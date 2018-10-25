@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -11,8 +12,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setTitle("Night Stalker Revived");
+        primaryStage.setScene(new Scene(root, 640, 384));
+        // primaryStage.getScene().setFill(Paint.valueOf());
         primaryStage.show();
     }
 
