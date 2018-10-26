@@ -2,11 +2,12 @@ package model;
 
 import javafx.scene.image.Image;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Singular;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Builder
 public class BuildingBlock {
 
