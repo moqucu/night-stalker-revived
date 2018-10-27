@@ -127,21 +127,143 @@ public class World {
                 BuildingBlock.builder()
                         .type(BuildingBlock.Type.Wall)
                         .image(new Image("images/Sprite 014 - Wall.png"))
-                        .position(Position.builder().horizontal(4).vertical(1).build())
+                        .position(Position.builder().horizontal(19).vertical(1).build())
+                        .position(Position.builder().horizontal(19).vertical(5).build())
+                        .position(Position.builder().horizontal(19).vertical(8).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 015 - Wall.png"))
+                        .position(Position.builder().horizontal(0).vertical(2).build())
                         .build()
         );
         buildingBlocks.add(
                 BuildingBlock.builder()
                         .type(BuildingBlock.Type.SpiderWeb)
-                        .image(new Image("images/Sprite 015 - Web.png"))
+                        .image(new Image("images/Sprite 016 - Web.png"))
                         .position(Position.builder().horizontal(1).vertical(2).build())
                         .build()
         );
         buildingBlocks.add(
                 BuildingBlock.builder()
                         .type(BuildingBlock.Type.Wall)
-                        .image(new Image("images/Sprite 016 - Wall.png"))
+                        .image(new Image("images/Sprite 017 - Wall.png"))
                         .position(Position.builder().horizontal(2).vertical(2).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.SpiderWeb)
+                        .image(new Image("images/Sprite 018 - Web.png"))
+                        .position(Position.builder().horizontal(3).vertical(2).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 019 - Wall.png"))
+                        .position(Position.builder().horizontal(4).vertical(2).build())
+                        .position(Position.builder().horizontal(12).vertical(3).build())
+                        .position(Position.builder().horizontal(14).vertical(3).build())
+                        .position(Position.builder().horizontal(2).vertical(5).build())
+                        .position(Position.builder().horizontal(6).vertical(5).build())
+                        .position(Position.builder().horizontal(4).vertical(7).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 020 - Wall.png"))
+                        .position(Position.builder().horizontal(6).vertical(2).build())
+                        .position(Position.builder().horizontal(11).vertical(2).build())
+                        .position(Position.builder().horizontal(16).vertical(2).build())
+                        .position(Position.builder().horizontal(18).vertical(4).build())
+                        .position(Position.builder().horizontal(8).vertical(7).build())
+                        .position(Position.builder().horizontal(6).vertical(9).build())
+                        .position(Position.builder().horizontal(14).vertical(9).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 021 - Wall.png"))
+                        .position(Position.builder().horizontal(7).vertical(2).build())
+                        .position(Position.builder().horizontal(15).vertical(6).build())
+                        .position(Position.builder().horizontal(9).vertical(7).build())
+                        .position(Position.builder().horizontal(11).vertical(7).build())
+                        .position(Position.builder().horizontal(7).vertical(9).build())
+                        .position(Position.builder().horizontal(9).vertical(9).build())
+                        .position(Position.builder().horizontal(15).vertical(9).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 022 - Wall.png"))
+                        .position(Position.builder().horizontal(8).vertical(2).build())
+                        .position(Position.builder().horizontal(15).vertical(4).build())
+                        .position(Position.builder().horizontal(16).vertical(6).build())
+                        .position(Position.builder().horizontal(10).vertical(7).build())
+                        .position(Position.builder().horizontal(1).vertical(9).build())
+                        .position(Position.builder().horizontal(8).vertical(9).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 023 - Wall.png"))
+                        .position(Position.builder().horizontal(9).vertical(2).build())
+                        .position(Position.builder().horizontal(17).vertical(2).build())
+                        .position(Position.builder().horizontal(16).vertical(4).build())
+                        .position(Position.builder().horizontal(17).vertical(6).build())
+                        .position(Position.builder().horizontal(2).vertical(9).build())
+                        .position(Position.builder().horizontal(10).vertical(9).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 024 - Wall.png"))
+                        .position(Position.builder().horizontal(12).vertical(2).build())
+                        .position(Position.builder().horizontal(12).vertical(7).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 025 - Wall.png"))
+                        .position(Position.builder().horizontal(14).vertical(2).build())
+                        .position(Position.builder().horizontal(2).vertical(3).build())
+                        .position(Position.builder().horizontal(6).vertical(4).build())
+                        .position(Position.builder().horizontal(4).vertical(6).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 026 - Wall.png"))
+                        .position(Position.builder().horizontal(19).vertical(2).build())
+                        .position(Position.builder().horizontal(19).vertical(6).build())
+                        .position(Position.builder().horizontal(19).vertical(9).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 027 - Wall.png"))
+                        .position(Position.builder().horizontal(0).vertical(3).build())
+                        .position(Position.builder().horizontal(0).vertical(6).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 028 - Wall.png"))
+                        .position(Position.builder().horizontal(19).vertical(3).build())
+                        .position(Position.builder().horizontal(19).vertical(7).build())
+                        .position(Position.builder().horizontal(19).vertical(10).build())
                         .build()
         );
 
