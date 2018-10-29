@@ -120,7 +120,7 @@ public class World {
                         .position(Position.builder().horizontal(2).vertical(6).build())
                         .position(Position.builder().horizontal(6).vertical(6).build())
                         .position(Position.builder().horizontal(4).vertical(8).build())
-                        .position(Position.builder().horizontal(13).vertical(8).build())
+                        .position(Position.builder().horizontal(12).vertical(8).build())
                         .build()
         );
         buildingBlocks.add(
@@ -264,6 +264,64 @@ public class World {
                         .position(Position.builder().horizontal(19).vertical(3).build())
                         .position(Position.builder().horizontal(19).vertical(7).build())
                         .position(Position.builder().horizontal(19).vertical(10).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 029 - Wall.png"))
+                        .position(Position.builder().horizontal(0).vertical(4).build())
+                        .position(Position.builder().horizontal(0).vertical(7).build())
+                        .position(Position.builder().horizontal(0).vertical(10).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 030 - Wall.png"))
+                        .position(Position.builder().horizontal(4).vertical(4).build())
+                        .position(Position.builder().horizontal(12).vertical(5).build())
+                        .position(Position.builder().horizontal(2).vertical(7).build())
+                        .position(Position.builder().horizontal(6).vertical(7).build())
+                        .position(Position.builder().horizontal(14).vertical(7).build())
+                        .position(Position.builder().horizontal(4).vertical(9).build())
+                        .position(Position.builder().horizontal(12).vertical(9).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.BunkerSolid)
+                        .image(new Image("images/Sprite 031 - Bunker Solid.png"))
+                        .position(Position.builder().horizontal(8).vertical(4).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Bunker)
+                        .image(new Image("images/Sprite 032 - Bunker.png"))
+                        .position(Position.builder().horizontal(9).vertical(4).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.BunkerSolid)
+                        .image(new Image("images/Sprite 033 - Bunker Solid.png"))
+                        .position(Position.builder().horizontal(10).vertical(4).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 034 - Wall.png"))
+                        .position(Position.builder().horizontal(14).vertical(4).build())
+                        .build()
+        );
+        buildingBlocks.add(
+                BuildingBlock.builder()
+                        .type(BuildingBlock.Type.Wall)
+                        .image(new Image("images/Sprite 035 - Wall.png"))
+                        .position(Position.builder().horizontal(19).vertical(4).build())
+                        .position(Position.builder().horizontal(16).vertical(9).build())
                         .build()
         );
 

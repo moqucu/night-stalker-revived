@@ -14,6 +14,7 @@ public class BuildingBlock {
     public enum Type {
         Maze,
         Bunker,
+        BunkerSolid,
         SpiderWeb,
         Wall,
         Path
