@@ -12,12 +12,11 @@ import java.util.List;
 public class BuildingBlock {
 
     public enum Type {
-        Maze,
         Bunker,
         BunkerSolid,
+        BunkerHalfSolid,
         SpiderWeb,
-        Wall,
-        Path
+        Wall
     }
 
     private Type type;
