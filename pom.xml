@@ -36,7 +36,7 @@
                 <version>8.8.3</version>
                 <configuration>
                     <vendor>OurCompany</vendor>
-                    <mainClass>sample.Main</mainClass>
+                    <mainClass>Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

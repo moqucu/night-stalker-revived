@@ -1,5 +1,6 @@
 package model;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class World {
+public class World implements Renderable {
 
     private List<BuildingBlock> buildingBlocks = new ArrayList<>();
 
@@ -432,5 +433,17 @@ public class World {
                         .position(Position.builder().horizontal(19).vertical(11).build())
                         .build()
         );
+    }
+
+    @Override
+    public void render(GraphicsContext gc, double interpolation) {
+
+        buildingBlocks.forEach(buildingBlock -> buildingBlock.getPositions().forEach(
+                position -> gc.drawImage(
+                        buildingBlock.getImage(),
+                        32 * position.getHorizontal(),
+                        32 * position.getVertical()
+                )));
+
     }
 }
