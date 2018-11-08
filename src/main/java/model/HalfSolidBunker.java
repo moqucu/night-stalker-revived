@@ -1,0 +1,24 @@
+package model;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class HalfSolidBunker extends Sprite implements Renderable {
+
+    public HalfSolidBunker(Image image, Position initialPosition) {
+
+        super(initialPosition);
+        setInitialImage(image);
+    }
+
+    @Override
+    public void render(GraphicsContext gc, double interpolation) {
+
+        gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
+    }
+}
