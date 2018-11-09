@@ -18,7 +18,7 @@ public abstract class GameObject {
         private int vertical;
     }
 
-    public GameObject(Position initialPosition) {
+    GameObject(Position initialPosition) {
 
         this.initialPosition = initialPosition;
     }

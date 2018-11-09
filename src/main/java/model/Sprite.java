@@ -2,6 +2,7 @@ package model;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,6 +11,8 @@ import lombok.EqualsAndHashCode;
 public abstract class Sprite extends GameObject implements Renderable {
 
     @Data
+    @Builder
+    @SuppressWarnings("WeakerAccess")
     public static class Coordinates {
 
         private int x;
@@ -18,7 +21,7 @@ public abstract class Sprite extends GameObject implements Renderable {
 
     private Image initialImage;
 
-    private Coordinates currentCoordinates;
+    private Coordinates currentCoordinates = Coordinates.builder().build();
 
     Sprite(Position initialPosition) {
 
@@ -27,12 +30,18 @@ public abstract class Sprite extends GameObject implements Renderable {
         currentCoordinates.setY(getInitialPosition().getVertical() * HEIGHT);
     }
 
-    public Rectangle2D getBoundary() {
+    Sprite(Coordinates initialCoordinates) {
+
+        super(null);
+        currentCoordinates = initialCoordinates;
+    }
+
+    protected Rectangle2D getBoundary() {
 
         return new Rectangle2D(currentCoordinates.getX(), currentCoordinates.getY(), WIDTH, HEIGHT);
     }
 
-    public boolean intersects(Sprite sprite) {
+    protected boolean intersects(Sprite sprite) {
 
         return sprite.getBoundary().intersects(this.getBoundary());
     }

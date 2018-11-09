@@ -8,6 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.Renderable;
 import model.Updatable;
+import model.World;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,13 +25,16 @@ public class Game {
 
     private Set<KeyCode> input = new HashSet<>();
 
+    private World world;
+
     private ArrayList<Updatable> updatables = new ArrayList<>();
     private ArrayList<Renderable> renderables = new ArrayList<>();
 
-    public Game(Stage primaryStage) {
+    public Game(Stage primaryStage, World world) {
 
         this.primaryStage = primaryStage;
         initializeStage();
+        this.world = world;
     }
 
     private void initializeStage() {
@@ -67,7 +71,6 @@ public class Game {
 
     void start() {
 
-
         final long startNanoTime = System.nanoTime();
 
         new AnimationTimer()
@@ -75,12 +78,11 @@ public class Game {
             public void handle(long currentNanoTime)
             {
                 double t = (currentNanoTime - startNanoTime) / 1000000000.0;
-                updatables.forEach(u -> u.update(input));
+                updatables.forEach(u -> u.update(input, world.getSprites()));
                 renderables.forEach(r -> r.render(graphicsContext, t));
             }
         }.start();
 
         primaryStage.show();
-
     }
 }

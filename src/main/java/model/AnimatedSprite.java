@@ -23,6 +23,11 @@ public abstract class AnimatedSprite extends Sprite {
         super(initialPosition);
     }
 
+    AnimatedSprite(Coordinates currentCoordinates) {
+
+        super(currentCoordinates);
+    }
+
     Image getFrame(double time)
     {
         int index = (int)((time % (frames.size() * frameDuration)) / frameDuration);
