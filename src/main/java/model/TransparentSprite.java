@@ -4,7 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class TransparentSprite extends Sprite {
 
-    public TransparentSprite(int x, int y) {
+    TransparentSprite(int x, int y) {
+
         super(Sprite.Coordinates.builder().x(x).y(y).build());
     }
 

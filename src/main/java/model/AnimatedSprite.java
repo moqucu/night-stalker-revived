@@ -18,11 +18,6 @@ public abstract class AnimatedSprite extends Sprite {
 
     protected double frameDuration;
 
-    AnimatedSprite(Position initialPosition) {
-
-        super(initialPosition);
-    }
-
     AnimatedSprite(Coordinates currentCoordinates) {
 
         super(currentCoordinates);

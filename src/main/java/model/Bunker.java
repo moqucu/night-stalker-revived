@@ -22,7 +22,7 @@ public class Bunker extends Sprite implements Renderable {
     }
 
     @Override
-    boolean intersects(Sprite sprite) {
+    public boolean intersects(Sprite sprite) {
 
         return false;
     }
