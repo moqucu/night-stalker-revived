@@ -2,15 +2,29 @@ package model;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.AudioClip;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class World implements Renderable, Updatable {
 
     private Map<Integer, List<GameObject>> gameObjects = new HashMap<>();
+    private AudioClip audio = new AudioClip(World.class.getResource("/sounds/background.wav").toString());
 
     public World() {
+
+        ExecutorService service = Executors.newFixedThreadPool(4);
+        service.execute(() -> {
+
+            audio.setVolume(0.5f);
+            audio.setCycleCount(INDEFINITE);
+            audio.play();
+        });
     }
 
     public void addGameObject(int layer, GameObject gameObject) {

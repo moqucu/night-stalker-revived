@@ -382,8 +382,14 @@ public class Main extends Application {
         game.addRenderable(world);
         game.addUpdatable(world);
 
-        Bat bat = new Bat();
-        world.addGameObject(2, bat);
+        Bat bat1 = new Bat(17, 3, 5.0);
+        world.addGameObject(2, bat1);
+
+        Bat bat2 = new Bat(16, 7, 2.5);
+        world.addGameObject(2, bat2);
+
+        NightStalker nightStalker = new NightStalker();
+        world.addGameObject(1, nightStalker);
 
         game.start();
     }

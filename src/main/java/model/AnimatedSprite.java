@@ -11,8 +11,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public abstract class AnimatedSprite extends Sprite {
-    // assumes animation loops,
-    //  each image displays for equal time
+
     @Singular
     protected List<Image> frames = new ArrayList<>();
 
@@ -23,8 +22,8 @@ public abstract class AnimatedSprite extends Sprite {
         super(currentCoordinates);
     }
 
-    Image getFrame(double time)
-    {
+    Image getFrame(double time) {
+
         int index = (int)((time % (frames.size() * frameDuration)) / frameDuration);
         return frames.get(index);
     }
