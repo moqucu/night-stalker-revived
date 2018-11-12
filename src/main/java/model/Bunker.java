@@ -24,6 +24,9 @@ public class Bunker extends Sprite implements Renderable {
     @Override
     public boolean intersects(Sprite sprite) {
 
-        return false;
+        if (sprite instanceof NightStalker)
+            return false;
+        else
+            return sprite.getBoundary().intersects(this.getBoundary());
     }
 }
