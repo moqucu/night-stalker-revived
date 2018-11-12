@@ -6,13 +6,8 @@ import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static model.Bat.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -26,13 +21,13 @@ public class NightStalker extends AnimatedSprite implements Updatable {
     }
 
     @Override
-    public void render(GraphicsContext gc, double interpolation) {
+    public void render(GraphicsContext gc, double deltaTime) {
 
             gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
     }
 
     @Override
-    public void update(Set<KeyCode> input, List<Sprite> sprites) {
+    public void update(double deltaTimeSinceStart, double deltaTime, Set<KeyCode> input, List<Sprite> sprites) {
 
     }
 }

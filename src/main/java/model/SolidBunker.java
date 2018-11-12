@@ -16,7 +16,7 @@ public class SolidBunker extends Sprite implements Renderable {
     }
 
     @Override
-    public void render(GraphicsContext gc, double interpolation) {
+    public void render(GraphicsContext gc, double deltaTime) {
 
         gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
     }

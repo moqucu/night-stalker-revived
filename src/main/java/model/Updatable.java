@@ -7,5 +7,5 @@ import java.util.Set;
 
 public interface Updatable {
 
-    void update(Set<KeyCode> input, List<Sprite> sprites);
+    void update(double deltaTimeSinceStart, double deltaTime, Set<KeyCode> input, List<Sprite> sprites);
 }

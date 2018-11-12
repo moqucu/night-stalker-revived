@@ -42,7 +42,7 @@ public class World implements Renderable, Updatable {
     }
 
     @Override
-    public void render(GraphicsContext gc, double interpolation) {
+    public void render(GraphicsContext gc, double deltaTime) {
 
         gc.clearRect(0, 0, 640, 384);
         gameObjects
@@ -52,12 +52,12 @@ public class World implements Renderable, Updatable {
                 .forEach(key -> gameObjects.get(key).forEach(gameObject -> {
 
                     if (gameObject instanceof Renderable)
-                        ((Renderable) gameObject).render(gc, interpolation);
+                        ((Renderable) gameObject).render(gc, deltaTime);
                 }));
     }
 
     @Override
-    public void update(Set<KeyCode> input, List<Sprite> sprites) {
+    public void update(double deltaTimeSinceStart, double deltaTime, Set<KeyCode> input, List<Sprite> sprites) {
 
         if (input.size() > 0 && (input.contains(KeyCode.ESCAPE) || input.contains(KeyCode.Q)))
             System.exit(0);
@@ -65,7 +65,7 @@ public class World implements Renderable, Updatable {
         gameObjects.keySet().forEach(key -> gameObjects.get(key).forEach(gameObject -> {
 
             if (gameObject instanceof Updatable)
-                ((Updatable) gameObject).update(input, sprites);
+                ((Updatable) gameObject).update(deltaTimeSinceStart, deltaTime, input, sprites);
         }));
     }
 

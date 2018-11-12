@@ -15,9 +15,14 @@ public abstract class Sprite extends GameObject implements Renderable {
     @SuppressWarnings("WeakerAccess")
     public static class Coordinates {
 
-        private int x;
-        private int y;
+        private long x;
+        private long y;
     }
+
+    /**
+     * Velocity is measured in pixel / seconds
+     */
+    private int velocity;
 
     private Image initialImage;
 
@@ -44,5 +49,10 @@ public abstract class Sprite extends GameObject implements Renderable {
     protected boolean intersects(Sprite sprite) {
 
         return sprite.getBoundary().intersects(this.getBoundary());
+    }
+
+    long determinePixelMoveRate(double deltaTime) {
+
+        return Math.round(getVelocity() * deltaTime);
     }
 }

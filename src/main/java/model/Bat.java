@@ -15,8 +15,6 @@ import static model.Bat.Direction.*;
 @EqualsAndHashCode(callSuper = true)
 public class Bat extends AnimatedSprite implements Updatable {
 
-    public static final int PIXEL = 1;
-
     enum Direction {
 
         Up, Right, Down, Left
@@ -45,32 +43,34 @@ public class Bat extends AnimatedSprite implements Updatable {
         frames.add(new Image("images/Bat 1 - 4.png"));
         frames.add(new Image("images/Bat 1 - 3.png"));
 
+        setVelocity(35);
+
         frameDuration = 0.1;
 
         this.sleepTime = sleepTime;
     }
 
     @Override
-    public void render(GraphicsContext gc, double interpolation) {
+    public void render(GraphicsContext gc, double deltaTime) {
 
-        if (interpolation < sleepTime)
+        if (awake)
+            gc.drawImage(getFrame(deltaTime), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
+        else
             gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
-        else {
-            awake = true;
-            gc.drawImage(getFrame(interpolation), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
-        }
     }
 
     @Override
-    public void update(Set<KeyCode> input, List<Sprite> sprites) {
+    public void update(double deltaTimeSinceStart, double deltaTime, Set<KeyCode> input, List<Sprite> sprites) {
 
-        if (!awake)
+        if (deltaTimeSinceStart < sleepTime)
             return;
+        else
+            awake = true;
 
-        List<Direction> availableDirections = determineAvailableDirections(sprites);
+        List<Direction> availableDirections = determineAvailableDirections(sprites, deltaTime);
         removeDirectionOppositeToCurrentDirectionIfPossible(availableDirections);
         randomlyPickDirection(availableDirections);
-        advanceCoordinatesByDirection(getCurrentCoordinates(), direction);
+        moveToCurrentDirection(getCurrentCoordinates(), direction, deltaTime);
     }
 
     private void randomlyPickDirection(List<Direction> availableDirections) {
@@ -100,38 +100,43 @@ public class Bat extends AnimatedSprite implements Updatable {
         }
     }
 
-    private boolean checkDirectionForCollision(Coordinates coordinates, Direction direction, List<Sprite> sprites) {
+    private boolean checkDirectionForCollision(
+            Coordinates coordinates,
+            Direction direction,
+            List<Sprite> sprites,
+            double deltaTime) {
 
         ShadowSprite shadowSprite
                 = new ShadowSprite(this, coordinates.getX(), coordinates.getY());
 
-        advanceCoordinatesByDirection(shadowSprite.getCurrentCoordinates(), direction);
+        moveToCurrentDirection(shadowSprite.getCurrentCoordinates(), direction, deltaTime);
 
         return sprites
                 .stream()
                 .anyMatch(sprite -> sprite.intersects(shadowSprite) & !sprite.equals(this));
     }
 
-    private void advanceCoordinatesByDirection(Coordinates coordinates, Direction direction) {
+    private void moveToCurrentDirection(Coordinates coordinates, Direction direction, double deltaTime) {
 
         switch (direction) {
 
             case Right:
-                coordinates.setX(getCurrentCoordinates().getX() + PIXEL);
+                coordinates.setX(getCurrentCoordinates().getX() + determinePixelMoveRate(deltaTime));
                 break;
             case Down:
-                coordinates.setY(getCurrentCoordinates().getY() + PIXEL);
+                coordinates.setY(getCurrentCoordinates().getY() + determinePixelMoveRate(deltaTime));
                 break;
             case Left:
-                coordinates.setX(getCurrentCoordinates().getX() - PIXEL);
+                coordinates.setX(getCurrentCoordinates().getX() - determinePixelMoveRate(deltaTime));
                 break;
             case Up:
-                coordinates.setY(getCurrentCoordinates().getY() - PIXEL);
+                coordinates.setY(getCurrentCoordinates().getY() - determinePixelMoveRate(deltaTime));
                 break;
         }
     }
 
-    private List<Direction> determineAvailableDirections(List<Sprite> sprites) {
+
+    private List<Direction> determineAvailableDirections(List<Sprite> sprites, double deltaTime) {
 
         List<Direction> availableDirections = new ArrayList<>();
         availableDirections.add(Up);
@@ -144,7 +149,8 @@ public class Bat extends AnimatedSprite implements Updatable {
                 .filter(availableDirection -> !checkDirectionForCollision(
                         getCurrentCoordinates(),
                         availableDirection,
-                        sprites
+                        sprites,
+                        deltaTime
                 ))
                 .collect(Collectors.toList());
     }

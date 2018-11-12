@@ -22,9 +22,9 @@ public abstract class AnimatedSprite extends Sprite {
         super(currentCoordinates);
     }
 
-    Image getFrame(double time) {
+    Image getFrame(double deltaTime) {
 
-        int index = (int)((time % (frames.size() * frameDuration)) / frameDuration);
+        int index = (int)((deltaTime % (frames.size() * frameDuration)) / frameDuration);
         return frames.get(index);
     }
 }

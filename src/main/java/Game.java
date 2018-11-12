@@ -13,9 +13,13 @@ import model.World;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Game {
 
+    private final long startNanoTime = System.nanoTime();
+
+    private final AtomicLong lastNanoTime = new AtomicLong(System.nanoTime());
 
     private Stage primaryStage;
 
@@ -71,15 +75,16 @@ public class Game {
 
     void start() {
 
-        final long startNanoTime = System.nanoTime();
+        new AnimationTimer() {
 
-        new AnimationTimer()
-        {
-            public void handle(long currentNanoTime)
-            {
-                double t = (currentNanoTime - startNanoTime) / 1000000000.0;
-                updatables.forEach(u -> u.update(input, world.getSprites()));
-                renderables.forEach(r -> r.render(graphicsContext, t));
+            public void handle(long currentNanoTime) {
+
+                /* calculate time since last update */
+                double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000000.0;
+                double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
+
+                updatables.forEach(u -> u.update(deltaTimeSinceStart, deltaTime, input, world.getSprites()));
+                renderables.forEach(r -> r.render(graphicsContext, deltaTimeSinceStart));
             }
         }.start();
 
