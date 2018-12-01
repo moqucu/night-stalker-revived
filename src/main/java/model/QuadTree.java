@@ -4,23 +4,20 @@ import java.awt.Rectangle;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Quadtree {
+public class QuadTree {
 
     // https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
 
-    private int MAX_OBJECTS = 10;
-    private int MAX_LEVELS = 5;
-
     private int level;
-    private List objects;
+    private List<Rectangle> objects;
     private Rectangle bounds;
-    private Quadtree[] nodes;
+    private QuadTree[] nodes;
 
-    public Quadtree(int pLevel, Rectangle pBounds) {
+    public QuadTree(int pLevel, Rectangle pBounds) {
         level = pLevel;
         objects = new ArrayList();
         bounds = pBounds;
-        nodes = new Quadtree[4];
+        nodes = new QuadTree[4];
     }
 
     // Clears all objects from tree
@@ -43,10 +40,10 @@ public class Quadtree {
         int x = (int)bounds.getX();
         int y = (int)bounds.getY();
 
-        nodes[0] = new Quadtree(level+1, new Rectangle(x + subWidth, y, subWidth, subHeight));
-        nodes[1] = new Quadtree(level+1, new Rectangle(x, y, subWidth, subHeight));
-        nodes[2] = new Quadtree(level+1, new Rectangle(x, y + subHeight, subWidth, subHeight));
-        nodes[3] = new Quadtree(level+1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+        nodes[0] = new QuadTree(level+1, new Rectangle(x + subWidth, y, subWidth, subHeight));
+        nodes[1] = new QuadTree(level+1, new Rectangle( x, y, subWidth, subHeight));
+        nodes[2] = new QuadTree(level+1, new Rectangle( x, y + subHeight, subWidth, subHeight));
+        nodes[3] = new QuadTree(level+1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
     }
 
     // Determine which node the object belongs to
@@ -85,6 +82,10 @@ public class Quadtree {
 
     // Add object to QuadTree
     public void insert(Rectangle pRect) {
+
+        int MAX_OBJECTS = 10;
+        int MAX_LEVELS = 5;
+
         if (nodes[0] != null) {
             int index = getIndex(pRect);
 
