@@ -388,6 +388,9 @@ public class Main extends Application {
         Bat bat2 = new Bat(16, 7, 2.5);
         world.addGameObject(2, bat2);
 
+        Spider spider = new Spider(1, 1);
+        world.addGameObject(2, spider);
+
         NightStalker nightStalker = new NightStalker();
         world.addGameObject(1, nightStalker);
 
