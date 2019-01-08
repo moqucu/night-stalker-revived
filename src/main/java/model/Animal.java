@@ -49,7 +49,7 @@ public abstract class Animal extends AnimatedSprite implements Updatable {
         return friendlyObject;
     }
 
-    private List<Direction> determineAvailableDirections(List<Sprite> sprites, double deltaTime) {
+    protected List<Direction> determineAvailableDirections(List<Sprite> sprites, double deltaTime) {
 
         List<Direction> availableDirections = new ArrayList<>();
         availableDirections.add(Up);

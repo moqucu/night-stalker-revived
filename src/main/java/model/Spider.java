@@ -6,8 +6,13 @@ import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static model.Direction.*;
+import static model.Direction.Left;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -15,7 +20,7 @@ public class Spider extends Animal {
 
     public Spider(int initialXCoordinate, int initialYCoordinate) {
 
-        super(Coordinates.builder().x(initialXCoordinate * WIDTH - WIDTH / 2).y(initialYCoordinate * HEIGHT).build());
+        super(Coordinates.builder().x(initialXCoordinate * WIDTH).y(initialYCoordinate * HEIGHT).build());
 
         setInitialImage(new Image("images/Spider - Vertical 2.png"));
 
@@ -37,6 +42,22 @@ public class Spider extends Animal {
         setVelocity(35);
 
         frameDuration = 0.1;
+    }
+
+    @Override
+    protected List<Direction> determineAvailableDirections(List<Sprite> sprites, double deltaTime) {
+
+        List<Direction> availableDirections = super.determineAvailableDirections(sprites, deltaTime);
+
+        Coordinates currentCoordinates = getCurrentCoordinates();
+
+        if (currentCoordinates.getX() / WIDTH == 3 && currentCoordinates.getY() / HEIGHT == 5)
+            availableDirections.remove(Right);
+
+        if (currentCoordinates.getX() / WIDTH == 3 && currentCoordinates.getY() / HEIGHT == 8)
+            availableDirections.remove(Down);
+
+        return availableDirections;
     }
 
     @Override
