@@ -391,6 +391,9 @@ public class Main extends Application {
         Spider spider = new Spider(1, 1);
         world.addGameObject(2, spider);
 
+        GreyRobot robot = new GreyRobot(1, 10);
+        world.addGameObject(2, robot);
+
         NightStalker nightStalker = new NightStalker();
         world.addGameObject(1, nightStalker);
 

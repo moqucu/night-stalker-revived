@@ -10,7 +10,7 @@ import java.util.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Bat extends Animal {
+public class Bat extends ArtificiallyMovedSprite {
 
     private boolean awake = false;
 

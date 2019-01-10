@@ -2,21 +2,16 @@ package model;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static model.Direction.*;
-import static model.Direction.Left;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Spider extends Animal {
+public class Spider extends ArtificiallyMovedSprite {
 
     public Spider(int initialXCoordinate, int initialYCoordinate) {
 

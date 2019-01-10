@@ -14,11 +14,11 @@ import static model.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class Animal extends AnimatedSprite implements Updatable {
+public abstract class ArtificiallyMovedSprite extends AnimatedSprite implements Updatable {
 
     private Random random = new Random();
 
-    Animal(Coordinates currentCoordinates) {
+    ArtificiallyMovedSprite(Coordinates currentCoordinates) {
         super(currentCoordinates);
     }
 
@@ -42,9 +42,10 @@ public abstract class Animal extends AnimatedSprite implements Updatable {
 
         if (sprite instanceof ShadowSprite)
             friendlyObject = (((ShadowSprite) sprite).getShadowCaster() instanceof Bat
-                    || ((ShadowSprite) sprite).getShadowCaster() instanceof Spider);
+                    || ((ShadowSprite) sprite).getShadowCaster() instanceof Spider
+                    || ((ShadowSprite) sprite).getShadowCaster() instanceof GreyRobot);
         else
-            friendlyObject = (sprite instanceof Bat || sprite instanceof Spider);
+            friendlyObject = (sprite instanceof Bat || sprite instanceof Spider|| sprite instanceof GreyRobot);
 
         return friendlyObject;
     }
