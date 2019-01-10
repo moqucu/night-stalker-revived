@@ -1,5 +1,7 @@
 package model;
 
+import javafx.geometry.Rectangle2D;
+
 import java.awt.Rectangle;
 import java.util.List;
 import java.util.ArrayList;
@@ -10,10 +12,10 @@ public class QuadTree {
 
     private int level;
     private List<Rectangle> objects;
-    private Rectangle bounds;
+    private Rectangle2D bounds;
     private QuadTree[] nodes;
 
-    public QuadTree(int pLevel, Rectangle pBounds) {
+    public QuadTree(int pLevel, Rectangle2D pBounds) {
         level = pLevel;
         objects = new ArrayList();
         bounds = pBounds;
@@ -37,29 +39,29 @@ public class QuadTree {
     private void split() {
         int subWidth = (int)(bounds.getWidth() / 2);
         int subHeight = (int)(bounds.getHeight() / 2);
-        int x = (int)bounds.getX();
-        int y = (int)bounds.getY();
+// Todo        int x = (int)bounds.getX();
+// Todo       int y = (int)bounds.getY();
 
-        nodes[0] = new QuadTree(level+1, new Rectangle(x + subWidth, y, subWidth, subHeight));
-        nodes[1] = new QuadTree(level+1, new Rectangle( x, y, subWidth, subHeight));
-        nodes[2] = new QuadTree(level+1, new Rectangle( x, y + subHeight, subWidth, subHeight));
-        nodes[3] = new QuadTree(level+1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+//        Todo nodes[0] = new QuadTree(level+1, new Rectangle(x + subWidth, y, subWidth, subHeight));
+//        Todo nodes[1] = new QuadTree(level+1, new Rectangle( x, y, subWidth, subHeight));
+//        Todo nodes[2] = new QuadTree(level+1, new Rectangle( x, y + subHeight, subWidth, subHeight));
+//        todo nodes[3] = new QuadTree(level+1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
     }
 
     // Determine which node the object belongs to
     // Returns -1 if object doesn't fit in node
     private int getIndex(Rectangle pRect) {
         int index = -1;
-        double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
-        double horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
+//        todo double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
+//        todo double horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
 
         // Object can completely fit within the top quadrants
-        boolean topQuadrant = (pRect.getY() < horizontalMidpoint && pRect.getY() + pRect.getHeight() < horizontalMidpoint);
+//        todo        boolean topQuadrant = (pRect.getY() < horizontalMidpoint && pRect.getY() + pRect.getHeight() < horizontalMidpoint);
         // Object can completely fit within the bottom quadrants
-        boolean bottomQuadrant = (pRect.getY() > horizontalMidpoint);
+        //        todo  boolean bottomQuadrant = (pRect.getY() > horizontalMidpoint);
 
         // Object can completely fit within the left quadrants
-        if (pRect.getX() < verticalMidpoint && pRect.getX() + pRect.getWidth() < verticalMidpoint) {
+       /* todo if (pRect.getX() < verticalMidpoint && pRect.getX() + pRect.getWidth() < verticalMidpoint) {
             if (topQuadrant) {
                 index = 1;
             }
@@ -75,13 +77,13 @@ public class QuadTree {
             else if (bottomQuadrant) {
                 index = 3;
             }
-        }
+        }*/
 
         return index;
     }
 
-    // Add object to QuadTree
-    public void insert(Rectangle pRect) {
+    // Add object to QuadTree todo
+    /*public void insert(Rectangle2D pRect) {
 
         int MAX_OBJECTS = 10;
         int MAX_LEVELS = 5;
@@ -114,10 +116,11 @@ public class QuadTree {
                 }
             }
         }
-    }
+    }*/
 
     // Return all objects that could collide with the given object
-    public List retrieve(List returnObjects, Rectangle pRect) {
+    //todo
+    /*public List retrieve(List returnObjects, Rectangle2D pRect) {
         int index = getIndex(pRect);
         if (index != -1 && nodes[0] != null) {
             nodes[index].retrieve(returnObjects, pRect);
@@ -126,5 +129,5 @@ public class QuadTree {
         returnObjects.addAll(objects);
 
         return returnObjects;
-    }
+    }*/
 }

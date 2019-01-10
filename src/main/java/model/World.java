@@ -1,5 +1,6 @@
 package model;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
@@ -82,5 +83,11 @@ public class World implements Renderable, Updatable {
         );
 
         return sprites;
+    }
+
+    //todo
+    @Override
+    public Rectangle2D getBoundary() {
+        return null;
     }
 }

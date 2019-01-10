@@ -41,7 +41,7 @@ public abstract class Sprite extends GameObject implements Renderable {
         currentCoordinates = initialCoordinates;
     }
 
-    protected Rectangle2D getBoundary() {
+    public Rectangle2D getBoundary() {
 
         return new Rectangle2D(currentCoordinates.getX(), currentCoordinates.getY(), WIDTH, HEIGHT);
     }

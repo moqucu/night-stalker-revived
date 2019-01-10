@@ -36,7 +36,7 @@ public class Game {
     private ArrayList<Updatable> updatables = new ArrayList<>();
     private ArrayList<Renderable> renderables = new ArrayList<>();
 
-    private QuadTree quad = new QuadTree(0, new Rectangle(0,0,WIDTH,HEIGHT));
+    //todo private QuadTree quad = new QuadTree(0, new Rectangle(0,0,WIDTH,HEIGHT));
 
     public Game(Stage primaryStage, World world) {
 
@@ -88,9 +88,9 @@ public class Game {
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
 
                 // Clear QuadTree
-                quad.clear();
+                //todo quad.clear();
                 // Update QuadTree
-                // renderables.forEach(q -> quad.insert(q.bbox()));  // Todo bbox() attr needed
+                //todo renderables.forEach(q -> quad.insert(q.getBoundary()));  // Todo bbox() attr needed
 
                 updatables.forEach(u -> u.update(deltaTimeSinceStart, deltaTime, input, world.getSprites()));
                 renderables.forEach(r -> r.render(graphicsContext, deltaTimeSinceStart));
