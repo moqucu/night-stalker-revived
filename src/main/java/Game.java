@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import model.Renderable;
 import model.Updatable;
 import model.World;
+import model.QuadTree;
+import java.awt.Rectangle;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,6 +35,8 @@ public class Game {
 
     private ArrayList<Updatable> updatables = new ArrayList<>();
     private ArrayList<Renderable> renderables = new ArrayList<>();
+
+    private QuadTree quad = new QuadTree(0, new Rectangle(0,0,WIDTH,HEIGHT));
 
     public Game(Stage primaryStage, World world) {
 
@@ -82,6 +86,11 @@ public class Game {
                 /* calculate time since last update */
                 double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000000.0;
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
+
+                // Clear QuadTree
+                quad.clear();
+                // Update QuadTree
+                // renderables.forEach(q -> quad.insert(q.bbox()));  // Todo bbox() attr needed
 
                 updatables.forEach(u -> u.update(deltaTimeSinceStart, deltaTime, input, world.getSprites()));
                 renderables.forEach(r -> r.render(graphicsContext, deltaTimeSinceStart));
