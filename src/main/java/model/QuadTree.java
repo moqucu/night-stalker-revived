@@ -2,7 +2,6 @@ package model;
 
 import javafx.geometry.Rectangle2D;
 
-import java.awt.Rectangle;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -11,7 +10,7 @@ public class QuadTree {
     // https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
 
     private int level;
-    private List<Rectangle> objects;
+    private List<Rectangle2D> objects;
     private Rectangle2D bounds;
     private QuadTree[] nodes;
 
@@ -37,31 +36,31 @@ public class QuadTree {
 
     // Splits the node into 4 subnodes
     private void split() {
-        int subWidth = (int)(bounds.getWidth() / 2);
-        int subHeight = (int)(bounds.getHeight() / 2);
-// Todo        int x = (int)bounds.getX();
-// Todo       int y = (int)bounds.getY();
+        int subWidth = (int) (bounds.getWidth() / 2);
+        int subHeight = (int) (bounds.getHeight() / 2);
+        int x = (int) bounds.getMinX();
+        int y = (int) bounds.getMinY();
 
-//        Todo nodes[0] = new QuadTree(level+1, new Rectangle(x + subWidth, y, subWidth, subHeight));
-//        Todo nodes[1] = new QuadTree(level+1, new Rectangle( x, y, subWidth, subHeight));
-//        Todo nodes[2] = new QuadTree(level+1, new Rectangle( x, y + subHeight, subWidth, subHeight));
-//        todo nodes[3] = new QuadTree(level+1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+        nodes[0] = new QuadTree(level + 1, new Rectangle2D(x + subWidth, y, subWidth, subHeight));
+        nodes[1] = new QuadTree(level + 1, new Rectangle2D(x, y, subWidth, subHeight));
+        nodes[2] = new QuadTree(level + 1, new Rectangle2D(x, y + subHeight, subWidth, subHeight));
+        nodes[3] = new QuadTree(level + 1, new Rectangle2D(x + subWidth, y + subHeight, subWidth, subHeight));
     }
 
     // Determine which node the object belongs to
     // Returns -1 if object doesn't fit in node
-    private int getIndex(Rectangle pRect) {
+    private int getIndex(Rectangle2D pRect) {
         int index = -1;
-//        todo double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
-//        todo double horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
+        double verticalMidpoint = bounds.getMinX() + (bounds.getWidth() / 2);
+        double horizontalMidpoint = bounds.getMinY() + (bounds.getHeight() / 2);
 
         // Object can completely fit within the top quadrants
-//        todo        boolean topQuadrant = (pRect.getY() < horizontalMidpoint && pRect.getY() + pRect.getHeight() < horizontalMidpoint);
+        boolean topQuadrant = (pRect.getMinY() < horizontalMidpoint && pRect.getMinY() + pRect.getHeight() < horizontalMidpoint);
         // Object can completely fit within the bottom quadrants
-        //        todo  boolean bottomQuadrant = (pRect.getY() > horizontalMidpoint);
+        boolean bottomQuadrant = (pRect.getMinY() > horizontalMidpoint);
 
         // Object can completely fit within the left quadrants
-       /* todo if (pRect.getX() < verticalMidpoint && pRect.getX() + pRect.getWidth() < verticalMidpoint) {
+        if (pRect.getMinX() < verticalMidpoint && pRect.getMinX() + pRect.getWidth() < verticalMidpoint) {
             if (topQuadrant) {
                 index = 1;
             }
@@ -70,20 +69,20 @@ public class QuadTree {
             }
         }
         // Object can completely fit within the right quadrants
-        else if (pRect.getX() > verticalMidpoint) {
+        else if (pRect.getMinX() > verticalMidpoint) {
             if (topQuadrant) {
                 index = 0;
             }
             else if (bottomQuadrant) {
                 index = 3;
             }
-        }*/
+        }
 
         return index;
     }
 
-    // Add object to QuadTree todo
-    /*public void insert(Rectangle2D pRect) {
+    // Add object to QuadTree
+    public void insert(Rectangle2D pRect) {
 
         int MAX_OBJECTS = 10;
         int MAX_LEVELS = 5;
@@ -116,11 +115,10 @@ public class QuadTree {
                 }
             }
         }
-    }*/
+    }
 
     // Return all objects that could collide with the given object
-    //todo
-    /*public List retrieve(List returnObjects, Rectangle2D pRect) {
+    public List retrieve(List returnObjects, Rectangle2D pRect) {
         int index = getIndex(pRect);
         if (index != -1 && nodes[0] != null) {
             nodes[index].retrieve(returnObjects, pRect);
@@ -129,5 +127,5 @@ public class QuadTree {
         returnObjects.addAll(objects);
 
         return returnObjects;
-    }*/
+    }
 }
