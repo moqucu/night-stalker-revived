@@ -88,6 +88,7 @@ public class World implements Renderable, Updatable {
     //todo
     @Override
     public Rectangle2D getBoundary() {
+
         return null;
     }
 }

@@ -397,6 +397,9 @@ public class Main extends Application {
         NightStalker nightStalker = new NightStalker();
         world.addGameObject(1, nightStalker);
 
+        Gun gun = new Gun(3.0);
+        world.addGameObject(3, gun);
+
         game.start();
     }
 

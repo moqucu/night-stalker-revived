@@ -24,6 +24,8 @@ public abstract class Sprite extends GameObject implements Renderable {
      */
     private int velocity;
 
+    protected double frameDuration;
+
     private Image initialImage;
 
     private Coordinates currentCoordinates = Coordinates.builder().build();
