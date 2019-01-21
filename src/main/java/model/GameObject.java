@@ -1,5 +1,6 @@
 package model;
 
+import javafx.geometry.Rectangle2D;
 import lombok.Builder;
 import lombok.Data;
 

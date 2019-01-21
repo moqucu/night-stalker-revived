@@ -70,9 +70,14 @@ public abstract class ArtificiallyMovedSprite extends MovableSprite implements U
     }
 
     @Override
-    public void update(double deltaTimeSinceStart, double deltaTime, Set<KeyCode> input, List<Sprite> sprites) {
+    public void update(
+            double deltaTimeSinceStart,
+            double deltaTime,
+            Set<KeyCode> input,
+            List<Sprite> nearbyObjects
+    ) {
 
-        List<Direction> availableDirections = determineAvailableDirections(sprites, deltaTime);
+        List<Direction> availableDirections = determineAvailableDirections(nearbyObjects, deltaTime);
         removeDirectionOppositeToCurrentDirectionIfPossible(availableDirections);
         randomlyPickDirection(availableDirections);
         moveToCurrentDirection(getCurrentCoordinates(), direction, deltaTime);

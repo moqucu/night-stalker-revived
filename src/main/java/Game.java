@@ -9,13 +9,14 @@ import javafx.stage.Stage;
 import model.Renderable;
 import model.Updatable;
 import model.World;
-import model.QuadTree;
-import java.awt.Rectangle;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static model.GameObject.HEIGHT;
+import static model.GameObject.WIDTH;
 
 public class Game {
 
@@ -27,8 +28,6 @@ public class Game {
 
     private GraphicsContext graphicsContext;
 
-    private final static int WIDTH = 640, HEIGHT = 384;
-
     private Set<KeyCode> input = new HashSet<>();
 
     private World world;
@@ -36,18 +35,16 @@ public class Game {
     private ArrayList<Updatable> updatables = new ArrayList<>();
     private ArrayList<Renderable> renderables = new ArrayList<>();
 
-    //todo private QuadTree quad = new QuadTree(0, new Rectangle(0,0,WIDTH,HEIGHT));
-
     public Game(Stage primaryStage, World world) {
 
         this.primaryStage = primaryStage;
-        initializeStage();
         this.world = world;
+        initializeStage();
     }
 
     private void initializeStage() {
 
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        Canvas canvas = new Canvas(world.getWidth(), world.getHeight());
         graphicsContext = canvas.getGraphicsContext2D();
 
         StackPane holder = new StackPane();
@@ -88,11 +85,12 @@ public class Game {
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
 
                 // Clear QuadTree
-                //todo quad.clear();
-                // Update QuadTree
-                //todo renderables.forEach(q -> quad.insert(q.getBoundary()));  // Todo bbox() attr needed
+                world.getQuadTree().clear();
 
-                updatables.forEach(u -> u.update(deltaTimeSinceStart, deltaTime, input, world.getSprites()));
+                // Update QuadTree
+                world.getAllSprites().forEach(world.getQuadTree()::insert);
+
+                updatables.forEach(u -> u.update(deltaTimeSinceStart, deltaTime, input, null));
                 renderables.forEach(r -> r.render(graphicsContext, deltaTimeSinceStart));
             }
         }.start();

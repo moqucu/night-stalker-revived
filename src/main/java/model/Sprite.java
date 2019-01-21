@@ -12,7 +12,6 @@ public abstract class Sprite extends GameObject implements Renderable {
 
     @Data
     @Builder
-    @SuppressWarnings("WeakerAccess")
     public static class Coordinates {
 
         private long x;

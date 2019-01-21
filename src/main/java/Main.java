@@ -6,10 +6,12 @@ import utility.WallFactory;
 
 public class Main extends Application {
 
+    private final static int WIDTH = 640, HEIGHT = 384;
+
     @Override
     public void start(Stage primaryStage) {
 
-        World world = new World();
+        World world = new World(WIDTH, HEIGHT);
         Game game = new Game(primaryStage, world);
 
         world.addGameObjects(4, WallFactory.createWalls(
