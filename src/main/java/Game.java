@@ -84,12 +84,6 @@ public class Game {
                 double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000000.0;
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
 
-                // Clear QuadTree
-                world.getQuadTree().clear();
-
-                // Update QuadTree
-                world.getAllSprites().forEach(world.getQuadTree()::insert);
-
                 updatables.forEach(u -> u.update(deltaTimeSinceStart, deltaTime, input, null));
                 renderables.forEach(r -> r.render(graphicsContext, deltaTimeSinceStart));
             }

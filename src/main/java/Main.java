@@ -401,7 +401,7 @@ public class Main extends Application {
 
         Gun gun = new Gun(3.0);
         world.addGameObject(3, gun);
-
+        world.getAllSpritesInProximityAndThoseWhoMove(spider);
         game.start();
     }
 

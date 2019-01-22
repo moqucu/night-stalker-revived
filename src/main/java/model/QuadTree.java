@@ -3,22 +3,25 @@ package model;
 import javafx.geometry.Rectangle2D;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
  */
-public class QuadTree {
+class QuadTree {
 
-    private static int TOP_RIGHT_NODE = 0;
+    private static byte TOP_RIGHT_NODE = 0b00000001;
 
-    private static int TOP_LEFT_NODE = 1;
+    private static byte TOP_LEFT_NODE = 0b00000010;
 
-    private static int BOTTOM_LEFT_NODE = 2;
+    private static byte BOTTOM_LEFT_NODE = 0b00000100;
 
-    private static int BOTTOM_RIGHT_NODE = 3;
+    private static byte BOTTOM_RIGHT_NODE = 0b00001000;
 
     /**
      * Defines how many objects a node can hold before it splits.
@@ -49,7 +52,7 @@ public class QuadTree {
     /**
      * Represents the four sub nodes.
      */
-    private final QuadTree[] nodes = new QuadTree[4];
+    private final ConcurrentMap<Byte, QuadTree> nodes = new ConcurrentHashMap<>(4);
 
     /**
      * Objects in node
@@ -74,19 +77,10 @@ public class QuadTree {
     /**
      * The clear method clears the quad tree by recursively clearing all objects from all nodes.
      */
-    public void clear() {
+    void clear() {
 
         sprites.clear();
-
-        for (int i = 0; i < nodes.length; i++) {
-
-            if (nodes[i] != null) {
-
-                nodes[i].clear();
-                nodes[i] = null;
-            }
-        }
-
+        nodes.clear();
         hasSubNodes.set(false);
     }
 
@@ -105,62 +99,87 @@ public class QuadTree {
 
         int nextLevel = level + 1;
 
-        nodes[TOP_RIGHT_NODE] = new QuadTree(
-                nextLevel,
-                new Rectangle2D(leftBoundary + halfWidth, topBoundary, halfWidth, halfHeight)
+        nodes.put(
+                TOP_RIGHT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary + halfWidth, topBoundary, halfWidth, halfHeight)
+                )
         );
-        nodes[TOP_LEFT_NODE] = new QuadTree(
-                nextLevel,
-                new Rectangle2D(leftBoundary, topBoundary, halfWidth, halfHeight)
+
+        nodes.put(
+                TOP_LEFT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary, topBoundary, halfWidth, halfHeight)
+                )
         );
-        nodes[BOTTOM_LEFT_NODE] = new QuadTree(
-                nextLevel,
-                new Rectangle2D(leftBoundary, topBoundary + halfHeight, halfWidth, halfHeight)
+
+        nodes.put(
+                BOTTOM_LEFT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary, topBoundary + halfHeight, halfWidth, halfHeight)
+                )
         );
-        nodes[BOTTOM_RIGHT_NODE] = new QuadTree(
-                nextLevel,
-                new Rectangle2D(leftBoundary + halfWidth, topBoundary + halfHeight, halfWidth, halfHeight)
+
+        nodes.put(
+                BOTTOM_RIGHT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary + halfWidth, topBoundary + halfHeight, halfWidth, halfHeight)
+                )
         );
 
         hasSubNodes.set(true);
     }
 
     /**
-     * Determine which node the object belongs to. -1 means
-     * object cannot completely fit within a child node and is part
-     * of the parent node
+     * Determine which node the object belongs to.
      *
      * @param sprite Sprite whose node is to be determined.
-     * @return 0 = top-right node, 1 = top-left node, 2 = bottom-left node, 3 = bottom-right node,
-     * -1 = parent node.
+     * @return byte with lower 4 bits representing which index to pull.
      */
-    private int getIndex(Sprite sprite) {
+    private byte getIndex(Sprite sprite) {
 
-        if (!hasSubNodes.get())
-            return -1;
+        /* if none of this node's boundary intersects with the sprite's boundary, return 0 for all bits */
+        byte intersectionFlags = 0b00000000;
 
-        if (nodes[TOP_RIGHT_NODE].getBoundary().contains(sprite.getBoundary()))
-            return TOP_RIGHT_NODE;
-        else if (nodes[TOP_LEFT_NODE].getBoundary().contains(sprite.getBoundary()))
-            return TOP_LEFT_NODE;
-        else if (nodes[BOTTOM_LEFT_NODE].getBoundary().contains(sprite.getBoundary()))
-            return BOTTOM_LEFT_NODE;
-        else if (nodes[BOTTOM_RIGHT_NODE].getBoundary().contains(sprite.getBoundary()))
-            return BOTTOM_RIGHT_NODE;
-        else
-            return -1;
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, TOP_RIGHT_NODE);
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, TOP_LEFT_NODE);
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, BOTTOM_LEFT_NODE);
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, BOTTOM_RIGHT_NODE);
+
+        return intersectionFlags;
+    }
+
+    /**
+     * Checks if sprite intersects with node @ bitMask and sets the respective flag.
+     *
+     * @param sprite            Sprite to be analyzed for intersecting with the specified node.
+     * @param intersectionFlags Parameter to be modified with OR operator in case sprite intersects with boundary.
+     * @param bitMask           The index / flag that needs to be determined.
+     * @return Potentially modified parameter based on intersection analysis.
+     */
+    private byte setIntersectionFlags(Sprite sprite, byte intersectionFlags, byte bitMask) {
+
+        if (nodes.get(bitMask) != null
+                && nodes.get(bitMask).getBoundary().intersects(sprite.getBoundary()))
+            intersectionFlags |= bitMask;
+
+        return intersectionFlags;
     }
 
     private boolean wasInsertedIntoSubNode(Sprite sprite) {
 
-        int index = getIndex(sprite);
+        byte index = getIndex(sprite);
 
-        if (index != -1) {
-            nodes[index].insert(sprite);
+        if (index > 0) {
+            nodes.get(index).insert(sprite);
             return true;
         }
-        else
-            return false;
+
+        return false;
     }
 
     /**
@@ -174,11 +193,11 @@ public class QuadTree {
      *
      * @param sprite The game object that shall be inserted into the quad tree.
      */
-    public void insert(Sprite sprite) {
+    void insert(Sprite sprite) {
 
         /* Can only insert new objects into right boundary */
         if (!boundary.contains(sprite.getBoundary()))
-            return;
+            throw new RuntimeException("Sprite is (partially) out of bounds with regards to this node!");
 
         /* If this node has sub nodes and object can be inserted there, this function is done */
         if (hasSubNodes.get() && wasInsertedIntoSubNode(sprite))
@@ -197,9 +216,8 @@ public class QuadTree {
 
             sprites.forEach(listedObject -> {
 
-                if (wasInsertedIntoSubNode(sprite))
+                if (wasInsertedIntoSubNode(listedObject))
                     sprites.remove(listedObject);
-
 
             });
         }
@@ -211,13 +229,25 @@ public class QuadTree {
      * @param sprite Sprite that shall be used for the proximity search.
      * @return All nearby game sprites.
      */
+    @SuppressWarnings("Duplicates")
     List<Sprite> findNearbyGameObjects(Sprite sprite) {
 
-        int index = getIndex(sprite);
+        List<Sprite> nearbySprites = new ArrayList<>(sprites);
 
-        if (index != -1 && hasSubNodes.get())
-            return nodes[index].findNearbyGameObjects(sprite);
-        else
-            return sprites;
+        byte index = getIndex(sprite);
+
+        if ((index & TOP_RIGHT_NODE) == TOP_RIGHT_NODE)
+            nearbySprites.addAll(nodes.get(TOP_RIGHT_NODE).findNearbyGameObjects(sprite));
+
+        if ((index & TOP_LEFT_NODE) == TOP_LEFT_NODE)
+            nearbySprites.addAll(nodes.get(TOP_LEFT_NODE).findNearbyGameObjects(sprite));
+
+        if ((index & BOTTOM_LEFT_NODE) == BOTTOM_LEFT_NODE)
+            nearbySprites.addAll(nodes.get(BOTTOM_LEFT_NODE).findNearbyGameObjects(sprite));
+
+        if ((index & BOTTOM_RIGHT_NODE) == BOTTOM_RIGHT_NODE)
+            nearbySprites.addAll(nodes.get(BOTTOM_RIGHT_NODE).findNearbyGameObjects(sprite));
+
+        return nearbySprites;
     }
 }
