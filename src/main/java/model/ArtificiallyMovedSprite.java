@@ -3,6 +3,7 @@ package model;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Random;
@@ -12,6 +13,7 @@ import static model.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public abstract class ArtificiallyMovedSprite extends MovableSprite implements Updatable {
 
     private Random random = new Random();
@@ -23,7 +25,12 @@ public abstract class ArtificiallyMovedSprite extends MovableSprite implements U
 
     private void randomlyPickDirection(List<Direction> availableDirections) {
 
-        direction = availableDirections.get(random.nextInt(availableDirections.size()));
+//        try {
+            direction = availableDirections.get(random.nextInt(availableDirections.size()));
+
+//        } catch(IllegalArgumentException exception) {
+//            System.exit(-1);
+//        }
     }
 
     protected boolean isFriendlyObject(Sprite sprite) {
@@ -49,7 +56,7 @@ public abstract class ArtificiallyMovedSprite extends MovableSprite implements U
 
     private void removeDirectionOppositeToCurrentDirectionIfPossible(List<Direction> availableDirections) {
 
-        if (availableDirections.size() == 1)
+        if (availableDirections.size() <= 1)
             return;
 
         switch (direction) {

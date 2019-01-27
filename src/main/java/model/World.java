@@ -64,6 +64,14 @@ public class World implements Renderable, Updatable {
         return allSprites;
     }
 
+    private List<Sprite> getAllSpritesInProximityAndThoseWhoMove(List<Sprite> sprites) {
+
+        List<Sprite> allSprites = new ArrayList<>();
+        sprites.forEach(sprite -> allSprites.addAll(getAllSpritesInProximityAndThoseWhoMove(sprite)));
+
+        return allSprites;
+    }
+
     @Override
     public void render(GraphicsContext gc, double deltaTime) {
 
@@ -92,15 +100,21 @@ public class World implements Renderable, Updatable {
 
         allGameObjects.keySet().forEach(key -> allGameObjects.get(key).forEach(gameObject -> {
 
-            if (gameObject instanceof Updatable)
+            if (gameObject instanceof Updatable) {
+
+                List<Sprite> nearbySprites = new ArrayList<>();
+                if (gameObject instanceof MovableSprite)
+                    nearbySprites = getAllSpritesInProximityAndThoseWhoMove(
+                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection()
+                    );
+
                 ((Updatable) gameObject).update(
                         deltaTimeSinceStart,
                         deltaTime,
                         input,
-                        gameObject instanceof Sprite
-                                ? getAllSpritesInProximityAndThoseWhoMove((Sprite) gameObject)
-                                : null
+                        nearbySprites
                 );
+            }
         }));
     }
 

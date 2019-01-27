@@ -250,4 +250,13 @@ class QuadTree {
 
         return nearbySprites;
     }
+
+    List<Sprite> findNearbyGameObjects(long x, long y) {
+
+        Wall wall = new Wall(null, GameObject.Position.builder().horizontal(0).vertical(0).build());
+        wall.setCurrentCoordinates(Sprite.Coordinates.builder().x(x).y(y).build());
+
+        return findNearbyGameObjects(wall);
+    }
+
 }

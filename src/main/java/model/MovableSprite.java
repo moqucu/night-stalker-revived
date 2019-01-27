@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import static model.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public abstract class MovableSprite extends Sprite {
 
     protected Direction direction = Right;
@@ -34,7 +36,7 @@ public abstract class MovableSprite extends Sprite {
 
     Image getFrame(double deltaTime) {
 
-        int index = (int)((deltaTime % (frames.get(direction).size() * frameDuration)) / frameDuration);
+        int index = (int) ((deltaTime % (frames.get(direction).size() * frameDuration)) / frameDuration);
         return frames.get(direction).get(index);
     }
 
@@ -66,6 +68,56 @@ public abstract class MovableSprite extends Sprite {
                         deltaTime
                 ))
                 .collect(Collectors.toList());
+    }
+
+    List<Sprite> createShadowSpritePerMovableDirection() {
+
+        List<Sprite> shadowSprites = new ArrayList<>();
+
+        frames.keySet().forEach(
+                key -> {
+                    switch (key) {
+                        case Up:
+                            shadowSprites.add(
+                                    new ShadowSprite(
+                                            this,
+                                            getCurrentCoordinates().getX(),
+                                            getCurrentCoordinates().getY() - HEIGHT
+                                    )
+                            );
+                            break;
+                        case Down:
+                            shadowSprites.add(
+                                    new ShadowSprite(
+                                            this,
+                                            getCurrentCoordinates().getX(),
+                                            getCurrentCoordinates().getY() + HEIGHT
+                                    )
+                            );
+                            break;
+                        case Left:
+                            shadowSprites.add(
+                                    new ShadowSprite(
+                                            this,
+                                            getCurrentCoordinates().getX() - WIDTH,
+                                            getCurrentCoordinates().getY()
+                                    )
+                            );
+                            break;
+                        case Right:
+                            shadowSprites.add(
+                                    new ShadowSprite(
+                                            this,
+                                            getCurrentCoordinates().getX() + WIDTH,
+                                            getCurrentCoordinates().getY()
+                                    )
+                            );
+                            break;
+                    }
+                }
+        );
+
+        return shadowSprites;
     }
 
     private boolean checkDirectionForCollision(
