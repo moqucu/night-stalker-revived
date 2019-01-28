@@ -70,8 +70,9 @@ public abstract class MovableSprite extends Sprite {
                 .collect(Collectors.toList());
     }
 
-    List<Sprite> createShadowSpritePerMovableDirection() {
+    List<Sprite> createShadowSpritePerMovableDirection(double deltaTime) {
 
+        long pixelMoveRate = determinePixelMoveRate(deltaTime);
         List<Sprite> shadowSprites = new ArrayList<>();
 
         frames.keySet().forEach(
@@ -82,7 +83,7 @@ public abstract class MovableSprite extends Sprite {
                                     new ShadowSprite(
                                             this,
                                             getCurrentCoordinates().getX(),
-                                            getCurrentCoordinates().getY() - HEIGHT
+                                            getCurrentCoordinates().getY() - pixelMoveRate
                                     )
                             );
                             break;
@@ -91,7 +92,7 @@ public abstract class MovableSprite extends Sprite {
                                     new ShadowSprite(
                                             this,
                                             getCurrentCoordinates().getX(),
-                                            getCurrentCoordinates().getY() + HEIGHT
+                                            getCurrentCoordinates().getY() + pixelMoveRate
                                     )
                             );
                             break;
@@ -99,7 +100,7 @@ public abstract class MovableSprite extends Sprite {
                             shadowSprites.add(
                                     new ShadowSprite(
                                             this,
-                                            getCurrentCoordinates().getX() - WIDTH,
+                                            getCurrentCoordinates().getX() - pixelMoveRate,
                                             getCurrentCoordinates().getY()
                                     )
                             );
@@ -108,7 +109,7 @@ public abstract class MovableSprite extends Sprite {
                             shadowSprites.add(
                                     new ShadowSprite(
                                             this,
-                                            getCurrentCoordinates().getX() + WIDTH,
+                                            getCurrentCoordinates().getX() + pixelMoveRate,
                                             getCurrentCoordinates().getY()
                                     )
                             );

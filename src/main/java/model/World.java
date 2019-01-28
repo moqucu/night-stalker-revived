@@ -55,7 +55,7 @@ public class World implements Renderable, Updatable {
         gameObjects.forEach(gameObject -> addGameObject(layer, gameObject));
     }
 
-    public List<Sprite> getAllSpritesInProximityAndThoseWhoMove(Sprite sprite) {
+    private List<Sprite> getAllSpritesInProximityAndThoseWhoMove(Sprite sprite) {
 
         List<Sprite> allSprites = new ArrayList<>();
         allSprites.addAll(unmovableSprites.findNearbyGameObjects(sprite));
@@ -103,9 +103,13 @@ public class World implements Renderable, Updatable {
             if (gameObject instanceof Updatable) {
 
                 List<Sprite> nearbySprites = new ArrayList<>();
+
+                if (gameObject instanceof Sprite)
+                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove((Sprite)gameObject));
+
                 if (gameObject instanceof MovableSprite)
-                    nearbySprites = getAllSpritesInProximityAndThoseWhoMove(
-                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection()
+                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove(
+                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection(deltaTime))
                     );
 
                 ((Updatable) gameObject).update(

@@ -7,6 +7,7 @@ import utility.WallFactory;
 public class Main extends Application {
 
     private final static int WIDTH = 640, HEIGHT = 384;
+    private static final int TITLE_BAR_HEIGHT = 22;
 
     @Override
     public void start(Stage primaryStage) {
@@ -401,7 +402,10 @@ public class Main extends Application {
 
         Gun gun = new Gun(3.0);
         world.addGameObject(3, gun);
-        world.getAllSpritesInProximityAndThoseWhoMove(spider);
+
+        primaryStage.setHeight(HEIGHT + TITLE_BAR_HEIGHT);
+        primaryStage.setWidth(WIDTH);
+
         game.start();
     }
 

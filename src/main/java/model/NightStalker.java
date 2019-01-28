@@ -13,6 +13,8 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class NightStalker extends MovableSprite implements Updatable {
 
+    private Gun gun = null;
+
     public NightStalker() {
 
         super(Coordinates.builder().x(9 * WIDTH).y(5 * HEIGHT - HEIGHT / 2).build());
@@ -25,7 +27,7 @@ public class NightStalker extends MovableSprite implements Updatable {
             frames.get(directions[i]).add(new Image("images/NightStalker 1 - 1.png"));
         }
 
-        setVelocity(35);
+        setVelocity(70);
 
         frameDuration = 0.1;
     }
@@ -62,24 +64,45 @@ public class NightStalker extends MovableSprite implements Updatable {
 
         List<Direction> availableDirections = determineAvailableDirections(sprites, deltaTime);
 
+        sprites.forEach(sprite -> {
+
+            if (gun == null && sprite instanceof Gun && sprite.getBoundary().intersects(this.getBoundary()))
+                gun = ((Gun)sprite).pickUp();
+        });
+
         input.forEach(inputSignal -> {
 
             switch (inputSignal) {
                 case UP:
+
                     if (availableDirections.contains(Direction.Up))
                         moveToCurrentDirection(getCurrentCoordinates(), Direction.Up, deltaTime);
                     break;
                 case RIGHT:
+
                     if (availableDirections.contains(Direction.Right))
                         moveToCurrentDirection(getCurrentCoordinates(), Direction.Right, deltaTime);
                     break;
                 case DOWN:
+
                     if (availableDirections.contains(Direction.Down))
                         moveToCurrentDirection(getCurrentCoordinates(), Direction.Down, deltaTime);
                     break;
                 case LEFT:
+
                     if (availableDirections.contains(Direction.Left))
                         moveToCurrentDirection(getCurrentCoordinates(), Direction.Left, deltaTime);
+                    break;
+                case SPACE:
+
+                    if (gun != null)
+
+                        try {
+                            gun.fire();
+                        } catch(Gun.NoMoreRoundsException e) {
+                            gun = gun.drop();
+                        }
+
                     break;
             }
         });
