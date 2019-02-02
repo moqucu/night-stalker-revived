@@ -2,8 +2,10 @@ package model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public abstract class GameObject {
 
     public static final int WIDTH = 32;

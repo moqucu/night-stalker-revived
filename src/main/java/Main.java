@@ -6,10 +6,13 @@ import utility.WallFactory;
 
 public class Main extends Application {
 
+    private final static int WIDTH = 640, HEIGHT = 384;
+    private static final int TITLE_BAR_HEIGHT = 22;
+
     @Override
     public void start(Stage primaryStage) {
 
-        World world = new World();
+        World world = new World(WIDTH, HEIGHT);
         Game game = new Game(primaryStage, world);
 
         world.addGameObjects(4, WallFactory.createWalls(
@@ -396,6 +399,12 @@ public class Main extends Application {
 
         NightStalker nightStalker = new NightStalker();
         world.addGameObject(1, nightStalker);
+
+        Gun gun = new Gun(3.0);
+        world.addGameObject(3, gun);
+
+        primaryStage.setHeight(HEIGHT + TITLE_BAR_HEIGHT);
+        primaryStage.setWidth(WIDTH);
 
         game.start();
     }

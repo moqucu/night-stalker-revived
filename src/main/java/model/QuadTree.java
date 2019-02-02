@@ -1,133 +1,262 @@
 package model;
 
 import javafx.geometry.Rectangle2D;
+import lombok.Getter;
 
-import java.awt.Rectangle;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class QuadTree {
+/**
+ * https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
+ */
+class QuadTree {
 
-    // https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
+    private static byte TOP_RIGHT_NODE = 0b00000001;
 
-    private int level;
-    private List<Rectangle> objects;
-    private Rectangle2D bounds;
-    private QuadTree[] nodes;
+    private static byte TOP_LEFT_NODE = 0b00000010;
 
-    public QuadTree(int pLevel, Rectangle2D pBounds) {
-        level = pLevel;
-        objects = new ArrayList();
-        bounds = pBounds;
-        nodes = new QuadTree[4];
+    private static byte BOTTOM_LEFT_NODE = 0b00000100;
+
+    private static byte BOTTOM_RIGHT_NODE = 0b00001000;
+
+    /**
+     * Defines how many objects a node can hold before it splits.
+     */
+    private static final int MAX_OBJECTS = 20;
+
+    /**
+     * Defines the deepest level sub node.
+     */
+    private static final int MAX_LEVELS = 7;
+
+    /**
+     * Represents the current node level (0 being the topmost node).
+     */
+    private final int level;
+
+    /**
+     * Does this node have sub notes?
+     */
+    private AtomicBoolean hasSubNodes = new AtomicBoolean(false);
+
+    /**
+     * Represents the 2D space that the node occupies.
+     */
+    @Getter
+    private final Rectangle2D boundary;
+
+    /**
+     * Represents the four sub nodes.
+     */
+    private final ConcurrentMap<Byte, QuadTree> nodes = new ConcurrentHashMap<>(4);
+
+    /**
+     * Objects in node
+     */
+    private CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
+
+    /**
+     * Create root node.
+     **/
+    QuadTree(Rectangle2D quadTreeBoundaries) {
+
+        level = 0;
+        this.boundary = quadTreeBoundaries;
     }
 
-    // Clears all objects from tree
-    public void clear() {
-        objects.clear();
+    private QuadTree(int level, Rectangle2D quadTreeBoundary) {
 
-        for (int i = 0; i < nodes.length; i++) {
-            if (nodes[i] != null) {
-                nodes[i].clear();
-                nodes[i] = null;
-            }
-        }
+        this.level = level;
+        this.boundary = quadTreeBoundary;
     }
 
+    /**
+     * The clear method clears the quad tree by recursively clearing all objects from all nodes.
+     */
+    void clear() {
 
-    // Splits the node into 4 subnodes
+        sprites.clear();
+        nodes.clear();
+        hasSubNodes.set(false);
+    }
+
+    /**
+     * Split the node into four sub nodes by
+     * dividing the node into four equal parts
+     * and initializing the four sub nodes with the new boundary.
+     */
     private void split() {
-        int subWidth = (int)(bounds.getWidth() / 2);
-        int subHeight = (int)(bounds.getHeight() / 2);
-// Todo        int x = (int)bounds.getX();
-// Todo       int y = (int)bounds.getY();
 
-//        Todo nodes[0] = new QuadTree(level+1, new Rectangle(x + subWidth, y, subWidth, subHeight));
-//        Todo nodes[1] = new QuadTree(level+1, new Rectangle( x, y, subWidth, subHeight));
-//        Todo nodes[2] = new QuadTree(level+1, new Rectangle( x, y + subHeight, subWidth, subHeight));
-//        todo nodes[3] = new QuadTree(level+1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+        int halfWidth = (int) (boundary.getWidth() / 2);
+        int halfHeight = (int) (boundary.getHeight() / 2);
+
+        int leftBoundary = (int) boundary.getMinX();
+        int topBoundary = (int) boundary.getMinY();
+
+        int nextLevel = level + 1;
+
+        nodes.put(
+                TOP_RIGHT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary + halfWidth, topBoundary, halfWidth, halfHeight)
+                )
+        );
+
+        nodes.put(
+                TOP_LEFT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary, topBoundary, halfWidth, halfHeight)
+                )
+        );
+
+        nodes.put(
+                BOTTOM_LEFT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary, topBoundary + halfHeight, halfWidth, halfHeight)
+                )
+        );
+
+        nodes.put(
+                BOTTOM_RIGHT_NODE,
+                new QuadTree(
+                        nextLevel,
+                        new Rectangle2D(leftBoundary + halfWidth, topBoundary + halfHeight, halfWidth, halfHeight)
+                )
+        );
+
+        hasSubNodes.set(true);
     }
 
-    // Determine which node the object belongs to
-    // Returns -1 if object doesn't fit in node
-    private int getIndex(Rectangle pRect) {
-        int index = -1;
-//        todo double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
-//        todo double horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
+    /**
+     * Determine which node the object belongs to.
+     *
+     * @param sprite Sprite whose node is to be determined.
+     * @return byte with lower 4 bits representing which index to pull.
+     */
+    private byte getIndex(Sprite sprite) {
 
-        // Object can completely fit within the top quadrants
-//        todo        boolean topQuadrant = (pRect.getY() < horizontalMidpoint && pRect.getY() + pRect.getHeight() < horizontalMidpoint);
-        // Object can completely fit within the bottom quadrants
-        //        todo  boolean bottomQuadrant = (pRect.getY() > horizontalMidpoint);
+        /* if none of this node's boundary intersects with the sprite's boundary, return 0 for all bits */
+        byte intersectionFlags = 0b00000000;
 
-        // Object can completely fit within the left quadrants
-       /* todo if (pRect.getX() < verticalMidpoint && pRect.getX() + pRect.getWidth() < verticalMidpoint) {
-            if (topQuadrant) {
-                index = 1;
-            }
-            else if (bottomQuadrant) {
-                index = 2;
-            }
-        }
-        // Object can completely fit within the right quadrants
-        else if (pRect.getX() > verticalMidpoint) {
-            if (topQuadrant) {
-                index = 0;
-            }
-            else if (bottomQuadrant) {
-                index = 3;
-            }
-        }*/
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, TOP_RIGHT_NODE);
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, TOP_LEFT_NODE);
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, BOTTOM_LEFT_NODE);
+        intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, BOTTOM_RIGHT_NODE);
 
-        return index;
+        return intersectionFlags;
     }
 
-    // Add object to QuadTree todo
-    /*public void insert(Rectangle2D pRect) {
+    /**
+     * Checks if sprite intersects with node @ bitMask and sets the respective flag.
+     *
+     * @param sprite            Sprite to be analyzed for intersecting with the specified node.
+     * @param intersectionFlags Parameter to be modified with OR operator in case sprite intersects with boundary.
+     * @param bitMask           The index / flag that needs to be determined.
+     * @return Potentially modified parameter based on intersection analysis.
+     */
+    private byte setIntersectionFlags(Sprite sprite, byte intersectionFlags, byte bitMask) {
 
-        int MAX_OBJECTS = 10;
-        int MAX_LEVELS = 5;
+        if (nodes.get(bitMask) != null
+                && nodes.get(bitMask).getBoundary().intersects(sprite.getBoundary()))
+            intersectionFlags |= bitMask;
 
-        if (nodes[0] != null) {
-            int index = getIndex(pRect);
+        return intersectionFlags;
+    }
 
-            if (index != -1) {
-                nodes[index].insert(pRect);
+    private boolean wasInsertedIntoSubNode(Sprite sprite) {
 
-                return;
-            }
+        byte index = getIndex(sprite);
+
+        if (index > 0) {
+            nodes.get(index).insert(sprite);
+            return true;
         }
 
-        objects.add(pRect);
+        return false;
+    }
 
-        if (objects.size() > MAX_OBJECTS && level < MAX_LEVELS) {
-            if (nodes[0] == null) {
-                split();
-            }
+    /**
+     * The insert method is where everything comes together.
+     * The method first determines whether the node has any child nodes and tries to add the object there.
+     * If there are no child nodes or the object doesn’t fit in a child node, it adds the object to the parent node.
+     * Once the object is added, it determines whether the node needs to split by checking
+     * if the current number of objects exceeds the max allowed objects.
+     * Splitting will cause the node to insert any object that can fit in a child node
+     * to be added to the child node; otherwise the object will stay in the parent node.
+     *
+     * @param sprite The game object that shall be inserted into the quad tree.
+     */
+    void insert(Sprite sprite) {
 
-            int i = 0;
-            while (i < objects.size()) {
-                int index = getIndex(objects.get(i));
-                if (index != -1) {
-                    nodes[index].insert(objects.remove(i));
-                }
-                else {
-                    i++;
-                }
-            }
+        /* Can only insert new objects into right boundary */
+        if (!boundary.contains(sprite.getBoundary()))
+            throw new RuntimeException("Sprite is (partially) out of bounds with regards to this node!");
+
+        /* If this node has sub nodes and object can be inserted there, this function is done */
+        if (hasSubNodes.get() && wasInsertedIntoSubNode(sprite))
+            return;
+
+        /* Insert the game object in the list */
+        sprites.add(sprite);
+
+        /* if capacity of list is reached, split and move all objects into sub nodes */
+        if (sprites.size() > MAX_OBJECTS) {
+
+            if (level == MAX_LEVELS)
+                throw new RuntimeException("Quad tree has exceeded max_objects and max_levels limit");
+
+            split();
+
+            sprites.forEach(listedObject -> {
+
+                if (wasInsertedIntoSubNode(listedObject))
+                    sprites.remove(listedObject);
+
+            });
         }
-    }*/
+    }
 
-    // Return all objects that could collide with the given object
-    //todo
-    /*public List retrieve(List returnObjects, Rectangle2D pRect) {
-        int index = getIndex(pRect);
-        if (index != -1 && nodes[0] != null) {
-            nodes[index].retrieve(returnObjects, pRect);
-        }
+    /**
+     * Return all sprites that are in relative close proximity to the given object.
+     *
+     * @param sprite Sprite that shall be used for the proximity search.
+     * @return All nearby game sprites.
+     */
+    @SuppressWarnings("Duplicates")
+    List<Sprite> findNearbyGameObjects(Sprite sprite) {
 
-        returnObjects.addAll(objects);
+        List<Sprite> nearbySprites = new ArrayList<>(sprites);
 
-        return returnObjects;
-    }*/
+        byte index = getIndex(sprite);
+
+        if ((index & TOP_RIGHT_NODE) == TOP_RIGHT_NODE)
+            nearbySprites.addAll(nodes.get(TOP_RIGHT_NODE).findNearbyGameObjects(sprite));
+
+        if ((index & TOP_LEFT_NODE) == TOP_LEFT_NODE)
+            nearbySprites.addAll(nodes.get(TOP_LEFT_NODE).findNearbyGameObjects(sprite));
+
+        if ((index & BOTTOM_LEFT_NODE) == BOTTOM_LEFT_NODE)
+            nearbySprites.addAll(nodes.get(BOTTOM_LEFT_NODE).findNearbyGameObjects(sprite));
+
+        if ((index & BOTTOM_RIGHT_NODE) == BOTTOM_RIGHT_NODE)
+            nearbySprites.addAll(nodes.get(BOTTOM_RIGHT_NODE).findNearbyGameObjects(sprite));
+
+        return nearbySprites;
+    }
+
+    List<Sprite> findNearbyGameObjects(long x, long y) {
+
+        Wall wall = new Wall(null, GameObject.Position.builder().horizontal(0).vertical(0).build());
+        wall.setCurrentCoordinates(Sprite.Coordinates.builder().x(x).y(y).build());
+
+        return findNearbyGameObjects(wall);
+    }
+
 }

@@ -5,14 +5,15 @@ import javafx.scene.image.Image;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public abstract class Sprite extends GameObject implements Renderable {
 
     @Data
     @Builder
-    @SuppressWarnings("WeakerAccess")
     public static class Coordinates {
 
         private long x;
@@ -23,6 +24,8 @@ public abstract class Sprite extends GameObject implements Renderable {
      * Velocity is measured in pixel / seconds
      */
     private int velocity;
+
+    protected double frameDuration;
 
     private Image initialImage;
 

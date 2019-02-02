@@ -6,18 +6,25 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
+import java.util.concurrent.*;
 
 import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class World implements Renderable, Updatable {
 
-    private Map<Integer, List<GameObject>> gameObjects = new HashMap<>();
+    private final ConcurrentMap<Integer, List<GameObject>> allGameObjects = new ConcurrentHashMap<>();
+
+    private final CopyOnWriteArrayList<Sprite> movableSprites = new CopyOnWriteArrayList<>();
+
+    private final QuadTree unmovableSprites;
+    private final Rectangle2D boundary;
     private AudioClip audio = new AudioClip(World.class.getResource("/sounds/background.wav").toString());
 
-    public World() {
+    public World(int width, int height) {
+
+        boundary = new Rectangle2D(0, 0, (double) width, (double) height);
+        unmovableSprites = new QuadTree(boundary);
+        unmovableSprites.clear();
 
         ExecutorService service = Executors.newFixedThreadPool(4);
         service.execute(() -> {
@@ -28,29 +35,52 @@ public class World implements Renderable, Updatable {
         });
     }
 
-    public void addGameObject(int layer, GameObject gameObject) {
+    public void addGameObject(int layer, Sprite gameObject) {
 
-        List<GameObject> layerSpecificGameObjects = gameObjects.getOrDefault(layer, new ArrayList<>());
+        List<GameObject> layerSpecificGameObjects = allGameObjects.getOrDefault(layer, new ArrayList<>());
         layerSpecificGameObjects.add(gameObject);
-        gameObjects.putIfAbsent(layer, layerSpecificGameObjects);
+        allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
+
+        if (gameObject instanceof MovableSprite)
+            movableSprites.add(gameObject);
+        else
+            unmovableSprites.insert(gameObject);
     }
 
-    public void addGameObjects(int layer, List<? extends GameObject> gameObjects) {
+    public void addGameObjects(int layer, List<? extends Sprite> gameObjects) {
 
-        List<GameObject> layerSpecificGameObjects = this.gameObjects.getOrDefault(layer, new ArrayList<>());
+        List<GameObject> layerSpecificGameObjects = this.allGameObjects.getOrDefault(layer, new ArrayList<>());
         layerSpecificGameObjects.addAll(gameObjects);
-        this.gameObjects.putIfAbsent(layer, layerSpecificGameObjects);
+        this.allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
+        gameObjects.forEach(gameObject -> addGameObject(layer, gameObject));
+    }
+
+    private List<Sprite> getAllSpritesInProximityAndThoseWhoMove(Sprite sprite) {
+
+        List<Sprite> allSprites = new ArrayList<>();
+        allSprites.addAll(unmovableSprites.findNearbyGameObjects(sprite));
+        allSprites.addAll(movableSprites);
+
+        return allSprites;
+    }
+
+    private List<Sprite> getAllSpritesInProximityAndThoseWhoMove(List<Sprite> sprites) {
+
+        List<Sprite> allSprites = new ArrayList<>();
+        sprites.forEach(sprite -> allSprites.addAll(getAllSpritesInProximityAndThoseWhoMove(sprite)));
+
+        return allSprites;
     }
 
     @Override
     public void render(GraphicsContext gc, double deltaTime) {
 
-        gc.clearRect(0, 0, 640, 384);
-        gameObjects
+        gc.clearRect(boundary.getMinX(), boundary.getMinY(), boundary.getWidth(), boundary.getHeight());
+        allGameObjects
                 .keySet()
                 .stream()
                 .sorted((f1, f2) -> Integer.compare(f2, f1))
-                .forEach(key -> gameObjects.get(key).forEach(gameObject -> {
+                .forEach(key -> allGameObjects.get(key).forEach(gameObject -> {
 
                     if (gameObject instanceof Renderable)
                         ((Renderable) gameObject).render(gc, deltaTime);
@@ -58,36 +88,47 @@ public class World implements Renderable, Updatable {
     }
 
     @Override
-    public void update(double deltaTimeSinceStart, double deltaTime, Set<KeyCode> input, List<Sprite> sprites) {
+    public void update(
+            double deltaTimeSinceStart,
+            double deltaTime,
+            Set<KeyCode> input,
+            List<Sprite> nearbyObjects
+    ) {
 
         if (input.size() > 0 && (input.contains(KeyCode.ESCAPE) || input.contains(KeyCode.Q)))
             System.exit(0);
 
-        gameObjects.keySet().forEach(key -> gameObjects.get(key).forEach(gameObject -> {
+        allGameObjects.keySet().forEach(key -> allGameObjects.get(key).forEach(gameObject -> {
 
-            if (gameObject instanceof Updatable)
-                ((Updatable) gameObject).update(deltaTimeSinceStart, deltaTime, input, sprites);
+            if (gameObject instanceof Updatable) {
+
+                List<Sprite> nearbySprites = new ArrayList<>();
+
+                if (gameObject instanceof Sprite)
+                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove((Sprite)gameObject));
+
+                if (gameObject instanceof MovableSprite)
+                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove(
+                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection(deltaTime))
+                    );
+
+                ((Updatable) gameObject).update(
+                        deltaTimeSinceStart,
+                        deltaTime,
+                        input,
+                        nearbySprites
+                );
+            }
         }));
     }
 
-    public List<Sprite> getSprites() {
+    public double getWidth() {
 
-        List<Sprite> sprites = new ArrayList<>();
-        gameObjects.keySet().forEach(key -> sprites.addAll(
-                gameObjects
-                        .get(key)
-                        .stream()
-                        .filter(gameObject -> gameObject instanceof Sprite)
-                        .map(sc -> (Sprite) sc)
-                        .collect(Collectors.toList()))
-        );
-
-        return sprites;
+        return boundary.getWidth();
     }
 
-    //todo
-    @Override
-    public Rectangle2D getBoundary() {
-        return null;
+    public double getHeight() {
+
+        return boundary.getHeight();
     }
 }

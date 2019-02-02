@@ -5,10 +5,14 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
 
 @Data
+@Log4j2
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Bat extends ArtificiallyMovedSprite {
 
@@ -59,6 +63,19 @@ public class Bat extends ArtificiallyMovedSprite {
         else
             awake = true;
 
+        log.info("Direction before update: {}", this.getDirection());
+        log.info("Coordinates before update: {}", this.getCurrentCoordinates());
+        log.info("Nearby objects:");
+        sprites.forEach(log::info);
+        List<Direction> availableDirections = determineAvailableDirections(sprites, deltaTime);
+        log.info("Available direction:");
+        availableDirections.forEach(log::info);
+
+
         super.update(deltaTimeSinceStart, deltaTime, input, sprites);
+
+        log.info("Direction after update: {}", this.getDirection());
+        log.info("Coordinates after update: {}", this.getCurrentCoordinates());
+
     }
 }
