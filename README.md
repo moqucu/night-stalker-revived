@@ -24,6 +24,8 @@ The great Intellivision game revived as a Java game
     -   https://www.safaribooksonline.com/library/view/beginning-java-8/9781484204153/
 
     -   https://www.giantbomb.com/night-stalker/3030-4094/
+    
+    -   http://atariage.com/forums/topic/278003-colors-off-on-my-intellivision-system-1/
 
 ### **Action Items**
 

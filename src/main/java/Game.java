@@ -2,10 +2,13 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 import model.Renderable;
 import model.Updatable;
 import model.World;
@@ -13,6 +16,7 @@ import model.World;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static model.GameObject.HEIGHT;
@@ -32,6 +36,14 @@ public class Game {
 
     private World world;
 
+    private StackPane root = new StackPane();
+
+    private Scene scene = new Scene(root, 640,  384);
+
+    private final Image splashScreen = new Image("images/Night Stalker Revived Slash Screen.png");
+
+    private final ImageView splashScreenBackPlate = new ImageView();
+
     private ArrayList<Updatable> updatables = new ArrayList<>();
     private ArrayList<Renderable> renderables = new ArrayList<>();
 
@@ -39,9 +51,17 @@ public class Game {
 
         this.primaryStage = primaryStage;
         this.world = world;
+        createSplashScreenNodes();
         initializeStage();
     }
 
+    private void createSplashScreenNodes() {
+        splashScreenBackPlate.setImage(splashScreen);
+        root.getChildren().add(splashScreenBackPlate);
+
+    }
+
+    @SneakyThrows
     private void initializeStage() {
 
         Canvas canvas = new Canvas(world.getWidth(), world.getHeight());
@@ -49,6 +69,11 @@ public class Game {
 
         StackPane holder = new StackPane();
         holder.setStyle("-fx-background-color: #002DFF");
+        holder.getChildren().add(root);
+        primaryStage.show();
+
+
+        TimeUnit.SECONDS.sleep(10);
         holder.getChildren().add(canvas);
 
         Pane root = new Pane();
