@@ -1,3 +1,5 @@
+package org.moqucu.games.nightstalker;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -9,9 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
-import model.Renderable;
-import model.Updatable;
-import model.World;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,10 +18,10 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static model.GameObject.HEIGHT;
-import static model.GameObject.WIDTH;
+import static org.moqucu.games.nightstalker.objects.GameObject.HEIGHT;
+import static org.moqucu.games.nightstalker.objects.GameObject.WIDTH;
 
-public class Game {
+public class GameLoop {
 
     private final long startNanoTime = System.nanoTime();
 
@@ -34,7 +33,7 @@ public class Game {
 
     private Set<KeyCode> input = new HashSet<>();
 
-    private World world;
+    private Maze maze;
 
     private StackPane root = new StackPane();
 
@@ -47,10 +46,10 @@ public class Game {
     private ArrayList<Updatable> updatables = new ArrayList<>();
     private ArrayList<Renderable> renderables = new ArrayList<>();
 
-    public Game(Stage primaryStage, World world) {
+    public GameLoop(Stage primaryStage, Maze maze) {
 
         this.primaryStage = primaryStage;
-        this.world = world;
+        this.maze = maze;
         createSplashScreenNodes();
         initializeStage();
     }
@@ -64,7 +63,7 @@ public class Game {
     @SneakyThrows
     private void initializeStage() {
 
-        Canvas canvas = new Canvas(world.getWidth(), world.getHeight());
+        Canvas canvas = new Canvas(maze.getWidth(), maze.getHeight());
         graphicsContext = canvas.getGraphicsContext2D();
 
         StackPane holder = new StackPane();

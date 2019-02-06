@@ -1,6 +1,6 @@
 # night-stalker-revived
 
-The great Intellivision game revived as a Java game
+The great Intellivision gameLoop revived as a Java gameLoop
 
 ## 2018-03-16: Night Stalker Kick Off
 
@@ -12,10 +12,10 @@ The great Intellivision game revived as a Java game
 
 -   Project Goals:
 
-    -   Resurrect Intellivision’s Night Stalker game in Java
+    -   Resurrect Intellivision’s Night Stalker gameLoop in Java
 
     -   Teach GISSV 5th graders in approx. fifteen 45 minutes lessons how to
-        develop this game themselves
+        develop this gameLoop themselves
 
 -   Resources:
 
@@ -35,7 +35,7 @@ The great Intellivision game revived as a Java game
     IntelliJ) from chapter 1
 
 -   Everyone to brainstorm the properties and behaviors (aka required functions)
-    for the following objects:
+    for the following org.moqucu.games.nightstalker.objects:
 
     -   World, NightStalker -\> Eileen
 
@@ -57,7 +57,7 @@ The great Intellivision game revived as a Java game
 
 -   **World**
 
--   **Maze**: 2D Array [12][24]
+-   **org.moqucu.games.nightstalker.Maze**: 2D Array [12][24]
 
     -   0 or 1 (or an object) to denote a maze block
 
@@ -197,23 +197,23 @@ The great Intellivision game revived as a Java game
 
 -   Everyone to read chapter 4 of Java Games book
 
-## 2017-04-27: Night Stalker - Game Engine
+## 2017-04-27: Night Stalker - org.moqucu.games.nightstalker.GameLoop Engine
 
 ### **Objectives**
 
 -   Sean to present consolidated GitHub repository
 
--   Wen-Yu to facilitate discussion on game engine and related requirements
+-   Wen-Yu to facilitate discussion on gameLoop engine and related requirements
 
 ### **Outcomes**
 
 -   https://github.com/moqucu/night-stalker-revived/commit/9ceee7f49809b2d348009ac7ab587b0c57b168ee
 
--   High-level discussion on game engine alternatives
+-   High-level discussion on gameLoop engine alternatives
 
-    -   Game engine controls everything
+    -   org.moqucu.games.nightstalker.GameLoop engine controls everything
 
-    -   Objects control everything, bound together by game engine
+    -   Objects control everything, bound together by gameLoop engine
 
 ### **Action Items**
 

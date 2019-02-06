@@ -1,3 +1,5 @@
+package org.moqucu.games.nightstalker.utility;
+
 public class GameConstants {
  
     public final static int WIDTH = 640, HEIGHT = 384;

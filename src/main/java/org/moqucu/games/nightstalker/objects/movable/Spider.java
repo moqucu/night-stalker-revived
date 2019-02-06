@@ -1,13 +1,15 @@
-package model;
+package org.moqucu.games.nightstalker.objects.movable;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.objects.Sprite;
 
 import java.util.List;
 
-import static model.Direction.*;
+import static org.moqucu.games.nightstalker.data.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

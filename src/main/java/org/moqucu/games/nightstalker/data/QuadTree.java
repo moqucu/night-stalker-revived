@@ -1,7 +1,10 @@
-package model;
+package org.moqucu.games.nightstalker.data;
 
 import javafx.geometry.Rectangle2D;
 import lombok.Getter;
+import org.moqucu.games.nightstalker.objects.GameObject;
+import org.moqucu.games.nightstalker.objects.Sprite;
+import org.moqucu.games.nightstalker.objects.immovable.Wall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
  */
-class QuadTree {
+public class QuadTree {
 
     private static byte TOP_RIGHT_NODE = 0b00000001;
 
@@ -24,7 +27,7 @@ class QuadTree {
     private static byte BOTTOM_RIGHT_NODE = 0b00001000;
 
     /**
-     * Defines how many objects a node can hold before it splits.
+     * Defines how many org.moqucu.games.nightstalker.objects a node can hold before it splits.
      */
     private static final int MAX_OBJECTS = 20;
 
@@ -62,7 +65,7 @@ class QuadTree {
     /**
      * Create root node.
      **/
-    QuadTree(Rectangle2D quadTreeBoundaries) {
+    public QuadTree(Rectangle2D quadTreeBoundaries) {
 
         level = 0;
         this.boundary = quadTreeBoundaries;
@@ -75,9 +78,9 @@ class QuadTree {
     }
 
     /**
-     * The clear method clears the quad tree by recursively clearing all objects from all nodes.
+     * The clear method clears the quad tree by recursively clearing all org.moqucu.games.nightstalker.objects from all nodes.
      */
-    void clear() {
+    public void clear() {
 
         sprites.clear();
         nodes.clear();
@@ -187,15 +190,15 @@ class QuadTree {
      * The method first determines whether the node has any child nodes and tries to add the object there.
      * If there are no child nodes or the object doesn’t fit in a child node, it adds the object to the parent node.
      * Once the object is added, it determines whether the node needs to split by checking
-     * if the current number of objects exceeds the max allowed objects.
+     * if the current number of org.moqucu.games.nightstalker.objects exceeds the max allowed org.moqucu.games.nightstalker.objects.
      * Splitting will cause the node to insert any object that can fit in a child node
      * to be added to the child node; otherwise the object will stay in the parent node.
      *
      * @param sprite The game object that shall be inserted into the quad tree.
      */
-    void insert(Sprite sprite) {
+    public void insert(Sprite sprite) {
 
-        /* Can only insert new objects into right boundary */
+        /* Can only insert new org.moqucu.games.nightstalker.objects into right boundary */
         if (!boundary.contains(sprite.getBoundary()))
             throw new RuntimeException("Sprite is (partially) out of bounds with regards to this node!");
 
@@ -206,7 +209,7 @@ class QuadTree {
         /* Insert the game object in the list */
         sprites.add(sprite);
 
-        /* if capacity of list is reached, split and move all objects into sub nodes */
+        /* if capacity of list is reached, split and move all org.moqucu.games.nightstalker.objects into sub nodes */
         if (sprites.size() > MAX_OBJECTS) {
 
             if (level == MAX_LEVELS)
@@ -230,7 +233,7 @@ class QuadTree {
      * @return All nearby game sprites.
      */
     @SuppressWarnings("Duplicates")
-    List<Sprite> findNearbyGameObjects(Sprite sprite) {
+    public List<Sprite> findNearbyGameObjects(Sprite sprite) {
 
         List<Sprite> nearbySprites = new ArrayList<>(sprites);
 
@@ -251,7 +254,7 @@ class QuadTree {
         return nearbySprites;
     }
 
-    List<Sprite> findNearbyGameObjects(long x, long y) {
+    public List<Sprite> findNearbyGameObjects(long x, long y) {
 
         Wall wall = new Wall(null, GameObject.Position.builder().horizontal(0).vertical(0).build());
         wall.setCurrentCoordinates(Sprite.Coordinates.builder().x(x).y(y).build());

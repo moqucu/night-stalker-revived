@@ -1,9 +1,10 @@
-package model;
+package org.moqucu.games.nightstalker.objects.movable;
 
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
+import org.moqucu.games.nightstalker.objects.Sprite;
 
 import java.util.*;
 
@@ -14,12 +15,12 @@ public abstract class AnimatedSprite extends Sprite {
     @Singular
     protected List<Image> frames = new LinkedList<>();
 
-    AnimatedSprite(Coordinates currentCoordinates) {
+    protected AnimatedSprite(Coordinates currentCoordinates) {
 
         super(currentCoordinates);
     }
 
-    Image getFrame(double deltaTime) {
+    protected Image getFrame(double deltaTime) {
 
         int index = (int)((deltaTime % (frames.size() * frameDuration)) / frameDuration);
         return frames.get(index);

@@ -34,6 +34,18 @@
             <version>2.11.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -52,7 +64,7 @@
                 <version>8.8.3</version>
                 <configuration>
                     <vendor>OurCompany</vendor>
-                    <mainClass>Main</mainClass>
+                    <mainClass>org.moqucu.games.nightstalker.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

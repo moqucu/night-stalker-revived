@@ -1,16 +1,20 @@
-package model;
+package org.moqucu.games.nightstalker;
 
+import org.moqucu.games.nightstalker.data.QuadTree;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
+import org.moqucu.games.nightstalker.objects.GameObject;
+import org.moqucu.games.nightstalker.objects.Sprite;
+import org.moqucu.games.nightstalker.objects.movable.MovableSprite;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 import static javafx.scene.media.AudioClip.INDEFINITE;
 
-public class World implements Renderable, Updatable {
+public class Maze implements Renderable, Updatable {
 
     private final ConcurrentMap<Integer, List<GameObject>> allGameObjects = new ConcurrentHashMap<>();
 
@@ -18,9 +22,9 @@ public class World implements Renderable, Updatable {
 
     private final QuadTree unmovableSprites;
     private final Rectangle2D boundary;
-    private AudioClip audio = new AudioClip(World.class.getResource("/sounds/background.wav").toString());
+    private AudioClip audio = new AudioClip(Maze.class.getResource("/sounds/background.wav").toString());
 
-    public World(int width, int height) {
+    public Maze(int width, int height) {
 
         boundary = new Rectangle2D(0, 0, (double) width, (double) height);
         unmovableSprites = new QuadTree(boundary);
@@ -35,7 +39,7 @@ public class World implements Renderable, Updatable {
         });
     }
 
-    public void addGameObject(int layer, Sprite gameObject) {
+    void addGameObject(int layer, Sprite gameObject) {
 
         List<GameObject> layerSpecificGameObjects = allGameObjects.getOrDefault(layer, new ArrayList<>());
         layerSpecificGameObjects.add(gameObject);
@@ -47,7 +51,7 @@ public class World implements Renderable, Updatable {
             unmovableSprites.insert(gameObject);
     }
 
-    public void addGameObjects(int layer, List<? extends Sprite> gameObjects) {
+    void addGameObjects(int layer, List<? extends Sprite> gameObjects) {
 
         List<GameObject> layerSpecificGameObjects = this.allGameObjects.getOrDefault(layer, new ArrayList<>());
         layerSpecificGameObjects.addAll(gameObjects);

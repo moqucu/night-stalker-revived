@@ -1,4 +1,4 @@
-package model;
+package org.moqucu.games.nightstalker.data;
 
 public enum Direction {
 

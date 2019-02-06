@@ -1,4 +1,4 @@
-package model;
+package org.moqucu.games.nightstalker.objects;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.moqucu.games.nightstalker.Renderable;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -31,14 +32,14 @@ public abstract class Sprite extends GameObject implements Renderable {
 
     private Coordinates currentCoordinates = Coordinates.builder().build();
 
-    Sprite(Position initialPosition) {
+    public Sprite(Position initialPosition) {
 
         super(initialPosition);
         currentCoordinates.setX(getInitialPosition().getHorizontal() * WIDTH);
         currentCoordinates.setY(getInitialPosition().getVertical() * HEIGHT);
     }
 
-    Sprite(Coordinates initialCoordinates) {
+    public Sprite(Coordinates initialCoordinates) {
 
         super(null);
         currentCoordinates = initialCoordinates;
@@ -49,12 +50,12 @@ public abstract class Sprite extends GameObject implements Renderable {
         return new Rectangle2D(currentCoordinates.getX(), currentCoordinates.getY(), WIDTH, HEIGHT);
     }
 
-    protected boolean intersects(Sprite sprite) {
+    public boolean intersects(Sprite sprite) {
 
         return sprite.getBoundary().intersects(this.getBoundary());
     }
 
-    long determinePixelMoveRate(double deltaTime) {
+    protected long determinePixelMoveRate(double deltaTime) {
 
         return Math.round(getVelocity() * deltaTime);
     }

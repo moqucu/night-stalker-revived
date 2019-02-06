@@ -1,3 +1,4 @@
+package org.moqucu.games.nightstalker;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -7,96 +8,102 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.Bat;
-import model.Bunker;
-import model.GameObject;
-import model.GreyRobot;
-import model.Gun;
-import model.HalfSolidBunker;
-import model.NightStalker;
-import model.SolidBunker;
-import model.Spider;
-import model.SpiderWeb;
-import model.World;
-import utility.WallFactory;
+import org.moqucu.games.nightstalker.objects.movable.Bat;
+import org.moqucu.games.nightstalker.objects.immovable.Bunker;
+import org.moqucu.games.nightstalker.objects.GameObject;
+import org.moqucu.games.nightstalker.objects.movable.GreyRobot;
+import org.moqucu.games.nightstalker.objects.immovable.Gun;
+import org.moqucu.games.nightstalker.objects.immovable.HalfSolidBunker;
+import org.moqucu.games.nightstalker.objects.movable.NightStalker;
+import org.moqucu.games.nightstalker.objects.immovable.SolidBunker;
+import org.moqucu.games.nightstalker.objects.movable.Spider;
+import org.moqucu.games.nightstalker.objects.immovable.SpiderWeb;
+import org.moqucu.games.nightstalker.utility.GameConstants;
+import org.moqucu.games.nightstalker.utility.WallFactory;
+
+import static org.moqucu.games.nightstalker.utility.GameConstants.*;
 
 public class NightStalkerRevived extends Application {
 
     private Group root;
 
-    private Scene scene;
+    private Stage primaryStage;
 
-    private StackPane root;
-
-    private Image splashScreen;
-
-    private int gameScore = 0;
-    
-    private World world;
+    private Image splashScreen = new Image("images/Night Stalker Revived Slash Screen.png");
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("InvinciBagel");
+        this.primaryStage = primaryStage;
+
+        this.primaryStage.setTitle("InvinciBagel");
         root = new Group();
-        scene = new Scene(
+        Scene scene = new Scene(
                 root,
-                GameConstants.WIDTH,
-                GameConstants.HEIGHT,
+                WIDTH,
+                HEIGHT,
                 Color.web(Integer.toHexString(GameConstants.COLOR_WHITE))
         );
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        this.primaryStage.setScene(scene);
+        this.primaryStage.show();
 
-        createGameActors();
-        addGameActorNodes();
-        createCastingDirection();
+        createMazeAndAddSprites();
         createSplashScreenNodes();
         addNodesToStackPane();
         createStartGameLoop();
     }
 
-    private void createGameActors() {
-        
-        world = new World(GameConstants.WIDTH, GameConstants.HEIGHT);
+    private void createStartGameLoop() {
 
-        world.addGameObjects(4, WallFactory.createWalls(
+        Maze maze = new Maze(WIDTH, HEIGHT);
+        GameLoop gameLoop = new GameLoop(primaryStage, maze);
+
+        primaryStage.setHeight(HEIGHT + TITLE_BAR_HEIGHT);
+        primaryStage.setWidth(WIDTH);
+
+        gameLoop.start();
+    }
+
+    private void createMazeAndAddSprites() {
+
+        Maze maze = new Maze(WIDTH, HEIGHT);
+
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 001 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(0).build())
                         .build()
         ));
 
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 002 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(1).vertical(0).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 003 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(2).vertical(0).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 004 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(3).vertical(0).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 005 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(4).vertical(0).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 006 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(5).vertical(0).build())
@@ -108,7 +115,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(17).vertical(0).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 007 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(6).vertical(0).build())
@@ -120,33 +127,33 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(18).vertical(0).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 008 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(0).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 009 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(1).build())
                         .build()
         ));
 
-        world.addGameObject(0, new SpiderWeb(
+        maze.addGameObject(0, new SpiderWeb(
                 new Image("images/Sprite 010 - Web.png"),
                 GameObject.Position.builder().horizontal(1).vertical(1).build()
         ));
-        world.addGameObject(0, new SpiderWeb(
+        maze.addGameObject(0, new SpiderWeb(
                 new Image("images/Sprite 011 - Web.png"),
                 GameObject.Position.builder().horizontal(2).vertical(1).build()
         ));
-        world.addGameObject(0, new SpiderWeb(
+        maze.addGameObject(0, new SpiderWeb(
                 new Image("images/Sprite 012 - Web.png"),
                 GameObject.Position.builder().horizontal(3).vertical(1).build()
         ));
 
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 013 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(4).vertical(1).build())
@@ -159,7 +166,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(12).vertical(8).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 014 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(1).build())
@@ -167,31 +174,31 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(8).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 015 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(2).build())
                         .build()
         ));
 
-        world.addGameObject(0, new SpiderWeb(
+        maze.addGameObject(0, new SpiderWeb(
                 new Image("images/Sprite 016 - Web.png"),
                 GameObject.Position.builder().horizontal(1).vertical(2).build()
         ));
 
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 017 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(2).vertical(2).build())
                         .build()
         ));
 
-        world.addGameObject(0, new SpiderWeb(
+        maze.addGameObject(0, new SpiderWeb(
                 new Image("images/Sprite 018 - Web.png"),
                 GameObject.Position.builder().horizontal(3).vertical(2).build()
         ));
 
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 019 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(4).vertical(2).build())
@@ -202,7 +209,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(4).vertical(7).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 020 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(6).vertical(2).build())
@@ -214,7 +221,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(14).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 021 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(7).vertical(2).build())
@@ -226,7 +233,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(15).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 022 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(8).vertical(2).build())
@@ -237,7 +244,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(8).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 023 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(9).vertical(2).build())
@@ -248,14 +255,14 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(10).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 024 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(12).vertical(2).build())
                         .initialPosition(GameObject.Position.builder().horizontal(12).vertical(7).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 025 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(14).vertical(2).build())
@@ -264,7 +271,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(4).vertical(6).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 026 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(2).build())
@@ -272,14 +279,14 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 027 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(3).build())
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(6).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 028 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(3).build())
@@ -287,7 +294,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(10).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 029 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(4).build())
@@ -295,7 +302,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(10).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 030 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(4).vertical(4).build())
@@ -308,35 +315,35 @@ public class NightStalkerRevived extends Application {
                         .build()
         ));
 
-        world.addGameObject(0, new SolidBunker(
+        maze.addGameObject(0, new SolidBunker(
                 new Image("images/Sprite 031 - Bunker Solid.png"),
                 GameObject.Position.builder().horizontal(8).vertical(4).build()
         ));
 
-        world.addGameObject(0, new Bunker(
+        maze.addGameObject(0, new Bunker(
                 new Image("images/Sprite 032 - Bunker.png"),
                 GameObject.Position.builder().horizontal(9).vertical(4).build()
         ));
 
-        world.addGameObject(0, new SolidBunker(
+        maze.addGameObject(0, new SolidBunker(
                 new Image("images/Sprite 033 - Bunker Solid.png"),
                 GameObject.Position.builder().horizontal(10).vertical(4).build()
         ));
 
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 034 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(14).vertical(4).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 035 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(4).build())
                         .initialPosition(GameObject.Position.builder().horizontal(16).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 036 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(5).build())
@@ -344,60 +351,60 @@ public class NightStalkerRevived extends Application {
                         .build()
         ));
 
-        world.addGameObject(0, new SolidBunker(
+        maze.addGameObject(0, new SolidBunker(
                 new Image("images/Sprite 037 - Bunker Solid.png"),
                 GameObject.Position.builder().horizontal(8).vertical(5).build()
         ));
 
 
-        world.addGameObject(0, new HalfSolidBunker(
+        maze.addGameObject(0, new HalfSolidBunker(
                 new Image("images/Sprite 038 - Bunker Half-Solid.png"),
                 GameObject.Position.builder().horizontal(9).vertical(5).build()
         ));
 
-        world.addGameObject(0, new SolidBunker(
+        maze.addGameObject(0, new SolidBunker(
                 new Image("images/Sprite 039 - Bunker Solid.png"),
                 GameObject.Position.builder().horizontal(10).vertical(5).build()
         ));
 
 
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 040 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(14).vertical(6).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 041 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(16).vertical(8).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 042 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(17).vertical(8).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 043 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 044 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(17).vertical(9).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 045 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(11).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 046 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(1).vertical(11).build())
@@ -411,7 +418,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(17).vertical(11).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 047 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(2).vertical(11).build())
@@ -425,7 +432,7 @@ public class NightStalkerRevived extends Application {
                         .initialPosition(GameObject.Position.builder().horizontal(18).vertical(11).build())
                         .build()
         ));
-        world.addGameObjects(4, WallFactory.createWalls(
+        maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
                         .image(new Image("images/Sprite 048 - Wall.png"))
                         .initialPosition(GameObject.Position.builder().horizontal(19).vertical(11).build())
@@ -433,26 +440,27 @@ public class NightStalkerRevived extends Application {
         ));
 
         Bat bat1 = new Bat(17, 3, 5.0);
-        world.addGameObject(2, bat1);
+        maze.addGameObject(2, bat1);
 
         Bat bat2 = new Bat(16, 7, 2.5);
-        world.addGameObject(2, bat2);
+        maze.addGameObject(2, bat2);
 
         Spider spider = new Spider(1, 1);
-        world.addGameObject(2, spider);
+        maze.addGameObject(2, spider);
 
         GreyRobot robot = new GreyRobot(1, 10);
-        world.addGameObject(2, robot);
+        maze.addGameObject(2, robot);
 
         NightStalker nightStalker = new NightStalker();
-        world.addGameObject(1, nightStalker);
+        maze.addGameObject(1, nightStalker);
 
         Gun gun = new Gun(3.0);
-        world.addGameObject(3, gun);
+        maze.addGameObject(3, gun);
     }
 
     private void createSplashScreenNodes() {
-        scoreText = new Text();
+        /*scoreText = new Text();
+        int gameScore = 0;
         scoreText.setText(String.valueOf(gameScore));
         scoreText.setLayoutY(385);
         scoreText.setLayoutX(525);
@@ -514,15 +522,15 @@ public class NightStalkerRevived extends Application {
         splashScreenBackplate = new ImageView();
         splashScreenBackplate.setImage(splashScreen);
         splashScreenTextArea = new ImageView();
-        splashScreenTextArea.setImage(instructionLayer);
+        splashScreenTextArea.setImage(instructionLayer);*/
     }
 
     private void addNodesToStackPane() {
-        root.getChildren().add(splashScreenBackplate);
+        /*root.getChildren().add(splashScreenBackplate);
         root.getChildren().add(splashScreenTextArea);
         root.getChildren().add(buttonContainer);
         root.getChildren().add(scoreText);
-        root.getChildren().add(scoreLabel);
+        root.getChildren().add(scoreLabel);*/
     }
 
     public static void main(String[] args) {

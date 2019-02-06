@@ -1,4 +1,4 @@
-package model;
+package org.moqucu.games.nightstalker.objects.movable;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.objects.Sprite;
 
 import java.util.*;
 
@@ -65,7 +67,7 @@ public class Bat extends ArtificiallyMovedSprite {
 
         log.info("Direction before update: {}", this.getDirection());
         log.info("Coordinates before update: {}", this.getCurrentCoordinates());
-        log.info("Nearby objects:");
+        log.info("Nearby org.moqucu.games.nightstalker.objects:");
         sprites.forEach(log::info);
         List<Direction> availableDirections = determineAvailableDirections(sprites, deltaTime);
         log.info("Available direction:");

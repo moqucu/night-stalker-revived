@@ -1,11 +1,11 @@
-package utility;
+package org.moqucu.games.nightstalker.utility;
 
 import javafx.scene.image.Image;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
-import model.GameObject;
-import model.Wall;
+import org.moqucu.games.nightstalker.objects.GameObject;
+import org.moqucu.games.nightstalker.objects.immovable.Wall;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,15 +1,20 @@
-package model;
+package org.moqucu.games.nightstalker.objects.movable;
 
+import org.moqucu.games.nightstalker.Updatable;
+import org.moqucu.games.nightstalker.data.Direction;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.moqucu.games.nightstalker.objects.*;
+import org.moqucu.games.nightstalker.objects.immovable.Gun;
+import org.moqucu.games.nightstalker.objects.immovable.ShadowSprite;
 
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import static model.Direction.*;
+import static org.moqucu.games.nightstalker.data.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

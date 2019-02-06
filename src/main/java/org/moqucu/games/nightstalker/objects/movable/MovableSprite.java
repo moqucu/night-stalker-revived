@@ -1,10 +1,13 @@
-package model;
+package org.moqucu.games.nightstalker.objects.movable;
 
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
+import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.objects.immovable.ShadowSprite;
+import org.moqucu.games.nightstalker.objects.Sprite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static model.Direction.*;
+import static org.moqucu.games.nightstalker.data.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -41,7 +44,7 @@ public abstract class MovableSprite extends Sprite {
     }
 
     @Override
-    protected boolean intersects(Sprite sprite) {
+    public boolean intersects(Sprite sprite) {
 
         if (isFriendlyObject(sprite))
             return false;
@@ -70,7 +73,7 @@ public abstract class MovableSprite extends Sprite {
                 .collect(Collectors.toList());
     }
 
-    List<Sprite> createShadowSpritePerMovableDirection(double deltaTime) {
+    public List<Sprite> createShadowSpritePerMovableDirection(double deltaTime) {
 
         long pixelMoveRate = determinePixelMoveRate(deltaTime);
         List<Sprite> shadowSprites = new ArrayList<>();

@@ -1,4 +1,4 @@
-package model;
+package org.moqucu.games.nightstalker.objects.immovable;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -7,6 +7,11 @@ import javafx.scene.media.AudioClip;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.moqucu.games.nightstalker.Maze;
+import org.moqucu.games.nightstalker.objects.Sprite;
+import org.moqucu.games.nightstalker.Updatable;
+import org.moqucu.games.nightstalker.objects.movable.AnimatedSprite;
+import org.moqucu.games.nightstalker.objects.movable.NightStalker;
 
 import java.util.List;
 import java.util.Random;
@@ -27,9 +32,9 @@ public class Gun extends AnimatedSprite implements Updatable {
 
     private byte rounds = 6;
 
-    private AudioClip pickUpGunSound = new AudioClip(World.class.getResource("/sounds/pickupgun.wav").toString());
+    private AudioClip pickUpGunSound = new AudioClip(Maze.class.getResource("/sounds/pickupgun.wav").toString());
 
-    private AudioClip shootSound = new AudioClip(World.class.getResource("/sounds/shoot.wav").toString());
+    private AudioClip shootSound = new AudioClip(Maze.class.getResource("/sounds/shoot.wav").toString());
 
     private int[][] randomGunPositions = {{9, 6}, {17, 3}, {18, 10}, {9, 3}, {3, 9}};
 
@@ -70,7 +75,7 @@ public class Gun extends AnimatedSprite implements Updatable {
     }
 
     @Override
-    protected boolean intersects(Sprite sprite) {
+    public boolean intersects(Sprite sprite) {
 
         return false;
     }
@@ -86,7 +91,7 @@ public class Gun extends AnimatedSprite implements Updatable {
         }
     }
 
-    void fire() throws NoMoreRoundsException {
+    public void fire() throws NoMoreRoundsException {
 
         if (rounds > 0) {
 
@@ -97,7 +102,7 @@ public class Gun extends AnimatedSprite implements Updatable {
             throw new NoMoreRoundsException();
     }
 
-    Gun pickUp() {
+    public Gun pickUp() {
 
         rounds = 6;
         pickedUp = true;
@@ -107,7 +112,7 @@ public class Gun extends AnimatedSprite implements Updatable {
         return this;
     }
 
-    Gun drop() {
+    public Gun drop() {
 
         pickedUp = false;
         // awake = false;
