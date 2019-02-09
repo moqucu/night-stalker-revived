@@ -12,6 +12,7 @@ import org.moqucu.games.nightstalker.objects.immovable.Gun;
 
 import java.util.List;
 import java.util.Set;
+import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -23,12 +24,12 @@ public class NightStalker extends MovableSprite implements Updatable {
 
         super(Coordinates.builder().x(9 * WIDTH).y(5 * HEIGHT - HEIGHT / 2).build());
 
-        setInitialImage(new Image("images/NightStalker 1 - 1.png"));
+        setInitialImage(new Image(translate("images/NightStalker 1 - 1.png")));
 
         Direction[] directions = Direction.values();
         for (int i = 0; i < Direction.values().length; i++) {
 
-            frames.get(directions[i]).add(new Image("images/NightStalker 1 - 1.png"));
+            frames.get(directions[i]).add(new Image(translate("images/NightStalker 1 - 1.png")));
         }
 
         setVelocity(70);

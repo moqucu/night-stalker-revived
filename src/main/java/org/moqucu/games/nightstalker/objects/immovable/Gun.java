@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Gun extends AnimatedSprite implements Updatable {
@@ -32,9 +34,9 @@ public class Gun extends AnimatedSprite implements Updatable {
 
     private byte rounds = 6;
 
-    private AudioClip pickUpGunSound = new AudioClip(Maze.class.getResource("/sounds/pickupgun.wav").toString());
+    private AudioClip pickUpGunSound = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/pickupgun.wav").toString());
 
-    private AudioClip shootSound = new AudioClip(Maze.class.getResource("/sounds/shoot.wav").toString());
+    private AudioClip shootSound = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/shoot.wav").toString());
 
     private int[][] randomGunPositions = {{9, 6}, {17, 3}, {18, 10}, {9, 3}, {3, 9}};
 
@@ -53,10 +55,10 @@ public class Gun extends AnimatedSprite implements Updatable {
                 .y(randomGunPositions[randomIndex][1] * HEIGHT)
                 .build());
 
-        setInitialImage(new Image("images/Empty Sprite.png"));
+        setInitialImage(new Image(translate("images/Empty Sprite.png")));
 
-        frames.add(new Image("images/Weapon Full Size.png"));
-        frames.add(new Image("images/Empty Sprite.png"));
+        frames.add(new Image(translate("images/Weapon Full Size.png")));
+        frames.add(new Image(translate("images/Empty Sprite.png")));
 
         setVelocity(35);
 

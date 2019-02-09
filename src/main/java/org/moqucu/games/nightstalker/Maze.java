@@ -21,8 +21,10 @@ public class Maze implements Renderable, Updatable {
     private final CopyOnWriteArrayList<Sprite> movableSprites = new CopyOnWriteArrayList<>();
 
     private final QuadTree unmovableSprites;
+
     private final Rectangle2D boundary;
-    private AudioClip audio = new AudioClip(Maze.class.getResource("/sounds/background.wav").toString());
+
+    private AudioClip audio = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/background.wav").toString());
 
     public Maze(int width, int height) {
 

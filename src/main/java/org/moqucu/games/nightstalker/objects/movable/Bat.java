@@ -12,6 +12,8 @@ import org.moqucu.games.nightstalker.objects.Sprite;
 
 import java.util.*;
 
+import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
+
 @Data
 @Log4j2
 @ToString(callSuper = true)
@@ -26,19 +28,19 @@ public class Bat extends ArtificiallyMovedSprite {
 
         super(Coordinates.builder().x(initialXCoordinate * WIDTH - WIDTH / 2).y(initialYCoordinate * HEIGHT).build());
 
-        setInitialImage(new Image("images/Bat 1 - 1.png"));
+        setInitialImage(new Image(translate("images/Bat 1 - 1.png")));
 
         Direction[] directions = Direction.values();
         for (int i = 0; i < Direction.values().length; i++) {
 
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 2.png"));
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 3.png"));
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 4.png"));
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 5.png"));
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 6.png"));
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 5.png"));
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 4.png"));
-            frames.get(directions[i]).add(new Image("images/Bat 1 - 3.png"));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 2.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 3.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 4.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 5.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 6.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 5.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 4.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 3.png")));
         }
 
         setVelocity(35);

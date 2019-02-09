@@ -83,6 +83,7 @@ fabric.properties
 modules.xml
 .idea/misc.xml
 *.ipr
+*.java-version
 
 # Sonarlint plugin
 .idea/sonarlint

@@ -10,6 +10,7 @@ import org.moqucu.games.nightstalker.objects.Sprite;
 import java.util.List;
 
 import static org.moqucu.games.nightstalker.data.Direction.*;
+import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,20 +20,20 @@ public class Spider extends ArtificiallyMovedSprite {
 
         super(Coordinates.builder().x(initialXCoordinate * WIDTH).y(initialYCoordinate * HEIGHT).build());
 
-        setInitialImage(new Image("images/Spider - Vertical 2.png"));
+        setInitialImage(new Image(translate("images/Spider - Vertical 2.png")));
 
         Direction[] directions = Direction.values();
         for (int i = 0; i < Direction.values().length; i++) {
 
             if (i % 2 == 0) {
 
-                frames.get(directions[i]).add(new Image("images/Spider - Vertical 2.png"));
-                frames.get(directions[i]).add(new Image("images/Spider - Vertical 3.png"));
+                frames.get(directions[i]).add(new Image(translate("images/Spider - Vertical 2.png")));
+                frames.get(directions[i]).add(new Image(translate("images/Spider - Vertical 3.png")));
 
             } else {
 
-                frames.get(directions[i]).add(new Image("images/Spider - Horizontal 1.png"));
-                frames.get(directions[i]).add(new Image("images/Spider - Horizontal 2.png"));
+                frames.get(directions[i]).add(new Image(translate("images/Spider - Horizontal 1.png")));
+                frames.get(directions[i]).add(new Image(translate("images/Spider - Horizontal 2.png")));
             }
         }
 

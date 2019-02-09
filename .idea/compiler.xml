@@ -12,15 +12,23 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
+      <profile name="Annotation profile for night-stalker-revived" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/edge-SNAPSHOT/lombok-edge-SNAPSHOT.jar" />
+        </processorPath>
         <module name="night-stalker-revived" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="night-stalker-revived" target="1.8" />
+      <module name="night-stalker-revived" target="11" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="night-stalker-revived" options="" />
+    </option>
   </component>
 </project>

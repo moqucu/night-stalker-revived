@@ -4,15 +4,12 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -37,29 +34,12 @@ public class GameLoop {
 
     private StackPane root = new StackPane();
 
-    private Scene scene = new Scene(root, 640,  384);
-
-    private final Image splashScreen = new Image("images/Night Stalker Revived Slash Screen.png");
-
-    private final ImageView splashScreenBackPlate = new ImageView();
-
-    private ArrayList<Updatable> updatables = new ArrayList<>();
-    private ArrayList<Renderable> renderables = new ArrayList<>();
-
     public GameLoop(Stage primaryStage, Maze maze) {
 
         this.primaryStage = primaryStage;
         this.maze = maze;
-        createSplashScreenNodes();
         initializeStage();
     }
-
-    private void createSplashScreenNodes() {
-        splashScreenBackPlate.setImage(splashScreen);
-        root.getChildren().add(splashScreenBackPlate);
-
-    }
-
     @SneakyThrows
     private void initializeStage() {
 
@@ -70,7 +50,6 @@ public class GameLoop {
         holder.setStyle("-fx-background-color: #002DFF");
         holder.getChildren().add(root);
         primaryStage.show();
-
 
         TimeUnit.SECONDS.sleep(10);
         holder.getChildren().add(canvas);
@@ -88,16 +67,6 @@ public class GameLoop {
         primaryStage.setScene(scene);
     }
 
-    void addUpdatable(Updatable u) {
-
-        updatables.add(u);
-    }
-
-    void addRenderable(Renderable r) {
-
-        renderables.add(r);
-    }
-
     void start() {
 
         new AnimationTimer() {
@@ -108,8 +77,8 @@ public class GameLoop {
                 double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000000.0;
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
 
-                updatables.forEach(u -> u.update(deltaTimeSinceStart, deltaTime, input, null));
-                renderables.forEach(r -> r.render(graphicsContext, deltaTimeSinceStart));
+                maze.update(deltaTimeSinceStart, deltaTime, input, null);
+                maze.render(graphicsContext, deltaTimeSinceStart);
             }
         }.start();
 
