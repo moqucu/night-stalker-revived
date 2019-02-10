@@ -1,4 +1,5 @@
 module org.moqucu.games.nightstalker {
+    requires javafx.base;
     requires javafx.controls;
     requires javafx.media;
     requires static lombok;

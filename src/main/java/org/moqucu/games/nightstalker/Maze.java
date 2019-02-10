@@ -4,15 +4,14 @@ import org.moqucu.games.nightstalker.data.QuadTree;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.media.AudioClip;
 import org.moqucu.games.nightstalker.objects.GameObject;
+import org.moqucu.games.nightstalker.objects.Renderable;
 import org.moqucu.games.nightstalker.objects.Sprite;
+import org.moqucu.games.nightstalker.objects.Updatable;
 import org.moqucu.games.nightstalker.objects.movable.MovableSprite;
 
 import java.util.*;
 import java.util.concurrent.*;
-
-import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class Maze implements Renderable, Updatable {
 
@@ -24,21 +23,12 @@ public class Maze implements Renderable, Updatable {
 
     private final Rectangle2D boundary;
 
-    private AudioClip audio = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/background.wav").toString());
 
     public Maze(int width, int height) {
 
         boundary = new Rectangle2D(0, 0, (double) width, (double) height);
         unmovableSprites = new QuadTree(boundary);
         unmovableSprites.clear();
-
-        ExecutorService service = Executors.newFixedThreadPool(4);
-        service.execute(() -> {
-
-            audio.setVolume(0.5f);
-            audio.setCycleCount(INDEFINITE);
-            audio.play();
-        });
     }
 
     void addGameObject(int layer, Sprite gameObject) {

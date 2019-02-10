@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.moqucu.games.nightstalker.Maze;
 import org.moqucu.games.nightstalker.objects.Sprite;
-import org.moqucu.games.nightstalker.Updatable;
+import org.moqucu.games.nightstalker.objects.Updatable;
 import org.moqucu.games.nightstalker.objects.movable.AnimatedSprite;
 import org.moqucu.games.nightstalker.objects.movable.NightStalker;
 

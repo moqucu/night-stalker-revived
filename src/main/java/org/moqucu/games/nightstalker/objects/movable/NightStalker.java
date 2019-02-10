@@ -1,6 +1,6 @@
 package org.moqucu.games.nightstalker.objects.movable;
 
-import org.moqucu.games.nightstalker.Updatable;
+import org.moqucu.games.nightstalker.objects.Updatable;
 import org.moqucu.games.nightstalker.data.Direction;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

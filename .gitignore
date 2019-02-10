@@ -84,6 +84,7 @@ modules.xml
 .idea/misc.xml
 *.ipr
 *.java-version
+.idea
 
 # Sonarlint plugin
 .idea/sonarlint

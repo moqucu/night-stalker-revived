@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker;
+package org.moqucu.games.nightstalker.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 

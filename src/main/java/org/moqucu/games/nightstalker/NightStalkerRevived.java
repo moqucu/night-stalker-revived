@@ -1,14 +1,19 @@
 package org.moqucu.games.nightstalker;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.moqucu.games.nightstalker.objects.movable.Bat;
@@ -21,25 +26,39 @@ import org.moqucu.games.nightstalker.objects.movable.NightStalker;
 import org.moqucu.games.nightstalker.objects.immovable.SolidBunker;
 import org.moqucu.games.nightstalker.objects.movable.Spider;
 import org.moqucu.games.nightstalker.objects.immovable.SpiderWeb;
+import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
 import org.moqucu.games.nightstalker.utility.WallFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.moqucu.games.nightstalker.utility.GameConstants.*;
 
 public class NightStalkerRevived extends Application {
 
-    private Group root;
+    private Group splashScreenRootNode;
 
     private Stage primaryStage;
 
     private Maze maze;
 
-    private ImageView splashScreenBackPlate;
+    private Font buttonFont = Font.loadFont(translate("fonts/intellect.ttf"), 12);
+
+    private Task backGroundMusicLoop;
 
     public static String translate(String relativePath) {
 
         return NightStalkerRevived.class.getResource(relativePath).toExternalForm();
     }
 
+    @Override
+    public void init() {
+
+        splashScreenRootNode = createSplashScreenRootNode();
+        maze = createMazeAndAddSprites();
+    }
 
     private String fxBorderColor(int color) {
 
@@ -64,26 +83,33 @@ public class NightStalkerRevived extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        backGroundMusicLoop = new BackGroundMusicLoop();
+        ExecutorService service = Executors.newFixedThreadPool(4);
+        service.execute(backGroundMusicLoop);
+
+        /*;
+        service.execute(() -> {
+
+            audio.setVolume(0.5f);
+            audio.setCycleCount(INDEFINITE);
+            audio.play();
+        });*/
+
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Night Stalker Revived");
-        root = new Group();
         Scene scene = new Scene(
-                root,
+                splashScreenRootNode,
                 WIDTH,
-                HEIGHT,
-                Color.web(String.format("%06x", COLOR_BLUE))
+                HEIGHT + 32,
+                Color.web(String.format("%06x", COLOR_BROWN))
         );
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
-
-        createSplashScreenNodes();
-
-        createMazeAndAddSprites();
     }
 
-    private void createMazeAndAddSprites() {
+    private Maze createMazeAndAddSprites() {
 
-        maze = new Maze(WIDTH, HEIGHT);
+        Maze maze = new Maze(WIDTH, HEIGHT);
 
         maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
@@ -469,11 +495,11 @@ public class NightStalkerRevived extends Application {
 
         Gun gun = new Gun(3.0);
         maze.addGameObject(3, gun);
+
+        return maze;
     }
 
     private void createStartGameLoop() {
-
-        splashScreenBackPlate.setVisible(false);
 
         GameLoop gameLoop = new GameLoop(primaryStage, maze);
 
@@ -483,49 +509,66 @@ public class NightStalkerRevived extends Application {
         gameLoop.start();
     }
 
-    private void createSplashScreenNodes() {
-
-        splashScreenBackPlate
-                = new ImageView(translate("images/Night Stalker Revived Slash Screen.png"));
-        root.getChildren().add(splashScreenBackPlate);
-
-        HBox buttonContainer = new HBox(40);
-        buttonContainer.setLayoutY(351);
-        Insets buttonContainerPadding = new Insets(0, 0, 10, 16);
-        buttonContainer.setPadding(buttonContainerPadding);
-
-        Font scoreFont = Font.loadFont(translate("fonts/intellect.ttf"), 12);
+    private Button createQuitButton() {
 
         Button quitButton = new Button();
-        quitButton.setFont(scoreFont);
+        quitButton.setFont(buttonFont);
         quitButton.setStyle(
-                fxBorderColor(COLOR_BLUE)
-                + fxBorderWidth(2)
-                + fxBackgroundColor(COLOR_BLUE)
-                + fxTextFill(COLOR_WHITE)
-        );
-        quitButton.setText("QUIT");
-        quitButton.setOnAction((ActionEvent) -> System.exit(0));
-
-        Button playButton = new Button();
-        playButton.setFont(scoreFont);
-        playButton.setStyle(
-                fxBorderColor(COLOR_BLUE)
+                fxBorderColor(COLOR_WHITE)
                         + fxBorderWidth(2)
-                        + fxBackgroundColor(COLOR_BLUE)
+                        + fxBackgroundColor(COLOR_BROWN)
                         + fxTextFill(COLOR_WHITE)
         );
-        playButton.setText("PLAY");
-        playButton.setOnAction((ActionEvent) -> createStartGameLoop());
+        quitButton.setText("Quit");
+        quitButton.setOnAction((ActionEvent) -> System.exit(0));
 
-        buttonContainer.getChildren().addAll(quitButton, playButton);
+        return quitButton;
+    }
 
-        root.getChildren().add(buttonContainer);
+    private Button createPlayButton() {
 
-        /*root.getChildren().add(splashScreenTextArea);
+        Button playButton = new Button();
+        playButton.setFont(buttonFont);
+        playButton.setStyle(
+                fxBorderColor(COLOR_WHITE)
+                        + fxBorderWidth(2)
+                        + fxBackgroundColor(COLOR_BROWN)
+                        + fxTextFill(COLOR_WHITE)
+        );
+        playButton.setText("Play");
+        playButton.setOnAction((ActionEvent) -> backGroundMusicLoop.cancel());
 
-        root.getChildren().add(scoreText);
-        root.getChildren().add(scoreLabel);*/
+        return playButton;
+    }
+
+    private Node[] createNodeArrayOfAllButtons() {
+
+        List<Node> nodes = new ArrayList<>();
+        nodes.add(createQuitButton());
+        nodes.add(new Rectangle(20, 28, Paint.valueOf(String.format("%06x", COLOR_BROWN))));
+        nodes.add(createPlayButton());
+
+        return nodes.toArray(new Node[]{});
+    }
+
+    private Group createSplashScreenRootNode() {
+
+        ImageView splashScreenImage
+                = new ImageView(translate("images/Night Stalker Revived Slash Screen.png"));
+        HBox buttonContainer = new HBox(createNodeArrayOfAllButtons());
+        Insets buttonContainerPadding = new Insets(2, 2, 2, 2);
+        buttonContainer.setPadding(buttonContainerPadding);
+
+        VBox splashScreenContainer = new VBox();
+        splashScreenContainer.getChildren().add(buttonContainer);
+        splashScreenContainer.getChildren().add(splashScreenImage);
+
+       return new Group(splashScreenContainer);
+
+        /*splashScreenRootNode.getChildren().add(splashScreenTextArea);
+
+        splashScreenRootNode.getChildren().add(scoreText);
+        splashScreenRootNode.getChildren().add(scoreLabel);*/
 
 
         /*Text scoreText = new Text();
@@ -534,17 +577,17 @@ public class NightStalkerRevived extends Application {
         scoreText.setLayoutY(385);
         scoreText.setLayoutX(525);
 
-        scoreText.setFont(scoreFont);
+        scoreText.setFont(buttonFont);
         scoreText.setFill(Color.RED);
         Text scoreLabel = new Text();
         scoreLabel.setText("SCORE:");
         scoreLabel.setLayoutY(385);
         scoreLabel.setLayoutX(445);
-        scoreLabel.setFont(scoreFont);
+        scoreLabel.setFont(buttonFont);
         scoreLabel.setFill(Color.BLACK);
 
         Button gameButton = new Button();
-        gameButton.setFont(scoreFont);
+        gameButton.setFont(buttonFont);
         gameButton.setText("PLAY GAME");*/
         /*gameButton.setOnAction((ActionEvent) -> {
             splashScreenBackplate.setImage(skyCloud);

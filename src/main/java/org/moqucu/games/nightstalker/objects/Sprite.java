@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.moqucu.games.nightstalker.Renderable;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

@@ -1,0 +1,18 @@
+The game begins immediately, with the man inside
+the center bunker. His loaded weapon is lying in
+the maze and is flashing. The man must leave the
+bunker and land on the weapon to pick it up.
+
+Press the Disc on your hand controller to move the
+man through the maze. Press the Disc edge in the
+direction you want the man to go.
+
+Once the man has picked up the weapon, he has
+six bullets and can now shoot in four different
+
+directions.
+
+NOTE: The man can run and shoot, but he cannot
+do both at once! Also you can only fire off a shot
+when the man is standing still and he has the
+weapon
