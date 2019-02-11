@@ -7,6 +7,13 @@
     <groupId>org.moqucu.games</groupId>
     <artifactId>night-stalker-revived</artifactId>
     <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.2.RELEASE</version>
+    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,6 +31,11 @@
         </repository>
     </repositories>
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -80,11 +92,16 @@
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-
                     <release>${java.version}</release>
                     <annotationProcessorPaths>
                         <path>
@@ -92,20 +109,11 @@
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
                         </path>
-                    </annotationProcessorPaths>                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.zenjava</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.8.3</version>
-                <configuration>
-                    <vendor>OurCompany</vendor>
-                    <mainClass>org.moqucu.games.nightstalker.Main</mainClass>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
-        </plugins>
+
+         </plugins>
     </build>
-
-
 
 </project>

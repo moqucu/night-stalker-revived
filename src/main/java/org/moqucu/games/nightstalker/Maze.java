@@ -4,11 +4,11 @@ import org.moqucu.games.nightstalker.data.QuadTree;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import org.moqucu.games.nightstalker.objects.GameObject;
-import org.moqucu.games.nightstalker.objects.Renderable;
-import org.moqucu.games.nightstalker.objects.Sprite;
-import org.moqucu.games.nightstalker.objects.Updatable;
-import org.moqucu.games.nightstalker.objects.movable.MovableSprite;
+import org.moqucu.games.nightstalker.gameobject.GameObject;
+import org.moqucu.games.nightstalker.gameobject.Renderable;
+import org.moqucu.games.nightstalker.gameobject.Sprite;
+import org.moqucu.games.nightstalker.gameobject.Updatable;
+import org.moqucu.games.nightstalker.gameobject.movable.MovableSprite;
 
 import java.util.*;
 import java.util.concurrent.*;

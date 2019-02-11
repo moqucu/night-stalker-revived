@@ -2,45 +2,38 @@ package org.moqucu.games.nightstalker;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.moqucu.games.nightstalker.objects.movable.Bat;
-import org.moqucu.games.nightstalker.objects.immovable.Bunker;
-import org.moqucu.games.nightstalker.objects.GameObject;
-import org.moqucu.games.nightstalker.objects.movable.GreyRobot;
-import org.moqucu.games.nightstalker.objects.immovable.Gun;
-import org.moqucu.games.nightstalker.objects.immovable.HalfSolidBunker;
-import org.moqucu.games.nightstalker.objects.movable.NightStalker;
-import org.moqucu.games.nightstalker.objects.immovable.SolidBunker;
-import org.moqucu.games.nightstalker.objects.movable.Spider;
-import org.moqucu.games.nightstalker.objects.immovable.SpiderWeb;
+import org.moqucu.games.nightstalker.gameobject.movable.Bat;
+import org.moqucu.games.nightstalker.gameobject.immovable.Bunker;
+import org.moqucu.games.nightstalker.gameobject.GameObject;
+import org.moqucu.games.nightstalker.gameobject.movable.GreyRobot;
+import org.moqucu.games.nightstalker.gameobject.immovable.Gun;
+import org.moqucu.games.nightstalker.gameobject.immovable.HalfSolidBunker;
+import org.moqucu.games.nightstalker.gameobject.movable.NightStalker;
+import org.moqucu.games.nightstalker.gameobject.immovable.SolidBunker;
+import org.moqucu.games.nightstalker.gameobject.movable.Spider;
+import org.moqucu.games.nightstalker.gameobject.immovable.SpiderWeb;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
 import org.moqucu.games.nightstalker.utility.WallFactory;
+import org.moqucu.games.nightstalker.view.FxmlView;
+import org.moqucu.games.nightstalker.view.StageManager;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.moqucu.games.nightstalker.utility.GameConstants.*;
 
+@SpringBootApplication
 public class NightStalkerRevived extends Application {
 
-    private Group splashScreenRootNode;
+    private ConfigurableApplicationContext springContext;
 
-    private Stage primaryStage;
+    private StageManager stageManager;
 
     private Maze maze;
 
@@ -53,58 +46,47 @@ public class NightStalkerRevived extends Application {
         return NightStalkerRevived.class.getResource(relativePath).toExternalForm();
     }
 
+    private ConfigurableApplicationContext bootstrapSpringApplicationContext() {
+
+        SpringApplicationBuilder builder = new SpringApplicationBuilder(NightStalkerRevived.class);
+        String[] args = getParameters().getRaw().stream().toArray(String[]::new);
+        builder.headless(false);
+
+        return builder.run(args);
+    }
+
     @Override
     public void init() {
 
-        splashScreenRootNode = createSplashScreenRootNode();
+        springContext = bootstrapSpringApplicationContext();
         maze = createMazeAndAddSprites();
     }
 
-    private String fxBorderColor(int color) {
+    private void displayInitialScene() {
 
-        return "-fx-border-color: #" + String.format("%06x", color) + "; ";
-    }
-
-    private String fxBackgroundColor(int color) {
-
-        return "-fx-background-color: #" + String.format("%06x", color) + "; ";
-    }
-
-    private String fxBorderWidth(int width) {
-
-        return "-fx-border-width: " + width + "px; ";
-    }
-
-    private String fxTextFill(int color) {
-
-        return "-fx-text-fill: #" + String.format("%06x", color) + "; ";
+        stageManager.switchScene(FxmlView.SPLASH_SCREEN);
     }
 
     @Override
     public void start(Stage primaryStage) {
 
+        stageManager = springContext.getBean(StageManager.class, primaryStage);
+        displayInitialScene();
+
         backGroundMusicLoop = new BackGroundMusicLoop();
         ExecutorService service = Executors.newFixedThreadPool(4);
         service.execute(backGroundMusicLoop);
+    }
 
-        /*;
-        service.execute(() -> {
+    @Override
+    public void stop() {
 
-            audio.setVolume(0.5f);
-            audio.setCycleCount(INDEFINITE);
-            audio.play();
-        });*/
+        springContext.close();
+    }
 
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Night Stalker Revived");
-        Scene scene = new Scene(
-                splashScreenRootNode,
-                WIDTH,
-                HEIGHT + 32,
-                Color.web(String.format("%06x", COLOR_BROWN))
-        );
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
+    public static void main(String[] args) {
+
+        Application.launch(args);
     }
 
     private Maze createMazeAndAddSprites() {
@@ -497,147 +479,5 @@ public class NightStalkerRevived extends Application {
         maze.addGameObject(3, gun);
 
         return maze;
-    }
-
-    private void createStartGameLoop() {
-
-        GameLoop gameLoop = new GameLoop(primaryStage, maze);
-
-        primaryStage.setHeight(HEIGHT + TITLE_BAR_HEIGHT);
-        primaryStage.setWidth(WIDTH);
-
-        gameLoop.start();
-    }
-
-    private Button createQuitButton() {
-
-        Button quitButton = new Button();
-        quitButton.setFont(buttonFont);
-        quitButton.setStyle(
-                fxBorderColor(COLOR_WHITE)
-                        + fxBorderWidth(2)
-                        + fxBackgroundColor(COLOR_BROWN)
-                        + fxTextFill(COLOR_WHITE)
-        );
-        quitButton.setText("Quit");
-        quitButton.setOnAction((ActionEvent) -> System.exit(0));
-
-        return quitButton;
-    }
-
-    private Button createPlayButton() {
-
-        Button playButton = new Button();
-        playButton.setFont(buttonFont);
-        playButton.setStyle(
-                fxBorderColor(COLOR_WHITE)
-                        + fxBorderWidth(2)
-                        + fxBackgroundColor(COLOR_BROWN)
-                        + fxTextFill(COLOR_WHITE)
-        );
-        playButton.setText("Play");
-        playButton.setOnAction((ActionEvent) -> backGroundMusicLoop.cancel());
-
-        return playButton;
-    }
-
-    private Node[] createNodeArrayOfAllButtons() {
-
-        List<Node> nodes = new ArrayList<>();
-        nodes.add(createQuitButton());
-        nodes.add(new Rectangle(20, 28, Paint.valueOf(String.format("%06x", COLOR_BROWN))));
-        nodes.add(createPlayButton());
-
-        return nodes.toArray(new Node[]{});
-    }
-
-    private Group createSplashScreenRootNode() {
-
-        ImageView splashScreenImage
-                = new ImageView(translate("images/Night Stalker Revived Slash Screen.png"));
-        HBox buttonContainer = new HBox(createNodeArrayOfAllButtons());
-        Insets buttonContainerPadding = new Insets(2, 2, 2, 2);
-        buttonContainer.setPadding(buttonContainerPadding);
-
-        VBox splashScreenContainer = new VBox();
-        splashScreenContainer.getChildren().add(buttonContainer);
-        splashScreenContainer.getChildren().add(splashScreenImage);
-
-       return new Group(splashScreenContainer);
-
-        /*splashScreenRootNode.getChildren().add(splashScreenTextArea);
-
-        splashScreenRootNode.getChildren().add(scoreText);
-        splashScreenRootNode.getChildren().add(scoreLabel);*/
-
-
-        /*Text scoreText = new Text();
-        int gameScore = 0;
-        scoreText.setText(String.valueOf(gameScore));
-        scoreText.setLayoutY(385);
-        scoreText.setLayoutX(525);
-
-        scoreText.setFont(buttonFont);
-        scoreText.setFill(Color.RED);
-        Text scoreLabel = new Text();
-        scoreLabel.setText("SCORE:");
-        scoreLabel.setLayoutY(385);
-        scoreLabel.setLayoutX(445);
-        scoreLabel.setFont(buttonFont);
-        scoreLabel.setFill(Color.BLACK);
-
-        Button gameButton = new Button();
-        gameButton.setFont(buttonFont);
-        gameButton.setText("PLAY GAME");*/
-        /*gameButton.setOnAction((ActionEvent) -> {
-            splashScreenBackplate.setImage(skyCloud);
-            splashScreenBackplate.setVisible(true);
-            splashScreenBackplate.toBack();
-            splashScreenTextArea.setVisible(false);
-        });
-        helpButton = new Button();
-        helpButton.setText("INSTRUCTIONS");
-        helpButton.setOnAction((ActionEvent) -> {
-            splashScreenBackplate.setImage(splashScreen);
-            splashScreenBackplate.toFront();
-            splashScreenBackplate.setVisible(true);
-            splashScreenTextArea.setVisible(true);
-            splashScreenTextArea.setImage(instructionLayer);
-            splashScreenTextArea.toFront();
-            buttonContainer.toFront();
-        });
-        scoreButton = new Button();
-        scoreButton.setText("HIGH SCORES");
-        scoreButton.setOnAction((ActionEvent) -> {
-            splashScreenBackplate.setImage(splashScreen);
-            splashScreenBackplate.toFront();
-            splashScreenBackplate.setVisible(true);
-            splashScreenTextArea.setVisible(true);
-            splashScreenTextArea.setImage(scoresLayer);
-            splashScreenTextArea.toFront();
-            buttonContainer.toFront();
-        });
-        legalButton = new Button();
-        legalButton.setText("LEGAL & CREDITS");
-        legalButton.setOnAction((ActionEvent) -> {
-            splashScreenBackplate.setImage(splashScreen);
-            splashScreenBackplate.toFront();
-            splashScreenBackplate.setVisible(true);
-            splashScreenTextArea.setVisible(true);
-            splashScreenTextArea.setImage(legalLayer);
-            splashScreenTextArea.toFront();
-            buttonContainer.toFront();
-        });
-        buttonContainer.getChildren().addAll(gameButton, helpButton, scoreButton, legalButton);
-        splashScreenBackplate = new ImageView();
-        splashScreenBackplate.setImage(splashScreen);
-        splashScreenTextArea = new ImageView();
-        splashScreenTextArea.setImage(instructionLayer);*/
-
-    }
-
-    public static void main(String[] args) {
-
-        launch(args);
     }
 }

@@ -2,9 +2,9 @@ package org.moqucu.games.nightstalker.data;
 
 import javafx.geometry.Rectangle2D;
 import lombok.Getter;
-import org.moqucu.games.nightstalker.objects.GameObject;
-import org.moqucu.games.nightstalker.objects.Sprite;
-import org.moqucu.games.nightstalker.objects.immovable.Wall;
+import org.moqucu.games.nightstalker.gameobject.GameObject;
+import org.moqucu.games.nightstalker.gameobject.Sprite;
+import org.moqucu.games.nightstalker.gameobject.immovable.Wall;
 
 import java.util.ArrayList;
 import java.util.List;

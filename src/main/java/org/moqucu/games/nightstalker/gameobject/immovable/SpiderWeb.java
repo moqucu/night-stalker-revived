@@ -1,19 +1,17 @@
-package org.moqucu.games.nightstalker.objects.immovable;
+package org.moqucu.games.nightstalker.gameobject.immovable;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.moqucu.games.nightstalker.objects.Renderable;
-import org.moqucu.games.nightstalker.objects.Sprite;
+import org.moqucu.games.nightstalker.gameobject.Renderable;
+import org.moqucu.games.nightstalker.gameobject.Sprite;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class Wall extends Sprite implements Renderable {
+public class SpiderWeb extends Sprite implements Renderable {
 
-    public Wall(Image image, Position initialPosition) {
+    public SpiderWeb(Image image, Position initialPosition) {
 
         super(initialPosition);
         setInitialImage(image);
@@ -23,5 +21,11 @@ public class Wall extends Sprite implements Renderable {
     public void render(GraphicsContext gc, double deltaTime) {
 
         gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
+    }
+
+    @Override
+    public boolean intersects(Sprite sprite) {
+
+        return false;
     }
 }

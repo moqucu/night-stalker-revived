@@ -1,12 +1,12 @@
-package org.moqucu.games.nightstalker.objects.immovable;
+package org.moqucu.games.nightstalker.gameobject.immovable;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.objects.Renderable;
-import org.moqucu.games.nightstalker.objects.Sprite;
+import org.moqucu.games.nightstalker.gameobject.Renderable;
+import org.moqucu.games.nightstalker.gameobject.Sprite;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

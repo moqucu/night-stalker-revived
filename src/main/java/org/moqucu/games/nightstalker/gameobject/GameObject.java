@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.objects;
+package org.moqucu.games.nightstalker.gameobject;
 
 import lombok.Builder;
 import lombok.Data;

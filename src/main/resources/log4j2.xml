@@ -19,7 +19,7 @@
 
     </Appenders>
     <Loggers>
-        <Logger name="org.moqucu.games.nightstalker.objects.movable.Bat" level="INFO" additivity="false">
+        <Logger name="org.moqucu.games.nightstalker.gameobject.movable.Bat" level="INFO" additivity="false">
             <AppenderRef ref="File"/>
         </Logger>
         <Root level="error">
