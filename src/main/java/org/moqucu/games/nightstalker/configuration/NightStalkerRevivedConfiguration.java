@@ -10,8 +10,12 @@ import org.springframework.context.annotation.Lazy;
 @Configuration
 public class NightStalkerRevivedConfiguration {
 
+    final SpringFXMLLoader springFXMLLoader;
+
     @Autowired
-    SpringFXMLLoader springFXMLLoader;
+    public NightStalkerRevivedConfiguration(SpringFXMLLoader springFXMLLoader) {
+        this.springFXMLLoader = springFXMLLoader;
+    }
 
     @Bean
     @Lazy

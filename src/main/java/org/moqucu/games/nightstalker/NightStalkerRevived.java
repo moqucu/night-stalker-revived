@@ -2,21 +2,8 @@ package org.moqucu.games.nightstalker;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
-import javafx.scene.image.Image;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.moqucu.games.nightstalker.gameobject.movable.Bat;
-import org.moqucu.games.nightstalker.gameobject.immovable.Bunker;
-import org.moqucu.games.nightstalker.gameobject.GameObject;
-import org.moqucu.games.nightstalker.gameobject.movable.GreyRobot;
-import org.moqucu.games.nightstalker.gameobject.immovable.Gun;
-import org.moqucu.games.nightstalker.gameobject.immovable.HalfSolidBunker;
-import org.moqucu.games.nightstalker.gameobject.movable.NightStalker;
-import org.moqucu.games.nightstalker.gameobject.immovable.SolidBunker;
-import org.moqucu.games.nightstalker.gameobject.movable.Spider;
-import org.moqucu.games.nightstalker.gameobject.immovable.SpiderWeb;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
-import org.moqucu.games.nightstalker.utility.WallFactory;
 import org.moqucu.games.nightstalker.view.FxmlView;
 import org.moqucu.games.nightstalker.view.StageManager;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,8 +13,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.moqucu.games.nightstalker.utility.GameConstants.*;
-
 @SpringBootApplication
 public class NightStalkerRevived extends Application {
 
@@ -35,11 +20,9 @@ public class NightStalkerRevived extends Application {
 
     private StageManager stageManager;
 
-    private Maze maze;
+    // private Maze maze;
 
-    private Font buttonFont = Font.loadFont(translate("fonts/intellect.ttf"), 12);
-
-    private Task backGroundMusicLoop;
+    // private Font buttonFont = Font.loadFont(translate("fonts/intellect.ttf"), 12);
 
     public static String translate(String relativePath) {
 
@@ -49,7 +32,7 @@ public class NightStalkerRevived extends Application {
     private ConfigurableApplicationContext bootstrapSpringApplicationContext() {
 
         SpringApplicationBuilder builder = new SpringApplicationBuilder(NightStalkerRevived.class);
-        String[] args = getParameters().getRaw().stream().toArray(String[]::new);
+        String[] args = getParameters().getRaw().toArray(new String[0]);
         builder.headless(false);
 
         return builder.run(args);
@@ -59,7 +42,7 @@ public class NightStalkerRevived extends Application {
     public void init() {
 
         springContext = bootstrapSpringApplicationContext();
-        maze = createMazeAndAddSprites();
+        // maze = createMazeAndAddSprites();
     }
 
     private void displayInitialScene() {
@@ -73,7 +56,7 @@ public class NightStalkerRevived extends Application {
         stageManager = springContext.getBean(StageManager.class, primaryStage);
         displayInitialScene();
 
-        backGroundMusicLoop = new BackGroundMusicLoop();
+        Task backGroundMusicLoop = new BackGroundMusicLoop();
         ExecutorService service = Executors.newFixedThreadPool(4);
         service.execute(backGroundMusicLoop);
     }
@@ -89,7 +72,7 @@ public class NightStalkerRevived extends Application {
         Application.launch(args);
     }
 
-    private Maze createMazeAndAddSprites() {
+    /*private Maze createMazeAndAddSprites() {
 
         Maze maze = new Maze(WIDTH, HEIGHT);
 
@@ -479,5 +462,5 @@ public class NightStalkerRevived extends Application {
         maze.addGameObject(3, gun);
 
         return maze;
-    }
+    }*/
 }

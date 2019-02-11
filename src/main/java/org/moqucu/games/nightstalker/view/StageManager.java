@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.configuration.SpringFXMLLoader;
-import org.moqucu.games.nightstalker.view.FxmlView;
 
 import java.util.Optional;
 
