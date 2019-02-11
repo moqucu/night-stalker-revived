@@ -1,11 +1,11 @@
-package org.moqucu.games.nightstalker.objects.movable;
+package org.moqucu.games.nightstalker.gameobject.movable;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.moqucu.games.nightstalker.data.Direction;
-import org.moqucu.games.nightstalker.objects.Sprite;
+import org.moqucu.games.nightstalker.gameobject.Sprite;
 
 import java.util.List;
 

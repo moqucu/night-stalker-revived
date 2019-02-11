@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static org.moqucu.games.nightstalker.objects.GameObject.HEIGHT;
-import static org.moqucu.games.nightstalker.objects.GameObject.WIDTH;
+import static org.moqucu.games.nightstalker.gameobject.GameObject.HEIGHT;
+import static org.moqucu.games.nightstalker.gameobject.GameObject.WIDTH;
 
 public class GameLoop {
 

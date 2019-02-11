@@ -1,7 +1,6 @@
-package org.moqucu.games.nightstalker.objects;
+package org.moqucu.games.nightstalker.gameobject;
 
 import javafx.scene.input.KeyCode;
-import org.moqucu.games.nightstalker.objects.Sprite;
 
 import java.util.List;
 import java.util.Set;

@@ -2,9 +2,7 @@ package org.moqucu.games.nightstalker.data;
 
 import javafx.geometry.Rectangle2D;
 import lombok.Getter;
-import org.moqucu.games.nightstalker.objects.GameObject;
-import org.moqucu.games.nightstalker.objects.Sprite;
-import org.moqucu.games.nightstalker.objects.immovable.Wall;
+import org.moqucu.games.nightstalker.gameobject.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -253,13 +251,4 @@ public class QuadTree {
 
         return nearbySprites;
     }
-
-    public List<Sprite> findNearbyGameObjects(long x, long y) {
-
-        Wall wall = new Wall(null, GameObject.Position.builder().horizontal(0).vertical(0).build());
-        wall.setCurrentCoordinates(Sprite.Coordinates.builder().x(x).y(y).build());
-
-        return findNearbyGameObjects(wall);
-    }
-
 }
