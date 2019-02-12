@@ -1,23 +1,25 @@
 package org.moqucu.games.nightstalker.gameobject;
 
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public abstract class Sprite extends GameObject implements Renderable {
+public abstract class Sprite extends ImageView {
+
+    public static final int WIDTH = 32;
+
+    public static final int HEIGHT = 32;
 
     @Data
     @Builder
-    public static class Coordinates {
+    public static class Position {
 
-        private long x;
-        private long y;
+        private int horizontal;
+        private int vertical;
     }
 
     /**
@@ -25,28 +27,32 @@ public abstract class Sprite extends GameObject implements Renderable {
      */
     private int velocity;
 
+    private Position initialMazeGridPosition;
+
     protected double frameDuration;
 
     private Image initialImage;
 
-    private Coordinates currentCoordinates = Coordinates.builder().build();
+    protected Point2D currentCoordinates = Point2D.ZERO;
 
-    public Sprite(Position initialPosition) {
+    public Sprite(Position initialMazeGridPosition) {
 
-        super(initialPosition);
-        currentCoordinates.setX(getInitialPosition().getHorizontal() * WIDTH);
-        currentCoordinates.setY(getInitialPosition().getVertical() * HEIGHT);
+        this.initialMazeGridPosition = initialMazeGridPosition;
+        currentCoordinates.add(
+                initialMazeGridPosition.getHorizontal() * WIDTH,
+                initialMazeGridPosition.getVertical() * HEIGHT
+        );
     }
 
-    public Sprite(Coordinates initialCoordinates) {
+    public Sprite(Point2D initialCoordinates) {
 
-        super(null);
+        this(Position.builder().build());
         currentCoordinates = initialCoordinates;
     }
 
-    public Rectangle2D getBoundary() {
+    public Bounds getBoundary() {
 
-        return new Rectangle2D(currentCoordinates.getX(), currentCoordinates.getY(), WIDTH, HEIGHT);
+        return new BoundingBox(currentCoordinates.getX(), currentCoordinates.getY(), WIDTH, HEIGHT);
     }
 
     public boolean intersects(Sprite sprite) {
@@ -56,6 +62,6 @@ public abstract class Sprite extends GameObject implements Renderable {
 
     protected long determinePixelMoveRate(double deltaTime) {
 
-        return Math.round(getVelocity() * deltaTime);
+        return Math.round(velocity * deltaTime);
     }
 }

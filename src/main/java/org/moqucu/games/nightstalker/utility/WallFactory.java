@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
-import org.moqucu.games.nightstalker.gameobject.GameObject;
 import org.moqucu.games.nightstalker.gameobject.immovable.Wall;
 
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ import javafx.scene.media.AudioClip;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.moqucu.games.nightstalker.Maze;
+import org.moqucu.games.nightstalker.view.Maze;
 import org.moqucu.games.nightstalker.gameobject.Sprite;
 import org.moqucu.games.nightstalker.gameobject.Updatable;
 import org.moqucu.games.nightstalker.gameobject.movable.AnimatedSprite;

@@ -4,7 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.gameobject.Renderable;
 import org.moqucu.games.nightstalker.gameobject.Sprite;
 
 @Data

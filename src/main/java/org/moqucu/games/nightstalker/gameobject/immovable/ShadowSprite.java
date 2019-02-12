@@ -3,7 +3,6 @@ package org.moqucu.games.nightstalker.gameobject.immovable;
 import javafx.scene.canvas.GraphicsContext;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.gameobject.GameObject;
 import org.moqucu.games.nightstalker.gameobject.Sprite;
 
 @Data

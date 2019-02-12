@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
+import org.moqucu.games.nightstalker.view.Maze;
 
 import java.util.HashSet;
 import java.util.Set;

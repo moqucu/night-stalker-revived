@@ -1,11 +1,8 @@
-package org.moqucu.games.nightstalker;
+package org.moqucu.games.nightstalker.view;
 
+import javafx.scene.layout.StackPane;
 import org.moqucu.games.nightstalker.data.QuadTree;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import org.moqucu.games.nightstalker.gameobject.GameObject;
-import org.moqucu.games.nightstalker.gameobject.Renderable;
 import org.moqucu.games.nightstalker.gameobject.Sprite;
 import org.moqucu.games.nightstalker.gameobject.Updatable;
 import org.moqucu.games.nightstalker.gameobject.movable.MovableSprite;
@@ -13,7 +10,11 @@ import org.moqucu.games.nightstalker.gameobject.movable.MovableSprite;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class Maze implements Renderable, Updatable {
+public class Maze extends StackPane implements Updatable {
+
+    private final static double PREF_WIDTH = 640d;
+
+    private final static double PREF_HEIGHT = 384;
 
     private final ConcurrentMap<Integer, List<GameObject>> allGameObjects = new ConcurrentHashMap<>();
 
@@ -21,14 +22,25 @@ public class Maze implements Renderable, Updatable {
 
     private final QuadTree unmovableSprites;
 
-    private final Rectangle2D boundary;
+    public Maze() {
 
+        super();
+        setId("org.moqucu.games.nightstalker.maze");
+        setWidth(PREF_WIDTH);
+        setPrefWidth(PREF_WIDTH);
+        setHeight(PREF_HEIGHT);
+        setPrefHeight(PREF_HEIGHT);
+        unmovableSprites = new QuadTree(getBoundsInLocal());
+    }
 
     public Maze(int width, int height) {
 
-        boundary = new Rectangle2D(0, 0, (double) width, (double) height);
-        unmovableSprites = new QuadTree(boundary);
-        unmovableSprites.clear();
+        super();
+        setWidth(width);
+        setPrefWidth(width);
+        setHeight(height);
+        setPrefHeight(height);
+        unmovableSprites = new QuadTree(getBoundsInLocal());
     }
 
     void addGameObject(int layer, Sprite gameObject) {
@@ -69,21 +81,6 @@ public class Maze implements Renderable, Updatable {
     }
 
     @Override
-    public void render(GraphicsContext gc, double deltaTime) {
-
-        gc.clearRect(boundary.getMinX(), boundary.getMinY(), boundary.getWidth(), boundary.getHeight());
-        allGameObjects
-                .keySet()
-                .stream()
-                .sorted((f1, f2) -> Integer.compare(f2, f1))
-                .forEach(key -> allGameObjects.get(key).forEach(gameObject -> {
-
-                    if (gameObject instanceof Renderable)
-                        ((Renderable) gameObject).render(gc, deltaTime);
-                }));
-    }
-
-    @Override
     public void update(
             double deltaTimeSinceStart,
             double deltaTime,
@@ -116,15 +113,5 @@ public class Maze implements Renderable, Updatable {
                 );
             }
         }));
-    }
-
-    public double getWidth() {
-
-        return boundary.getWidth();
-    }
-
-    public double getHeight() {
-
-        return boundary.getHeight();
     }
 }

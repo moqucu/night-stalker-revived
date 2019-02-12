@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.data;
 
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import lombok.Getter;
 import org.moqucu.games.nightstalker.gameobject.Sprite;
 
@@ -48,7 +49,7 @@ public class QuadTree {
      * Represents the 2D space that the node occupies.
      */
     @Getter
-    private final Rectangle2D boundary;
+    private final Bounds bounds;
 
     /**
      * Represents the four sub nodes.
@@ -63,16 +64,16 @@ public class QuadTree {
     /**
      * Create root node.
      **/
-    public QuadTree(Rectangle2D quadTreeBoundaries) {
+    public QuadTree(Bounds quadTreeBounds) {
 
         level = 0;
-        this.boundary = quadTreeBoundaries;
+        bounds = quadTreeBounds;
     }
 
-    private QuadTree(int level, Rectangle2D quadTreeBoundary) {
+    private QuadTree(int level, Bounds quadTreeBounds) {
 
         this.level = level;
-        this.boundary = quadTreeBoundary;
+        bounds = quadTreeBounds;
     }
 
     /**
@@ -88,15 +89,15 @@ public class QuadTree {
     /**
      * Split the node into four sub nodes by
      * dividing the node into four equal parts
-     * and initializing the four sub nodes with the new boundary.
+     * and initializing the four sub nodes with the new bounds.
      */
     private void split() {
 
-        int halfWidth = (int) (boundary.getWidth() / 2);
-        int halfHeight = (int) (boundary.getHeight() / 2);
+        int halfWidth = (int) (bounds.getWidth() / 2);
+        int halfHeight = (int) (bounds.getHeight() / 2);
 
-        int leftBoundary = (int) boundary.getMinX();
-        int topBoundary = (int) boundary.getMinY();
+        int leftBoundary = (int) bounds.getMinX();
+        int topBoundary = (int) bounds.getMinY();
 
         int nextLevel = level + 1;
 
@@ -104,7 +105,7 @@ public class QuadTree {
                 TOP_RIGHT_NODE,
                 new QuadTree(
                         nextLevel,
-                        new Rectangle2D(leftBoundary + halfWidth, topBoundary, halfWidth, halfHeight)
+                        new BoundingBox(leftBoundary + halfWidth, topBoundary, halfWidth, halfHeight)
                 )
         );
 
@@ -112,7 +113,7 @@ public class QuadTree {
                 TOP_LEFT_NODE,
                 new QuadTree(
                         nextLevel,
-                        new Rectangle2D(leftBoundary, topBoundary, halfWidth, halfHeight)
+                        new BoundingBox(leftBoundary, topBoundary, halfWidth, halfHeight)
                 )
         );
 
@@ -120,7 +121,7 @@ public class QuadTree {
                 BOTTOM_LEFT_NODE,
                 new QuadTree(
                         nextLevel,
-                        new Rectangle2D(leftBoundary, topBoundary + halfHeight, halfWidth, halfHeight)
+                        new BoundingBox(leftBoundary, topBoundary + halfHeight, halfWidth, halfHeight)
                 )
         );
 
@@ -128,7 +129,7 @@ public class QuadTree {
                 BOTTOM_RIGHT_NODE,
                 new QuadTree(
                         nextLevel,
-                        new Rectangle2D(leftBoundary + halfWidth, topBoundary + halfHeight, halfWidth, halfHeight)
+                        new BoundingBox(leftBoundary + halfWidth, topBoundary + halfHeight, halfWidth, halfHeight)
                 )
         );
 
@@ -143,7 +144,7 @@ public class QuadTree {
      */
     private byte getIndex(Sprite sprite) {
 
-        /* if none of this node's boundary intersects with the sprite's boundary, return 0 for all bits */
+        /* if none of this node's bounds intersects with the sprite's bounds, return 0 for all bits */
         byte intersectionFlags = 0b00000000;
 
         intersectionFlags = setIntersectionFlags(sprite, intersectionFlags, TOP_RIGHT_NODE);
@@ -158,14 +159,14 @@ public class QuadTree {
      * Checks if sprite intersects with node @ bitMask and sets the respective flag.
      *
      * @param sprite            Sprite to be analyzed for intersecting with the specified node.
-     * @param intersectionFlags Parameter to be modified with OR operator in case sprite intersects with boundary.
+     * @param intersectionFlags Parameter to be modified with OR operator in case sprite intersects with bounds.
      * @param bitMask           The index / flag that needs to be determined.
      * @return Potentially modified parameter based on intersection analysis.
      */
     private byte setIntersectionFlags(Sprite sprite, byte intersectionFlags, byte bitMask) {
 
         if (nodes.get(bitMask) != null
-                && nodes.get(bitMask).getBoundary().intersects(sprite.getBoundary()))
+                && nodes.get(bitMask).getBounds().intersects(sprite.getBoundary()))
             intersectionFlags |= bitMask;
 
         return intersectionFlags;
@@ -196,8 +197,8 @@ public class QuadTree {
      */
     public void insert(Sprite sprite) {
 
-        /* Can only insert new org.moqucu.games.nightstalker.objects into right boundary */
-        if (!boundary.contains(sprite.getBoundary()))
+        /* Can only insert new org.moqucu.games.nightstalker.objects into right bounds */
+        if (!bounds.contains(sprite.getBoundary()))
             throw new RuntimeException("Sprite is (partially) out of bounds with regards to this node!");
 
         /* If this node has sub nodes and object can be inserted there, this function is done */
