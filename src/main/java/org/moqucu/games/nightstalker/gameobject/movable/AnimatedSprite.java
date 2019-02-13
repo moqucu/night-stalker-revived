@@ -1,5 +1,6 @@
 package org.moqucu.games.nightstalker.gameobject.movable;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +16,7 @@ public abstract class AnimatedSprite extends Sprite {
     @Singular
     protected List<Image> frames = new LinkedList<>();
 
-    protected AnimatedSprite(Coordinates currentCoordinates) {
+    protected AnimatedSprite(Point2D currentCoordinates) {
 
         super(currentCoordinates);
     }

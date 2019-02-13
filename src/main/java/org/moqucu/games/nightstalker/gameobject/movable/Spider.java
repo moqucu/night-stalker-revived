@@ -1,6 +1,6 @@
 package org.moqucu.games.nightstalker.gameobject.movable;
 
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ public class Spider extends ArtificiallyMovedSprite {
 
     public Spider(int initialXCoordinate, int initialYCoordinate) {
 
-        super(Coordinates.builder().x(initialXCoordinate * WIDTH).y(initialYCoordinate * HEIGHT).build());
+        super(new Point2D(initialXCoordinate * WIDTH, initialYCoordinate * HEIGHT));
 
         setInitialImage(new Image(translate("images/Spider - Vertical 2.png")));
 
@@ -47,7 +47,7 @@ public class Spider extends ArtificiallyMovedSprite {
 
         List<Direction> availableDirections = super.determineAvailableDirections(sprites, deltaTime);
 
-        Coordinates currentCoordinates = getCurrentCoordinates();
+        Point2D currentCoordinates = getCurrentCoordinates();
 
         if (currentCoordinates.getX() / WIDTH == 3 && currentCoordinates.getY() / HEIGHT == 5)
             availableDirections.remove(Right);
@@ -56,11 +56,5 @@ public class Spider extends ArtificiallyMovedSprite {
             availableDirections.remove(Down);
 
         return availableDirections;
-    }
-
-    @Override
-    public void render(GraphicsContext gc, double deltaTime) {
-
-            gc.drawImage(getFrame(deltaTime), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
     }
 }

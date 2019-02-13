@@ -1,5 +1,6 @@
 package org.moqucu.games.nightstalker.gameobject.movable;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +28,7 @@ public abstract class MovableSprite extends Sprite {
     @Singular
     protected Map<Direction, List<Image>> frames = new HashMap<>();
 
-    MovableSprite(Coordinates currentCoordinates) {
+    MovableSprite(Point2D currentCoordinates) {
 
         super(currentCoordinates);
 
@@ -125,7 +126,7 @@ public abstract class MovableSprite extends Sprite {
     }
 
     private boolean checkDirectionForCollision(
-            Coordinates coordinates,
+            Point2D coordinates,
             Direction direction,
             List<Sprite> sprites,
             double deltaTime) {
@@ -140,21 +141,21 @@ public abstract class MovableSprite extends Sprite {
                 .anyMatch(sprite -> sprite.intersects(shadowSprite) & !sprite.equals(this));
     }
 
-    void moveToCurrentDirection(Coordinates coordinates, Direction direction, double deltaTime) {
+    void moveToCurrentDirection(Point2D coordinates, Direction direction, double deltaTime) {
 
         switch (direction) {
 
             case Right:
-                coordinates.setX(getCurrentCoordinates().getX() + determinePixelMoveRate(deltaTime));
+                coordinates.add(getCurrentCoordinates().getX() + determinePixelMoveRate(deltaTime), 0);
                 break;
             case Down:
-                coordinates.setY(getCurrentCoordinates().getY() + determinePixelMoveRate(deltaTime));
+                coordinates.add(0, getCurrentCoordinates().getY() + determinePixelMoveRate(deltaTime));
                 break;
             case Left:
-                coordinates.setX(getCurrentCoordinates().getX() - determinePixelMoveRate(deltaTime));
+                coordinates.add(getCurrentCoordinates().getX() - determinePixelMoveRate(deltaTime), 0);
                 break;
             case Up:
-                coordinates.setY(getCurrentCoordinates().getY() - determinePixelMoveRate(deltaTime));
+                coordinates.add(0, getCurrentCoordinates().getY() - determinePixelMoveRate(deltaTime));
                 break;
         }
     }

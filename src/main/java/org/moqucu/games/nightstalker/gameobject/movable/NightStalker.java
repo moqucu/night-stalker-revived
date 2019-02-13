@@ -1,8 +1,8 @@
 package org.moqucu.games.nightstalker.gameobject.movable;
 
+import javafx.geometry.Point2D;
 import org.moqucu.games.nightstalker.gameobject.Updatable;
 import org.moqucu.games.nightstalker.data.Direction;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class NightStalker extends MovableSprite implements Updatable {
 
     public NightStalker() {
 
-        super(Coordinates.builder().x(9 * WIDTH).y(5 * HEIGHT - HEIGHT / 2).build());
+        super(new Point2D(9 * WIDTH, 5 * HEIGHT - HEIGHT / 2));
 
         setInitialImage(new Image(translate("images/NightStalker 1 - 1.png")));
 
@@ -41,12 +41,6 @@ public class NightStalker extends MovableSprite implements Updatable {
     protected boolean isFriendlyObject(Sprite sprite) {
 
         return false;
-    }
-
-    @Override
-    public void render(GraphicsContext gc, double deltaTime) {
-
-            gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
     }
 
     @Override

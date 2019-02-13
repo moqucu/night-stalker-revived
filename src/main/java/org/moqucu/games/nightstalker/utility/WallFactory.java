@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
+import org.moqucu.games.nightstalker.gameobject.Sprite;
 import org.moqucu.games.nightstalker.gameobject.immovable.Wall;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class WallFactory {
         private Image image;
 
         @Singular
-        private List<GameObject.Position> initialPositions;
+        private List<Sprite.Position> initialPositions;
     }
 
     public static List<Wall> createWalls(WallFactoryConfiguration configuration) {

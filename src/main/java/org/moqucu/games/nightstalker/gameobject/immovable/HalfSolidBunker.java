@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.gameobject.immovable;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,28 +9,16 @@ import org.moqucu.games.nightstalker.gameobject.Sprite;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class HalfSolidBunker extends Sprite implements Renderable {
+public class HalfSolidBunker extends Sprite {
 
     public HalfSolidBunker(Image image, Position initialPosition) {
 
         super(initialPosition);
-        setInitialImage(image);
+        setImage(image);
     }
 
-    @Override
-    public void render(GraphicsContext gc, double deltaTime) {
+    public Bounds getBoundary() {
 
-        gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
-    }
-
-    @Override
-    public Rectangle2D getBoundary() {
-
-        return new Rectangle2D(
-                getCurrentCoordinates().getX(),
-                getCurrentCoordinates().getY()+HEIGHT/2.0,
-                WIDTH,
-                HEIGHT/2.0
-        );
+        return new BoundingBox(currentCoordinates.getX(), currentCoordinates.getY() + HEIGHT / 2.0, WIDTH, HEIGHT);
     }
 }

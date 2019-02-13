@@ -16,7 +16,7 @@ public class Maze extends StackPane implements Updatable {
 
     private final static double PREF_HEIGHT = 384;
 
-    private final ConcurrentMap<Integer, List<GameObject>> allGameObjects = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, List<Sprite>> allGameObjects = new ConcurrentHashMap<>();
 
     private final CopyOnWriteArrayList<Sprite> movableSprites = new CopyOnWriteArrayList<>();
 
@@ -45,7 +45,7 @@ public class Maze extends StackPane implements Updatable {
 
     void addGameObject(int layer, Sprite gameObject) {
 
-        List<GameObject> layerSpecificGameObjects = allGameObjects.getOrDefault(layer, new ArrayList<>());
+        List<Sprite> layerSpecificGameObjects = allGameObjects.getOrDefault(layer, new ArrayList<>());
         layerSpecificGameObjects.add(gameObject);
         allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
 
@@ -57,7 +57,7 @@ public class Maze extends StackPane implements Updatable {
 
     void addGameObjects(int layer, List<? extends Sprite> gameObjects) {
 
-        List<GameObject> layerSpecificGameObjects = this.allGameObjects.getOrDefault(layer, new ArrayList<>());
+        List<Sprite> layerSpecificGameObjects = this.allGameObjects.getOrDefault(layer, new ArrayList<>());
         layerSpecificGameObjects.addAll(gameObjects);
         this.allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
         gameObjects.forEach(gameObject -> addGameObject(layer, gameObject));

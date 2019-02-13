@@ -1,6 +1,6 @@
 package org.moqucu.games.nightstalker.gameobject.immovable;
 
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Point2D;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.moqucu.games.nightstalker.gameobject.Sprite;
@@ -9,15 +9,11 @@ import org.moqucu.games.nightstalker.gameobject.Sprite;
 @EqualsAndHashCode(callSuper = true)
 public class ShadowSprite extends Sprite {
 
-    private GameObject shadowCaster;
+    private Sprite shadowCaster;
 
-    public ShadowSprite(GameObject shadowCaster, long x, long y) {
+    public ShadowSprite(Sprite shadowCaster, double x, double y) {
 
-        super(Sprite.Coordinates.builder().x(x).y(y).build());
+        super(new Point2D(x, y));
         this.shadowCaster = shadowCaster;
-    }
-
-    @Override
-    public void render(GraphicsContext gc, double deltaTime) {
     }
 }

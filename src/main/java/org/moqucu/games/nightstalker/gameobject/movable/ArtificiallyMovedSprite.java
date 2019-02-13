@@ -1,5 +1,6 @@
 package org.moqucu.games.nightstalker.gameobject.movable;
 
+import javafx.geometry.Point2D;
 import org.moqucu.games.nightstalker.gameobject.Updatable;
 import org.moqucu.games.nightstalker.data.Direction;
 import javafx.scene.input.KeyCode;
@@ -23,19 +24,14 @@ public abstract class ArtificiallyMovedSprite extends MovableSprite implements U
 
     private Random random = new Random();
 
-    ArtificiallyMovedSprite(Coordinates currentCoordinates) {
+    ArtificiallyMovedSprite(Point2D currentCoordinates) {
 
         super(currentCoordinates);
     }
 
     private void randomlyPickDirection(List<Direction> availableDirections) {
 
-//        try {
             direction = availableDirections.get(random.nextInt(availableDirections.size()));
-
-//        } catch(IllegalArgumentException exception) {
-//            System.exit(-1);
-//        }
     }
 
     protected boolean isFriendlyObject(Sprite sprite) {

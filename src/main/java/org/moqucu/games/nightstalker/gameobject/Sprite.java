@@ -7,12 +7,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class Sprite extends ImageView {
 
-    public static final int WIDTH = 32;
+    public static final double WIDTH = 32.0;
 
-    public static final int HEIGHT = 32;
+    public static final double HEIGHT = 32.0;
 
     @Data
     @Builder

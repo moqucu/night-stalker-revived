@@ -1,6 +1,5 @@
 package org.moqucu.games.nightstalker.gameobject.immovable;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,17 +9,11 @@ import org.moqucu.games.nightstalker.gameobject.Sprite;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Wall extends Sprite implements Renderable {
+public class Wall extends Sprite {
 
     public Wall(Image image, Position initialPosition) {
 
         super(initialPosition);
-        setInitialImage(image);
-    }
-
-    @Override
-    public void render(GraphicsContext gc, double deltaTime) {
-
-        gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
+        setImage(image);
     }
 }

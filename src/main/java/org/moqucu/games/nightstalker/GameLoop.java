@@ -16,8 +16,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static org.moqucu.games.nightstalker.gameobject.GameObject.HEIGHT;
-import static org.moqucu.games.nightstalker.gameobject.GameObject.WIDTH;
+import static org.moqucu.games.nightstalker.utility.GameConstants.HEIGHT;
+import static org.moqucu.games.nightstalker.utility.GameConstants.WIDTH;
 
 public class GameLoop {
 
@@ -79,7 +79,6 @@ public class GameLoop {
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
 
                 maze.update(deltaTimeSinceStart, deltaTime, input, null);
-                maze.render(graphicsContext, deltaTimeSinceStart);
             }
         }.start();
 

@@ -1,12 +1,11 @@
 package org.moqucu.games.nightstalker.gameobject.movable;
 
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.data.Direction;
 import org.moqucu.games.nightstalker.gameobject.Sprite;
 
@@ -15,7 +14,6 @@ import java.util.*;
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
-@Log4j2
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Bat extends ArtificiallyMovedSprite {
@@ -26,7 +24,7 @@ public class Bat extends ArtificiallyMovedSprite {
 
     public Bat(int initialXCoordinate, int initialYCoordinate, double sleepTime) {
 
-        super(Coordinates.builder().x(initialXCoordinate * WIDTH - WIDTH / 2).y(initialYCoordinate * HEIGHT).build());
+        super(new Point2D(initialXCoordinate * WIDTH - WIDTH / 2, initialYCoordinate * HEIGHT));
 
         setInitialImage(new Image(translate("images/Bat 1 - 1.png")));
 
@@ -51,15 +49,6 @@ public class Bat extends ArtificiallyMovedSprite {
     }
 
     @Override
-    public void render(GraphicsContext gc, double deltaTime) {
-
-        if (awake)
-            gc.drawImage(getFrame(deltaTime), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
-        else
-            gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
-    }
-
-    @Override
     public void update(double deltaTimeSinceStart, double deltaTime, Set<KeyCode> input, List<Sprite> sprites) {
 
         if (deltaTimeSinceStart < sleepTime)
@@ -67,19 +56,6 @@ public class Bat extends ArtificiallyMovedSprite {
         else
             awake = true;
 
-        log.info("Direction before update: {}", this.getDirection());
-        log.info("Coordinates before update: {}", this.getCurrentCoordinates());
-        log.info("Nearby org.moqucu.games.nightstalker.objects:");
-        sprites.forEach(log::info);
-        List<Direction> availableDirections = determineAvailableDirections(sprites, deltaTime);
-        log.info("Available direction:");
-        availableDirections.forEach(log::info);
-
-
         super.update(deltaTimeSinceStart, deltaTime, input, sprites);
-
-        log.info("Direction after update: {}", this.getDirection());
-        log.info("Coordinates after update: {}", this.getCurrentCoordinates());
-
     }
 }

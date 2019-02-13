@@ -1,6 +1,6 @@
 package org.moqucu.games.nightstalker.gameobject.movable;
 
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class GreyRobot extends ArtificiallyMovedSprite {
 
     public GreyRobot(int initialXCoordinate, int initialYCoordinate) {
 
-        super(Coordinates.builder().x(initialXCoordinate * WIDTH).y(initialYCoordinate * HEIGHT).build());
+        super(new Point2D(initialXCoordinate * WIDTH, initialYCoordinate * HEIGHT));
 
         setInitialImage(new Image(translate("images/Grey Robot - 1.png")));
 
@@ -37,12 +37,6 @@ public class GreyRobot extends ArtificiallyMovedSprite {
         setVelocity(35);
 
         frameDuration = 0.1;
-    }
-
-    @Override
-    public void render(GraphicsContext gc, double deltaTime) {
-
-            gc.drawImage(getFrame(deltaTime), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
     }
 
     @Override

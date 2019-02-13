@@ -1,6 +1,6 @@
 package org.moqucu.games.nightstalker.gameobject.immovable;
 
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
@@ -48,12 +48,14 @@ public class Gun extends AnimatedSprite implements Updatable {
 
     public Gun(double sleepTime) {
 
-        super(Coordinates.builder().x(3 * WIDTH).y(9 * HEIGHT).build());
+        super(new Point2D(3 * WIDTH, 9 * HEIGHT));
 
-        setCurrentCoordinates(Coordinates.builder()
-                .x(randomGunPositions[randomIndex][0] * WIDTH)
-                .y(randomGunPositions[randomIndex][1] * HEIGHT)
-                .build());
+        setCurrentCoordinates(
+                new Point2D(
+                        randomGunPositions[randomIndex][0] * WIDTH,
+                        randomGunPositions[randomIndex][1] * HEIGHT
+                )
+        );
 
         setInitialImage(new Image(translate("images/Empty Sprite.png")));
 
@@ -65,15 +67,6 @@ public class Gun extends AnimatedSprite implements Updatable {
         frameDuration = 0.4;
 
         this.sleepTime = sleepTime;
-    }
-
-    @Override
-    public void render(GraphicsContext gc, double deltaTime) {
-
-        if (awake && !pickedUp)
-            gc.drawImage(getFrame(deltaTime), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
-        else
-            gc.drawImage(getInitialImage(), getCurrentCoordinates().getX(), getCurrentCoordinates().getY());
     }
 
     @Override
@@ -119,10 +112,12 @@ public class Gun extends AnimatedSprite implements Updatable {
         pickedUp = false;
         // awake = false;
         randomIndex = (new Random()).nextInt(4);
-        setCurrentCoordinates(Coordinates.builder()
-                .x(randomGunPositions[randomIndex][0] * WIDTH)
-                .y(randomGunPositions[randomIndex][1] * HEIGHT)
-                .build());
+        setCurrentCoordinates(
+                new Point2D(
+                        randomGunPositions[randomIndex][0] * WIDTH,
+                        randomGunPositions[randomIndex][1] * HEIGHT
+                )
+        );
 
         return null;
     }
