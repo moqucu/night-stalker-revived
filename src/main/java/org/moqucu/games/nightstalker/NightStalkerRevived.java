@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
-import org.moqucu.games.nightstalker.view.FxmlView;
+import org.moqucu.games.nightstalker.controller.FxmlView;
 import org.moqucu.games.nightstalker.view.StageManager;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -78,7 +78,7 @@ public class NightStalkerRevived extends Application {
 
         maze.addGameObjects(4, WallFactory.createWalls(
                 WallFactory.WallFactoryConfiguration.builder()
-                        .image(new Image(translate("images/Sprite 001 - Wall.png")))
+                        .image(new Image(translate("images/Sprite_001_Wall.png")))
                         .initialPosition(GameObject.Position.builder().horizontal(0).vertical(0).build())
                         .build()
         ));

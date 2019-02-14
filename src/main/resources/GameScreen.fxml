@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import org.moqucu.games.nightstalker.view.Maze?>
+<?import org.moqucu.games.nightstalker.view.immovable.Wall?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<Group
+        xmlns="http://javafx.com/javafx/8.0.172-ea"
+        xmlns:fx="http://javafx.com/fxml/1"
+        id="org.moqucu.games.nightstalker.group2"
+        fx:controller="org.moqucu.games.nightstalker.controller.GameScreenController"
+>
+    <Maze
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            id="org.moqucu.games.nightstalker.maze.1"
+            style="-fx-background-color: #0562F1;"
+            onMouseClicked="#onMouseClicked"
+    >
+        <Wall
+                id="org.moqucu.games.nightstalker.wall.1"
+        >
+            <Image url="@Sprite_001_Wall.png" />
+        </Wall>
+    </Maze>
+</Group>

@@ -1,14 +1,14 @@
-package org.moqucu.games.nightstalker.gameobject.movable;
+package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.geometry.Point2D;
-import org.moqucu.games.nightstalker.gameobject.Updatable;
 import org.moqucu.games.nightstalker.data.Direction;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.gameobject.*;
-import org.moqucu.games.nightstalker.gameobject.immovable.Gun;
+import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.view.Updatable;
+import org.moqucu.games.nightstalker.view.immovable.Gun;
 
 import java.util.List;
 import java.util.Set;

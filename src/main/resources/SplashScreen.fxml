@@ -9,7 +9,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Group xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.moqucu.games.nightstalker.controller.SplashScreenController">
+<Group
+        xmlns="http://javafx.com/javafx/8.0.172-ea"
+        xmlns:fx="http://javafx.com/fxml/1"
+        id="org.moqucu.games.nightstalker.group1"
+        fx:controller="org.moqucu.games.nightstalker.controller.SplashScreenController"
+>
     <VBox prefHeight="200.0" style="-fx-background-color: #534E03;">
       <ButtonBar prefHeight="24.0" style="-fx-background-color: #534E03;">
         <buttons>

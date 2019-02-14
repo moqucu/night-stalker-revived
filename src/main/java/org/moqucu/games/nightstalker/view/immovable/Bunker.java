@@ -1,8 +1,8 @@
-package org.moqucu.games.nightstalker.gameobject.immovable;
+package org.moqucu.games.nightstalker.view.immovable;
 
 import javafx.scene.image.Image;
-import org.moqucu.games.nightstalker.gameobject.movable.NightStalker;
-import org.moqucu.games.nightstalker.gameobject.Sprite;
+import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.view.movable.NightStalker;
 
 public class Bunker extends Sprite {
 

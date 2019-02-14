@@ -3,9 +3,7 @@ package org.moqucu.games.nightstalker.view;
 import javafx.scene.layout.StackPane;
 import org.moqucu.games.nightstalker.data.QuadTree;
 import javafx.scene.input.KeyCode;
-import org.moqucu.games.nightstalker.gameobject.Sprite;
-import org.moqucu.games.nightstalker.gameobject.Updatable;
-import org.moqucu.games.nightstalker.gameobject.movable.MovableSprite;
+import org.moqucu.games.nightstalker.view.movable.MovableSprite;
 
 import java.util.*;
 import java.util.concurrent.*;

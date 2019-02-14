@@ -19,6 +19,7 @@ module org.moqucu.games.nightstalker {
 
     exports org.moqucu.games.nightstalker;
     exports org.moqucu.games.nightstalker.configuration;
+    exports org.moqucu.games.nightstalker.controller;
     exports org.moqucu.games.nightstalker.view;
 
     opens org.moqucu.games.nightstalker to javafx.graphics, spring.core;

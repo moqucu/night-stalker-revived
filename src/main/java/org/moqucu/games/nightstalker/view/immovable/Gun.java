@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.gameobject.immovable;
+package org.moqucu.games.nightstalker.view.immovable;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -7,11 +7,11 @@ import javafx.scene.media.AudioClip;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.moqucu.games.nightstalker.view.AnimatedSprite;
 import org.moqucu.games.nightstalker.view.Maze;
-import org.moqucu.games.nightstalker.gameobject.Sprite;
-import org.moqucu.games.nightstalker.gameobject.Updatable;
-import org.moqucu.games.nightstalker.gameobject.movable.AnimatedSprite;
-import org.moqucu.games.nightstalker.gameobject.movable.NightStalker;
+import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.view.Updatable;
+import org.moqucu.games.nightstalker.view.movable.NightStalker;
 
 import java.util.List;
 import java.util.Random;

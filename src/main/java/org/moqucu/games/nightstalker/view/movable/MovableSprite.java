@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.gameobject.movable;
+package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
 import org.moqucu.games.nightstalker.data.Direction;
-import org.moqucu.games.nightstalker.gameobject.immovable.ShadowSprite;
-import org.moqucu.games.nightstalker.gameobject.Sprite;
+import org.moqucu.games.nightstalker.view.ShadowSprite;
+import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
