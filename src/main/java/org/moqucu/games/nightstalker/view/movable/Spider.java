@@ -20,20 +20,20 @@ public class Spider extends ArtificiallyMovedSprite {
 
         super(new Point2D(initialXCoordinate * WIDTH, initialYCoordinate * HEIGHT));
 
-        setInitialImage(new Image(translate("images/Spider - Vertical 2.png")));
+        setInitialImage(new Image(translate("images/Spider_Vertical_2.png")));
 
         Direction[] directions = Direction.values();
         for (int i = 0; i < Direction.values().length; i++) {
 
             if (i % 2 == 0) {
 
-                frames.get(directions[i]).add(new Image(translate("images/Spider - Vertical 2.png")));
-                frames.get(directions[i]).add(new Image(translate("images/Spider - Vertical 3.png")));
+                frames.get(directions[i]).add(new Image(translate("images/Spider_Vertical_2.png")));
+                frames.get(directions[i]).add(new Image(translate("images/Spider_Vertical_3.png")));
 
             } else {
 
-                frames.get(directions[i]).add(new Image(translate("images/Spider - Horizontal 1.png")));
-                frames.get(directions[i]).add(new Image(translate("images/Spider - Horizontal 2.png")));
+                frames.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_1.png")));
+                frames.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_2.png")));
             }
         }
 

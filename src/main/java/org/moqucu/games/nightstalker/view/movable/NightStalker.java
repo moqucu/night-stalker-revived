@@ -24,12 +24,12 @@ public class NightStalker extends MovableSprite implements Updatable {
 
         super(new Point2D(9 * WIDTH, 5 * HEIGHT - HEIGHT / 2));
 
-        setInitialImage(new Image(translate("images/NightStalker 1 - 1.png")));
+        setInitialImage(new Image(translate("images/NightStalker_1_1.png")));
 
         Direction[] directions = Direction.values();
         for (int i = 0; i < Direction.values().length; i++) {
 
-            frames.get(directions[i]).add(new Image(translate("images/NightStalker 1 - 1.png")));
+            frames.get(directions[i]).add(new Image(translate("images/NightStalker_1_1.png")));
         }
 
         setVelocity(70);

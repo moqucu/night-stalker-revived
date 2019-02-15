@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.Group?>
+<?import javafx.scene.layout.TilePane?>
 <?import org.moqucu.games.nightstalker.view.Maze?>
 <?import org.moqucu.games.nightstalker.view.immovable.Wall?>
 <?import javafx.scene.image.Image?>
+<?import org.moqucu.games.nightstalker.view.immovable.SpiderWeb?>
 <?import javafx.scene.image.ImageView?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
@@ -18,10 +20,248 @@
             style="-fx-background-color: #0562F1;"
             onMouseClicked="#onMouseClicked"
     >
-        <Wall
-                id="org.moqucu.games.nightstalker.wall.1"
-        >
-            <Image url="@Sprite_001_Wall.png" />
-        </Wall>
+        <TilePane prefRows="12" prefColumns="20">
+            <Wall id="org.moqucu.games.nightstalker.wall.1">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_001_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.2">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_002_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.3">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_003_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.4">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_004_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.5">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_005_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.6">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_006_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.7">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_007_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.8">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_006_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.9">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_007_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.10">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_006_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.11">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_007_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.12">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_006_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.13">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_007_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.14">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_006_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.15">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_007_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.16">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_006_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.17">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_007_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.18">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_006_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.19">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_007_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.20">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_008_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.21">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_009_Wall.png"/>
+            </Wall>
+            <SpiderWeb id="org.moqucu.games.nightstalker.web.1">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_010_Web.png"/>
+            </SpiderWeb>
+            <SpiderWeb id="org.moqucu.games.nightstalker.web.2">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_011_Web.png"/>
+            </SpiderWeb>
+            <SpiderWeb id="org.moqucu.games.nightstalker.web.3">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_012_Web.png"/>
+            </SpiderWeb>
+            <Wall id="org.moqucu.games.nightstalker.wall.22">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_013_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.23">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_014_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.24">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_015_Wall.png"/>
+            </Wall>
+            <SpiderWeb id="org.moqucu.games.nightstalker.web.4">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_016_Web.png"/>
+            </SpiderWeb>
+            <Wall id="org.moqucu.games.nightstalker.wall.25">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_017_Wall.png"/>
+            </Wall>
+            <SpiderWeb id="org.moqucu.games.nightstalker.web.5">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_018_Web.png"/>
+            </SpiderWeb>
+            <Wall id="org.moqucu.games.nightstalker.wall.26">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_019_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.27">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_020_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.28">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_021_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.29">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_022_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.30">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_023_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.31">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_020_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.32">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_024_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.33">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_025_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.34">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_020_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.35">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_023_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.36">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_026_Wall.png"/>
+            </Wall>
+            <Wall id="org.moqucu.games.nightstalker.wall.37">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_027_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.37">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_025_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.38">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_013_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.39">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_019_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.40">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_019_Wall.png"/>
+            </Wall>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <ImageView>
+                <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
+            </ImageView>
+            <Wall id="org.moqucu.games.nightstalker.wall.41">
+                <Image url="@org/moqucu/games/nightstalker/images/Sprite_028_Wall.png"/>
+            </Wall>
+
+        </TilePane>
     </Maze>
 </Group>

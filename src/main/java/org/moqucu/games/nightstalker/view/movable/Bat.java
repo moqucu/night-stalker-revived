@@ -26,19 +26,19 @@ public class Bat extends ArtificiallyMovedSprite {
 
         super(new Point2D(initialXCoordinate * WIDTH - WIDTH / 2, initialYCoordinate * HEIGHT));
 
-        setInitialImage(new Image(translate("images/Bat 1 - 1.png")));
+        setInitialImage(new Image(translate("images/Bat_1_1.png")));
 
         Direction[] directions = Direction.values();
         for (int i = 0; i < Direction.values().length; i++) {
 
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 2.png")));
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 3.png")));
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 4.png")));
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 5.png")));
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 6.png")));
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 5.png")));
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 4.png")));
-            frames.get(directions[i]).add(new Image(translate("images/Bat 1 - 3.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_2.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_3.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_4.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_5.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_6.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_5.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_4.png")));
+            frames.get(directions[i]).add(new Image(translate("images/Bat_1_3.png")));
         }
 
         setVelocity(35);
