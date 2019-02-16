@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import org.moqucu.games.nightstalker.view.Sprite;
 
 @Data
+@SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
 public class HalfSolidBunker extends Sprite {
 

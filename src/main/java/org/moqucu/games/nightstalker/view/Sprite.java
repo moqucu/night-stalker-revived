@@ -19,7 +19,7 @@ public abstract class Sprite extends ImageView {
 
     @Data
     @Builder
-    public static class Position {
+    protected static class Position {
 
         private int horizontal;
         private int vertical;
@@ -51,6 +51,7 @@ public abstract class Sprite extends ImageView {
 
         this(Position.builder().build());
         currentCoordinates = initialCoordinates;
+        relocate(currentCoordinates.getX(), currentCoordinates.getY());
     }
 
     public Bounds getBoundary() {

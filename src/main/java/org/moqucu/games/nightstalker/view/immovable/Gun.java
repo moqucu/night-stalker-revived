@@ -20,6 +20,7 @@ import java.util.Set;
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
+@SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
 public class Gun extends AnimatedSprite implements Updatable {
 
@@ -46,7 +47,14 @@ public class Gun extends AnimatedSprite implements Updatable {
     @EqualsAndHashCode.Exclude
     private NightStalker nightStalker = null;
 
-    public Gun(double sleepTime) {
+    public Gun() {
+
+        this(5.0);
+        relocate(randomGunPositions[randomIndex][0] * 32, randomGunPositions[randomIndex][1] * 32);
+    }
+
+
+    private Gun(double sleepTime) {
 
         super(new Point2D(3 * WIDTH, 9 * HEIGHT));
 

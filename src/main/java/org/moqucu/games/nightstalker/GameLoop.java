@@ -3,7 +3,6 @@ package org.moqucu.games.nightstalker;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -27,8 +26,6 @@ public class GameLoop {
 
     private Stage primaryStage;
 
-    private GraphicsContext graphicsContext;
-
     private Set<KeyCode> input = new HashSet<>();
 
     private Maze maze;
@@ -45,7 +42,6 @@ public class GameLoop {
     private void initializeStage() {
 
         Canvas canvas = new Canvas(maze.getWidth(), maze.getHeight());
-        graphicsContext = canvas.getGraphicsContext2D();
 
         StackPane holder = new StackPane();
         holder.setStyle("-fx-background-color: #002DFF");

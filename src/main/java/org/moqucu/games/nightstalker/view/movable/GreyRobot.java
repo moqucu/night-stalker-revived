@@ -17,11 +17,17 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @Log4j2
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unused")
+@EqualsAndHashCode(callSuper = true)
 public class GreyRobot extends ArtificiallyMovedSprite {
 
-    public GreyRobot(int initialXCoordinate, int initialYCoordinate) {
+    public GreyRobot() {
+
+        this(1, 10);
+    }
+
+    private GreyRobot(int initialXCoordinate, int initialYCoordinate) {
 
         super(new Point2D(initialXCoordinate * WIDTH, initialYCoordinate * HEIGHT));
 

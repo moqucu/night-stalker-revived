@@ -22,6 +22,11 @@ public class Bat extends ArtificiallyMovedSprite {
 
     private double sleepTime;
 
+    public Bat() {
+
+        this(17, 3, 5.0);
+    }
+
     public Bat(int initialXCoordinate, int initialYCoordinate, double sleepTime) {
 
         super(new Point2D(initialXCoordinate * WIDTH - WIDTH / 2, initialYCoordinate * HEIGHT));

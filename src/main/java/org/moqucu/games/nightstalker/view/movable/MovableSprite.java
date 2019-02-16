@@ -38,6 +38,7 @@ public abstract class MovableSprite extends Sprite {
         frames.put(Left, new ArrayList<>());
     }
 
+    //ToDo: convert to viewport based function
     Image getFrame(double deltaTime) {
 
         int index = (int) ((deltaTime % (frames.get(direction).size() * frameDuration)) / frameDuration);

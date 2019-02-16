@@ -3,7 +3,6 @@ package org.moqucu.games.nightstalker.view;
 import javafx.geometry.Point2D;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.view.Sprite;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

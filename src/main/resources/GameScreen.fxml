@@ -2,14 +2,20 @@
 
 <?import javafx.scene.Group?>
 <?import javafx.scene.layout.TilePane?>
-<?import org.moqucu.games.nightstalker.view.Maze?>
-<?import org.moqucu.games.nightstalker.view.immovable.Wall?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.image.Image?>
-<?import org.moqucu.games.nightstalker.view.immovable.SpiderWeb?>
 <?import javafx.scene.image.ImageView?>
 <?import org.moqucu.games.nightstalker.view.immovable.SolidBunker?>
 <?import org.moqucu.games.nightstalker.view.immovable.Bunker?>
 <?import org.moqucu.games.nightstalker.view.immovable.HalfSolidBunker?>
+<?import org.moqucu.games.nightstalker.view.Maze?>
+<?import org.moqucu.games.nightstalker.view.immovable.Wall?>
+<?import org.moqucu.games.nightstalker.view.immovable.SpiderWeb?>
+<?import org.moqucu.games.nightstalker.view.immovable.Gun?>
+<?import org.moqucu.games.nightstalker.view.movable.NightStalker?>
+<?import org.moqucu.games.nightstalker.view.movable.GreyRobot?>
+<?import org.moqucu.games.nightstalker.view.movable.Spider?>
+<?import org.moqucu.games.nightstalker.view.movable.Bat?>
 
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
@@ -24,6 +30,33 @@
             style="-fx-background-color: #0562F1;"
             onMouseClicked="#onMouseClicked"
     >
+        <Pane>
+            <Gun>
+                <Image url="@org/moqucu/games/nightstalker/images/Weapon_Full_Size.png"/>
+            </Gun>
+
+        </Pane>
+        <Pane>
+            <Spider>
+                <Image url="@org/moqucu/games/nightstalker/images/Spider_Vertical_2.png"/>
+            </Spider>
+            <Bat>
+                <Image url="@org/moqucu/games/nightstalker/images/Bat_1_1.png"/>
+            </Bat>
+            <!--<Bat> Bat bat2 = new Bat(16, 7, 2.5);
+                <Image url="@org/moqucu/games/nightstalker/images/Bat_1_1.png"/>
+            </Bat>-->
+
+        </Pane>
+        <Pane>
+            <NightStalker>
+                <Image url="@org/moqucu/games/nightstalker/images/NightStalker_1_1.png"/>
+            </NightStalker>
+            <GreyRobot>
+                <Image url="@org/moqucu/games/nightstalker/images/Grey_Robot_1.png"/>
+            </GreyRobot>
+
+        </Pane>
         <TilePane prefRows="12" prefColumns="20">
             <Wall id="org.moqucu.games.nightstalker.wall.1">
                 <Image url="@org/moqucu/games/nightstalker/images/Sprite_001_Wall.png"/>
@@ -551,7 +584,7 @@
             <ImageView>
                 <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
             </ImageView>
-             <ImageView>
+            <ImageView>
                 <Image url="@org/moqucu/games/nightstalker/images/Empty_Sprite.png"/>
             </ImageView>
             <Wall id="org.moqucu.games.nightstalker.wall.78">

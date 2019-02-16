@@ -8,8 +8,9 @@ import lombok.ToString;
 import org.moqucu.games.nightstalker.view.Sprite;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unused")
+@EqualsAndHashCode(callSuper = true)
 public class Wall extends Sprite {
 
     public Wall() {

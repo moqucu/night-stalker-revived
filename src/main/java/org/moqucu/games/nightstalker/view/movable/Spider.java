@@ -16,6 +16,11 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Spider extends ArtificiallyMovedSprite {
 
+    public Spider() {
+
+        this(1, 1);
+    }
+
     public Spider(int initialXCoordinate, int initialYCoordinate) {
 
         super(new Point2D(initialXCoordinate * WIDTH, initialYCoordinate * HEIGHT));

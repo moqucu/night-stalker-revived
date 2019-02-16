@@ -21,6 +21,7 @@ public abstract class AnimatedSprite extends Sprite {
         super(currentCoordinates);
     }
 
+    //todo: convert to viewport based function
     protected Image getFrame(double deltaTime) {
 
         int index = (int)((deltaTime % (frames.size() * frameDuration)) / frameDuration);

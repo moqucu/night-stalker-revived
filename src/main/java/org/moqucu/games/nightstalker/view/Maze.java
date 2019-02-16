@@ -41,6 +41,7 @@ public class Maze extends StackPane implements Updatable {
         unmovableSprites = new QuadTree(getBoundsInLocal());
     }
 
+    // todo: trace added children in QuadTree
     void addGameObject(int layer, Sprite gameObject) {
 
         List<Sprite> layerSpecificGameObjects = allGameObjects.getOrDefault(layer, new ArrayList<>());
@@ -53,6 +54,7 @@ public class Maze extends StackPane implements Updatable {
             unmovableSprites.insert(gameObject);
     }
 
+    // todo: trace added children in QuadTree
     void addGameObjects(int layer, List<? extends Sprite> gameObjects) {
 
         List<Sprite> layerSpecificGameObjects = this.allGameObjects.getOrDefault(layer, new ArrayList<>());
