@@ -16,6 +16,7 @@ module org.moqucu.games.nightstalker {
     requires spring.boot.autoconfigure;
     requires spring.context;
     requires spring.core;
+    requires spring.statemachine.core;
 
     exports org.moqucu.games.nightstalker;
     exports org.moqucu.games.nightstalker.configuration;

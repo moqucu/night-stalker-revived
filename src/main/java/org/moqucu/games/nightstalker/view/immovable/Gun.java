@@ -65,10 +65,10 @@ public class Gun extends AnimatedSprite implements Updatable {
                 )
         );
 
-        setInitialImage(new Image(translate("images/Empty_Sprite.png")));
+        setInitialImage(new Image(translate("images/hall-way.png")));
 
-        frames.add(new Image(translate("images/Weapon_Full_Size.png")));
-        frames.add(new Image(translate("images/Empty_Sprite.png")));
+        /*frames2.add(new Image(translate("images/Weapon_Full_Size.png")));
+        frames2.add(new Image(translate("images/hall-way.png")));*/
 
         setVelocity(35);
 

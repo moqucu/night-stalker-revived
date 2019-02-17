@@ -1,11 +1,10 @@
 package org.moqucu.games.nightstalker.view;
 
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
+import javafx.geometry.Rectangle2D;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
-import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.*;
 
@@ -14,15 +13,14 @@ import java.util.*;
 public abstract class AnimatedSprite extends Sprite {
 
     @Singular
-    protected List<Image> frames = new LinkedList<>();
+    protected List<Rectangle2D> frames = new LinkedList<>();
 
     protected AnimatedSprite(Point2D currentCoordinates) {
 
         super(currentCoordinates);
     }
 
-    //todo: convert to viewport based function
-    protected Image getFrame(double deltaTime) {
+    protected Rectangle2D getViewPortForFrame(double deltaTime) {
 
         int index = (int)((deltaTime % (frames.size() * frameDuration)) / frameDuration);
         return frames.get(index);

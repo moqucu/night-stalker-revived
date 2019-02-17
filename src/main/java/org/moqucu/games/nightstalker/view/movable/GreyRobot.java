@@ -36,8 +36,8 @@ public class GreyRobot extends ArtificiallyMovedSprite {
         Direction[] directions = Direction.values();
         for (int i = 0; i < Direction.values().length; i++) {
 
-                frames.get(directions[i]).add(new Image(translate("images/Grey_Robot_1.png")));
-                frames.get(directions[i]).add(new Image(translate("images/Grey_Robot_2.png")));
+                frames2.get(directions[i]).add(new Image(translate("images/Grey_Robot_1.png")));
+                frames2.get(directions[i]).add(new Image(translate("images/Grey_Robot_2.png")));
         }
 
         setVelocity(35);

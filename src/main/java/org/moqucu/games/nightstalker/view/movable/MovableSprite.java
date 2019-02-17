@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
 import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.view.AnimatedSprite;
 import org.moqucu.games.nightstalker.view.ShadowSprite;
 import org.moqucu.games.nightstalker.view.Sprite;
 
@@ -21,29 +22,29 @@ import static org.moqucu.games.nightstalker.data.Direction.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class MovableSprite extends Sprite {
+public abstract class MovableSprite extends AnimatedSprite {
 
     protected Direction direction = Right;
 
     @Singular
-    protected Map<Direction, List<Image>> frames = new HashMap<>();
+    protected Map<Direction, List<Image>> frames2 = new HashMap<>();
 
     MovableSprite(Point2D currentCoordinates) {
 
         super(currentCoordinates);
 
-        frames.put(Up, new ArrayList<>());
-        frames.put(Right, new ArrayList<>());
-        frames.put(Down, new ArrayList<>());
-        frames.put(Left, new ArrayList<>());
+        frames2.put(Up, new ArrayList<>());
+        frames2.put(Right, new ArrayList<>());
+        frames2.put(Down, new ArrayList<>());
+        frames2.put(Left, new ArrayList<>());
     }
 
     //ToDo: convert to viewport based function
-    Image getFrame(double deltaTime) {
+   /* Image getFrame(double deltaTime) {
 
-        int index = (int) ((deltaTime % (frames.get(direction).size() * frameDuration)) / frameDuration);
-        return frames.get(direction).get(index);
-    }
+        int index = (int) ((deltaTime % (frames2.get(direction).size() * frameDuration)) / frameDuration);
+        return frames2.get(direction).get(index);
+    }*/
 
     @Override
     public boolean intersects(Sprite sprite) {
@@ -80,7 +81,7 @@ public abstract class MovableSprite extends Sprite {
         long pixelMoveRate = determinePixelMoveRate(deltaTime);
         List<Sprite> shadowSprites = new ArrayList<>();
 
-        frames.keySet().forEach(
+        frames2.keySet().forEach(
                 key -> {
                     switch (key) {
                         case Up:

@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.moqucu.games.nightstalker.view.Sprite;
 
+import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
+
 @Data
 @ToString(callSuper = true)
 @SuppressWarnings("unused")
@@ -16,12 +18,6 @@ public class Wall extends Sprite {
     public Wall() {
 
         super(Point2D.ZERO);
-    }
-
-
-    public Wall(Image image, Position initialPosition) {
-
-        super(initialPosition);
-        setImage(image);
+        setImage(new Image(translate("images/wall.png")));
     }
 }

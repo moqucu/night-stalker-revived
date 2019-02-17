@@ -32,13 +32,13 @@ public class Spider extends ArtificiallyMovedSprite {
 
             if (i % 2 == 0) {
 
-                frames.get(directions[i]).add(new Image(translate("images/Spider_Vertical_2.png")));
-                frames.get(directions[i]).add(new Image(translate("images/Spider_Vertical_3.png")));
+                frames2.get(directions[i]).add(new Image(translate("images/Spider_Vertical_2.png")));
+                frames2.get(directions[i]).add(new Image(translate("images/Spider_Vertical_3.png")));
 
             } else {
 
-                frames.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_1.png")));
-                frames.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_2.png")));
+                frames2.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_1.png")));
+                frames2.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_2.png")));
             }
         }
 
