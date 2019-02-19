@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.List;

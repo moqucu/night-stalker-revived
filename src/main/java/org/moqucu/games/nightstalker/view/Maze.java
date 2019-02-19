@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.view;
 
 import javafx.scene.layout.StackPane;
-import org.moqucu.games.nightstalker.data.QuadTree;
+import org.moqucu.games.nightstalker.model.QuadTree;
 import javafx.scene.input.KeyCode;
 import org.moqucu.games.nightstalker.view.movable.MovableSprite;
 

@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.geometry.Point2D;
-import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.model.Direction;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import lombok.Data;

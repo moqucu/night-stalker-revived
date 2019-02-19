@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
-import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
 import org.moqucu.games.nightstalker.view.ShadowSprite;
 import org.moqucu.games.nightstalker.view.Sprite;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.moqucu.games.nightstalker.data.Direction.*;
+import static org.moqucu.games.nightstalker.model.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

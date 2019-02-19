@@ -1,0 +1,4 @@
+[
+  {"source": {"x": 1, "y": 1}, "destinations":  [{"x": 3, "y": 1}, {"x": 1, "y": 8} ]},
+  {"source": {"x": 3, "y": 1}, "destinations":  [{"x": 3, "y": 5}, {"x": 1, "y": 1} ]}
+]

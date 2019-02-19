@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.data;
+package org.moqucu.games.nightstalker.model;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;

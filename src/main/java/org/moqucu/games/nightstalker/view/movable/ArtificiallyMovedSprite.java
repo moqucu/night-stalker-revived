@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.geometry.Point2D;
-import org.moqucu.games.nightstalker.data.Direction;
+import org.moqucu.games.nightstalker.model.Direction;
 import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import static org.moqucu.games.nightstalker.data.Direction.*;
+import static org.moqucu.games.nightstalker.model.Direction.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
