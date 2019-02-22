@@ -125,7 +125,7 @@ public class Bat extends ArtificiallyMovedSprite {
     private void timeToWakeUp(StateContext stateContext) {
 
         log.debug("timeToWakeUp: {}", stateContext);
-        boolean sentEventFlag = stateMachine.sendEvent(Events.wakeUp);
+        stateMachine.sendEvent(Events.wakeUp);
     }
 
     private void wokeUp(StateContext stateContext) {
