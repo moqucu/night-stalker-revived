@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.IntegerProperty;
@@ -167,6 +168,7 @@ public class Bat extends ArtificiallyMovedSprite {
             duration = Duration.millis(Math.abs(deltaY)/getVelocity() * 1000);
 
         translateTransition = new TranslateTransition(duration, this);
+        ((TranslateTransition) translateTransition).setInterpolator(Interpolator.LINEAR);
 
         ((TranslateTransition) translateTransition).setByX(deltaX);
         ((TranslateTransition) translateTransition).setByY(deltaY);
