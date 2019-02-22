@@ -17,6 +17,11 @@ module org.moqucu.games.nightstalker {
     requires spring.context;
     requires spring.core;
     requires spring.statemachine.core;
+    requires spring.messaging;
+
+    requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.core;
 
     exports org.moqucu.games.nightstalker;
     exports org.moqucu.games.nightstalker.configuration;
