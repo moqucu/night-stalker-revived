@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.model.QuadTree;
 import javafx.scene.input.KeyCode;
+import org.moqucu.games.nightstalker.view.movable.ArtificiallyMovedSprite;
 import org.moqucu.games.nightstalker.view.movable.Bat;
 import org.moqucu.games.nightstalker.view.movable.MovableSprite;
 import org.springframework.core.io.ClassPathResource;
@@ -46,8 +47,8 @@ public class Maze extends StackPane implements Updatable {
                     log.info("Pane has this many children: {}", ((Pane)addedPane).getChildren().size());
                     ((Pane) addedPane)
                             .getChildren()
-                            .filtered(node -> node instanceof Bat)
-                            .forEach(bat -> ((Bat)bat).setMazeGraph(mazeGraph));
+                            .filtered(node -> node instanceof ArtificiallyMovedSprite)
+                            .forEach(sprite -> ((ArtificiallyMovedSprite)sprite).setMazeGraph(mazeGraph));
 
                     ((Pane) addedPane).getChildren().addListener(new ListChangeListener<>() {
 
@@ -56,8 +57,8 @@ public class Maze extends StackPane implements Updatable {
                             change.next();
                             change.getAddedSubList().forEach(addedChild -> {
                                 log.info("child added to Pane; is of type {}", addedChild.getClass().getName());
-                                if (addedChild instanceof Bat)
-                                    ((Bat) addedChild).setMazeGraph(mazeGraph);
+                                if (addedChild instanceof ArtificiallyMovedSprite)
+                                    ((ArtificiallyMovedSprite) addedChild).setMazeGraph(mazeGraph);
                             });
                         }
                     });

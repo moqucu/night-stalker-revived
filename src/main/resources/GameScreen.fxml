@@ -41,20 +41,15 @@
             <Spider>
                 <Image url="@org/moqucu/games/nightstalker/images/Spider_Vertical_2.png"/>
             </Spider>
-            <Bat/>
-            <!--<Bat> Bat bat2 = new Bat(16, 7, 2.5);
-                <Image url="@org/moqucu/games/nightstalker/images/Bat_1_1.png"/>
-            </Bat>-->
+            <Bat translateX="544.0" translateY="96"/>
+            <Bat translateX="480.0" translateY="224"/>
+            <GreyRobot translateX="32.0" translateY="320.0"/>
 
         </Pane>
         <Pane>
             <NightStalker>
                 <Image url="@org/moqucu/games/nightstalker/images/NightStalker_1_1.png"/>
             </NightStalker>
-            <GreyRobot>
-                <Image url="@org/moqucu/games/nightstalker/images/Grey_Robot_1.png"/>
-            </GreyRobot>
-
         </Pane>
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
             <Wall id="org.moqucu.games.nightstalker.maze.00.00"/>

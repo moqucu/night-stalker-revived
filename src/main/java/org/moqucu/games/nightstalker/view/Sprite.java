@@ -42,8 +42,6 @@ public abstract class Sprite extends ImageView {
 
     private Position initialMazeGridPosition;
 
-    protected double frameDuration;
-
 
     protected Point2D currentCoordinates = Point2D.ZERO;
 
@@ -64,6 +62,11 @@ public abstract class Sprite extends ImageView {
         relocate(currentCoordinates.getX(), currentCoordinates.getY());
     }
 
+    public Sprite() {
+
+        super();
+    }
+
     public Bounds getBoundary() {
 
         return new BoundingBox(currentCoordinates.getX(), currentCoordinates.getY(), WIDTH, HEIGHT);
@@ -79,28 +82,24 @@ public abstract class Sprite extends ImageView {
         return Math.round(velocity * deltaTime);
     }
 
-    protected Rectangle2D getViewPort(int index) {
+    private Rectangle2D getViewPort(int index) {
 
         return new Rectangle2D(index * WIDTH, 0, WIDTH, HEIGHT);
     }
 
     public int getInitialKeyFrameIndex() {
 
-        log.debug("getInitialKeyFrameIndex: {}", initialKeyFrameIndex.get());
         return initialKeyFrameIndex.get();
     }
 
     public void setInitialKeyFrameIndex(int index) {
 
-        log.debug("setInitialKeyFrameIndex: {}", index);
         initialKeyFrameIndex.set(index);
         setViewport(getViewPort(initialKeyFrameIndex.get()));
     }
 
     public IntegerProperty initialKeyFrameIndexProperty() {
 
-        log.debug("initialKeyFrameIndexProperty: {}", initialKeyFrameIndex.get());
         return initialKeyFrameIndex;
     }
-
 }

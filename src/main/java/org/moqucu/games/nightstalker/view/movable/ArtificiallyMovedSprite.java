@@ -1,93 +1,65 @@
 package org.moqucu.games.nightstalker.view.movable;
 
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
-import org.moqucu.games.nightstalker.model.Direction;
-import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.moqucu.games.nightstalker.view.ShadowSprite;
-import org.moqucu.games.nightstalker.view.Sprite;
-import org.moqucu.games.nightstalker.view.Updatable;
-import org.moqucu.games.nightstalker.view.immovable.Gun;
+import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.MazeGraph;
+import org.moqucu.games.nightstalker.view.AnimatedSprite;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-
-import static org.moqucu.games.nightstalker.model.Direction.*;
 
 @Data
+@Log4j2
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class ArtificiallyMovedSprite extends MovableSprite implements Updatable {
+public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
 
     private Random random = new Random();
+    private Animation translateTransition;
+    private MazeGraph mazeGraph;
+    private Point2D previousNode = null;
 
-    ArtificiallyMovedSprite(Point2D currentCoordinates) {
 
-        super(currentCoordinates);
+    ArtificiallyMovedSprite() {
+
+        super();
     }
 
-    private void randomlyPickDirection(List<Direction> availableDirections) {
+    Animation prepareAnimationForMovingSpriteRandomlyAlongMazeGraph() {
 
-            direction = availableDirections.get(random.nextInt(availableDirections.size()));
-    }
+        Point2D currentNode = new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
+        log.info("mazeGraph: {}", mazeGraph);
+        List<Point2D> adjacentNodes = new ArrayList<>(List.copyOf(mazeGraph.getAdjacencyList().get(currentNode)));
+        if (previousNode != null && adjacentNodes.size() > 1)
+            adjacentNodes.remove(previousNode);
+        previousNode = currentNode;
 
-    protected boolean isFriendlyObject(Sprite sprite) {
+        Point2D nextNode = adjacentNodes.get(random.nextInt(adjacentNodes.size()));
 
-        boolean friendlyObject;
+        double deltaX = nextNode.getX()-currentNode.getX();
+        double deltaY = nextNode.getY()-currentNode.getY();
 
-        if (sprite instanceof ShadowSprite)
-            friendlyObject = (((ShadowSprite) sprite).getShadowCaster() instanceof Bat
-                    || ((ShadowSprite) sprite).getShadowCaster() instanceof Spider
-                    || ((ShadowSprite) sprite).getShadowCaster() instanceof GreyRobot
-                    || ((ShadowSprite) sprite).getShadowCaster() instanceof Gun);
+        Duration duration;
+        if (deltaX != 0)
+            duration = Duration.millis(Math.abs(deltaX)/getVelocity() * 1000);
         else
-            friendlyObject = (
-                    sprite instanceof Bat
-                            || sprite instanceof Spider
-                            || sprite instanceof GreyRobot
-                            || sprite instanceof Gun
+            duration = Duration.millis(Math.abs(deltaY)/getVelocity() * 1000);
 
-            );
+        translateTransition = new TranslateTransition(duration, this);
+        ((TranslateTransition) translateTransition).setInterpolator(Interpolator.LINEAR);
 
-        return friendlyObject;
-    }
+        ((TranslateTransition) translateTransition).setByX(deltaX);
+        ((TranslateTransition) translateTransition).setByY(deltaY);
+        translateTransition.setCycleCount(1);
 
-    private void removeDirectionOppositeToCurrentDirectionIfPossible(List<Direction> availableDirections) {
-
-        if (availableDirections.size() <= 1)
-            return;
-
-        switch (direction) {
-
-            case Right:
-                availableDirections.remove(Left);
-                break;
-            case Down:
-                availableDirections.remove(Up);
-                break;
-            case Left:
-                availableDirections.remove(Right);
-                break;
-            case Up:
-                availableDirections.remove(Down);
-                break;
-        }
-    }
-
-    @Override
-    public void update(
-            double deltaTimeSinceStart,
-            double deltaTime,
-            Set<KeyCode> input,
-            List<Sprite> nearbyObjects
-    ) {
-
-        List<Direction> availableDirections = determineAvailableDirections(nearbyObjects, deltaTime);
-        removeDirectionOppositeToCurrentDirectionIfPossible(availableDirections);
-        randomlyPickDirection(availableDirections);
-        moveToCurrentDirection(getCurrentCoordinates(), direction, deltaTime);
+        return translateTransition;
     }
 }

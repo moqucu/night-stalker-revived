@@ -1,17 +1,18 @@
 package org.moqucu.games.nightstalker.view.movable;
 
-import javafx.geometry.Point2D;
+import javafx.animation.Animation;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.view.Sprite;
+import org.springframework.statemachine.StateContext;
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.StateMachineBuilder;
+import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
-import java.util.List;
-import java.util.Set;
+import java.util.EnumSet;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
@@ -22,46 +23,67 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class GreyRobot extends ArtificiallyMovedSprite {
 
+    enum States {
+        awake, moving
+    }
+
+    enum Events {
+        move, stop
+    }
+
+    StateMachine<GreyRobot.States, GreyRobot.Events> stateMachine;
+
     public GreyRobot() {
 
-        this(1, 10);
-    }
-
-    private GreyRobot(int initialXCoordinate, int initialYCoordinate) {
-
-        super(new Point2D(initialXCoordinate * WIDTH, initialYCoordinate * HEIGHT));
-
-        setInitialImage(new Image(translate("images/Grey_Robot_1.png")));
-
-        Direction[] directions = Direction.values();
-        for (int i = 0; i < Direction.values().length; i++) {
-
-                frames2.get(directions[i]).add(new Image(translate("images/Grey_Robot_1.png")));
-                frames2.get(directions[i]).add(new Image(translate("images/Grey_Robot_2.png")));
-        }
-
+        setImage(new Image(translate("images/grey-robot.png")));
+        setNumberOfFrames(2);
         setVelocity(35);
 
-        frameDuration = 0.1;
+        stateMachine = buildStateMachine();
+        stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
+
+            @Override
+            public void transitionEnded(org.springframework.statemachine.transition.Transition<GreyRobot.States, GreyRobot.Events> transition) {
+
+                if (transition.getTarget().getId().equals(GreyRobot.States.awake))
+                    stateMachine.sendEvent(GreyRobot.Events.move);
+            }
+        });
+        stateMachine.start();
+
+        playAnimation();
     }
 
-    @Override
-    public void update(
-            double deltaTimeSinceStart,
-            double deltaTime,
-            Set<KeyCode> input,
-            List<Sprite> nearbyObjects
-    ) {
+    @SneakyThrows
+    private StateMachine<GreyRobot.States, GreyRobot.Events> buildStateMachine() {
 
-        log.info("Direction before update: {}", this.getDirection());
-        log.info("Coordinates before update: {}", this.getCurrentCoordinates());
-        log.info("Nearby org.moqucu.games.nightstalker.objects:");
-        nearbyObjects.forEach(log::info);
-        List<Direction> availableDirections = determineAvailableDirections(nearbyObjects, deltaTime);
-        log.info("Available direction:");
-        availableDirections.forEach(log::info);
-        super.update(deltaTimeSinceStart, deltaTime, input, nearbyObjects);
-        log.info("Direction after update: {}", this.getDirection());
-        log.info("Coordinates after update: {}", this.getCurrentCoordinates());
+        StateMachineBuilder.Builder<GreyRobot.States, GreyRobot.Events> builder = StateMachineBuilder.builder();
+
+        builder.configureStates()
+                .withStates()
+                .initial(States.awake)
+                .states(EnumSet.allOf(GreyRobot.States.class));
+
+        builder.configureTransitions()
+                  .withExternal()
+                .source(GreyRobot.States.awake)
+                .target(GreyRobot.States.moving)
+                .action(this::startedToMove)
+                .event(GreyRobot.Events.move)
+                .and()
+                .withExternal()
+                .source(GreyRobot.States.moving)
+                .target(GreyRobot.States.awake)
+                .event(GreyRobot.Events.stop);
+
+        return builder.build();
+    }
+
+    private void startedToMove(StateContext stateContext) {
+
+        log.debug("startedToMove: {}", stateContext);
+        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
+        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(GreyRobot.Events.stop));
+        animation.play();
     }
 }

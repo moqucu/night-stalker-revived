@@ -56,7 +56,7 @@ public class Gun extends AnimatedSprite implements Updatable {
 
     private Gun(double sleepTime) {
 
-        super(new Point2D(3 * WIDTH, 9 * HEIGHT));
+        super();
 
         setCurrentCoordinates(
                 new Point2D(
@@ -72,7 +72,7 @@ public class Gun extends AnimatedSprite implements Updatable {
 
         setVelocity(35);
 
-        frameDuration = 0.4;
+        /*frameDuration = 0.4;*/
 
         this.sleepTime = sleepTime;
     }

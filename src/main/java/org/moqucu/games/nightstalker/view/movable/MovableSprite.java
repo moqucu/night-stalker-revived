@@ -29,9 +29,9 @@ public abstract class MovableSprite extends AnimatedSprite {
     @Singular
     protected Map<Direction, List<Image>> frames2 = new HashMap<>();
 
-    MovableSprite(Point2D currentCoordinates) {
+    MovableSprite() {
 
-        super(currentCoordinates);
+        super();
 
         frames2.put(Up, new ArrayList<>());
         frames2.put(Right, new ArrayList<>());
