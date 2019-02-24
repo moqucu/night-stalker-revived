@@ -12,7 +12,7 @@
 <?import org.moqucu.games.nightstalker.view.immovable.HallWay?>
 
 <?import org.moqucu.games.nightstalker.view.immovable.SpiderWeb?>
-<?import org.moqucu.games.nightstalker.view.immovable.Gun?>
+<?import org.moqucu.games.nightstalker.view.immovable.Weapon?>
 <?import org.moqucu.games.nightstalker.view.movable.NightStalker?>
 <?import org.moqucu.games.nightstalker.view.movable.GreyRobot?>
 <?import org.moqucu.games.nightstalker.view.movable.Spider?>
@@ -32,10 +32,7 @@
             onMouseClicked="#onMouseClicked"
     >
         <Pane>
-            <Gun>
-                <Image url="@org/moqucu/games/nightstalker/images/Weapon_Full_Size.png"/>
-            </Gun>
-
+            <Weapon/>
         </Pane>
         <Pane>
             <Spider>

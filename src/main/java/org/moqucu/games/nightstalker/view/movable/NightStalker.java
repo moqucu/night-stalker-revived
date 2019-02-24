@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.moqucu.games.nightstalker.view.Sprite;
 import org.moqucu.games.nightstalker.view.Updatable;
-import org.moqucu.games.nightstalker.view.immovable.Gun;
+import org.moqucu.games.nightstalker.view.immovable.Weapon;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +17,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class NightStalker extends MovableSprite implements Updatable {
 
-    private Gun gun = null;
+    private Weapon weapon = null;
 
     public NightStalker() {
 
@@ -64,8 +64,8 @@ public class NightStalker extends MovableSprite implements Updatable {
 
         sprites.forEach(sprite -> {
 
-            if (gun == null && sprite instanceof Gun && sprite.getBoundary().intersects(this.getBoundary()))
-                gun = ((Gun)sprite).pickUp();
+//            if (weapon == null && sprite instanceof Weapon && sprite.getBoundary().intersects(this.getBoundary()))
+                /*weapon = ((Weapon)sprite).pickUp();*/
         });
 
         input.forEach(inputSignal -> {
@@ -93,12 +93,12 @@ public class NightStalker extends MovableSprite implements Updatable {
                     break;
                 case SPACE:
 
-                    if (gun != null)
+                    if (weapon != null)
 
                         try {
-                            gun.fire();
-                        } catch(Gun.NoMoreRoundsException e) {
-                            gun = gun.drop();
+                            weapon.fire();
+                        } catch(Weapon.NoMoreRoundsException e) {
+                            /*weapon = weapon.drop();*/
                         }
 
                     break;

@@ -24,34 +24,32 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 public class GreyRobot extends ArtificiallyMovedSprite {
 
     enum States {
-        awake, moving
+        asleep, awake, moving
     }
 
     enum Events {
-        move, stop
+        wakeUp, move, stop
     }
 
-    StateMachine<GreyRobot.States, GreyRobot.Events> stateMachine;
+    StateMachine<States, Events> stateMachine;
 
     public GreyRobot() {
 
         setImage(new Image(translate("images/grey-robot.png")));
-        setNumberOfFrames(2);
+        setNumberOfFrames(3);
         setVelocity(35);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
 
             @Override
-            public void transitionEnded(org.springframework.statemachine.transition.Transition<GreyRobot.States, GreyRobot.Events> transition) {
+            public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
-                if (transition.getTarget().getId().equals(GreyRobot.States.awake))
-                    stateMachine.sendEvent(GreyRobot.Events.move);
+                if (transition.getTarget().getId().equals(States.awake))
+                    stateMachine.sendEvent(Events.move);
             }
         });
         stateMachine.start();
-
-        playAnimation();
     }
 
     @SneakyThrows
@@ -61,29 +59,52 @@ public class GreyRobot extends ArtificiallyMovedSprite {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.awake)
+                .initial(States.asleep)
                 .states(EnumSet.allOf(GreyRobot.States.class));
 
         builder.configureTransitions()
-                  .withExternal()
-                .source(GreyRobot.States.awake)
-                .target(GreyRobot.States.moving)
-                .action(this::startedToMove)
-                .event(GreyRobot.Events.move)
+                .withInternal()
+                .source(States.asleep)
+                .action(this::timeToWakeUp)
+                .timerOnce(1000)
                 .and()
                 .withExternal()
-                .source(GreyRobot.States.moving)
-                .target(GreyRobot.States.awake)
-                .event(GreyRobot.Events.stop);
+                .source(States.asleep)
+                .action(this::wokeUp)
+                .target(States.awake)
+                .event(Events.wakeUp)
+                .and()
+                .withExternal()
+                .source(States.awake)
+                .target(States.moving)
+                .action(this::startedToMove)
+                .event(Events.move)
+                .and()
+                .withExternal()
+                .source(States.moving)
+                .target(States.awake)
+                .event(Events.stop);
 
         return builder.build();
+    }
+
+    private void timeToWakeUp(StateContext stateContext) {
+
+        log.debug("timeToWakeUp: {}", stateContext);
+        stateMachine.sendEvent(Events.wakeUp);
+    }
+
+    private void wokeUp(StateContext stateContext) {
+
+        log.debug("wokeUp: {}", stateContext);
+        playAnimation();
     }
 
     private void startedToMove(StateContext stateContext) {
 
         log.debug("startedToMove: {}", stateContext);
         Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(GreyRobot.Events.stop));
+        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
         animation.play();
     }
 }

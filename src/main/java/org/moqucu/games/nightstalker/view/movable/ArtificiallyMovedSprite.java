@@ -7,10 +7,12 @@ import javafx.geometry.Point2D;
 import javafx.util.Duration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
+import org.springframework.core.io.ClassPathResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +29,18 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
     private MazeGraph mazeGraph;
     private Point2D previousNode = null;
 
-
+    @SneakyThrows
     ArtificiallyMovedSprite() {
 
         super();
+        mazeGraph = new MazeGraph(
+                (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json").getInputStream())
+        );
     }
 
     Animation prepareAnimationForMovingSpriteRandomlyAlongMazeGraph() {
 
         Point2D currentNode = new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
-        log.info("mazeGraph: {}", mazeGraph);
         List<Point2D> adjacentNodes = new ArrayList<>(List.copyOf(mazeGraph.getAdjacencyList().get(currentNode)));
         if (previousNode != null && adjacentNodes.size() > 1)
             adjacentNodes.remove(previousNode);
