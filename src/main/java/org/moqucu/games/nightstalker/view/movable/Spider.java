@@ -1,62 +1,112 @@
 package org.moqucu.games.nightstalker.view.movable;
 
-import javafx.geometry.Point2D;
+import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.view.Sprite;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.statemachine.StateContext;
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.StateMachineBuilder;
+import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
-import java.util.List;
+import java.util.EnumSet;
 
-import static org.moqucu.games.nightstalker.model.Direction.*;
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
+@Log4j2
 @EqualsAndHashCode(callSuper = true)
 public class Spider extends ArtificiallyMovedSprite {
+
+    enum States {
+        asleep, awake, moving
+    }
+
+    enum Events {
+        wakeUp, move, stop
+    }
+
+    StateMachine<States, Events> stateMachine;
 
     public Spider() {
 
         super();
 
-        relocate(32.0, 32.0);
-
-        setInitialImage(new Image(translate("images/Spider_Vertical_2.png")));
-
-        Direction[] directions = Direction.values();
-        /*for (int i = 0; i < Direction.values().length; i++) {
-
-            if (i % 2 == 0) {
-
-                frames2.get(directions[i]).add(new Image(translate("images/Spider_Vertical_2.png")));
-                frames2.get(directions[i]).add(new Image(translate("images/Spider_Vertical_3.png")));
-
-            } else {
-
-                frames2.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_1.png")));
-                frames2.get(directions[i]).add(new Image(translate("images/Spider_Horizontal_2.png")));
-            }
-        }*/
+        setImage(new Image(translate("images/spider.png")));
+        setNumberOfFrames(9);
 
         setVelocity(35);
 
-        /*frameDuration = 0.1;*/
+        stateMachine = buildStateMachine();
+        stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
+
+            @Override
+            public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
+
+                if (transition.getTarget().getId().equals(States.awake))
+                    stateMachine.sendEvent(Events.move);
+            }
+        });
+        stateMachine.start();
+
     }
 
-    /*@Override
-    protected List<Direction> determineAvailableDirections(List<Sprite> sprites, double deltaTime) {
+    @SneakyThrows
+    private StateMachine<States, Events> buildStateMachine() {
 
-        List<Direction> availableDirections = super.determineAvailableDirections(sprites, deltaTime);
+        StateMachineBuilder.Builder<States, Events> builder = StateMachineBuilder.builder();
 
-        Point2D currentCoordinates = getCurrentCoordinates();
+        builder.configureStates()
+                .withStates()
+                .initial(States.asleep)
+                .states(EnumSet.allOf(States.class));
 
-        if (currentCoordinates.getX() / WIDTH == 3 && currentCoordinates.getY() / HEIGHT == 5)
-            availableDirections.remove(Right);
+        builder.configureTransitions()
+                .withInternal()
+                .source(States.asleep)
+                .action(this::timeToWakeUp)
+                .timerOnce(500)
+                .and()
+                .withExternal()
+                .source(States.asleep)
+                .action(this::wokeUp)
+                .target(States.awake)
+                .event(Events.wakeUp)
+                .and()
+                .withExternal()
+                .source(States.awake)
+                .target(States.moving)
+                .action(this::startedToMove)
+                .event(Events.move)
+                .and()
+                .withExternal()
+                .source(States.moving)
+                .target(States.awake)
+                .event(Events.stop);
 
-        if (currentCoordinates.getX() / WIDTH == 3 && currentCoordinates.getY() / HEIGHT == 8)
-            availableDirections.remove(Down);
+        return builder.build();
+    }
 
-        return availableDirections;
-    }*/
+    private void timeToWakeUp(StateContext stateContext) {
+
+        log.debug("timeToWakeUp: {}", stateContext);
+        stateMachine.sendEvent(Events.wakeUp);
+    }
+
+    private void wokeUp(StateContext stateContext) {
+
+        log.debug("wokeUp: {}", stateContext);
+        playAnimation();
+    }
+
+    private void startedToMove(StateContext stateContext) {
+
+        log.debug("startedToMove: {}", stateContext);
+        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
+        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+        animation.play();
+    }
+
 }

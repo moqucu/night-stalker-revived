@@ -35,12 +35,10 @@
             <Weapon/>
         </Pane>
         <Pane>
-            <Spider>
-                <Image url="@org/moqucu/games/nightstalker/images/Spider_Vertical_2.png"/>
-            </Spider>
+            <Spider translateX="32.0" translateY="32.0"/>
+            <GreyRobot translateX="32.0" translateY="320.0"/>
             <Bat translateX="544.0" translateY="96"/>
             <Bat translateX="480.0" translateY="224"/>
-            <GreyRobot translateX="32.0" translateY="320.0"/>
 
         </Pane>
         <Pane>

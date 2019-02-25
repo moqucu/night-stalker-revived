@@ -32,8 +32,6 @@ public class Bat extends ArtificiallyMovedSprite {
 
     StateMachine<States, Events> stateMachine;
 
-    private double sleepTime;
-
     public Bat() {
 
         super();
@@ -41,7 +39,6 @@ public class Bat extends ArtificiallyMovedSprite {
         setImage(new Image(translate("images/bat.png")));
         setNumberOfFrames(6);
 
-        this.sleepTime = 5.0;
         setVelocity(35);
 
 
