@@ -15,7 +15,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class NightStalker extends MovableSprite implements Updatable {
+public class NightStalker extends DirectedSprite implements Updatable {
 
     private Weapon weapon = null;
 
@@ -34,12 +34,6 @@ public class NightStalker extends MovableSprite implements Updatable {
 
         setVelocity(70);
 
-    }
-
-    @Override
-    protected boolean isFriendlyObject(Sprite sprite) {
-
-        return false;
     }
 
     @Override

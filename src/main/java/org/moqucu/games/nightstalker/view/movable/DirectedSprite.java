@@ -22,14 +22,14 @@ import static org.moqucu.games.nightstalker.model.Direction.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class MovableSprite extends AnimatedSprite {
+public abstract class DirectedSprite extends AnimatedSprite {
 
     protected Direction direction = Right;
 
     @Singular
     protected Map<Direction, List<Image>> frames2 = new HashMap<>();
 
-    MovableSprite() {
+    DirectedSprite() {
 
         super();
 
@@ -38,24 +38,7 @@ public abstract class MovableSprite extends AnimatedSprite {
         frames2.put(Down, new ArrayList<>());
         frames2.put(Left, new ArrayList<>());
     }
-
-    //ToDo: convert to viewport based function
-   /* Image getFrame(double deltaTime) {
-
-        int index = (int) ((deltaTime % (frames2.get(direction).size() * frameDuration)) / frameDuration);
-        return frames2.get(direction).get(index);
-    }*/
-
-    @Override
-    public boolean intersects(Sprite sprite) {
-
-        if (isFriendlyObject(sprite))
-            return false;
-        else
-            return sprite.getBoundary().intersects(this.getBoundary());
-    }
-
-    protected abstract boolean isFriendlyObject(Sprite sprite);
+    
 
     protected List<Direction> determineAvailableDirections(List<Sprite> sprites, double deltaTime) {
 

@@ -1,17 +1,21 @@
 package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.animation.Animation;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.model.Indices;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
+import java.util.Map;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
@@ -28,15 +32,26 @@ public class Spider extends ArtificiallyMovedSprite {
         wakeUp, move, stop
     }
 
-    StateMachine<States, Events> stateMachine;
+    private StateMachine<States, Events> stateMachine;
+
+    private Direction direction = Direction.Down;
+
+    private Map<Direction, Indices> frameBoundaries = Map.of(
+            Direction.Up, Indices.builder().lower(1).upper(2).build(),
+            Direction.Down, Indices.builder().lower(3).upper(4).build(),
+            Direction.Right, Indices.builder().lower(5).upper(6).build(),
+            Direction.Left, Indices.builder().lower(7).upper(8).build()
+    );
 
     public Spider() {
 
         super();
 
         setImage(new Image(translate("images/spider.png")));
+
         setNumberOfFrames(9);
 
+        setFrameDuration(50);
         setVelocity(35);
 
         stateMachine = buildStateMachine();
@@ -106,7 +121,26 @@ public class Spider extends ArtificiallyMovedSprite {
         log.debug("startedToMove: {}", stateContext);
         Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
         animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
+
+        if (deltaNode.getX() < 0)
+            direction = Direction.Left;
+        else if (deltaNode.getX() > 0)
+            direction = Direction.Right;
+        else if (deltaNode.getY() < 0)
+            direction = Direction.Up;
+        else if (deltaNode.getY() > 0)
+            direction = Direction.Down;
         animation.play();
     }
 
+    @Override
+    public void interpolate(Double fraction) {
+
+        Indices indices = getFrameBoundaries().get(direction);
+        setViewport(
+                frames.get(indices.getLower()
+                        + Long.valueOf(Math.round(fraction * (indices.getUpper() - indices.getLower()))).intValue())
+        );
+    }
 }

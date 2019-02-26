@@ -28,6 +28,7 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
     private Animation translateTransition;
     private MazeGraph mazeGraph;
     private Point2D previousNode = null;
+    private Point2D nextNode = null;
 
     @SneakyThrows
     ArtificiallyMovedSprite() {
@@ -46,7 +47,7 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
             adjacentNodes.remove(previousNode);
         previousNode = currentNode;
 
-        Point2D nextNode = adjacentNodes.get(random.nextInt(adjacentNodes.size()));
+        nextNode = adjacentNodes.get(random.nextInt(adjacentNodes.size()));
 
         double deltaX = nextNode.getX()-currentNode.getX();
         double deltaY = nextNode.getY()-currentNode.getY();

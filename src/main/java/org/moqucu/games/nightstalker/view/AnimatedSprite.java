@@ -1,17 +1,21 @@
 package org.moqucu.games.nightstalker.view;
 
 import javafx.animation.Animation;
-import javafx.animation.Transition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 import lombok.*;
+import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.CustomTransition;
 
 import java.util.*;
 
+import static javafx.animation.Animation.INDEFINITE;
+
 @Data
 @SuppressWarnings("unused")
+@Log4j2
 @EqualsAndHashCode(callSuper = true)
 public abstract class AnimatedSprite extends Sprite {
 
@@ -21,7 +25,7 @@ public abstract class AnimatedSprite extends Sprite {
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private final IntegerProperty numberOfFrames = new SimpleIntegerProperty(-1);
+    protected final IntegerProperty numberOfFrames = new SimpleIntegerProperty(-1);
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -37,6 +41,7 @@ public abstract class AnimatedSprite extends Sprite {
         return numberOfFrames.get();
     }
 
+    @SneakyThrows
     protected void setNumberOfFrames(int numberOfFrames) {
 
         this.numberOfFrames.set(numberOfFrames);
@@ -47,20 +52,19 @@ public abstract class AnimatedSprite extends Sprite {
 
         setViewport(frames.get(0));
 
-        animation = new Transition() {
+        animation = new CustomTransition(
+                Duration.millis(numberOfFrames * frameDuration.get()),
+                INDEFINITE,
+                true,
+                this,
+                this.getClass().getMethod("interpolate", Double.class)
+        );
+    }
 
-            {
-                setCycleDuration(Duration.millis(numberOfFrames * frameDuration.get()));
-                setCycleCount(INDEFINITE);
-                setAutoReverse(true);
-            }
+    @SuppressWarnings("WeakerAccess")
+    public void interpolate(Double fraction) {
 
-            @Override
-            protected void interpolate(double fraction) {
-
-                setViewport(frames.get(Math.round((numberOfFrames - 2) * (float) fraction) + 1));
-            }
-        };
+        setViewport(frames.get(Long.valueOf(Math.round((numberOfFrames.get() - 2) * fraction)).intValue() + 1));
     }
 
     public IntegerProperty numberOfFramesProperty() {
@@ -73,7 +77,7 @@ public abstract class AnimatedSprite extends Sprite {
         return frameDuration.get();
     }
 
-    public void setFrameDuration(int frameDuration) {
+    protected void setFrameDuration(int frameDuration) {
 
         this.frameDuration.set(frameDuration);
     }
@@ -88,7 +92,7 @@ public abstract class AnimatedSprite extends Sprite {
         animation.playFromStart();
     }
 
-    public void stopAnimation() {
+    protected void stopAnimation() {
 
         animation.stop();
     }
