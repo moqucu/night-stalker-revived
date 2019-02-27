@@ -57,7 +57,7 @@ The great Intellivision gameLoop revived as a Java gameLoop
 
 -   **World**
 
--   **org.moqucu.games.nightstalker.Maze**: 2D Array [12][24]
+-   **org.moqucu.games.nightstalker.view.Maze**: 2D Array [12][24]
 
     -   0 or 1 (or an object) to denote a maze block
 

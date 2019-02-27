@@ -1,18 +1,24 @@
 package org.moqucu.games.nightstalker.view;
 
+import lombok.extern.log4j.Log4j2;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.configuration.SpringFXMLLoader;
+import org.moqucu.games.nightstalker.controller.FxmlView;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+@Log4j2
 public class StageManager {
 
     private final Stage primaryStage;
     private final SpringFXMLLoader springFXMLLoader;
-
+    private Map<Parent, Scene> scenes = new HashMap<>();
 
     public StageManager(SpringFXMLLoader springFXMLLoader, Stage primaryStage) {
 
@@ -23,6 +29,7 @@ public class StageManager {
     public void switchScene(final FxmlView view) {
 
         Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
+        log.info(viewRootNodeHierarchy.getId());
         show(viewRootNodeHierarchy, view.getTitle());
     }
 
@@ -37,10 +44,12 @@ public class StageManager {
 
     private Scene prepareScene(Parent rootNode) {
 
-        Scene scene = Optional.ofNullable(primaryStage.getScene()).orElse(new Scene(rootNode));
-        scene.setRoot(rootNode);
+        if (!scenes.containsKey(rootNode)) {
+            Scene scene = new Scene(rootNode);
+            scenes.put(rootNode, scene);
+        }
 
-        return scene;
+        return scenes.get(rootNode);
     }
 
     /**

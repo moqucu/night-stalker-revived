@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="INFO">
 
     <Properties>
         <Property name="filename">target/test.log</Property>
@@ -19,10 +19,10 @@
 
     </Appenders>
     <Loggers>
-        <Logger name="org.moqucu.games.nightstalker.gameobject.movable.Bat" level="INFO" additivity="false">
+        <Logger name="org.moqucu.games.nightstalker.view.movable.Bat" level="INFO" additivity="false">
             <AppenderRef ref="File"/>
         </Logger>
-        <Root level="error">
+        <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>

@@ -1,8 +1,7 @@
 package org.moqucu.games.nightstalker.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.view.StageManager;
@@ -13,19 +12,13 @@ import org.springframework.stereotype.Component;
 @Data
 @Log4j2
 @Component
-public class SplashScreenController implements FxmlController {
-
-    @FXML
-    private Button quitButton;
-
-    @FXML
-    private Button playButton;
+public class GameScreenController implements FxmlController {
 
     private final StageManager stageManager;
 
     @Autowired
     @Lazy //lazy since Stage for StageManager not available yet at initialization time
-    public SplashScreenController(StageManager stageManager) {
+    public GameScreenController(StageManager stageManager) {
 
         this.stageManager = stageManager;
     }
@@ -35,16 +28,9 @@ public class SplashScreenController implements FxmlController {
     }
 
     @FXML
-    public void quitButtonPressed(ActionEvent event) {
+    public void onMouseClicked(MouseEvent event) {
 
         log.debug(event);
-        System.exit(0);
-    }
-
-    @FXML
-    public void playButtonPressed(ActionEvent event) {
-
-        log.debug(event);
-        stageManager.switchScene(FxmlView.GAME_SCREEN);
+        stageManager.switchScene(FxmlView.SPLASH_SCREEN);
     }
 }
