@@ -38,9 +38,9 @@ public class Spider extends ArtificiallyMovedSprite {
 
     private Map<Direction, Indices> frameBoundaries = Map.of(
             Direction.Up, Indices.builder().lower(1).upper(2).build(),
-            Direction.Down, Indices.builder().lower(3).upper(4).build(),
-            Direction.Right, Indices.builder().lower(5).upper(6).build(),
-            Direction.Left, Indices.builder().lower(7).upper(8).build()
+            Direction.Down, Indices.builder().lower(1).upper(2).build(),
+            Direction.Right, Indices.builder().lower(3).upper(4).build(),
+            Direction.Left, Indices.builder().lower(3).upper(4).build()
     );
 
     public Spider() {
@@ -49,7 +49,7 @@ public class Spider extends ArtificiallyMovedSprite {
 
         setImage(new Image(translate("images/spider.png")));
 
-        setNumberOfFrames(9);
+        setNumberOfFrames(5);
 
         setFrameDuration(50);
         setVelocity(35);
