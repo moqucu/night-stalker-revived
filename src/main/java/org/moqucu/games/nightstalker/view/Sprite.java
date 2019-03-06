@@ -38,7 +38,7 @@ public abstract class Sprite extends ImageView {
     /**
      * Velocity is measured in pixel / seconds
      */
-    private int velocity;
+    private int velocity = 5;
 
     private Position initialMazeGridPosition;
 

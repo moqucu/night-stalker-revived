@@ -44,10 +44,10 @@ public class Maze extends StackPane implements Updatable {
                 if (addedPane instanceof Pane) {
                     log.info("pane added to Maze; is of type {}", addedPane.getClass().getName());
                     log.info("Pane has this many children: {}", ((Pane)addedPane).getChildren().size());
-                    ((Pane) addedPane)
+                    /*((Pane) addedPane)
                             .getChildren()
                             .filtered(node -> node instanceof ArtificiallyMovedSprite)
-                            .forEach(sprite -> ((ArtificiallyMovedSprite)sprite).setMazeGraph(mazeGraph));
+                            .forEach(sprite -> ((ArtificiallyMovedSprite)sprite).setMazeGraph(mazeGraph));*/
 
                     ((Pane) addedPane).getChildren().addListener(new ListChangeListener<>() {
 
@@ -56,8 +56,8 @@ public class Maze extends StackPane implements Updatable {
                             change.next();
                             change.getAddedSubList().forEach(addedChild -> {
                                 log.info("child added to Pane; is of type {}", addedChild.getClass().getName());
-                                if (addedChild instanceof ArtificiallyMovedSprite)
-                                    ((ArtificiallyMovedSprite) addedChild).setMazeGraph(mazeGraph);
+                                /*if (addedChild instanceof ArtificiallyMovedSprite)
+                                    ((ArtificiallyMovedSprite) addedChild).setMazeGraph(mazeGraph);*/
                             });
                         }
                     });

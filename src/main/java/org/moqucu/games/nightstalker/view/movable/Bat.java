@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.MazeGraph;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -29,6 +31,8 @@ public class Bat extends ArtificiallyMovedSprite {
     enum Events {
         wakeUp, move, stop
     }
+
+    private MazeGraph mazeGraph;
 
     StateMachine<States, Events> stateMachine;
 
@@ -110,4 +114,17 @@ public class Bat extends ArtificiallyMovedSprite {
         animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Bat.Events.stop));
         animation.play();
     }
+
+    @SneakyThrows
+    protected MazeGraph getMazeGraph() {
+
+        if (mazeGraph == null)
+            mazeGraph = new MazeGraph(
+                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
+                            .getInputStream())
+            );
+
+        return mazeGraph;
+    }
+
 }

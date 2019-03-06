@@ -39,12 +39,9 @@
             <GreyRobot translateX="32.0" translateY="320.0"/>
             <Bat translateX="544.0" translateY="96"/>
             <Bat translateX="480.0" translateY="224"/>
-
         </Pane>
         <Pane>
-            <NightStalker>
-                <Image url="@org/moqucu/games/nightstalker/images/NightStalker_1_1.png"/>
-            </NightStalker>
+            <NightStalker translateX="288.0" translateY="144.0"/>
         </Pane>
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
             <Wall id="org.moqucu.games.nightstalker.maze.00.00"/>

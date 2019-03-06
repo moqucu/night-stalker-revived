@@ -12,7 +12,6 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
-import org.springframework.core.io.ClassPathResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
 
     private Random random = new Random();
     private Animation translateTransition;
-    private MazeGraph mazeGraph;
     private Point2D previousNode = null;
     private Point2D nextNode = null;
 
@@ -34,15 +32,16 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
     ArtificiallyMovedSprite() {
 
         super();
-        mazeGraph = new MazeGraph(
-                (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json").getInputStream())
-        );
     }
 
     Animation prepareAnimationForMovingSpriteRandomlyAlongMazeGraph() {
 
         Point2D currentNode = new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
-        List<Point2D> adjacentNodes = new ArrayList<>(List.copyOf(mazeGraph.getAdjacencyList().get(currentNode)));
+        log.info("current coordinates: {}, {}", getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
+        log.info("Adjacency list: {} {}", getMazeGraph(), getMazeGraph().getAdjacencyList().get(currentNode));
+
+        List<Point2D> adjacentNodes = new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
+
         if (previousNode != null && adjacentNodes.size() > 1)
             adjacentNodes.remove(previousNode);
         previousNode = currentNode;
@@ -67,4 +66,6 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
 
         return translateTransition;
     }
+
+    protected abstract MazeGraph getMazeGraph();
 }

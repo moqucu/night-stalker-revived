@@ -9,6 +9,8 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.Indices;
+import org.moqucu.games.nightstalker.model.MazeGraph;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -33,6 +35,8 @@ public class Spider extends ArtificiallyMovedSprite {
     }
 
     private StateMachine<States, Events> stateMachine;
+
+    private MazeGraph mazeGraph;
 
     private Direction direction = Direction.Down;
 
@@ -143,4 +147,17 @@ public class Spider extends ArtificiallyMovedSprite {
                         + Long.valueOf(Math.round(fraction * (indices.getUpper() - indices.getLower()))).intValue())
         );
     }
+
+    @SneakyThrows
+    protected MazeGraph getMazeGraph() {
+
+        if (mazeGraph == null)
+            mazeGraph = new MazeGraph(
+                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
+                            .getInputStream())
+            );
+
+        return mazeGraph;
+    }
+
 }

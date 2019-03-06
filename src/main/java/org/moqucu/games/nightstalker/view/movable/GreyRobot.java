@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.MazeGraph;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -31,9 +33,13 @@ public class GreyRobot extends ArtificiallyMovedSprite {
         wakeUp, move, stop
     }
 
-    StateMachine<States, Events> stateMachine;
+    private MazeGraph mazeGraph;
+
+    private StateMachine<States, Events> stateMachine;
 
     public GreyRobot() {
+
+        super();
 
         setImage(new Image(translate("images/grey-robot.png")));
         setNumberOfFrames(3);
@@ -107,4 +113,17 @@ public class GreyRobot extends ArtificiallyMovedSprite {
         animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
         animation.play();
     }
+
+    @SneakyThrows
+    protected MazeGraph getMazeGraph() {
+
+        if (mazeGraph == null)
+            mazeGraph = new MazeGraph(
+                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
+                            .getInputStream())
+            );
+
+        return mazeGraph;
+    }
+
 }
