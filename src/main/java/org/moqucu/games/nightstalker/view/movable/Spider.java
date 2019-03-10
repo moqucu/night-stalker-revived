@@ -26,13 +26,9 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Spider extends ArtificiallyMovedSprite {
 
-    enum States {
-        asleep, awake, moving
-    }
+    enum States {asleep, awake, movingHorizontally, movingVertically}
 
-    enum Events {
-        wakeUp, move, stop
-    }
+    enum Events {wakeUp, moveHorizontally, moveVertically, stop}
 
     private StateMachine<States, Events> stateMachine;
 
@@ -40,11 +36,9 @@ public class Spider extends ArtificiallyMovedSprite {
 
     private Direction direction = Direction.Down;
 
-    private Map<Direction, Indices> frameBoundaries = Map.of(
-            Direction.Up, Indices.builder().lower(1).upper(2).build(),
-            Direction.Down, Indices.builder().lower(1).upper(2).build(),
-            Direction.Right, Indices.builder().lower(3).upper(4).build(),
-            Direction.Left, Indices.builder().lower(3).upper(4).build()
+    private Map<States, Indices> frameBoundaries = Map.of(
+            States.movingVertically, Indices.builder().lower(1).upper(2).build(),
+            States.movingHorizontally, Indices.builder().lower(3).upper(4).build()
     );
 
     public Spider() {
@@ -52,10 +46,11 @@ public class Spider extends ArtificiallyMovedSprite {
         super();
 
         setImage(new Image(translate("images/spider.png")));
+        setStillImageIndex(0);
 
-        setNumberOfFrames(5);
+        setAutoReversible(5);
 
-        setFrameDuration(50);
+        setFrameDurationInMillis(50);
         setVelocity(35);
 
         stateMachine = buildStateMachine();
@@ -65,7 +60,7 @@ public class Spider extends ArtificiallyMovedSprite {
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
                 if (transition.getTarget().getId().equals(States.awake))
-                    stateMachine.sendEvent(Events.move);
+                    stateMachine.sendEvent(Events.moveHorizontally);
             }
         });
         stateMachine.start();
@@ -96,12 +91,12 @@ public class Spider extends ArtificiallyMovedSprite {
                 .and()
                 .withExternal()
                 .source(States.awake)
-                .target(States.moving)
+                .target(States.movingHorizontally)
+                .event(Events.moveHorizontally)
                 .action(this::startedToMove)
-                .event(Events.move)
                 .and()
                 .withExternal()
-                .source(States.moving)
+                .source(States.movingHorizontally)
                 .target(States.awake)
                 .event(Events.stop);
 
@@ -117,25 +112,27 @@ public class Spider extends ArtificiallyMovedSprite {
     private void wokeUp(StateContext stateContext) {
 
         log.debug("wokeUp: {}", stateContext);
+
+        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
+        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+
+        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
+        if (deltaNode.getX() != 0)
+            stateMachine.sendEvent(Events.moveHorizontally);
+        else if (deltaNode.getY() != 0)
+            stateMachine.sendEvent(Events.moveVertically);
+
+        animation.play();
+
+
         playAnimation();
     }
 
-    private void startedToMove(StateContext stateContext) {
+    private void startedToMoveHorizontally(StateContext stateContext) {
 
-        log.debug("startedToMove: {}", stateContext);
-        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
+        log.debug("startedToMoveHorizontally: {}", stateContext);
 
-        if (deltaNode.getX() < 0)
-            direction = Direction.Left;
-        else if (deltaNode.getX() > 0)
-            direction = Direction.Right;
-        else if (deltaNode.getY() < 0)
-            direction = Direction.Up;
-        else if (deltaNode.getY() > 0)
-            direction = Direction.Down;
-        animation.play();
+
     }
 
     @Override

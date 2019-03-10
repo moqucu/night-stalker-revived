@@ -42,7 +42,9 @@ public class GreyRobot extends ArtificiallyMovedSprite {
         super();
 
         setImage(new Image(translate("images/grey-robot.png")));
-        setNumberOfFrames(3);
+        setStillImageIndex(0);
+
+        setAutoReversible(3);
         setVelocity(35);
 
         stateMachine = buildStateMachine();

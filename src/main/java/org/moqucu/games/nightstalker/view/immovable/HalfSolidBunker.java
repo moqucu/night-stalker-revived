@@ -23,9 +23,4 @@ public class HalfSolidBunker extends Sprite {
         super(initialPosition);
         setImage(image);
     }
-
-    public Bounds getBoundary() {
-
-        return new BoundingBox(currentCoordinates.getX(), currentCoordinates.getY() + HEIGHT / 2.0, WIDTH, HEIGHT);
-    }
 }

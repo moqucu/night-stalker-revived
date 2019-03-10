@@ -17,13 +17,4 @@ public class Bunker extends Sprite {
         super(initialPosition);
         setImage(image);
     }
-
-    @Override
-    public boolean intersects(Sprite sprite) {
-
-        if (sprite instanceof NightStalker)
-            return false;
-        else
-            return sprite.getBoundary().intersects(this.getBoundary());
-    }
 }

@@ -208,7 +208,7 @@ public class QuadTree {
         /* Insert the game object in the list */
         sprites.add(sprite);
 
-        /* if capacity of list is reached, split and move all org.moqucu.games.nightstalker.objects into sub nodes */
+        /* if capacity of list is reached, split and moveHorizontally all org.moqucu.games.nightstalker.objects into sub nodes */
         if (sprites.size() > MAX_OBJECTS) {
 
             if (level == MAX_LEVELS)

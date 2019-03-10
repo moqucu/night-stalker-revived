@@ -22,14 +22,20 @@ import static org.moqucu.games.nightstalker.model.Direction.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class DirectedSprite extends AnimatedSprite {
+public abstract class MovableSprite extends AnimatedSprite {
 
     protected Direction direction = Right;
 
     @Singular
     protected Map<Direction, List<Image>> frames2 = new HashMap<>();
 
-    DirectedSprite() {
+    /**
+     * Velocity is measured in pixel / seconds
+     */
+    private int velocity = 5;
+
+
+    MovableSprite() {
 
         super();
 
@@ -38,7 +44,13 @@ public abstract class DirectedSprite extends AnimatedSprite {
         frames2.put(Down, new ArrayList<>());
         frames2.put(Left, new ArrayList<>());
     }
-    
+
+    protected long determinePixelMoveRate(double deltaTime) {
+
+        return Math.round(velocity * deltaTime);
+    }
+
+
 
     protected List<Direction> determineAvailableDirections(List<Sprite> sprites, double deltaTime) {
 

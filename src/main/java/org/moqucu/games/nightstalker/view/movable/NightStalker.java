@@ -56,7 +56,7 @@ public class NightStalker extends ArtificiallyMovedSprite {
         super();
 
         setImage(new Image(translate("images/night-stalker.png")));
-        setNumberOfFrames(21);
+        setAutoReversible(21);
         setVelocity(70);
 
         stateMachine = buildStateMachine();

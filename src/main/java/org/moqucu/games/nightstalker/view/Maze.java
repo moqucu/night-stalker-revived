@@ -9,8 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.model.QuadTree;
 import javafx.scene.input.KeyCode;
-import org.moqucu.games.nightstalker.view.movable.ArtificiallyMovedSprite;
-import org.moqucu.games.nightstalker.view.movable.DirectedSprite;
+import org.moqucu.games.nightstalker.view.movable.MovableSprite;
 import org.springframework.core.io.ClassPathResource;
 
 import java.util.*;
@@ -88,7 +87,7 @@ public class Maze extends StackPane implements Updatable {
         layerSpecificGameObjects.add(gameObject);
         allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
 
-        if (gameObject instanceof DirectedSprite)
+        if (gameObject instanceof MovableSprite)
             movableSprites.add(gameObject);
         else
             unmovableSprites.insert(gameObject);
@@ -140,9 +139,9 @@ public class Maze extends StackPane implements Updatable {
                 if (gameObject instanceof Sprite)
                     nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove((Sprite) gameObject));
 
-                if (gameObject instanceof DirectedSprite)
+                if (gameObject instanceof MovableSprite)
                     nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove(
-                            ((DirectedSprite) gameObject).createShadowSpritePerMovableDirection(deltaTime))
+                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection(deltaTime))
                     );
 
                 ((Updatable) gameObject).update(

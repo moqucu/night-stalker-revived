@@ -56,8 +56,8 @@ public class Weapon extends AnimatedSprite {
         super();
         relocate(randomGunPositions[randomIndex][0] * 32, randomGunPositions[randomIndex][1] * 32);
         setImage(new Image(translate("images/weapon.png")));
-        setFrameDuration(200);
-        setNumberOfFrames(3);
+        setFrameDurationInMillis(200);
+        setAutoReversible(3);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {

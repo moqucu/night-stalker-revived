@@ -41,7 +41,7 @@ public class Bat extends ArtificiallyMovedSprite {
         super();
 
         setImage(new Image(translate("images/bat.png")));
-        setNumberOfFrames(6);
+        setAutoReversible(6);
 
         setVelocity(35);
 

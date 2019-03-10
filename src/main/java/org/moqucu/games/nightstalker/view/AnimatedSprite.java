@@ -1,90 +1,100 @@
 package org.moqucu.games.nightstalker.view;
 
 import javafx.animation.Animation;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.CustomTransition;
-
-import java.util.*;
+import org.moqucu.games.nightstalker.model.Indices;
 
 import static javafx.animation.Animation.INDEFINITE;
 
 @Data
-@SuppressWarnings("unused")
 @Log4j2
+@SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
 public abstract class AnimatedSprite extends Sprite {
 
     private Animation animation;
 
-    protected final List<Rectangle2D> frames = new LinkedList<>();
+    //todo
+    protected ObjectProperty<Indices> frameIndices;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    protected final IntegerProperty numberOfFrames = new SimpleIntegerProperty(-1);
+    protected final BooleanProperty autoReversible = new SimpleBooleanProperty(true);
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private final IntegerProperty frameDuration = new SimpleIntegerProperty(100);
+    private final IntegerProperty frameDurationInMillis = new SimpleIntegerProperty(100);
 
     protected AnimatedSprite() {
 
         super();
     }
 
-    public int getNumberOfFrames() {
+    private int calculateNumberOfFrames() {
 
-        return numberOfFrames.get();
+        return 0;
     }
 
     @SneakyThrows
-    protected void setNumberOfFrames(int numberOfFrames) {
-
-        this.numberOfFrames.set(numberOfFrames);
-        frames.clear();
-
-        for (int i = 0; i < numberOfFrames; i++)
-            frames.add(new Rectangle2D(i * WIDTH, 0, WIDTH, HEIGHT));
-
-        setViewport(frames.get(0));
+    private void configureAnimation() {
 
         animation = new CustomTransition(
-                Duration.millis(numberOfFrames * frameDuration.get()),
+                Duration.millis(calculateNumberOfFrames() * frameDurationInMillis.get()),
                 INDEFINITE,
-                true,
+                autoReversible.get(),
                 this,
                 this.getClass().getMethod("interpolate", Double.class)
         );
     }
 
-    @SuppressWarnings("WeakerAccess")
+    public boolean isAutoReversible() {
+
+        return autoReversible.get();
+    }
+
+    protected void setAutoReversible(boolean autoReversible) {
+
+        this.autoReversible.set(autoReversible);
+        frames.clear();
+
+        for (int i = 0; i < autoReversible; i++)
+            frames.add(new Rectangle2D(i * WIDTH, 0, WIDTH, HEIGHT));
+
+        setViewport(frames.get(0));
+
+    }
+
+    public BooleanProperty autoReversibleProperty() {
+
+        return autoReversible;
+    }
+
+    public int getFrameDurationInMillis() {
+
+        return frameDurationInMillis.get();
+    }
+
+    protected void setFrameDurationInMillis(int frameDurationInMillis) {
+
+        this.frameDurationInMillis.set(frameDurationInMillis);
+        configureAnimation();
+    }
+
+    public IntegerProperty frameDurationInMillisProperty() {
+
+        return frameDurationInMillis;
+    }
+
     public void interpolate(Double fraction) {
 
-        setViewport(frames.get(Long.valueOf(Math.round((numberOfFrames.get() - 2) * fraction)).intValue() + 1));
-    }
-
-    public IntegerProperty numberOfFramesProperty() {
-
-        return numberOfFrames;
-    }
-
-    public int getFrameDuration() {
-
-        return frameDuration.get();
-    }
-
-    protected void setFrameDuration(int frameDuration) {
-
-        this.frameDuration.set(frameDuration);
-    }
-
-    public IntegerProperty frameDurationProperty() {
-
-        return frameDuration;
+        setViewport(
+                getViewport(Long.valueOf(Math.round((calculateNumberOfFrames() - 2) * fraction)).intValue() + 1)
+        );
     }
 
     protected void playAnimation() {

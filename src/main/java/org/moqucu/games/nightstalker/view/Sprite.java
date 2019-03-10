@@ -2,18 +2,18 @@ package org.moqucu.games.nightstalker.view;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-@SuppressWarnings("unused")
 @Data
 @Log4j2
+@SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
 public abstract class Sprite extends ImageView {
 
@@ -21,85 +21,49 @@ public abstract class Sprite extends ImageView {
 
     public static final double HEIGHT = 32.0;
 
-    private Image initialImage;
-
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private IntegerProperty initialKeyFrameIndex = new SimpleIntegerProperty(0);
-
-    @Data
-    @Builder
-    protected static class Position {
-
-        private int horizontal;
-        private int vertical;
-    }
-
-    /**
-     * Velocity is measured in pixel / seconds
-     */
-    private int velocity = 5;
-
-    private Position initialMazeGridPosition;
-
-
-    protected Point2D currentCoordinates = Point2D.ZERO;
-
-    public Sprite(Position initialMazeGridPosition) {
-
-        setViewport(getViewPort(initialKeyFrameIndex.get()));
-        this.initialMazeGridPosition = initialMazeGridPosition;
-        currentCoordinates.add(
-                initialMazeGridPosition.getHorizontal() * WIDTH,
-                initialMazeGridPosition.getVertical() * HEIGHT
-        );
-    }
-
-    public Sprite(Point2D initialCoordinates) {
-
-        this(Position.builder().build());
-        currentCoordinates = initialCoordinates;
-        relocate(currentCoordinates.getX(), currentCoordinates.getY());
-    }
+    private IntegerProperty stillImageIndex = new SimpleIntegerProperty(0);
 
     public Sprite() {
 
         super();
     }
 
-    public Bounds getBoundary() {
+    /**
+     * Returns a rectangle representing the sprite image at the given index position. The index has to be
+     * between 0 and 239 which represents all possible 240 tiles in the 20 x 12 matrix.
+     *
+     * @param index Index of the tile to be retrieved as a rectangular viewport.
+     * @return Rectangle that represents the boundaries of the accessed tile.
+     * @throws RuntimeException if index is below 0 or above 239.
+     */
+    @SuppressWarnings("WeakerAccess")
+    protected Rectangle2D getViewport(int index) {
 
-        return new BoundingBox(currentCoordinates.getX(), currentCoordinates.getY(), WIDTH, HEIGHT);
+        if (index < 0 || index > 239)
+            throw new RuntimeException("Frame index " + index + "is out of bounds, has to be between 0 and 239!");
+
+        int horizontalIndex = index % 20;
+        int verticalIndex = index / 20;
+
+        return new Rectangle2D(horizontalIndex * WIDTH, verticalIndex * HEIGHT, WIDTH, HEIGHT);
     }
 
-    public boolean intersects(Sprite sprite) {
+    public int getStillImageIndex() {
 
-        return sprite.getBoundary().intersects(this.getBoundary());
+        return stillImageIndex.get();
     }
 
-    protected long determinePixelMoveRate(double deltaTime) {
+    @SuppressWarnings("WeakerAccess")
+    public void setStillImageIndex(int index) {
 
-        return Math.round(velocity * deltaTime);
+        stillImageIndex.set(index);
+        setViewport(getViewport(stillImageIndex.get()));
     }
 
-    private Rectangle2D getViewPort(int index) {
+    public IntegerProperty stillImageIndexProperty() {
 
-        return new Rectangle2D(index * WIDTH, 0, WIDTH, HEIGHT);
-    }
-
-    public int getInitialKeyFrameIndex() {
-
-        return initialKeyFrameIndex.get();
-    }
-
-    public void setInitialKeyFrameIndex(int index) {
-
-        initialKeyFrameIndex.set(index);
-        setViewport(getViewPort(initialKeyFrameIndex.get()));
-    }
-
-    public IntegerProperty initialKeyFrameIndexProperty() {
-
-        return initialKeyFrameIndex;
+        return stillImageIndex;
     }
 }
