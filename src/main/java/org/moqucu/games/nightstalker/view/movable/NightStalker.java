@@ -56,7 +56,7 @@ public class NightStalker extends ArtificiallyMovedSprite {
         super();
 
         setImage(new Image(translate("images/night-stalker.png")));
-        setAutoReversible(21);
+        /*setAutoReversible(21);
         setVelocity(70);
 
         stateMachine = buildStateMachine();
@@ -69,7 +69,7 @@ public class NightStalker extends ArtificiallyMovedSprite {
                     stateMachine.sendEvent(Events.move);
             }
         });
-        stateMachine.start();
+        stateMachine.start();*/
     }
 
     @SneakyThrows
@@ -137,16 +137,6 @@ public class NightStalker extends ArtificiallyMovedSprite {
         else if (deltaNode.getY() > 0)
             direction = Direction.Down;
         animation.play();
-    }
-
-    @Override
-    public void interpolate(Double fraction) {
-
-        Indices indices = getFrameBoundaries().get(direction);
-        setViewport(
-                frames.get(indices.getLower()
-                        + Long.valueOf(Math.round(fraction * (indices.getUpper() - indices.getLower()))).intValue())
-        );
     }
 
     @SneakyThrows

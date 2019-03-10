@@ -2,7 +2,7 @@ package org.moqucu.games.nightstalker.view;
 
 import javafx.animation.Animation;
 import javafx.beans.property.*;
-import javafx.geometry.Rectangle2D;
+import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -19,25 +19,40 @@ public abstract class AnimatedSprite extends Sprite {
 
     private Animation animation;
 
-    //todo
-    protected ObjectProperty<Indices> frameIndices;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final ObjectProperty<Indices> frameIndices;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    protected final BooleanProperty autoReversible = new SimpleBooleanProperty(true);
+    private final BooleanProperty autoReversible = new SimpleBooleanProperty(true);
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private final IntegerProperty frameDurationInMillis = new SimpleIntegerProperty(100);
 
+    @SneakyThrows
     protected AnimatedSprite() {
 
         super();
+
+        //noinspection unchecked
+        frameIndices = JavaBeanObjectPropertyBuilder
+                .create()
+                .name("lower")
+                .beanClass(Indices.class)
+                .bean(Indices.builder().lower(0).upper(0).build())
+                .build();
     }
 
+    /**
+     * Calculates the number of frames based on the lower and upper index as provided by the #frameIndices property.
+     *
+     * @return Number of frames.
+     */
     private int calculateNumberOfFrames() {
 
-        return 0;
+        return frameIndices.get().getUpper() - frameIndices.get().getLower() + 1;
     }
 
     @SneakyThrows
@@ -52,21 +67,33 @@ public abstract class AnimatedSprite extends Sprite {
         );
     }
 
+    public Indices getFrameIndices() {
+
+        return frameIndices.get();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void setFrameIndices(Indices frameIndices) {
+
+        this.frameIndices.set(frameIndices);
+        configureAnimation();
+    }
+
+    public ObjectProperty<Indices> frameIndicesProperty() {
+
+        return frameIndices;
+    }
+
     public boolean isAutoReversible() {
 
         return autoReversible.get();
     }
 
-    protected void setAutoReversible(boolean autoReversible) {
+    @SuppressWarnings("WeakerAccess")
+    public void setAutoReversible(boolean autoReversible) {
 
         this.autoReversible.set(autoReversible);
-        frames.clear();
-
-        for (int i = 0; i < autoReversible; i++)
-            frames.add(new Rectangle2D(i * WIDTH, 0, WIDTH, HEIGHT));
-
-        setViewport(frames.get(0));
-
+        configureAnimation();
     }
 
     public BooleanProperty autoReversibleProperty() {
@@ -90,11 +117,16 @@ public abstract class AnimatedSprite extends Sprite {
         return frameDurationInMillis;
     }
 
+    /**
+     * Is being called while the sprite animation is progressing. Interpolates fraction between 0 and 1.
+     * Then uses the fraction parameter to calculate the index of the frame that the viewport need to be set to.
+     *
+     * @param fraction Value between 0 and 1; progresses as the animations continues.
+     */
     public void interpolate(Double fraction) {
 
-        setViewport(
-                getViewport(Long.valueOf(Math.round((calculateNumberOfFrames() - 2) * fraction)).intValue() + 1)
-        );
+        double indexAsDouble = frameIndices.get().getLower() + fraction * (calculateNumberOfFrames() - 1);
+        setViewport(getViewport(Long.valueOf(Math.round(indexAsDouble)).intValue()));
     }
 
     protected void playAnimation() {

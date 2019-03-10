@@ -1,12 +1,12 @@
 package org.moqucu.games.nightstalker.view.immovable;
 
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.statemachine.StateContext;
@@ -25,16 +25,12 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Weapon extends AnimatedSprite {
 
-    public class NoMoreRoundsException extends Exception {
+    private class NoMoreRoundsException extends Exception {
     }
 
-    enum States {
-        tossedAway, reappearedOnTheGround, pickedUp
-    }
+    enum States {tossedAway, reappearedOnTheGround, pickedUp}
 
-    enum Events {
-        reappear, pickUp, tossAway
-    }
+    enum Events {reappear, pickUp, tossAway}
 
     StateMachine<States, Events> stateMachine;
 
@@ -57,7 +53,8 @@ public class Weapon extends AnimatedSprite {
         relocate(randomGunPositions[randomIndex][0] * 32, randomGunPositions[randomIndex][1] * 32);
         setImage(new Image(translate("images/weapon.png")));
         setFrameDurationInMillis(200);
-        setAutoReversible(3);
+        setAutoReversible(false);
+        setFrameIndices(Indices.builder().lower(1).upper(2).build());
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
@@ -135,12 +132,7 @@ public class Weapon extends AnimatedSprite {
 
         log.debug("tossedAway: {}", stateContext);
         randomIndex = (new Random()).nextInt(4);
-        setCurrentCoordinates(
-                new Point2D(
-                        randomGunPositions[randomIndex][0] * WIDTH,
-                        randomGunPositions[randomIndex][1] * HEIGHT
-                )
-        );
+        relocate(randomGunPositions[randomIndex][0] * 32, randomGunPositions[randomIndex][1] * 32);
     }
 
     public void fire() throws NoMoreRoundsException {

@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.springframework.core.io.ClassPathResource;
@@ -26,30 +25,27 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Spider extends ArtificiallyMovedSprite {
 
-    enum States {asleep, awake, movingHorizontally, movingVertically}
+    private enum States {asleep, awake, movingHorizontally, movingVertically}
 
-    enum Events {wakeUp, moveHorizontally, moveVertically, stop}
+    private enum Events {wakeUp, moveHorizontally, moveVertically, stop}
 
     private StateMachine<States, Events> stateMachine;
 
     private MazeGraph mazeGraph;
-
-    private Direction direction = Direction.Down;
 
     private Map<States, Indices> frameBoundaries = Map.of(
             States.movingVertically, Indices.builder().lower(1).upper(2).build(),
             States.movingHorizontally, Indices.builder().lower(3).upper(4).build()
     );
 
+    private Animation animation;
+
     public Spider() {
 
         super();
 
         setImage(new Image(translate("images/spider.png")));
-        setStillImageIndex(0);
-
-        setAutoReversible(5);
-
+        setAutoReversible(false);
         setFrameDurationInMillis(50);
         setVelocity(35);
 
@@ -64,7 +60,6 @@ public class Spider extends ArtificiallyMovedSprite {
             }
         });
         stateMachine.start();
-
     }
 
     @SneakyThrows
@@ -85,18 +80,29 @@ public class Spider extends ArtificiallyMovedSprite {
                 .and()
                 .withExternal()
                 .source(States.asleep)
-                .action(this::wokeUp)
                 .target(States.awake)
                 .event(Events.wakeUp)
+                .action(this::wokeUp)
                 .and()
                 .withExternal()
                 .source(States.awake)
                 .target(States.movingHorizontally)
                 .event(Events.moveHorizontally)
-                .action(this::startedToMove)
+                .action(this::startedToMoveHorizontally)
                 .and()
                 .withExternal()
                 .source(States.movingHorizontally)
+                .target(States.awake)
+                .event(Events.stop)
+                .and()
+                .withExternal()
+                .source(States.awake)
+                .target(States.movingVertically)
+                .event(Events.moveVertically)
+                .action(this::startedToMoveVertically)
+                .and()
+                .withExternal()
+                .source(States.movingVertically)
                 .target(States.awake)
                 .event(Events.stop);
 
@@ -113,7 +119,7 @@ public class Spider extends ArtificiallyMovedSprite {
 
         log.debug("wokeUp: {}", stateContext);
 
-        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
+        animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
         animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
 
         Point2D deltaNode = getNextNode().subtract(getPreviousNode());
@@ -121,28 +127,22 @@ public class Spider extends ArtificiallyMovedSprite {
             stateMachine.sendEvent(Events.moveHorizontally);
         else if (deltaNode.getY() != 0)
             stateMachine.sendEvent(Events.moveVertically);
-
-        animation.play();
-
-
-        playAnimation();
     }
 
     private void startedToMoveHorizontally(StateContext stateContext) {
 
         log.debug("startedToMoveHorizontally: {}", stateContext);
-
-
+        setFrameIndices(frameBoundaries.get(States.movingHorizontally));
+        animation.play();
+        playAnimation();
     }
 
-    @Override
-    public void interpolate(Double fraction) {
+    private void startedToMoveVertically(StateContext stateContext) {
 
-        Indices indices = getFrameBoundaries().get(direction);
-        setViewport(
-                frames.get(indices.getLower()
-                        + Long.valueOf(Math.round(fraction * (indices.getUpper() - indices.getLower()))).intValue())
-        );
+        log.debug("startedToMoveVertically: {}", stateContext);
+        setFrameIndices(frameBoundaries.get(States.movingVertically));
+        animation.play();
+        playAnimation();
     }
 
     @SneakyThrows
@@ -156,5 +156,4 @@ public class Spider extends ArtificiallyMovedSprite {
 
         return mazeGraph;
     }
-
 }

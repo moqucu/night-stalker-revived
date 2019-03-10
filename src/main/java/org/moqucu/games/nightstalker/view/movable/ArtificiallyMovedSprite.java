@@ -3,12 +3,10 @@ package org.moqucu.games.nightstalker.view.movable;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.*;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.SneakyThrows;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
@@ -27,6 +25,10 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
     private Animation translateTransition;
     private Point2D previousNode = null;
     private Point2D nextNode = null;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final DoubleProperty velocity = new SimpleDoubleProperty(35d);
 
     @SneakyThrows
     ArtificiallyMovedSprite() {
@@ -68,4 +70,23 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
     }
 
     protected abstract MazeGraph getMazeGraph();
+
+    @SuppressWarnings("WeakerAccess")
+    public double getVelocity() {
+
+        return velocity.get();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void setVelocity(int velocity) {
+
+        this.velocity.set(velocity);
+    }
+
+    @SuppressWarnings("unused")
+    public DoubleProperty velocityProperty() {
+
+        return velocity;
+    }
+
 }

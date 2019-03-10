@@ -1,16 +1,10 @@
 package org.moqucu.games.nightstalker.view;
 
-import javafx.collections.ListChangeListener;
-import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.model.QuadTree;
 import javafx.scene.input.KeyCode;
-import org.moqucu.games.nightstalker.view.movable.MovableSprite;
-import org.springframework.core.io.ClassPathResource;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -28,41 +22,11 @@ public class Maze extends StackPane implements Updatable {
 
     private final QuadTree unmovableSprites;
 
-    private final MazeGraph mazeGraph;
-
     @SneakyThrows
     public Maze() {
 
         super();
         setId("org.moqucu.games.nightstalker.maze");
-        mazeGraph = new MazeGraph((new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json").getInputStream()));
-
-        this.getChildren().addListener((ListChangeListener<Node>) change -> {
-            change.next();
-            change.getAddedSubList().forEach(addedPane -> {
-                if (addedPane instanceof Pane) {
-                    log.info("pane added to Maze; is of type {}", addedPane.getClass().getName());
-                    log.info("Pane has this many children: {}", ((Pane)addedPane).getChildren().size());
-                    /*((Pane) addedPane)
-                            .getChildren()
-                            .filtered(node -> node instanceof ArtificiallyMovedSprite)
-                            .forEach(sprite -> ((ArtificiallyMovedSprite)sprite).setMazeGraph(mazeGraph));*/
-
-                    ((Pane) addedPane).getChildren().addListener(new ListChangeListener<>() {
-
-                        @Override
-                        public void onChanged(Change<? extends Node> change) {
-                            change.next();
-                            change.getAddedSubList().forEach(addedChild -> {
-                                log.info("child added to Pane; is of type {}", addedChild.getClass().getName());
-                                /*if (addedChild instanceof ArtificiallyMovedSprite)
-                                    ((ArtificiallyMovedSprite) addedChild).setMazeGraph(mazeGraph);*/
-                            });
-                        }
-                    });
-                }
-            });
-        });
 
         setWidth(PREF_WIDTH);
         setPrefWidth(PREF_WIDTH);
@@ -87,10 +51,10 @@ public class Maze extends StackPane implements Updatable {
         layerSpecificGameObjects.add(gameObject);
         allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
 
-        if (gameObject instanceof MovableSprite)
-            movableSprites.add(gameObject);
-        else
-            unmovableSprites.insert(gameObject);
+//        if (gameObject instanceof MovableSprite)
+//            movableSprites.add(gameObject);
+//        else
+//            unmovableSprites.insert(gameObject);
     }
 
     // todo: trace added children in QuadTree
@@ -139,10 +103,10 @@ public class Maze extends StackPane implements Updatable {
                 if (gameObject instanceof Sprite)
                     nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove((Sprite) gameObject));
 
-                if (gameObject instanceof MovableSprite)
-                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove(
-                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection(deltaTime))
-                    );
+//                if (gameObject instanceof MovableSprite)
+//                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove(
+//                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection(deltaTime))
+//                    );
 
                 ((Updatable) gameObject).update(
                         deltaTimeSinceStart,

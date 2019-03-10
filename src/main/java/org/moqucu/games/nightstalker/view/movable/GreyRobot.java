@@ -7,11 +7,13 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
+import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
@@ -23,40 +25,55 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @ToString(callSuper = true)
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
-public class GreyRobot extends ArtificiallyMovedSprite {
+public class GreyRobot extends SleepingSprite {
 
-    enum States {
-        asleep, awake, moving
-    }
+    private enum States {asleep, awake, moving}
 
-    enum Events {
-        wakeUp, move, stop
-    }
+    private enum Events {wakeUp, move, stop}
 
     private MazeGraph mazeGraph;
 
     private StateMachine<States, Events> stateMachine;
+
+    private StateMachineListener<States, Events> stateMachineListener = new StateMachineListenerAdapter<>() {
+
+        @Override
+        public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
+
+            if (transition.getTarget().getId().equals(States.awake))
+                stateMachine.sendEvent(Events.move);
+        }
+    };
 
     public GreyRobot() {
 
         super();
 
         setImage(new Image(translate("images/grey-robot.png")));
-        setStillImageIndex(0);
 
-        setAutoReversible(3);
-        setVelocity(35);
+        setAutoReversible(false);
+        setFrameIndices(Indices.builder().lower(1).upper(2).build());
+
+        sleepTimeInMillisProperty().addListener((observableValue, number, t1) -> {
+
+            stopAndDeconstructStateMachine();
+            configureAndStartStateMachine();
+        });
+
+        configureAndStartStateMachine();
+    }
+
+    private void stopAndDeconstructStateMachine() {
+
+        stateMachine.stop();
+        stateMachine.removeStateListener(stateMachineListener);
+        stateMachine = null;
+    }
+
+    private void configureAndStartStateMachine() {
 
         stateMachine = buildStateMachine();
-        stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
-
-            @Override
-            public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
-
-                if (transition.getTarget().getId().equals(States.awake))
-                    stateMachine.sendEvent(Events.move);
-            }
-        });
+        stateMachine.addStateListener(stateMachineListener);
         stateMachine.start();
     }
 

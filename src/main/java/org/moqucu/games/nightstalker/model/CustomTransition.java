@@ -8,6 +8,9 @@ import org.moqucu.games.nightstalker.view.AnimatedSprite;
 
 import java.lang.reflect.Method;
 
+/**
+ * Custom JavaFX transition for calling a method based on reflection and initializing it through Constructor.
+ */
 @Log4j2
 public class CustomTransition extends Transition {
 
