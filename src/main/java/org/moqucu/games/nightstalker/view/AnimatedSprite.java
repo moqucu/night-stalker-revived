@@ -122,7 +122,7 @@ public abstract class AnimatedSprite extends Sprite {
         return frameDurationInMillis.get();
     }
 
-    protected void setFrameDurationInMillis(int frameDurationInMillis) {
+    public void setFrameDurationInMillis(int frameDurationInMillis) {
 
         this.frameDurationInMillis.set(frameDurationInMillis);
         configureAnimation();

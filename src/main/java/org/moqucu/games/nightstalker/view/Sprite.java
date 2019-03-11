@@ -28,6 +28,7 @@ public abstract class Sprite extends ImageView {
     public Sprite() {
 
         super();
+        setStillImageIndex(stillImageIndex.get());
     }
 
     /**

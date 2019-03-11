@@ -78,7 +78,7 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void setVelocity(int velocity) {
+    public void setVelocity(double velocity) {
 
         this.velocity.set(velocity);
     }

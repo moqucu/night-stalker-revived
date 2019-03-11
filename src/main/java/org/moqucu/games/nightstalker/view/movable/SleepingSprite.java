@@ -27,12 +27,12 @@ public abstract class SleepingSprite extends ArtificiallyMovedSprite {
         return sleepTineInMillis.get();
     }
 
-    protected void setSleepTimeInMillis(int sleepTimeInMillis) {
+    public void setSleepTimeInMillis(long sleepTimeInMillis) {
 
         this.sleepTineInMillis.set(sleepTimeInMillis);
     }
 
-    LongProperty sleepTimeInMillisProperty() {
+    public LongProperty sleepTimeInMillisProperty() {
 
         return sleepTineInMillis;
     }

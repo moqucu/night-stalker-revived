@@ -35,14 +35,14 @@
             <Weapon/>
         </Pane>
         <Pane>
-            <Spider translateX="32.0" translateY="32.0"/>
+            <!--<Spider translateX="32.0" translateY="32.0"/>-->
             <GreyRobot translateX="32.0" translateY="320.0"/>
-            <Bat translateX="544.0" translateY="96"/>
-            <Bat translateX="480.0" translateY="224"/>
+            <Bat translateX="544.0" translateY="96" sleepTimeInMillis="2500" frameDurationInMillis="50" velocity="70"/>
+            <Bat translateX="480.0" translateY="224" sleepTimeInMillis="5000" frameDurationInMillis="200"/>
         </Pane>
-        <Pane>
+        <!--<Pane>
             <NightStalker translateX="288.0" translateY="144.0"/>
-        </Pane>
+        </Pane>-->
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
             <Wall id="org.moqucu.games.nightstalker.maze.00.00"/>
             <Wall id="org.moqucu.games.nightstalker.maze.00.01" stillImageIndex="1"/>
