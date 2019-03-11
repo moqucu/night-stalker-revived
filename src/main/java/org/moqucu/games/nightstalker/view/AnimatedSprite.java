@@ -2,7 +2,6 @@ package org.moqucu.games.nightstalker.view;
 
 import javafx.animation.Animation;
 import javafx.beans.property.*;
-import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -37,12 +36,29 @@ public abstract class AnimatedSprite extends Sprite {
         super();
 
         //noinspection unchecked
-        frameIndices = JavaBeanObjectPropertyBuilder
-                .create()
-                .name("lower")
-                .beanClass(Indices.class)
-                .bean(Indices.builder().lower(0).upper(0).build())
-                .build();
+        frameIndices = wrapIndicesInObjectProperty(Indices.builder().lower(0).upper(0).build());
+    }
+
+    private ObjectProperty<Indices> wrapIndicesInObjectProperty(Indices indices) {
+
+        return new ObjectPropertyBase<>(indices) {
+
+            Indices indicesObject = indices;
+
+            @Override
+            public Object getBean() {
+
+                return indicesObject;
+            }
+
+            @Override
+            public String getName() {
+
+                return "indices";
+            }
+
+
+        };
     }
 
     /**

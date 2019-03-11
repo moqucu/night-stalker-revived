@@ -45,30 +45,30 @@
         </Pane>
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
             <Wall id="org.moqucu.games.nightstalker.maze.00.00"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.01" initialKeyFrameIndex="1"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.02" initialKeyFrameIndex="2"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.03" initialKeyFrameIndex="3"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.04" initialKeyFrameIndex="4"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.05" initialKeyFrameIndex="5"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.06" initialKeyFrameIndex="6"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.07" initialKeyFrameIndex="5"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.08" initialKeyFrameIndex="6"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.09" initialKeyFrameIndex="5"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.10" initialKeyFrameIndex="6"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.11" initialKeyFrameIndex="5"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.12" initialKeyFrameIndex="6"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.13" initialKeyFrameIndex="5"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.14" initialKeyFrameIndex="6"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.15" initialKeyFrameIndex="5"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.16" initialKeyFrameIndex="6"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.17" initialKeyFrameIndex="5"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.18" initialKeyFrameIndex="6"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.00.19" initialKeyFrameIndex="7"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.01.00" initialKeyFrameIndex="8"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.01" stillImageIndex="1"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.02" stillImageIndex="2"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.03" stillImageIndex="3"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.04" stillImageIndex="4"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.05" stillImageIndex="5"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.06" stillImageIndex="6"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.07" stillImageIndex="5"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.08" stillImageIndex="6"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.09" stillImageIndex="5"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.10" stillImageIndex="6"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.11" stillImageIndex="5"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.12" stillImageIndex="6"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.13" stillImageIndex="5"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.14" stillImageIndex="6"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.15" stillImageIndex="5"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.16" stillImageIndex="6"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.17" stillImageIndex="5"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.18" stillImageIndex="6"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.00.19" stillImageIndex="7"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.01.00" stillImageIndex="8"/>
             <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.01"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.02" initialKeyFrameIndex="1"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.03" initialKeyFrameIndex="2"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.01.04" initialKeyFrameIndex="9"/>
+            <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.02" stillImageIndex="1"/>
+            <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.03" stillImageIndex="2"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.01.04" stillImageIndex="9"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.01.05"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.01.06"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.01.07"/>
@@ -83,13 +83,13 @@
             <HallWay id="org.moqucu.games.nightstalker.maze.01.16"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.01.17"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.01.18"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.01.19" initialKeyFrameIndex="10"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.01.19" stillImageIndex="10"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.02.00" initialKeyFrameIndex="11"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.02.00" stillImageIndex="11"/>
 
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.01" initialKeyFrameIndex="3"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.02" initialKeyFrameIndex="4"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.03" initialKeyFrameIndex="5"/>
+            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.01" stillImageIndex="3"/>
+            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.02" stillImageIndex="4"/>
+            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.03" stillImageIndex="5"/>
 
             <Wall id="org.moqucu.games.nightstalker.wall.26">
                 <Image url="@org/moqucu/games/nightstalker/images/Sprite_019_Wall.png"/>
@@ -137,7 +137,7 @@
                 <Image url="@org/moqucu/games/nightstalker/images/Sprite_025_Wall.png"/>
             </Wall>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="9"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="9"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
@@ -164,7 +164,7 @@
             </Wall>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="9"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="9"/>
 
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <Wall id="org.moqucu.games.nightstalker.wall.43">
@@ -186,7 +186,7 @@
             </SolidBunker>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="9"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="9"/>
 
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <Wall id="org.moqucu.games.nightstalker.wall.46">
@@ -239,14 +239,14 @@
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="10"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="10"/>
 
             <Wall id="org.moqucu.games.nightstalker.wall.55">
                 <Image url="@org/moqucu/games/nightstalker/images/Sprite_027_Wall.png"/>
             </Wall>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="9"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="9"/>
 
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <Wall id="org.moqucu.games.nightstalker.wall.57">
@@ -254,7 +254,7 @@
             </Wall>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="9"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="9"/>
 
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
@@ -329,7 +329,7 @@
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="9"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="9"/>
 
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
@@ -339,7 +339,7 @@
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="9"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="9"/>
 
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
@@ -352,7 +352,7 @@
             </Wall>
             <HallWay id="org.moqucu.games.nightstalker.maze.x.y"/>
 
-            <Wall id="org.moqucu.games.nightstalker.maze.x.y" initialKeyFrameIndex="10"/>
+            <Wall id="org.moqucu.games.nightstalker.maze.x.y" stillImageIndex="10"/>
 
             <Wall id="org.moqucu.games.nightstalker.wall.81">
                 <Image url="@org/moqucu/games/nightstalker/images/Sprite_043_Wall.png"/>
