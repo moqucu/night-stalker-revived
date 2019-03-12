@@ -11,5 +11,6 @@ public class SolidBunker extends Sprite {
 
     public SolidBunker() {
 
+        super();
     }
 }

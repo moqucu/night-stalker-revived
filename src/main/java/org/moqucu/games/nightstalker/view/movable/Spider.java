@@ -55,8 +55,25 @@ public class Spider extends ArtificiallyMovedSprite {
             @Override
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
-                if (transition.getTarget().getId().equals(States.awake))
-                    stateMachine.sendEvent(Events.moveHorizontally);
+                log.debug("State changed to {}", transition.getTarget().getId());
+
+                switch (transition.getTarget().getId()) {
+
+                    case awake:
+                        animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
+                        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
+                        if (deltaNode.getX() != 0)
+                            stateMachine.sendEvent(Events.moveHorizontally);
+                        else if (deltaNode.getY() != 0)
+                            stateMachine.sendEvent(Events.moveVertically);
+                        break;
+                    case movingHorizontally:
+                    case movingVertically:
+                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        animation.play();
+                        break;
+                }
             }
         });
         stateMachine.start();
@@ -82,13 +99,11 @@ public class Spider extends ArtificiallyMovedSprite {
                 .source(States.asleep)
                 .target(States.awake)
                 .event(Events.wakeUp)
-                .action(this::wokeUp)
                 .and()
                 .withExternal()
                 .source(States.awake)
                 .target(States.movingHorizontally)
                 .event(Events.moveHorizontally)
-                .action(this::startedToMoveHorizontally)
                 .and()
                 .withExternal()
                 .source(States.movingHorizontally)
@@ -99,7 +114,6 @@ public class Spider extends ArtificiallyMovedSprite {
                 .source(States.awake)
                 .target(States.movingVertically)
                 .event(Events.moveVertically)
-                .action(this::startedToMoveVertically)
                 .and()
                 .withExternal()
                 .source(States.movingVertically)
@@ -112,37 +126,8 @@ public class Spider extends ArtificiallyMovedSprite {
     private void timeToWakeUp(StateContext stateContext) {
 
         log.debug("timeToWakeUp: {}", stateContext);
+        playAnimation();
         stateMachine.sendEvent(Events.wakeUp);
-    }
-
-    private void wokeUp(StateContext stateContext) {
-
-        log.debug("wokeUp: {}", stateContext);
-
-        animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-
-        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
-        if (deltaNode.getX() != 0)
-            stateMachine.sendEvent(Events.moveHorizontally);
-        else if (deltaNode.getY() != 0)
-            stateMachine.sendEvent(Events.moveVertically);
-    }
-
-    private void startedToMoveHorizontally(StateContext stateContext) {
-
-        log.debug("startedToMoveHorizontally: {}", stateContext);
-        setFrameIndices(frameBoundaries.get(States.movingHorizontally));
-        animation.play();
-        playAnimation();
-    }
-
-    private void startedToMoveVertically(StateContext stateContext) {
-
-        log.debug("startedToMoveVertically: {}", stateContext);
-        setFrameIndices(frameBoundaries.get(States.movingVertically));
-        animation.play();
-        playAnimation();
     }
 
     @SneakyThrows

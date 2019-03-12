@@ -39,8 +39,8 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
     Animation prepareAnimationForMovingSpriteRandomlyAlongMazeGraph() {
 
         Point2D currentNode = new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
-        log.info("current coordinates: {}, {}", getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
-        log.info("Adjacency list: {} {}", getMazeGraph(), getMazeGraph().getAdjacencyList().get(currentNode));
+        log.debug("current coordinates: {}, {}", getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
+        log.debug("Adjacency list: {} {}", getMazeGraph(), getMazeGraph().getAdjacencyList().get(currentNode));
 
         List<Point2D> adjacentNodes = new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
 

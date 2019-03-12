@@ -35,7 +35,7 @@
             <Weapon/>
         </Pane>
         <Pane>
-            <!--<Spider translateX="32.0" translateY="32.0"/>-->
+            <Spider translateX="32.0" translateY="32.0" frameDurationInMillis="200"/>
             <GreyRobot translateX="32.0" translateY="320.0"/>
             <Bat translateX="544.0" translateY="96" sleepTimeInMillis="2500" frameDurationInMillis="50" velocity="70"/>
             <Bat translateX="480.0" translateY="224" sleepTimeInMillis="5000" frameDurationInMillis="200"/>
