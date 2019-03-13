@@ -38,17 +38,24 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
 
     Animation prepareAnimationForMovingSpriteRandomlyAlongMazeGraph() {
 
-        Point2D currentNode = new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
+        Point2D currentNode = getCurrentNode();
         log.debug("current coordinates: {}, {}", getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
         log.debug("Adjacency list: {} {}", getMazeGraph(), getMazeGraph().getAdjacencyList().get(currentNode));
 
-        List<Point2D> adjacentNodes = new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
+        List<Point2D> adjacentNodes = getAdjacentNodes(currentNode);
 
         if (previousNode != null && adjacentNodes.size() > 1)
             adjacentNodes.remove(previousNode);
         previousNode = currentNode;
 
         nextNode = adjacentNodes.get(random.nextInt(adjacentNodes.size()));
+
+        translateTransition = calculateTranslateTransition(currentNode, nextNode);
+
+        return translateTransition;
+    }
+
+    TranslateTransition calculateTranslateTransition(Point2D currentNode, Point2D nextNode) {
 
         double deltaX = nextNode.getX()-currentNode.getX();
         double deltaY = nextNode.getY()-currentNode.getY();
@@ -59,14 +66,23 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
         else
             duration = Duration.millis(Math.abs(deltaY)/getVelocity() * 1000);
 
-        translateTransition = new TranslateTransition(duration, this);
-        ((TranslateTransition) translateTransition).setInterpolator(Interpolator.LINEAR);
-
-        ((TranslateTransition) translateTransition).setByX(deltaX);
-        ((TranslateTransition) translateTransition).setByY(deltaY);
+        TranslateTransition translateTransition = new TranslateTransition(duration, this);
+        translateTransition.setInterpolator(Interpolator.LINEAR);
+        translateTransition.setByX(deltaX);
+        translateTransition.setByY(deltaY);
         translateTransition.setCycleCount(1);
 
         return translateTransition;
+    }
+
+    ArrayList<Point2D> getAdjacentNodes(Point2D currentNode) {
+
+        return new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
+    }
+
+    Point2D getCurrentNode() {
+
+        return new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
     }
 
     protected abstract MazeGraph getMazeGraph();

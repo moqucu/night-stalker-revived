@@ -35,7 +35,6 @@ public abstract class AnimatedSprite extends Sprite {
 
         super();
 
-        //noinspection unchecked
         frameIndices = wrapIndicesInObjectProperty(Indices.builder().lower(0).upper(0).build());
     }
 
@@ -88,7 +87,6 @@ public abstract class AnimatedSprite extends Sprite {
         return frameIndices.get();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setFrameIndices(Indices frameIndices) {
 
         this.frameIndices.set(frameIndices);
@@ -122,6 +120,7 @@ public abstract class AnimatedSprite extends Sprite {
         return frameDurationInMillis.get();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setFrameDurationInMillis(int frameDurationInMillis) {
 
         this.frameDurationInMillis.set(frameDurationInMillis);
@@ -134,11 +133,12 @@ public abstract class AnimatedSprite extends Sprite {
     }
 
     /**
-     * Is being called while the sprite animation is progressing. Interpolates fraction between 0 and 1.
+     * Is being called while the sprite translateAnimation is progressing. Interpolates fraction between 0 and 1.
      * Then uses the fraction parameter to calculate the index of the frame that the viewport need to be set to.
      *
      * @param fraction Value between 0 and 1; progresses as the animations continues.
      */
+    @SuppressWarnings("WeakerAccess")
     public void interpolate(Double fraction) {
 
         double indexAsDouble = frameIndices.get().getLower() + fraction * (calculateNumberOfFrames() - 1);
