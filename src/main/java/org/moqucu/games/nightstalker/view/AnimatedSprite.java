@@ -1,90 +1,148 @@
 package org.moqucu.games.nightstalker.view;
 
 import javafx.animation.Animation;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.geometry.Rectangle2D;
+import javafx.beans.property.*;
 import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.CustomTransition;
-
-import java.util.*;
+import org.moqucu.games.nightstalker.model.Indices;
 
 import static javafx.animation.Animation.INDEFINITE;
 
 @Data
-@SuppressWarnings("unused")
 @Log4j2
+@SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
 public abstract class AnimatedSprite extends Sprite {
 
     private Animation animation;
 
-    protected final List<Rectangle2D> frames = new LinkedList<>();
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final ObjectProperty<Indices> frameIndices;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    protected final IntegerProperty numberOfFrames = new SimpleIntegerProperty(-1);
+    private final BooleanProperty autoReversible = new SimpleBooleanProperty(true);
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private final IntegerProperty frameDuration = new SimpleIntegerProperty(100);
+    private final IntegerProperty frameDurationInMillis = new SimpleIntegerProperty(100);
 
+    @SneakyThrows
     protected AnimatedSprite() {
 
         super();
+
+        frameIndices = wrapIndicesInObjectProperty(Indices.builder().lower(0).upper(0).build());
     }
 
-    public int getNumberOfFrames() {
+    private ObjectProperty<Indices> wrapIndicesInObjectProperty(Indices indices) {
 
-        return numberOfFrames.get();
+        return new ObjectPropertyBase<>(indices) {
+
+            Indices indicesObject = indices;
+
+            @Override
+            public Object getBean() {
+
+                return indicesObject;
+            }
+
+            @Override
+            public String getName() {
+
+                return "indices";
+            }
+
+
+        };
+    }
+
+    /**
+     * Calculates the number of frames based on the lower and upper index as provided by the #frameIndices property.
+     *
+     * @return Number of frames.
+     */
+    private int calculateNumberOfFrames() {
+
+        return frameIndices.get().getUpper() - frameIndices.get().getLower() + 1;
     }
 
     @SneakyThrows
-    protected void setNumberOfFrames(int numberOfFrames) {
-
-        this.numberOfFrames.set(numberOfFrames);
-        frames.clear();
-
-        for (int i = 0; i < numberOfFrames; i++)
-            frames.add(new Rectangle2D(i * WIDTH, 0, WIDTH, HEIGHT));
-
-        setViewport(frames.get(0));
+    private void configureAnimation() {
 
         animation = new CustomTransition(
-                Duration.millis(numberOfFrames * frameDuration.get()),
+                Duration.millis(calculateNumberOfFrames() * frameDurationInMillis.get()),
                 INDEFINITE,
-                true,
+                autoReversible.get(),
                 this,
                 this.getClass().getMethod("interpolate", Double.class)
         );
     }
 
+    public Indices getFrameIndices() {
+
+        return frameIndices.get();
+    }
+
+    public void setFrameIndices(Indices frameIndices) {
+
+        this.frameIndices.set(frameIndices);
+        configureAnimation();
+    }
+
+    public ObjectProperty<Indices> frameIndicesProperty() {
+
+        return frameIndices;
+    }
+
+    public boolean isAutoReversible() {
+
+        return autoReversible.get();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void setAutoReversible(boolean autoReversible) {
+
+        this.autoReversible.set(autoReversible);
+        configureAnimation();
+    }
+
+    public BooleanProperty autoReversibleProperty() {
+
+        return autoReversible;
+    }
+
+    public int getFrameDurationInMillis() {
+
+        return frameDurationInMillis.get();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void setFrameDurationInMillis(int frameDurationInMillis) {
+
+        this.frameDurationInMillis.set(frameDurationInMillis);
+        configureAnimation();
+    }
+
+    public IntegerProperty frameDurationInMillisProperty() {
+
+        return frameDurationInMillis;
+    }
+
+    /**
+     * Is being called while the sprite translateAnimation is progressing. Interpolates fraction between 0 and 1.
+     * Then uses the fraction parameter to calculate the index of the frame that the viewport need to be set to.
+     *
+     * @param fraction Value between 0 and 1; progresses as the animations continues.
+     */
     @SuppressWarnings("WeakerAccess")
     public void interpolate(Double fraction) {
 
-        setViewport(frames.get(Long.valueOf(Math.round((numberOfFrames.get() - 2) * fraction)).intValue() + 1));
-    }
-
-    public IntegerProperty numberOfFramesProperty() {
-
-        return numberOfFrames;
-    }
-
-    public int getFrameDuration() {
-
-        return frameDuration.get();
-    }
-
-    protected void setFrameDuration(int frameDuration) {
-
-        this.frameDuration.set(frameDuration);
-    }
-
-    public IntegerProperty frameDurationProperty() {
-
-        return frameDuration;
+        double indexAsDouble = frameIndices.get().getLower() + fraction * (calculateNumberOfFrames() - 1);
+        setViewport(getViewport(Long.valueOf(Math.round(indexAsDouble)).intValue()));
     }
 
     protected void playAnimation() {

@@ -7,11 +7,13 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
+import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.*;
@@ -20,42 +22,56 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @Log4j2
+@SuppressWarnings("unused")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Bat extends ArtificiallyMovedSprite {
+public class Bat extends SleepingSprite {
 
-    enum States {
-        asleep, awake, moving
-    }
+    private enum States {asleep, awake, moving}
 
-    enum Events {
-        wakeUp, move, stop
-    }
+    private enum Events {wakeUp, move, stop}
 
     private MazeGraph mazeGraph;
 
-    StateMachine<States, Events> stateMachine;
+    private StateMachine<States, Events> stateMachine;
+
+    private StateMachineListener<States, Events> stateMachineListener = new StateMachineListenerAdapter<>() {
+
+        @Override
+        public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
+
+            if (transition.getTarget().getId().equals(States.awake))
+                stateMachine.sendEvent(Events.move);
+        }
+    };
 
     public Bat() {
 
         super();
 
         setImage(new Image(translate("images/bat.png")));
-        setNumberOfFrames(6);
+        setFrameIndices(Indices.builder().lower(1).upper(5).build());
 
-        setVelocity(35);
+        sleepTimeInMillisProperty().addListener((observableValue, number, t1) -> {
 
+            stopAndDeconstructStateMachine();
+            configureAndStartStateMachine();
+        });
+
+        configureAndStartStateMachine();
+    }
+
+    private void stopAndDeconstructStateMachine() {
+
+        stateMachine.stop();
+        stateMachine.removeStateListener(stateMachineListener);
+        stateMachine = null;
+    }
+
+    private void configureAndStartStateMachine() {
 
         stateMachine = buildStateMachine();
-        stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
-
-            @Override
-            public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
-
-                if (transition.getTarget().getId().equals(States.awake))
-                    stateMachine.sendEvent(Events.move);
-            }
-        });
+        stateMachine.addStateListener(stateMachineListener);
         stateMachine.start();
     }
 
@@ -73,7 +89,7 @@ public class Bat extends ArtificiallyMovedSprite {
                 .withInternal()
                 .source(States.asleep)
                 .action(this::timeToWakeUp)
-                .timerOnce(2500)
+                .timerOnce(getSleepTimeInMillis())
                 .and()
                 .withExternal()
                 .source(States.asleep)
@@ -126,5 +142,4 @@ public class Bat extends ArtificiallyMovedSprite {
 
         return mazeGraph;
     }
-
 }

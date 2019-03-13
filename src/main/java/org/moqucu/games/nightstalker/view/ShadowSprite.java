@@ -12,7 +12,7 @@ public class ShadowSprite extends Sprite {
 
     public ShadowSprite(Sprite shadowCaster, double x, double y) {
 
-        super(new Point2D(x, y));
+        super();
         this.shadowCaster = shadowCaster;
     }
 }

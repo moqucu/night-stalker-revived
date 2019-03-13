@@ -40,5 +40,4 @@ public enum FxmlView {
 
         return ResourceBundle.getBundle("org.moqucu.games.nightstalker.Bundle").getString(key);
     }
-
 }

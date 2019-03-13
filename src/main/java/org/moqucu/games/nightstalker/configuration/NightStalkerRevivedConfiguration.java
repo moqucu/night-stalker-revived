@@ -14,6 +14,7 @@ public class NightStalkerRevivedConfiguration {
 
     @Autowired
     public NightStalkerRevivedConfiguration(SpringFXMLLoader springFXMLLoader) {
+
         this.springFXMLLoader = springFXMLLoader;
     }
 

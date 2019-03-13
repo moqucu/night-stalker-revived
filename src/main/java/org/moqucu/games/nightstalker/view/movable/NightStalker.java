@@ -2,22 +2,22 @@ package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.animation.Animation;
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyEvent;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.view.immovable.Weapon;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
@@ -27,28 +27,23 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class NightStalker extends ArtificiallyMovedSprite {
 
-    enum States {
-        asleep, awake, moving
-    }
+    enum States {Awake, MovingLeft, MovingRight, MovingVertically}
 
-    enum Events {
-        wakeUp, move, stop
-    }
+    enum Events {moveLeft, moveRight, moveVertically, stop}
 
     private StateMachine<States, Events> stateMachine;
 
-    private Direction direction = Direction.Down;
-
-    private Map<Direction, Indices> frameBoundaries = Map.of(
-            Direction.Up, Indices.builder().lower(1).upper(2).build(),
-            Direction.Down, Indices.builder().lower(1).upper(2).build(),
-            Direction.Right, Indices.builder().lower(11).upper(18).build(),
-            Direction.Left, Indices.builder().lower(3).upper(10).build()
+    private Map<States, Indices> frameBoundaries = Map.of(
+            States.MovingVertically, Indices.builder().lower(1).upper(2).build(),
+            States.MovingRight, Indices.builder().lower(11).upper(18).build(),
+            States.MovingLeft, Indices.builder().lower(3).upper(10).build()
     );
 
     private MazeGraph mazeGraph;
 
     private Weapon weapon = null;
+
+    private Animation translateAnimation;
 
     @SneakyThrows
     public NightStalker() {
@@ -56,8 +51,12 @@ public class NightStalker extends ArtificiallyMovedSprite {
         super();
 
         setImage(new Image(translate("images/night-stalker.png")));
-        setNumberOfFrames(21);
+        setAutoReversible(false);
         setVelocity(70);
+        setFrameDurationInMillis(200);
+
+        setFocusTraversable(true);
+        setOnKeyPressed(this::handleKeyPressedEvent);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
@@ -65,8 +64,17 @@ public class NightStalker extends ArtificiallyMovedSprite {
             @Override
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
-                if (transition.getTarget().getId().equals(States.awake))
-                    stateMachine.sendEvent(Events.move);
+                log.debug("State changed to {}", transition.getTarget().getId());
+
+                switch (transition.getTarget().getId()) {
+
+                    case MovingLeft:
+                    case MovingRight:
+                    case MovingVertically:
+                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        translateAnimation.play();
+                        break;
+                }
             }
         });
         stateMachine.start();
@@ -79,74 +87,104 @@ public class NightStalker extends ArtificiallyMovedSprite {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.asleep)
+                .initial(States.Awake)
                 .states(EnumSet.allOf(States.class));
 
         builder.configureTransitions()
-                .withInternal()
-                .source(States.asleep)
-                .action(this::timeToWakeUp)
-                .timerOnce(2000)
+                .withExternal()
+                .source(States.Awake)
+                .target(States.MovingLeft)
+                .event(Events.moveLeft)
                 .and()
                 .withExternal()
-                .source(States.asleep)
-                .action(this::wokeUp)
-                .target(States.awake)
-                .event(Events.wakeUp)
+                .source(States.MovingLeft)
+                .target(States.Awake)
+                .event(Events.stop)
                 .and()
                 .withExternal()
-                .source(States.awake)
-                .target(States.moving)
-                .action(this::startedToMove)
-                .event(Events.move)
+                .source(States.Awake)
+                .target(States.MovingRight)
+                .event(Events.moveRight)
                 .and()
                 .withExternal()
-                .source(States.moving)
-                .target(States.awake)
+                .source(States.MovingRight)
+                .target(States.Awake)
+                .event(Events.stop)
+                .and()
+                .withExternal()
+                .source(States.Awake)
+                .target(States.MovingVertically)
+                .event(Events.moveVertically)
+                .and()
+                .withExternal()
+                .source(States.MovingVertically)
+                .target(States.Awake)
                 .event(Events.stop);
 
         return builder.build();
     }
 
-    private void timeToWakeUp(StateContext stateContext) {
+    private void handleKeyPressedEvent(KeyEvent keyEvent) {
 
-        log.debug("timeToWakeUp: {}", stateContext);
-        stateMachine.sendEvent(Events.wakeUp);
-    }
+        log.debug("Key pressed: {}", keyEvent.getCode());
 
-    private void wokeUp(StateContext stateContext) {
+        if (stateMachine.getState().getId() != States.Awake)
+            return;
 
-        log.debug("wokeUp: {}", stateContext);
-        playAnimation();
-    }
+        Point2D currentNode = getCurrentNode();
+        List<Point2D> adjacentNodes = getAdjacentNodes(currentNode);
 
-    private void startedToMove(StateContext stateContext) {
+        switch (keyEvent.getCode()) {
 
-        log.debug("startedToMove: {}", stateContext);
-        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-        animation.setAutoReverse(false);
-        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
-
-        if (deltaNode.getX() < 0)
-            direction = Direction.Left;
-        else if (deltaNode.getX() > 0)
-            direction = Direction.Right;
-        else if (deltaNode.getY() < 0)
-            direction = Direction.Up;
-        else if (deltaNode.getY() > 0)
-            direction = Direction.Down;
-        animation.play();
-    }
-
-    @Override
-    public void interpolate(Double fraction) {
-
-        Indices indices = getFrameBoundaries().get(direction);
-        setViewport(
-                frames.get(indices.getLower()
-                        + Long.valueOf(Math.round(fraction * (indices.getUpper() - indices.getLower()))).intValue())
-        );
+            case UP:
+                adjacentNodes
+                        .stream()
+                        .filter(node -> node.getX() == currentNode.getX() && node.getY() < currentNode.getY())
+                        .findFirst()
+                        .ifPresent(point2D -> {
+                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
+                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                            playAnimation();
+                            stateMachine.sendEvent(Events.moveVertically);
+                        });
+                break;
+            case DOWN:
+                adjacentNodes
+                        .stream()
+                        .filter(node -> node.getX() == currentNode.getX() && node.getY() > currentNode.getY())
+                        .findFirst()
+                        .ifPresent(point2D -> {
+                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
+                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                            playAnimation();
+                            stateMachine.sendEvent(Events.moveVertically);
+                        });
+                break;
+            case LEFT:
+                adjacentNodes
+                        .stream()
+                        .filter(node -> node.getX() < currentNode.getX() && node.getY() == currentNode.getY())
+                        .findFirst()
+                        .ifPresent(point2D -> {
+                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
+                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                            playAnimation();
+                            stateMachine.sendEvent(Events.moveLeft);
+                        });
+                break;
+            case RIGHT:
+                adjacentNodes
+                        .stream()
+                        .filter(node -> node.getX() > currentNode.getX() && node.getY() == currentNode.getY())
+                        .findFirst()
+                        .ifPresent(point2D -> {
+                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
+                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                            playAnimation();
+                            stateMachine.sendEvent(Events.moveRight);
+                        });
+                break;
+        }
     }
 
     @SneakyThrows

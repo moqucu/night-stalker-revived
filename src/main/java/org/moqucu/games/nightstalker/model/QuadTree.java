@@ -165,9 +165,9 @@ public class QuadTree {
      */
     private byte setIntersectionFlags(Sprite sprite, byte intersectionFlags, byte bitMask) {
 
-        if (nodes.get(bitMask) != null
+        /*if (nodes.get(bitMask) != null
                 && nodes.get(bitMask).getBounds().intersects(sprite.getBoundary()))
-            intersectionFlags |= bitMask;
+            intersectionFlags |= bitMask;*/
 
         return intersectionFlags;
     }
@@ -198,9 +198,9 @@ public class QuadTree {
     public void insert(Sprite sprite) {
 
         /* Can only insert new org.moqucu.games.nightstalker.objects into right bounds */
-        if (!bounds.contains(sprite.getBoundary()))
+       /* if (!bounds.contains(sprite.getBoundary()))
             throw new RuntimeException("Sprite is (partially) out of bounds with regards to this node!");
-
+*/
         /* If this node has sub nodes and object can be inserted there, this function is done */
         if (hasSubNodes.get() && wasInsertedIntoSubNode(sprite))
             return;
@@ -208,7 +208,7 @@ public class QuadTree {
         /* Insert the game object in the list */
         sprites.add(sprite);
 
-        /* if capacity of list is reached, split and move all org.moqucu.games.nightstalker.objects into sub nodes */
+        /* if capacity of list is reached, split and moveHorizontally all org.moqucu.games.nightstalker.objects into sub nodes */
         if (sprites.size() > MAX_OBJECTS) {
 
             if (level == MAX_LEVELS)

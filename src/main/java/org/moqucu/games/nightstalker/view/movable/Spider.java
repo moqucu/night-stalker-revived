@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.springframework.core.io.ClassPathResource;
@@ -26,36 +25,28 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Spider extends ArtificiallyMovedSprite {
 
-    enum States {
-        asleep, awake, moving
-    }
+    private enum States {asleep, awake, movingHorizontally, movingVertically}
 
-    enum Events {
-        wakeUp, move, stop
-    }
+    private enum Events {wakeUp, moveHorizontally, moveVertically, stop}
 
     private StateMachine<States, Events> stateMachine;
 
     private MazeGraph mazeGraph;
 
-    private Direction direction = Direction.Down;
-
-    private Map<Direction, Indices> frameBoundaries = Map.of(
-            Direction.Up, Indices.builder().lower(1).upper(2).build(),
-            Direction.Down, Indices.builder().lower(1).upper(2).build(),
-            Direction.Right, Indices.builder().lower(3).upper(4).build(),
-            Direction.Left, Indices.builder().lower(3).upper(4).build()
+    private Map<States, Indices> frameBoundaries = Map.of(
+            States.movingVertically, Indices.builder().lower(1).upper(2).build(),
+            States.movingHorizontally, Indices.builder().lower(3).upper(4).build()
     );
+
+    private Animation animation;
 
     public Spider() {
 
         super();
 
         setImage(new Image(translate("images/spider.png")));
-
-        setNumberOfFrames(5);
-
-        setFrameDuration(50);
+        setAutoReversible(false);
+        setFrameDurationInMillis(50);
         setVelocity(35);
 
         stateMachine = buildStateMachine();
@@ -64,12 +55,28 @@ public class Spider extends ArtificiallyMovedSprite {
             @Override
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
-                if (transition.getTarget().getId().equals(States.awake))
-                    stateMachine.sendEvent(Events.move);
+                log.debug("State changed to {}", transition.getTarget().getId());
+
+                switch (transition.getTarget().getId()) {
+
+                    case awake:
+                        animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
+                        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
+                        if (deltaNode.getX() != 0)
+                            stateMachine.sendEvent(Events.moveHorizontally);
+                        else if (deltaNode.getY() != 0)
+                            stateMachine.sendEvent(Events.moveVertically);
+                        break;
+                    case movingHorizontally:
+                    case movingVertically:
+                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        animation.play();
+                        break;
+                }
             }
         });
         stateMachine.start();
-
     }
 
     @SneakyThrows
@@ -90,18 +97,26 @@ public class Spider extends ArtificiallyMovedSprite {
                 .and()
                 .withExternal()
                 .source(States.asleep)
-                .action(this::wokeUp)
                 .target(States.awake)
                 .event(Events.wakeUp)
                 .and()
                 .withExternal()
                 .source(States.awake)
-                .target(States.moving)
-                .action(this::startedToMove)
-                .event(Events.move)
+                .target(States.movingHorizontally)
+                .event(Events.moveHorizontally)
                 .and()
                 .withExternal()
-                .source(States.moving)
+                .source(States.movingHorizontally)
+                .target(States.awake)
+                .event(Events.stop)
+                .and()
+                .withExternal()
+                .source(States.awake)
+                .target(States.movingVertically)
+                .event(Events.moveVertically)
+                .and()
+                .withExternal()
+                .source(States.movingVertically)
                 .target(States.awake)
                 .event(Events.stop);
 
@@ -111,41 +126,8 @@ public class Spider extends ArtificiallyMovedSprite {
     private void timeToWakeUp(StateContext stateContext) {
 
         log.debug("timeToWakeUp: {}", stateContext);
-        stateMachine.sendEvent(Events.wakeUp);
-    }
-
-    private void wokeUp(StateContext stateContext) {
-
-        log.debug("wokeUp: {}", stateContext);
         playAnimation();
-    }
-
-    private void startedToMove(StateContext stateContext) {
-
-        log.debug("startedToMove: {}", stateContext);
-        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
-
-        if (deltaNode.getX() < 0)
-            direction = Direction.Left;
-        else if (deltaNode.getX() > 0)
-            direction = Direction.Right;
-        else if (deltaNode.getY() < 0)
-            direction = Direction.Up;
-        else if (deltaNode.getY() > 0)
-            direction = Direction.Down;
-        animation.play();
-    }
-
-    @Override
-    public void interpolate(Double fraction) {
-
-        Indices indices = getFrameBoundaries().get(direction);
-        setViewport(
-                frames.get(indices.getLower()
-                        + Long.valueOf(Math.round(fraction * (indices.getUpper() - indices.getLower()))).intValue())
-        );
+        stateMachine.sendEvent(Events.wakeUp);
     }
 
     @SneakyThrows
@@ -159,5 +141,4 @@ public class Spider extends ArtificiallyMovedSprite {
 
         return mazeGraph;
     }
-
 }
