@@ -114,12 +114,64 @@
             <version>2.9.8</version>
         </dependency>
 
+        <!-- The JInput Project hosts an implementation of an API for game controller discovery and polled input. -->
+        <!-- https://jinput.github.io/jinput/ -->
+
+        <dependency>
+            <groupId>net.java.jinput</groupId>
+            <artifactId>jinput</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.jinput</groupId>
+            <artifactId>jinput</artifactId>
+            <version>2.0.9</version>
+            <classifier>natives-all</classifier>
+        </dependency>
+
 
     </dependencies>
 
     <build>
         <plugins>
 
+            <plugin>
+                <groupId>com.teamtter.mavennatives</groupId>
+                <artifactId>nativedependencies-maven-plugin</artifactId>
+                <version>1.0.6</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>false</skip>
+                    <!-- autoDetectDirUpInFilesystem is documented below-->
+                    <autoDetectDirUpInFilesystem>true</autoDetectDirUpInFilesystem>
+                    <!-- if autoDetectOSNatives is 'true' then you don't need the 'osFilters' list -->
+                    <!-- we advise you set 'autoDetectOSNatives' to true and forget about osFilters -->
+                    <autoDetectOSNatives>true</autoDetectOSNatives>
+
+                     <!--<nativesTargetDir>${session.executionRootDirectory}/target/natives</nativesTargetDir>-->
+                    <separateDirs>true</separateDirs>
+                    <!--<osFilters>
+                        <osFilter>
+                            <osName>linux</osName>
+                            <osArch>64</osArch>
+                            <suffix>linux</suffix>
+                        </osFilter>
+                        <osFilter>
+                            <osName>windows</osName>
+                            &lt;!&ndash; <osArch>64</osArch> &ndash;&gt; &lt;!&ndash; this line is not mandatory &ndash;&gt;
+                            <suffix>win</suffix>
+                        </osFilter>
+                    </osFilters>-->
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

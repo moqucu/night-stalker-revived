@@ -147,11 +147,13 @@ public abstract class AnimatedSprite extends Sprite {
 
     protected void playAnimation() {
 
+        animation.setOnFinished(event -> playAnimation());
         animation.playFromStart();
     }
 
     protected void stopAnimation() {
 
+        animation.setOnFinished(null);
         animation.stop();
     }
 }

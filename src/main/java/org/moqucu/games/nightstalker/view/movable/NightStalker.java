@@ -34,8 +34,9 @@ public class NightStalker extends ArtificiallyMovedSprite {
     private StateMachine<States, Events> stateMachine;
 
     private Map<States, Indices> frameBoundaries = Map.of(
+            States.Awake, Indices.builder().lower(0).upper(0).build(),
             States.MovingVertically, Indices.builder().lower(1).upper(2).build(),
-            States.MovingRight, Indices.builder().lower(11).upper(18).build(),
+            States.MovingRight, Indices.builder().lower(21).upper(28).build(),
             States.MovingLeft, Indices.builder().lower(3).upper(10).build()
     );
 
@@ -68,10 +69,15 @@ public class NightStalker extends ArtificiallyMovedSprite {
 
                 switch (transition.getTarget().getId()) {
 
+                    case Awake:
+                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        stopAnimation();
+                        break;
                     case MovingLeft:
                     case MovingRight:
                     case MovingVertically:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        playAnimation();
                         translateAnimation.play();
                         break;
                 }
@@ -144,7 +150,6 @@ public class NightStalker extends ArtificiallyMovedSprite {
                         .ifPresent(point2D -> {
                             translateAnimation = calculateTranslateTransition(currentNode, point2D);
                             translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            playAnimation();
                             stateMachine.sendEvent(Events.moveVertically);
                         });
                 break;
@@ -156,7 +161,6 @@ public class NightStalker extends ArtificiallyMovedSprite {
                         .ifPresent(point2D -> {
                             translateAnimation = calculateTranslateTransition(currentNode, point2D);
                             translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            playAnimation();
                             stateMachine.sendEvent(Events.moveVertically);
                         });
                 break;
@@ -168,7 +172,6 @@ public class NightStalker extends ArtificiallyMovedSprite {
                         .ifPresent(point2D -> {
                             translateAnimation = calculateTranslateTransition(currentNode, point2D);
                             translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            playAnimation();
                             stateMachine.sendEvent(Events.moveLeft);
                         });
                 break;
@@ -180,7 +183,6 @@ public class NightStalker extends ArtificiallyMovedSprite {
                         .ifPresent(point2D -> {
                             translateAnimation = calculateTranslateTransition(currentNode, point2D);
                             translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            playAnimation();
                             stateMachine.sendEvent(Events.moveRight);
                         });
                 break;

@@ -45,6 +45,7 @@ public class StageManager {
     private Scene prepareScene(Parent rootNode) {
 
         if (!scenes.containsKey(rootNode)) {
+
             Scene scene = new Scene(rootNode);
             scenes.put(rootNode, scene);
         }
