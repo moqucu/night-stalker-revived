@@ -2,9 +2,12 @@ package org.moqucu.games.nightstalker.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.GameLoop;
+import org.moqucu.games.nightstalker.view.Maze;
 import org.moqucu.games.nightstalker.view.StageManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,6 +26,8 @@ public class SplashScreenController implements FxmlController {
 
     private final StageManager stageManager;
 
+    private GameLoop gameLoop;
+
     @Autowired
     @Lazy //lazy since Stage for StageManager not available yet at initialization time
     public SplashScreenController(StageManager stageManager) {
@@ -38,6 +43,8 @@ public class SplashScreenController implements FxmlController {
     public void quitButtonPressed(ActionEvent event) {
 
         log.debug(event);
+        if (gameLoop != null)
+            gameLoop.stop();
         System.exit(0);
     }
 
@@ -45,6 +52,13 @@ public class SplashScreenController implements FxmlController {
     public void playButtonPressed(ActionEvent event) {
 
         log.debug(event);
-        stageManager.switchScene(FxmlView.GAME_SCREEN);
+        Parent parentNode = stageManager.switchScene(FxmlView.GAME_SCREEN);
+        Maze maze = (Maze)parentNode
+                .getChildrenUnmodifiable()
+                .filtered(node -> node instanceof Maze)
+                .get(0);
+
+        gameLoop = new GameLoop(maze);
+        gameLoop.start();
     }
 }

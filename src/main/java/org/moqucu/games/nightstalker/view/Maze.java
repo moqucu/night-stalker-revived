@@ -1,26 +1,25 @@
 package org.moqucu.games.nightstalker.view;
 
+import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.QuadTree;
-import javafx.scene.input.KeyCode;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 @Log4j2
-public class Maze extends StackPane implements Updatable {
+public class Maze extends StackPane {
 
     private final static double PREF_WIDTH = 640d;
 
-    private final static double PREF_HEIGHT = 384;
+    private final static double PREF_HEIGHT = 384d;
 
-    private final ConcurrentMap<Integer, List<Sprite>> allGameObjects = new ConcurrentHashMap<>();
+    private final ConcurrentMap<AnimatedSprite, AnimatedSprite> animatedSprites = new ConcurrentHashMap<>();
 
-    private final CopyOnWriteArrayList<Sprite> movableSprites = new CopyOnWriteArrayList<>();
-
-    private final QuadTree unmovableSprites;
+    private final ConcurrentMap<Updatable, Updatable> updatableSprites = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public Maze() {
@@ -32,89 +31,71 @@ public class Maze extends StackPane implements Updatable {
         setPrefWidth(PREF_WIDTH);
         setHeight(PREF_HEIGHT);
         setPrefHeight(PREF_HEIGHT);
-        unmovableSprites = new QuadTree(getBoundsInLocal());
+
+        this.getChildren().addListener((ListChangeListener<Node>) change -> {
+            change.next();
+            change.getAddedSubList().forEach(addedPane -> {
+                if (addedPane instanceof Pane) {
+
+                    ((Pane) addedPane)
+                            .getChildren()
+                            .filtered(node -> node instanceof AnimatedSprite)
+                            .forEach(sprite -> {
+
+                                animatedSprites.putIfAbsent((AnimatedSprite) sprite, (AnimatedSprite) sprite);
+                                log.debug(
+                                        "Added animated sprite of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
+
+                    ((Pane) addedPane)
+                            .getChildren()
+                            .filtered(node -> node instanceof Updatable)
+                            .forEach(sprite -> {
+
+                                updatableSprites.putIfAbsent((Updatable) sprite, (Updatable) sprite);
+                                log.debug(
+                                        "Added updatable sprite of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
+
+                    ((Pane) addedPane).getChildren().addListener((ListChangeListener<Node>) change1 -> {
+                        change1.next();
+                        change1.getAddedSubList().forEach(addedChild -> {
+
+                            if (addedChild instanceof AnimatedSprite) {
+
+                                animatedSprites.putIfAbsent((AnimatedSprite) addedChild, (AnimatedSprite) addedChild);
+                                log.debug(
+                                        "Added animated sprite of type {} to set.",
+                                        addedChild.getClass().getName()
+                                );
+                            }
+
+                            if (addedChild instanceof Updatable) {
+
+                                updatableSprites.putIfAbsent((Updatable) addedChild, (Updatable) addedChild);
+                                log.debug(
+                                        "Added updatable sprite of type {} to set.",
+                                        addedChild.getClass().getName()
+                                );
+                            }
+                        });
+                    });
+                }
+            });
+        });
     }
 
-    public Maze(int width, int height) {
+    public Set<AnimatedSprite> getAllAnimatedSprites() {
 
-        this();
-        setWidth(width);
-        setPrefWidth(width);
-        setHeight(height);
-        setPrefHeight(height);
+        return animatedSprites.keySet();
     }
 
-    // todo: trace added children in QuadTree
-    void addGameObject(int layer, Sprite gameObject) {
+    public Set<Updatable> getAllUpdatableSprites() {
 
-        List<Sprite> layerSpecificGameObjects = allGameObjects.getOrDefault(layer, new ArrayList<>());
-        layerSpecificGameObjects.add(gameObject);
-        allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
-
-//        if (gameObject instanceof MovableSprite)
-//            movableSprites.add(gameObject);
-//        else
-//            unmovableSprites.insert(gameObject);
-    }
-
-    // todo: trace added children in QuadTree
-    void addGameObjects(int layer, List<? extends Sprite> gameObjects) {
-
-        List<Sprite> layerSpecificGameObjects = this.allGameObjects.getOrDefault(layer, new ArrayList<>());
-        layerSpecificGameObjects.addAll(gameObjects);
-        this.allGameObjects.putIfAbsent(layer, layerSpecificGameObjects);
-        gameObjects.forEach(gameObject -> addGameObject(layer, gameObject));
-    }
-
-    private List<Sprite> getAllSpritesInProximityAndThoseWhoMove(Sprite sprite) {
-
-        List<Sprite> allSprites = new ArrayList<>();
-        allSprites.addAll(unmovableSprites.findNearbyGameObjects(sprite));
-        allSprites.addAll(movableSprites);
-
-        return allSprites;
-    }
-
-    private List<Sprite> getAllSpritesInProximityAndThoseWhoMove(List<Sprite> sprites) {
-
-        List<Sprite> allSprites = new ArrayList<>();
-        sprites.forEach(sprite -> allSprites.addAll(getAllSpritesInProximityAndThoseWhoMove(sprite)));
-
-        return allSprites;
-    }
-
-    @Override
-    public void update(
-            double deltaTimeSinceStart,
-            double deltaTime,
-            Set<KeyCode> input,
-            List<Sprite> nearbyObjects
-    ) {
-
-        if (input.size() > 0 && (input.contains(KeyCode.ESCAPE) || input.contains(KeyCode.Q)))
-            System.exit(0);
-
-        allGameObjects.keySet().forEach(key -> allGameObjects.get(key).forEach(gameObject -> {
-
-            if (gameObject instanceof Updatable) {
-
-                List<Sprite> nearbySprites = new ArrayList<>();
-
-                if (gameObject instanceof Sprite)
-                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove((Sprite) gameObject));
-
-//                if (gameObject instanceof MovableSprite)
-//                    nearbySprites.addAll(getAllSpritesInProximityAndThoseWhoMove(
-//                            ((MovableSprite) gameObject).createShadowSpritePerMovableDirection(deltaTime))
-//                    );
-
-                ((Updatable) gameObject).update(
-                        deltaTimeSinceStart,
-                        deltaTime,
-                        input,
-                        nearbySprites
-                );
-            }
-        }));
+        return updatableSprites.keySet();
     }
 }

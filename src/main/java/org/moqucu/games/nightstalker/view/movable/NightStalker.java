@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.view.movable;
 
 import javafx.animation.Animation;
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -10,8 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.model.MazeGraph;
+import org.moqucu.games.nightstalker.view.AnimatedSprite;
+import org.moqucu.games.nightstalker.view.Updatable;
 import org.moqucu.games.nightstalker.view.immovable.Weapon;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
@@ -19,17 +23,18 @@ import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class NightStalker extends ArtificiallyMovedSprite {
+public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
 
-    enum States {Awake, MovingLeft, MovingRight, MovingVertically}
+    enum States {Awake, MovingLeft, MovingRight, MovingVertically, Fainting}
 
-    enum Events {moveLeft, moveRight, moveVertically, stop}
+    enum Events {moveLeft, moveRight, moveVertically, stop, faint, wakeUp}
 
     private StateMachine<States, Events> stateMachine;
 
@@ -37,7 +42,8 @@ public class NightStalker extends ArtificiallyMovedSprite {
             States.Awake, Indices.builder().lower(0).upper(0).build(),
             States.MovingVertically, Indices.builder().lower(1).upper(2).build(),
             States.MovingRight, Indices.builder().lower(21).upper(28).build(),
-            States.MovingLeft, Indices.builder().lower(3).upper(10).build()
+            States.MovingLeft, Indices.builder().lower(3).upper(10).build(),
+            States.Fainting, Indices.builder().lower(19).upper(20).build()
     );
 
     private MazeGraph mazeGraph;
@@ -80,6 +86,10 @@ public class NightStalker extends ArtificiallyMovedSprite {
                         playAnimation();
                         translateAnimation.play();
                         break;
+                    case Fainting:
+                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        playAnimation();
+                        break;
                 }
             }
         });
@@ -111,6 +121,21 @@ public class NightStalker extends ArtificiallyMovedSprite {
                 .source(States.Awake)
                 .target(States.MovingRight)
                 .event(Events.moveRight)
+                .and()
+                .withExternal()
+                .source(States.Awake)
+                .target(States.Fainting)
+                .event(Events.faint)
+                .and()
+                .withInternal()
+                .source(States.Fainting)
+                .action(this::timeToWakeUp)
+                .timerOnce(1000)
+                .and()
+                .withExternal()
+                .source(States.Fainting)
+                .target(States.Awake)
+                .event(Events.wakeUp)
                 .and()
                 .withExternal()
                 .source(States.MovingRight)
@@ -200,4 +225,31 @@ public class NightStalker extends ArtificiallyMovedSprite {
 
         return mazeGraph;
     }
+
+    @Override
+    public void update(
+            double deltaTimeSinceStart,
+            double deltaTime,
+            Set<KeyCode> input,
+            Set<AnimatedSprite> nearbySprites
+    ) {
+
+        nearbySprites.forEach(animatedSprite -> {
+
+            if (animatedSprite instanceof Spider
+                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
+            && stateMachine.getState().getId().equals(States.Awake)) {
+
+                log.debug("Colliding with Spider!");
+                stateMachine.sendEvent(Events.faint);
+            }
+        });
+    }
+
+    private void timeToWakeUp(StateContext stateContext) {
+
+        log.debug("timeToWakeUp: {}", stateContext);
+        stateMachine.sendEvent(Events.wakeUp);
+    }
+
 }
