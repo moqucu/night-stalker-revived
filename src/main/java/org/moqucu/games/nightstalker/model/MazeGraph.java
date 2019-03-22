@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MazeGraph {
 
@@ -69,5 +70,71 @@ public class MazeGraph {
     public Map<Point2D, List<Point2D>> getAdjacencyList() {
 
         return adjacencyList;
+    }
+
+    private boolean isPointOnNode(Point2D point) {
+
+        return adjacencyList.containsKey(point);
+    }
+
+    // ToDo: needs to be tested and can potentially be generalized through reflection with "X" and "Y" parameter
+    public List<Point2D> getReachableNodes(Point2D point) {
+
+        if (isPointOnNode(point))
+            return adjacencyList.get(point);
+        else {
+
+            List<Point2D> reachableNodes = new ArrayList<>();
+
+            Set<Point2D> xAlignedNeighbors = adjacencyList
+                    .keySet()
+                    .stream()
+                    .filter(point2D -> point2D.getX() == point.getX())
+                    .collect(Collectors.toSet());
+
+            if (xAlignedNeighbors.size() > 1) {
+
+                Point2D directNeighborToTheRight = xAlignedNeighbors
+                        .stream()
+                        .filter(point2D -> point2D.getX() > point.getX())
+                        .min(Comparator.comparing(Point2D::getX))
+                        .orElse(null);
+
+                Point2D directNeighborToTheLeft = xAlignedNeighbors
+                        .stream()
+                        .filter(point2D -> point2D.getX() < point.getX())
+                        .max(Comparator.comparing(Point2D::getX))
+                        .orElse(null);
+
+                if (directNeighborToTheRight != null && directNeighborToTheLeft != null)
+                    reachableNodes.addAll(Set.of(directNeighborToTheRight, directNeighborToTheLeft));
+            }
+
+            Set <Point2D> yAlignedNeighbors = adjacencyList
+                    .keySet()
+                    .stream()
+                    .filter(point2D -> point2D.getY() == point.getY())
+                    .collect(Collectors.toSet());
+
+            if (yAlignedNeighbors.size() > 1) {
+
+                Point2D directNeighborBelow = yAlignedNeighbors
+                        .stream()
+                        .filter(point2D -> point2D.getY() > point.getY())
+                        .min(Comparator.comparing(Point2D::getY))
+                        .orElse(null);
+
+                Point2D directNeighborAbove = yAlignedNeighbors
+                        .stream()
+                        .filter(point2D -> point2D.getY() < point.getY())
+                        .max(Comparator.comparing(Point2D::getY))
+                        .orElse(null);
+
+                if (directNeighborBelow != null && directNeighborAbove != null)
+                    reachableNodes.addAll(Set.of(directNeighborBelow, directNeighborAbove));
+            }
+
+            return reachableNodes;
+        }
     }
 }
