@@ -145,12 +145,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.4.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-runner</artifactId>
             <version>1.4.1</version>
@@ -164,52 +158,15 @@
         <plugins>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.0</version>
-            </plugin>
-
-            <plugin>
-                <groupId>com.teamtter.mavennatives</groupId>
-                <artifactId>nativedependencies-maven-plugin</artifactId>
-                <version>1.0.6</version>
-                <executions>
-                    <execution>
-                        <id>unpacknatives</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.0.0-M3</version>
                 <configuration>
-                    <skip>false</skip>
-                    <!-- autoDetectDirUpInFilesystem is documented below-->
-                    <autoDetectDirUpInFilesystem>true</autoDetectDirUpInFilesystem>
-                    <!-- if autoDetectOSNatives is 'true' then you don't need the 'osFilters' list -->
-                    <!-- we advise you set 'autoDetectOSNatives' to true and forget about osFilters -->
-                    <autoDetectOSNatives>true</autoDetectOSNatives>
-
-                     <!--<nativesTargetDir>${session.executionRootDirectory}/target/natives</nativesTargetDir>-->
-                    <separateDirs>true</separateDirs>
-                    <!--<osFilters>
-                        <osFilter>
-                            <osName>linux</osName>
-                            <osArch>64</osArch>
-                            <suffix>linux</suffix>
-                        </osFilter>
-                        <osFilter>
-                            <osName>windows</osName>
-                            &lt;!&ndash; <osArch>64</osArch> &ndash;&gt; &lt;!&ndash; this line is not mandatory &ndash;&gt;
-                            <suffix>win</suffix>
-                        </osFilter>
-                    </osFilters>-->
+                    <!-- needed so that lombok does not throw errors during tests -->
+                    <forkCount>0</forkCount>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
