@@ -64,6 +64,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
 
         setFocusTraversable(true);
         setOnKeyPressed(this::handleKeyPressedEvent);
+        setOnKeyReleased(this::handleKeyReleasedEvent);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
@@ -77,6 +78,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
 
                     case Awake:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        translateAnimation.stop();
                         stopAnimation();
                         break;
                     case MovingLeft:
@@ -87,6 +89,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                         translateAnimation.play();
                         break;
                     case Fainting:
+                        log.debug("fainting...");
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
                         playAnimation();
                         break;
@@ -130,7 +133,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                 .withInternal()
                 .source(States.Fainting)
                 .action(this::timeToWakeUp)
-                .timerOnce(1000)
+                .timerOnce(3000)
                 .and()
                 .withExternal()
                 .source(States.Fainting)
@@ -155,6 +158,13 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
         return builder.build();
     }
 
+    private void handleKeyReleasedEvent(KeyEvent keyEvent) {
+
+        log.debug("Key released: {}", keyEvent.getCode());
+
+        stateMachine.sendEvent(Events.stop);
+    }
+
     private void handleKeyPressedEvent(KeyEvent keyEvent) {
 
         log.debug("Key pressed: {}", keyEvent.getCode());
@@ -163,12 +173,17 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
             return;
 
         Point2D currentNode = getCurrentNode();
-        List<Point2D> adjacentNodes = getAdjacentNodes(currentNode);
+        log.debug("Current node: {}", currentNode);
+
+        List<Point2D> reachableNodes = getReachableNodes(currentNode);
+        if (reachableNodes.size() == 0)
+            log.debug("No reachable nodes!");
+        reachableNodes.forEach(log::trace);
 
         switch (keyEvent.getCode()) {
 
             case UP:
-                adjacentNodes
+                reachableNodes
                         .stream()
                         .filter(node -> node.getX() == currentNode.getX() && node.getY() < currentNode.getY())
                         .findFirst()
@@ -179,7 +194,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                         });
                 break;
             case DOWN:
-                adjacentNodes
+                reachableNodes
                         .stream()
                         .filter(node -> node.getX() == currentNode.getX() && node.getY() > currentNode.getY())
                         .findFirst()
@@ -190,7 +205,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                         });
                 break;
             case LEFT:
-                adjacentNodes
+                reachableNodes
                         .stream()
                         .filter(node -> node.getX() < currentNode.getX() && node.getY() == currentNode.getY())
                         .findFirst()
@@ -201,7 +216,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                         });
                 break;
             case RIGHT:
-                adjacentNodes
+                reachableNodes
                         .stream()
                         .filter(node -> node.getX() > currentNode.getX() && node.getY() == currentNode.getY())
                         .findFirst()
@@ -211,6 +226,8 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                             stateMachine.sendEvent(Events.moveRight);
                         });
                 break;
+            case Q:
+                System.exit(0);
         }
     }
 
@@ -236,12 +253,18 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
 
         nearbySprites.forEach(animatedSprite -> {
 
-            if (animatedSprite instanceof Spider
+            if ((animatedSprite instanceof Spider || animatedSprite instanceof Bat)
                     && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
-            && stateMachine.getState().getId().equals(States.Awake)) {
+                    && stateMachine.getState().getId() != States.Fainting) {
 
-                log.debug("Colliding with Spider!");
+                log.debug("Colliding with animal.");
+                stateMachine.sendEvent(Events.stop);
                 stateMachine.sendEvent(Events.faint);
+            } else if (animatedSprite instanceof Weapon
+                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())) {
+
+                this.weapon = (Weapon) animatedSprite;
+                weapon.pickUp();
             }
         });
     }

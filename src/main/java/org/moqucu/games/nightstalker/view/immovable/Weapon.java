@@ -144,4 +144,9 @@ public class Weapon extends AnimatedSprite {
         } else
             throw new NoMoreRoundsException();
     }
+
+    public void pickUp() {
+
+        stateMachine.sendEvent(Events.pickUp);
+    }
 }

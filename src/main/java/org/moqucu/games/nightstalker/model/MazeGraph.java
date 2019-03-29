@@ -8,11 +8,13 @@ import javafx.geometry.Point2D;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Log4j2
 public class MazeGraph {
 
     @Data
@@ -80,8 +82,10 @@ public class MazeGraph {
     // ToDo: needs to be tested and can potentially be generalized through reflection with "X" and "Y" parameter
     public List<Point2D> getReachableNodes(Point2D point) {
 
-        if (isPointOnNode(point))
-            return adjacencyList.get(point);
+        Point2D roundedPoint = new Point2D(Math.round(point.getX()), Math.round(point.getY()));
+
+        if (isPointOnNode(roundedPoint))
+            return adjacencyList.get(roundedPoint);
         else {
 
             List<Point2D> reachableNodes = new ArrayList<>();
@@ -89,49 +93,51 @@ public class MazeGraph {
             Set<Point2D> xAlignedNeighbors = adjacencyList
                     .keySet()
                     .stream()
-                    .filter(point2D -> point2D.getX() == point.getX())
+                    .filter(point2D -> point2D.getX() == roundedPoint.getX())
                     .collect(Collectors.toSet());
+
+            if (xAlignedNeighbors.size() == 0)
+                log.debug("No x-aligned neighbors!");
+            xAlignedNeighbors.forEach(log::trace);
 
             if (xAlignedNeighbors.size() > 1) {
 
-                Point2D directNeighborToTheRight = xAlignedNeighbors
+                xAlignedNeighbors
                         .stream()
-                        .filter(point2D -> point2D.getX() > point.getX())
-                        .min(Comparator.comparing(Point2D::getX))
-                        .orElse(null);
+                        .filter(point2D -> point2D.getY() > roundedPoint.getY())
+                        .min(Comparator.comparing(Point2D::getY))
+                        .ifPresent(reachableNodes::add);
 
-                Point2D directNeighborToTheLeft = xAlignedNeighbors
+                xAlignedNeighbors
                         .stream()
-                        .filter(point2D -> point2D.getX() < point.getX())
-                        .max(Comparator.comparing(Point2D::getX))
-                        .orElse(null);
-
-                if (directNeighborToTheRight != null && directNeighborToTheLeft != null)
-                    reachableNodes.addAll(Set.of(directNeighborToTheRight, directNeighborToTheLeft));
+                        .filter(point2D -> point2D.getY() < roundedPoint.getY())
+                        .max(Comparator.comparing(Point2D::getY))
+                        .ifPresent(reachableNodes::add);
             }
 
             Set <Point2D> yAlignedNeighbors = adjacencyList
                     .keySet()
                     .stream()
-                    .filter(point2D -> point2D.getY() == point.getY())
+                    .filter(point2D -> point2D.getY() == roundedPoint.getY())
                     .collect(Collectors.toSet());
+
+            if (yAlignedNeighbors.size() == 0)
+                log.debug("No y-aligned neighbors!");
+            yAlignedNeighbors.forEach(log::trace);
 
             if (yAlignedNeighbors.size() > 1) {
 
-                Point2D directNeighborBelow = yAlignedNeighbors
+                yAlignedNeighbors
                         .stream()
-                        .filter(point2D -> point2D.getY() > point.getY())
-                        .min(Comparator.comparing(Point2D::getY))
-                        .orElse(null);
+                        .filter(point2D -> point2D.getX() > roundedPoint.getX())
+                        .min(Comparator.comparing(Point2D::getX))
+                        .ifPresent(reachableNodes::add);
 
-                Point2D directNeighborAbove = yAlignedNeighbors
+                yAlignedNeighbors
                         .stream()
-                        .filter(point2D -> point2D.getY() < point.getY())
-                        .max(Comparator.comparing(Point2D::getY))
-                        .orElse(null);
-
-                if (directNeighborBelow != null && directNeighborAbove != null)
-                    reachableNodes.addAll(Set.of(directNeighborBelow, directNeighborAbove));
+                        .filter(point2D -> point2D.getX() < roundedPoint.getX())
+                        .max(Comparator.comparing(Point2D::getX))
+                        .ifPresent(reachableNodes::add);
             }
 
             return reachableNodes;
