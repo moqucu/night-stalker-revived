@@ -27,7 +27,7 @@ public class MazeGraphTest {
     public void testGetReachableNodes() {
 
         List<Point2D> reachablePoints =
-                nightStalkerMazeGraph.getReachableNodes(new Point2D(10.0 * 32 + 1, 3.0 * 32 ));
+                nightStalkerMazeGraph.getClosestReachableNodes(new Point2D(10.0 * 32 + 1, 3.0 * 32 ));
         Assertions.assertEquals(2, reachablePoints.size());
     }
 }

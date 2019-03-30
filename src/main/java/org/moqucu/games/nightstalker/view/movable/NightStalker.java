@@ -228,6 +228,15 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                 break;
             case Q:
                 System.exit(0);
+            case SPACE:
+                if (weapon != null)
+                    try {
+
+                        weapon.fire();
+                    } catch (Weapon.NoMoreRoundsException e) {
+
+                        weapon.tossAway();
+                    }
         }
     }
 

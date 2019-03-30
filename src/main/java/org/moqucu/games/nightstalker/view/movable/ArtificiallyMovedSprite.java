@@ -75,14 +75,14 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
         return translateTransition;
     }
 
-    ArrayList<Point2D> getAdjacentNodes(Point2D currentNode) {
+    private ArrayList<Point2D> getAdjacentNodes(Point2D currentNode) {
 
         return new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
     }
 
     ArrayList<Point2D> getReachableNodes(Point2D currentNode) {
 
-        return new ArrayList<>(List.copyOf(getMazeGraph().getReachableNodes(currentNode)));
+        return new ArrayList<>(List.copyOf(getMazeGraph().getClosestReachableNodes(currentNode)));
     }
 
     Point2D getCurrentNode() {
@@ -109,5 +109,4 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
 
         return velocity;
     }
-
 }

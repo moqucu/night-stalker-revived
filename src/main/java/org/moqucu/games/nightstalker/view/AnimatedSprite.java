@@ -55,8 +55,6 @@ public abstract class AnimatedSprite extends Sprite {
 
                 return "indices";
             }
-
-
         };
     }
 

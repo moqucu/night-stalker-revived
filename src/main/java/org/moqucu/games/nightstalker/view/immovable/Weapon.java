@@ -1,10 +1,9 @@
 package org.moqucu.games.nightstalker.view.immovable;
 
+import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
@@ -15,6 +14,7 @@ import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Random;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
@@ -25,16 +25,24 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Weapon extends AnimatedSprite {
 
-    private class NoMoreRoundsException extends Exception {
+    public class NoMoreRoundsException extends Exception {
     }
 
-    enum States {tossedAway, reappearedOnTheGround, pickedUp}
+    enum States {TossedAway, ReappearedOnTheGround, PickedUp}
 
     enum Events {reappear, pickUp, tossAway}
 
     StateMachine<States, Events> stateMachine;
 
-    private byte rounds = 6;
+    private Map<States, Indices> frameBoundaries = Map.of(
+            States.TossedAway, Indices.builder().lower(0).upper(0).build(),
+            States.ReappearedOnTheGround, Indices.builder().lower(0).upper(1).build(),
+            States.PickedUp, Indices.builder().lower(0).upper(0).build()
+    );
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final IntegerProperty numberOfRounds = new SimpleIntegerProperty(6);
 
     private AudioClip pickUpGunSound = new AudioClip(
             Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/pickupgun.wav").toString()
@@ -52,9 +60,8 @@ public class Weapon extends AnimatedSprite {
         super();
         relocate(randomGunPositions[randomIndex][0] * 32, randomGunPositions[randomIndex][1] * 32);
         setImage(new Image(translate("images/weapon.png")));
-        setFrameDurationInMillis(200);
         setAutoReversible(false);
-        setFrameIndices(Indices.builder().lower(1).upper(2).build());
+        setFrameDurationInMillis(500);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
@@ -62,9 +69,11 @@ public class Weapon extends AnimatedSprite {
             @Override
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
+                setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
             }
         });
         stateMachine.start();
+        playAnimation();
     }
 
     @SneakyThrows
@@ -74,30 +83,30 @@ public class Weapon extends AnimatedSprite {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.tossedAway)
+                .initial(States.TossedAway)
                 .states(EnumSet.allOf(States.class));
 
         builder.configureTransitions()
                 .withInternal()
-                .source(States.tossedAway)
+                .source(States.TossedAway)
                 .action(this::timeToReappearOnTheGround)
-                .timerOnce(1500)
+                .timerOnce(1000)
                 .and()
                 .withExternal()
-                .source(States.tossedAway)
+                .source(States.TossedAway)
                 .action(this::reappearedOnTheGround)
-                .target(States.reappearedOnTheGround)
+                .target(States.ReappearedOnTheGround)
                 .event(Events.reappear)
                 .and()
                 .withExternal()
-                .source(States.reappearedOnTheGround)
-                .target(States.pickedUp)
+                .source(States.ReappearedOnTheGround)
+                .target(States.PickedUp)
                 .action(this::pickedUp)
                 .event(Events.pickUp)
                 .and()
                 .withExternal()
-                .source(States.pickedUp)
-                .target(States.tossedAway)
+                .source(States.PickedUp)
+                .target(States.TossedAway)
                 .action(this::tossedAway)
                 .event(Events.tossAway);
 
@@ -112,33 +121,31 @@ public class Weapon extends AnimatedSprite {
 
     private void reappearedOnTheGround(StateContext stateContext) {
 
-        log.debug("reappearedOnTheGround: {}", stateContext);
+        log.debug("ReappearedOnTheGround: {}", stateContext);
         pickUpGunSound.setVolume(0.1f);
         pickUpGunSound.play();
-        playAnimation();
     }
 
     private void pickedUp(StateContext stateContext) {
 
-        log.debug("pickedUp: {}", stateContext);
-        rounds = 6;
+        log.debug("PickedUp: {}", stateContext);
+        numberOfRounds.set(6);
         pickUpGunSound.setVolume(0.1f);
         pickUpGunSound.play();
-        stopAnimation();
     }
 
     private void tossedAway(StateContext stateContext) {
 
-        log.debug("tossedAway: {}", stateContext);
+        log.debug("TossedAway: {}", stateContext);
         randomIndex = (new Random()).nextInt(4);
         relocate(randomGunPositions[randomIndex][0] * 32, randomGunPositions[randomIndex][1] * 32);
     }
 
     public void fire() throws NoMoreRoundsException {
 
-        if (rounds > 0) {
+        if (numberOfRounds.get() > 0) {
 
-            rounds--;
+            numberOfRounds.set(numberOfRounds.get() - 1);
             shootSound.setVolume(0.1f);
             shootSound.play();
         } else
@@ -148,5 +155,25 @@ public class Weapon extends AnimatedSprite {
     public void pickUp() {
 
         stateMachine.sendEvent(Events.pickUp);
+    }
+
+    public void tossAway() {
+
+        stateMachine.sendEvent(Events.tossAway);
+    }
+
+    public int getNumberOfRounds() {
+
+        return numberOfRounds.get();
+    }
+
+    public void setNumberOfRounds(int numberOfRounds) {
+
+        this.numberOfRounds.set(numberOfRounds);
+    }
+
+    public IntegerProperty numberOfRoundsProperty() {
+
+        return numberOfRounds;
     }
 }

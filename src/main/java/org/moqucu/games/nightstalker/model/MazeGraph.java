@@ -79,8 +79,13 @@ public class MazeGraph {
         return adjacencyList.containsKey(point);
     }
 
-    // ToDo: needs to be tested and can potentially be generalized through reflection with "X" and "Y" parameter
-    public List<Point2D> getReachableNodes(Point2D point) {
+    public List<Point2D> getFurthestReachableNodes(Point2D point) {
+
+
+        return null;
+    }
+
+    public List<Point2D> getClosestReachableNodes(Point2D point) {
 
         Point2D roundedPoint = new Point2D(Math.round(point.getX()), Math.round(point.getY()));
 
@@ -98,7 +103,8 @@ public class MazeGraph {
 
             if (xAlignedNeighbors.size() == 0)
                 log.debug("No x-aligned neighbors!");
-            xAlignedNeighbors.forEach(log::trace);
+            if (log.isTraceEnabled())
+                xAlignedNeighbors.forEach(log::trace);
 
             if (xAlignedNeighbors.size() > 1) {
 
@@ -115,7 +121,7 @@ public class MazeGraph {
                         .ifPresent(reachableNodes::add);
             }
 
-            Set <Point2D> yAlignedNeighbors = adjacencyList
+            Set<Point2D> yAlignedNeighbors = adjacencyList
                     .keySet()
                     .stream()
                     .filter(point2D -> point2D.getY() == roundedPoint.getY())
@@ -123,7 +129,8 @@ public class MazeGraph {
 
             if (yAlignedNeighbors.size() == 0)
                 log.debug("No y-aligned neighbors!");
-            yAlignedNeighbors.forEach(log::trace);
+            if (log.isTraceEnabled())
+                yAlignedNeighbors.forEach(log::trace);
 
             if (yAlignedNeighbors.size() > 1) {
 

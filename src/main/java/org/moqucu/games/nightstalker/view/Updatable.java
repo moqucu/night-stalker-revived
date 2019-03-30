@@ -2,7 +2,6 @@ package org.moqucu.games.nightstalker.view;
 
 import javafx.scene.input.KeyCode;
 
-import java.util.List;
 import java.util.Set;
 
 public interface Updatable {

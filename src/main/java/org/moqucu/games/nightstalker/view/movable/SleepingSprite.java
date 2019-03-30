@@ -21,7 +21,6 @@ public abstract class SleepingSprite extends ArtificiallyMovedSprite {
         super();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public long getSleepTimeInMillis() {
 
         return sleepTineInMillis.get();
@@ -32,7 +31,7 @@ public abstract class SleepingSprite extends ArtificiallyMovedSprite {
         this.sleepTineInMillis.set(sleepTimeInMillis);
     }
 
-    public LongProperty sleepTimeInMillisProperty() {
+    LongProperty sleepTimeInMillisProperty() {
 
         return sleepTineInMillis;
     }
