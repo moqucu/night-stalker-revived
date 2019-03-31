@@ -81,8 +81,154 @@ public class MazeGraph {
 
     public List<Point2D> getFurthestReachableNodes(Point2D point) {
 
+        Point2D roundedPoint = new Point2D(Math.round(point.getX()), Math.round(point.getY()));
 
-        return null;
+        if (isPointOnNode(roundedPoint))
+            return adjacencyList.get(roundedPoint);
+
+        List<Point2D> reachableNodes = new ArrayList<>();
+
+        Set<Point2D> xAlignedNeighbors = adjacencyList
+                .keySet()
+                .stream()
+                .filter(point2D -> point2D.getX() == roundedPoint.getX())
+                .collect(Collectors.toSet());
+
+        if (xAlignedNeighbors.size() != 0) {
+
+            List<Point2D> nodesBelow = xAlignedNeighbors
+                    .stream()
+                    .filter(point2D -> point2D.getY() > roundedPoint.getY())
+                    .sorted(Comparator.comparing(Point2D::getY))
+                    .collect(Collectors.toList());
+
+            if (log.isTraceEnabled()) {
+
+                log.trace("Nodes below...");
+                nodesBelow.forEach(log::trace);
+            }
+
+            if (nodesBelow.size() == 1) {
+
+                reachableNodes.addAll(nodesBelow);
+                log.debug("Added furthest reachable node below: {}", nodesBelow.get(0));
+            } else if (nodesBelow.size() > 1) {
+
+                Point2D furthestNodeBelow = nodesBelow.get(0);
+                for (int i = 0; i + 1 < nodesBelow.size(); i++)
+
+                    if (adjacencyList.get(nodesBelow.get(i)).contains(nodesBelow.get(i + 1)))
+                        furthestNodeBelow = nodesBelow.get(i + 1);
+                    else
+                        break;
+
+                reachableNodes.add(furthestNodeBelow);
+                log.debug("Added furthest reachable node below: {}", furthestNodeBelow);
+            }
+
+            List<Point2D> nodesAbove = xAlignedNeighbors
+                    .stream()
+                    .filter(point2D -> point2D.getY() < roundedPoint.getY())
+                    .sorted(Comparator.comparing(Point2D::getY))
+                    .collect(Collectors.toList());
+
+            if (log.isTraceEnabled()) {
+
+                log.trace("Nodes above...");
+                nodesAbove.forEach(log::trace);
+            }
+
+            if (nodesAbove.size() == 1) {
+
+                reachableNodes.addAll(nodesAbove);
+                log.debug("Added furthest reachable node above: {}", nodesAbove.get(0));
+            } else if (nodesAbove.size() > 1) {
+
+                Point2D furthestNodeAbove = nodesAbove.get(nodesAbove.size() - 1);
+
+                for (int i = nodesAbove.size() - 1; i > 0; i--)
+
+                    if (adjacencyList.get(nodesAbove.get(i)).contains(nodesAbove.get(i - 1)))
+                        furthestNodeAbove = nodesAbove.get(i - 1);
+                    else
+                        break;
+
+                reachableNodes.add(furthestNodeAbove);
+                log.debug("Added furthest reachable node above: {}", furthestNodeAbove);
+            }
+        }
+
+        Set<Point2D> yAlignedNeighbors = adjacencyList
+                .keySet()
+                .stream()
+                .filter(point2D -> point2D.getY() == roundedPoint.getY())
+                .collect(Collectors.toSet());
+
+        if (yAlignedNeighbors.size() != 0) {
+
+            List<Point2D> nodesToTheRight = yAlignedNeighbors
+                    .stream()
+                    .filter(point2D -> point2D.getX() > roundedPoint.getX())
+                    .sorted(Comparator.comparing(Point2D::getX))
+                    .collect(Collectors.toList());
+
+            if (log.isTraceEnabled()) {
+
+                log.trace("Nodes to the right...");
+                nodesToTheRight.forEach(log::trace);
+            }
+
+            if (nodesToTheRight.size() == 1) {
+
+                reachableNodes.addAll(nodesToTheRight);
+                log.debug("Added furthest reachable node to the right: {}", nodesToTheRight.get(0));
+            } else if (nodesToTheRight.size() > 1) {
+
+                Point2D furthestNodeToTheRight = nodesToTheRight.get(0);
+                for (int i = 0; i + 1 < nodesToTheRight.size(); i++)
+
+                    if (adjacencyList.get(nodesToTheRight.get(i)).contains(nodesToTheRight.get(i + 1)))
+                        furthestNodeToTheRight = nodesToTheRight.get(i + 1);
+                    else
+                        break;
+
+                reachableNodes.add(furthestNodeToTheRight);
+                log.debug("Added furthest reachable node to the right: {}", furthestNodeToTheRight);
+            }
+
+            List<Point2D> nodesToTheLeft = yAlignedNeighbors
+                    .stream()
+                    .filter(point2D -> point2D.getX() < roundedPoint.getX())
+                    .sorted(Comparator.comparing(Point2D::getX))
+                    .collect(Collectors.toList());
+
+            if (log.isTraceEnabled()) {
+
+                log.trace("Nodes to the left...");
+                nodesToTheLeft.forEach(log::trace);
+            }
+
+            if (nodesToTheLeft.size() == 1) {
+
+                reachableNodes.addAll(nodesToTheLeft);
+                log.info("Added furthest reachable node to the left: {}", nodesToTheLeft.get(0));
+            } else if (nodesToTheLeft.size() > 1) {
+
+                Point2D furthestNodeToTheLeft = nodesToTheLeft.get(nodesToTheLeft.size() - 1);
+
+                for (int i = nodesToTheLeft.size() - 1; i > 0; i--)
+
+                    if (adjacencyList.get(nodesToTheLeft.get(i)).contains(nodesToTheLeft.get(i - 1)))
+                        furthestNodeToTheLeft = nodesToTheLeft.get(i - 1);
+                    else
+                        break;
+
+                reachableNodes.add(furthestNodeToTheLeft);
+                log.info("Added furthest reachable node to the left: {}", furthestNodeToTheLeft);
+            }
+        }
+
+        return reachableNodes;
     }
 
     public List<Point2D> getClosestReachableNodes(Point2D point) {

@@ -82,7 +82,7 @@ public abstract class ArtificiallyMovedSprite extends AnimatedSprite {
 
     ArrayList<Point2D> getReachableNodes(Point2D currentNode) {
 
-        return new ArrayList<>(List.copyOf(getMazeGraph().getClosestReachableNodes(currentNode)));
+        return new ArrayList<>(List.copyOf(getMazeGraph().getFurthestReachableNodes(currentNode)));
     }
 
     Point2D getCurrentNode() {
