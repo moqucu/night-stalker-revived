@@ -21,7 +21,6 @@ import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +30,8 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
 public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
+
+    private static final double MAX_OFFSET = 4.0;
 
     enum States {Awake, MovingLeft, MovingRight, MovingVertically, Fainting}
 
@@ -172,71 +173,45 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
         if (stateMachine.getState().getId() != States.Awake)
             return;
 
-        Point2D currentNode = getCurrentNode();
-        log.debug("Current node: {}", currentNode);
-
-        List<Point2D> reachableNodes = getReachableNodes(currentNode);
-        if (reachableNodes.size() == 0)
-            log.debug("No reachable nodes!");
-        reachableNodes.forEach(log::trace);
+        Point2D point = getCurrentNode();
+        log.debug("Current point: {}", point);
 
         switch (keyEvent.getCode()) {
 
             case UP:
-                reachableNodes
-                        .stream()
-                        .filter(node -> node.getX() == currentNode.getX() && node.getY() < currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveVertically);
-                        });
-                break;
             case DOWN:
-                reachableNodes
-                        .stream()
-                        .filter(node -> node.getX() == currentNode.getX() && node.getY() > currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveVertically);
-                        });
-                break;
             case LEFT:
-                reachableNodes
-                        .stream()
-                        .filter(node -> node.getX() < currentNode.getX() && node.getY() == currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveLeft);
-                        });
-                break;
             case RIGHT:
-                reachableNodes
-                        .stream()
-                        .filter(node -> node.getX() > currentNode.getX() && node.getY() == currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveRight);
-                        });
+                translateAnimation = calculatePathTransition(point, keyEvent.getCode(), MAX_OFFSET);
+                translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                translateKeyCodeDirectionToStateMachineEvent(keyEvent.getCode());
                 break;
             case Q:
                 System.exit(0);
             case SPACE:
                 if (weapon != null)
                     try {
-
                         weapon.fire();
                     } catch (Weapon.NoMoreRoundsException e) {
-
                         weapon.tossAway();
                     }
+        }
+    }
+
+    private void translateKeyCodeDirectionToStateMachineEvent(KeyCode keyCode) {
+
+        switch (keyCode) {
+
+            case UP:
+            case DOWN:
+                stateMachine.sendEvent(Events.moveVertically);
+                break;
+            case LEFT:
+                stateMachine.sendEvent(Events.moveLeft);
+                break;
+            case RIGHT:
+                stateMachine.sendEvent(Events.moveRight);
+                break;
         }
     }
 
