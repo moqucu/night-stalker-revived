@@ -21,7 +21,6 @@ import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,7 +29,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @Data
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
+public class NightStalker extends ManuallyMovedSprite implements Updatable {
 
     enum States {Awake, MovingLeft, MovingRight, MovingVertically, Fainting}
 
@@ -64,6 +63,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
 
         setFocusTraversable(true);
         setOnKeyPressed(this::handleKeyPressedEvent);
+        setOnKeyReleased(this::handleKeyReleasedEvent);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
@@ -77,6 +77,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
 
                     case Awake:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                        translateAnimation.stop();
                         stopAnimation();
                         break;
                     case MovingLeft:
@@ -87,6 +88,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                         translateAnimation.play();
                         break;
                     case Fainting:
+                        log.debug("fainting...");
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
                         playAnimation();
                         break;
@@ -130,7 +132,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
                 .withInternal()
                 .source(States.Fainting)
                 .action(this::timeToWakeUp)
-                .timerOnce(1000)
+                .timerOnce(3000)
                 .and()
                 .withExternal()
                 .source(States.Fainting)
@@ -155,6 +157,13 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
         return builder.build();
     }
 
+    private void handleKeyReleasedEvent(KeyEvent keyEvent) {
+
+        log.debug("Key released: {}", keyEvent.getCode());
+
+        stateMachine.sendEvent(Events.stop);
+    }
+
     private void handleKeyPressedEvent(KeyEvent keyEvent) {
 
         log.debug("Key pressed: {}", keyEvent.getCode());
@@ -162,54 +171,44 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
         if (stateMachine.getState().getId() != States.Awake)
             return;
 
-        Point2D currentNode = getCurrentNode();
-        List<Point2D> adjacentNodes = getAdjacentNodes(currentNode);
+        Point2D point = getCurrentNode();
+        log.debug("Current point: {}", point);
 
         switch (keyEvent.getCode()) {
 
             case UP:
-                adjacentNodes
-                        .stream()
-                        .filter(node -> node.getX() == currentNode.getX() && node.getY() < currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveVertically);
-                        });
-                break;
             case DOWN:
-                adjacentNodes
-                        .stream()
-                        .filter(node -> node.getX() == currentNode.getX() && node.getY() > currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveVertically);
-                        });
+            case LEFT:
+            case RIGHT:
+                translateAnimation = calculatePathTransition(point, keyEvent.getCode());
+                translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                translateKeyCodeDirectionToStateMachineEvent(keyEvent.getCode());
+                break;
+            case Q:
+                System.exit(0);
+            case SPACE:
+                if (weapon != null)
+                    try {
+                        weapon.fire();
+                    } catch (Weapon.NoMoreRoundsException e) {
+                        weapon.tossAway();
+                    }
+        }
+    }
+
+    private void translateKeyCodeDirectionToStateMachineEvent(KeyCode keyCode) {
+
+        switch (keyCode) {
+
+            case UP:
+            case DOWN:
+                stateMachine.sendEvent(Events.moveVertically);
                 break;
             case LEFT:
-                adjacentNodes
-                        .stream()
-                        .filter(node -> node.getX() < currentNode.getX() && node.getY() == currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveLeft);
-                        });
+                stateMachine.sendEvent(Events.moveLeft);
                 break;
             case RIGHT:
-                adjacentNodes
-                        .stream()
-                        .filter(node -> node.getX() > currentNode.getX() && node.getY() == currentNode.getY())
-                        .findFirst()
-                        .ifPresent(point2D -> {
-                            translateAnimation = calculateTranslateTransition(currentNode, point2D);
-                            translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-                            stateMachine.sendEvent(Events.moveRight);
-                        });
+                stateMachine.sendEvent(Events.moveRight);
                 break;
         }
     }
@@ -236,12 +235,18 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
 
         nearbySprites.forEach(animatedSprite -> {
 
-            if (animatedSprite instanceof Spider
+            if ((animatedSprite instanceof Spider || animatedSprite instanceof Bat)
                     && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
-            && stateMachine.getState().getId().equals(States.Awake)) {
+                    && stateMachine.getState().getId() != States.Fainting) {
 
-                log.debug("Colliding with Spider!");
+                log.debug("Colliding with animal.");
+                stateMachine.sendEvent(Events.stop);
                 stateMachine.sendEvent(Events.faint);
+            } else if (animatedSprite instanceof Weapon
+                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())) {
+
+                this.weapon = (Weapon) animatedSprite;
+                weapon.pickUp();
             }
         });
     }
