@@ -29,9 +29,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @Data
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
-
-    private static final double MAX_OFFSET = 4.0;
+public class NightStalker extends ManuallyMovedSprite implements Updatable {
 
     enum States {Awake, MovingLeft, MovingRight, MovingVertically, Fainting}
 
@@ -182,7 +180,7 @@ public class NightStalker extends ArtificiallyMovedSprite implements Updatable {
             case DOWN:
             case LEFT:
             case RIGHT:
-                translateAnimation = calculatePathTransition(point, keyEvent.getCode(), MAX_OFFSET);
+                translateAnimation = calculatePathTransition(point, keyEvent.getCode());
                 translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
                 translateKeyCodeDirectionToStateMachineEvent(keyEvent.getCode());
                 break;

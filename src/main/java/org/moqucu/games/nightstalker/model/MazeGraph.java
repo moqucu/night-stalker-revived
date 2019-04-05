@@ -290,7 +290,7 @@ public class MazeGraph {
         if (isPointOnNode(point)
                 && adjacencyList.get(point)
                 .stream()
-                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() > point.getY())
+                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() > point.getY() - maxOffset)
                 .findAny()
                 .isEmpty()
         )
@@ -300,7 +300,7 @@ public class MazeGraph {
                 .keySet()
                 .stream()
                 .filter(point2D -> point2D.getX() == point.getX())
-                .filter(point2D -> point2D.getY() > point.getY())
+                .filter(point2D -> point2D.getY() > point.getY() - maxOffset)
                 .min(Comparator.comparing(Point2D::getY))
                 .orElse(point);
     }
@@ -310,7 +310,7 @@ public class MazeGraph {
         if (isPointOnNode(point)
                 && adjacencyList.get(point)
                 .stream()
-                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() < point.getY())
+                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() < point.getY() + maxOffset)
                 .findAny()
                 .isEmpty()
         )
@@ -320,7 +320,7 @@ public class MazeGraph {
                 .keySet()
                 .stream()
                 .filter(point2D -> point2D.getX() == point.getX())
-                .filter(point2D -> point2D.getY() < point.getY())
+                .filter(point2D -> point2D.getY() < point.getY() + maxOffset)
                 .max(Comparator.comparing(Point2D::getY))
                 .orElse(point);
     }
@@ -330,7 +330,7 @@ public class MazeGraph {
         if (isPointOnNode(point)
                 && adjacencyList.get(point)
                 .stream()
-                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() > point.getX())
+                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() > point.getX() - maxOffset)
                 .findAny()
                 .isEmpty()
         )
@@ -340,7 +340,7 @@ public class MazeGraph {
                 .keySet()
                 .stream()
                 .filter(point2D -> point2D.getY() == point.getY())
-                .filter(point2D -> point2D.getX() > point.getX())
+                .filter(point2D -> point2D.getX() > point.getX() - maxOffset)
                 .min(Comparator.comparing(Point2D::getX))
                 .orElse(point);
     }
@@ -350,7 +350,7 @@ public class MazeGraph {
         if (isPointOnNode(point)
                 && adjacencyList.get(point)
                 .stream()
-                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() < point.getX())
+                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() < point.getX() + maxOffset)
                 .findAny()
                 .isEmpty()
         )
@@ -360,7 +360,7 @@ public class MazeGraph {
                 .keySet()
                 .stream()
                 .filter(point2D -> point2D.getY() == point.getY())
-                .filter(point2D -> point2D.getX() < point.getX())
+                .filter(point2D -> point2D.getX() < point.getX() + maxOffset)
                 .max(Comparator.comparing(Point2D::getX))
                 .orElse(point);
     }
