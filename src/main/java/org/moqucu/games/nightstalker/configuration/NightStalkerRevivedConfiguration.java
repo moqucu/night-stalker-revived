@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.configuration;
 
 import javafx.stage.Stage;
+import org.moqucu.games.nightstalker.view.SpringFXMLLoader;
 import org.moqucu.games.nightstalker.view.StageManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

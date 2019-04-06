@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.view.movable;
+package org.moqucu.games.nightstalker.sprite;
 
 import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
@@ -22,29 +22,36 @@ import java.util.*;
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class ManuallyMovedSprite extends MovableSprite {
+public abstract class ManuallyMovableSprite extends MovableSprite {
 
     private static final double MAX_OFFSET = 8.0;
 
     private Path path = new Path();
 
-    Duration duration = new Duration(0);
+    Duration duration = Duration.ZERO;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private final DoubleProperty maxOffset = new SimpleDoubleProperty(MAX_OFFSET);
 
     @SneakyThrows
-    ManuallyMovedSprite() {
+    protected ManuallyMovableSprite() {
 
         super();
+        moveAnimation = new PathTransition();
+        moveAnimation.setCycleCount(1);
+        getMoveAnimation().setNode(this);
+        getMoveAnimation().setInterpolator(Interpolator.LINEAR);
     }
 
-    void computePathTransitionBasedOnStartingPointAndDirection(
-            Point2D startingPoint,
-            KeyCode direction,
-            EventHandler<ActionEvent> finishedEventHandler
-    ) {
+    protected void setOnFinished(EventHandler<ActionEvent> finishedActionEventHandler) {
+
+        moveAnimation.setOnFinished(finishedActionEventHandler);
+    }
+
+    protected void computePathTransitionBasedOnDirection(KeyCode direction) {
+
+        Point2D startingPoint = getCurrentNode();
 
         resetPath();
 
@@ -84,27 +91,13 @@ public abstract class ManuallyMovedSprite extends MovableSprite {
         } else
             linePathTo(furthestReachableNodeInDirection);
 
-        moveAnimation = createTransitionFromPathAndInitializeIt(
-                duration,
-                path,
-                this,
-                finishedEventHandler
-        );
+        updateMoveAnimationWithNewPathAndDuration();
     }
 
-    private PathTransition createTransitionFromPathAndInitializeIt(
-            Duration duration,
-            Path path,
-            ManuallyMovedSprite manuallyMovedSprite,
-            EventHandler<ActionEvent> finishedEventHandler
-    ) {
+    private void updateMoveAnimationWithNewPathAndDuration() {
 
-        PathTransition pathTransition = new PathTransition(duration, path, manuallyMovedSprite);
-        pathTransition.setCycleCount(1);
-        pathTransition.setInterpolator(Interpolator.LINEAR);
-        pathTransition.setOnFinished(finishedEventHandler);
-
-        return pathTransition;
+        getMoveAnimation().setPath(path);
+        getMoveAnimation().setDuration(duration);
     }
 
     private boolean nodeSupportsMovementToDirection(Point2D node, KeyCode direction) {
@@ -150,10 +143,10 @@ public abstract class ManuallyMovedSprite extends MovableSprite {
                         .keySet()
                         .stream()
                         .filter(key ->
-                            !getMazeGraph().getFurthestReachableNode(
-                                    distanceToClosestNeighboringNodes.get(key),
-                                    direction
-                            ).equals(distanceToClosestNeighboringNodes.get(key)))
+                                !getMazeGraph().getFurthestReachableNode(
+                                        distanceToClosestNeighboringNodes.get(key),
+                                        direction
+                                ).equals(distanceToClosestNeighboringNodes.get(key)))
                         .min(Comparator.comparing(Double::doubleValue))
                         .orElse(Double.MAX_VALUE) // starting point is reachable via Double.MAX_VALUE
         );
@@ -206,9 +199,9 @@ public abstract class ManuallyMovedSprite extends MovableSprite {
 
         Point2D currentPathPoint;
         if (currentPathElement instanceof MoveTo)
-            currentPathPoint = new Point2D(((MoveTo)currentPathElement).getX(), ((MoveTo)currentPathElement).getY());
+            currentPathPoint = new Point2D(((MoveTo) currentPathElement).getX(), ((MoveTo) currentPathElement).getY());
         else
-            currentPathPoint = new Point2D(((LineTo)currentPathElement).getX(), ((LineTo)currentPathElement).getY());
+            currentPathPoint = new Point2D(((LineTo) currentPathElement).getX(), ((LineTo) currentPathElement).getY());
 
         return currentPathPoint;
     }
@@ -226,6 +219,12 @@ public abstract class ManuallyMovedSprite extends MovableSprite {
             default:
                 return new HashSet<>();
         }
+    }
+
+
+    public PathTransition getMoveAnimation() {
+
+        return (PathTransition) moveAnimation;
     }
 
     @SuppressWarnings("unused")

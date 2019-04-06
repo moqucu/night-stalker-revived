@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.view;
+package org.moqucu.games.nightstalker.sprite;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

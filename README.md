@@ -197,7 +197,7 @@ The great Intellivision gameLoop revived as a Java gameLoop
 
 -   Everyone to read chapter 4 of Java Games book
 
-## 2017-04-27: Night Stalker - org.moqucu.games.nightstalker.GameLoop Engine
+## 2017-04-27: Night Stalker - org.moqucu.games.nightstalker.controller.GameLoop Engine
 
 ### **Objectives**
 
@@ -211,7 +211,7 @@ The great Intellivision gameLoop revived as a Java gameLoop
 
 -   High-level discussion on gameLoop engine alternatives
 
-    -   org.moqucu.games.nightstalker.GameLoop engine controls everything
+    -   org.moqucu.games.nightstalker.controller.GameLoop engine controls everything
 
     -   Objects control everything, bound together by gameLoop engine
 

@@ -1,12 +1,11 @@
-package org.moqucu.games.nightstalker.view;
+package org.moqucu.games.nightstalker.sprite;
 
 import javafx.animation.Animation;
 import javafx.beans.property.*;
 import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.CustomTransition;
-import org.moqucu.games.nightstalker.model.Indices;
+import org.moqucu.games.nightstalker.utility.CustomTransition;
 
 import static javafx.animation.Animation.INDEFINITE;
 
@@ -15,6 +14,14 @@ import static javafx.animation.Animation.INDEFINITE;
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
 public abstract class AnimatedSprite extends Sprite {
+
+    @Data
+    @Builder
+    static protected class Indices {
+
+        private int lower;
+        private int upper;
+    }
 
     private Animation animation;
 
@@ -34,7 +41,6 @@ public abstract class AnimatedSprite extends Sprite {
     protected AnimatedSprite() {
 
         super();
-
         frameIndices = wrapIndicesInObjectProperty(Indices.builder().lower(0).upper(0).build());
     }
 
@@ -143,9 +149,9 @@ public abstract class AnimatedSprite extends Sprite {
         setViewport(getViewport(Long.valueOf(Math.round(indexAsDouble)).intValue()));
     }
 
-    protected void startAnimatingMe() {
+    protected void animateMeFromStart() {
 
-        animation.setOnFinished(event -> startAnimatingMe());
+        animation.setOnFinished(event -> animateMeFromStart());
         animation.playFromStart();
     }
 

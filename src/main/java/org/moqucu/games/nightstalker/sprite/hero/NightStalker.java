@@ -1,6 +1,5 @@
-package org.moqucu.games.nightstalker.view.movable;
+package org.moqucu.games.nightstalker.sprite.hero;
 
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lombok.SneakyThrows;
@@ -8,11 +7,13 @@ import lombok.extern.log4j.Log4j2;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.model.Indices;
 import org.moqucu.games.nightstalker.model.MazeGraph;
-import org.moqucu.games.nightstalker.view.AnimatedSprite;
-import org.moqucu.games.nightstalker.view.Updatable;
-import org.moqucu.games.nightstalker.view.immovable.Weapon;
+import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.ManuallyMovableSprite;
+import org.moqucu.games.nightstalker.sprite.object.Weapon;
+import org.moqucu.games.nightstalker.sprite.enemy.Bat;
+import org.moqucu.games.nightstalker.sprite.enemy.Spider;
+import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
@@ -28,7 +29,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @Data
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class NightStalker extends ManuallyMovedSprite implements Updatable {
+public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
     enum States {Awake, MovingLeft, MovingRight, MovingVertically, Fainting}
 
@@ -81,18 +82,19 @@ public class NightStalker extends ManuallyMovedSprite implements Updatable {
                     case MovingRight:
                     case MovingVertically:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-                        startAnimatingMe();
-                        startMovingMe();
+                        animateMeFromStart();
+                        moveMeFromStart();
                         break;
                     case Fainting:
                         log.debug("fainting...");
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-                        startAnimatingMe();
+                        animateMeFromStart();
                         break;
                 }
             }
         });
         stateMachine.start();
+        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
     }
 
     @SneakyThrows
@@ -168,20 +170,13 @@ public class NightStalker extends ManuallyMovedSprite implements Updatable {
         if (stateMachine.getState().getId() != States.Awake)
             return;
 
-        Point2D point = getCurrentNode();
-        log.debug("Current point: {}", point);
-
         switch (keyEvent.getCode()) {
 
             case UP:
             case DOWN:
             case LEFT:
             case RIGHT:
-                computePathTransitionBasedOnStartingPointAndDirection(
-                        point,
-                        keyEvent.getCode(),
-                        actionEvent -> stateMachine.sendEvent(Events.stop)
-                );
+                computePathTransitionBasedOnDirection(keyEvent.getCode());
                 translateKeyCodeDirectionToStateMachineEvent(keyEvent.getCode());
                 break;
             case Q:
@@ -226,12 +221,7 @@ public class NightStalker extends ManuallyMovedSprite implements Updatable {
     }
 
     @Override
-    public void update(
-            double deltaTimeSinceStart,
-            double deltaTime,
-            Set<KeyCode> input,
-            Set<AnimatedSprite> nearbySprites
-    ) {
+    public void detectCollision(Set<AnimatedSprite> nearbySprites) {
 
         nearbySprites.forEach(animatedSprite -> {
 

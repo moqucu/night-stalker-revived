@@ -3,7 +3,7 @@ package org.moqucu.games.nightstalker.model;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import lombok.Getter;
-import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.sprite.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;

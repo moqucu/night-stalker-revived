@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.configuration;
+package org.moqucu.games.nightstalker.view;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

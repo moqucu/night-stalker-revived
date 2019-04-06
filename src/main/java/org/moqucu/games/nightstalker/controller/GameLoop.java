@@ -1,10 +1,12 @@
-package org.moqucu.games.nightstalker;
+package org.moqucu.games.nightstalker.controller;
 
 import javafx.animation.AnimationTimer;
+import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.view.Maze;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+@Log4j2
 public class GameLoop {
 
     private final long startNanoTime = System.nanoTime();
@@ -23,13 +25,11 @@ public class GameLoop {
                 double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000000.0;
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
 
-                maze.getAllUpdatableSprites().forEach(
-                        updatableSprite -> updatableSprite.update(
-                                deltaTimeSinceStart,
-                                deltaTime,
-                                null,
-                                maze.getAllAnimatedSprites()
-                        )
+                log.trace("Delta time since start: {}", deltaTimeSinceStart);
+                log.trace("Delta time sincle last call: {}", deltaTime);
+
+                maze.getAllHittableSprites().forEach(
+                        updatableSprite -> updatableSprite.detectCollision(maze.getAllAnimatedSprites())
                 );
             }
         };

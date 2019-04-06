@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.view.movable;
+package org.moqucu.games.nightstalker.sprite;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -12,11 +12,11 @@ import lombok.extern.log4j.Log4j2;
 @SuppressWarnings("unused")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class SleepingSprite extends ArtificiallyMovedSprite {
+public abstract class SleepingSprite extends ArtificiallyMovableSprite {
 
     private final LongProperty sleepTineInMillis = new SimpleLongProperty(1000L);
 
-    SleepingSprite() {
+    protected SleepingSprite() {
 
         super();
     }
@@ -31,7 +31,7 @@ public abstract class SleepingSprite extends ArtificiallyMovedSprite {
         this.sleepTineInMillis.set(sleepTimeInMillis);
     }
 
-    LongProperty sleepTimeInMillisProperty() {
+    protected LongProperty sleepTimeInMillisProperty() {
 
         return sleepTineInMillis;
     }

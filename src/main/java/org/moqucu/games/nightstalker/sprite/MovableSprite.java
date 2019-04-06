@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.view.movable;
+package org.moqucu.games.nightstalker.sprite;
 
 import javafx.animation.Animation;
 import javafx.beans.property.DoubleProperty;
@@ -8,10 +8,6 @@ import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.MazeGraph;
-import org.moqucu.games.nightstalker.view.AnimatedSprite;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Log4j2
@@ -31,12 +27,12 @@ public abstract class MovableSprite extends AnimatedSprite {
         super();
     }
 
-    void startMovingMe() {
+    protected void moveMeFromStart() {
 
-        moveAnimation.play();
+        moveAnimation.playFromStart();
     }
 
-    void stopMovingMe() {
+    protected void stopMovingMe() {
 
         moveAnimation.stop();
     }
@@ -57,11 +53,6 @@ public abstract class MovableSprite extends AnimatedSprite {
     double deltaY(Point2D currentNode, Point2D nextNode) {
 
         return nextNode.subtract(currentNode).getY();
-    }
-
-    ArrayList<Point2D> getAdjacentNodes(Point2D currentNode) {
-
-        return new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
     }
 
     Point2D getCurrentNode() {

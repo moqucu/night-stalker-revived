@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.view.movable;
+package org.moqucu.games.nightstalker.sprite.enemy;
 
 import javafx.scene.image.Image;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Indices;
+import org.moqucu.games.nightstalker.sprite.SleepingSprite;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -55,6 +55,7 @@ public class Bat extends SleepingSprite {
         });
 
         configureAndStartStateMachine();
+        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
     }
 
     private void stopAndDeconstructStateMachine() {
@@ -116,13 +117,13 @@ public class Bat extends SleepingSprite {
     private void wokeUp(StateContext stateContext) {
 
         log.debug("wokeUp: {}", stateContext);
-        startAnimatingMe();
+        animateMeFromStart();
     }
 
     private void startedToMove(StateContext stateContext) {
 
         log.debug("startedToMove: {}", stateContext);
-        computeNextMoveAnimationBasedOnRandomDirection(actionEvent -> stateMachine.sendEvent(Events.stop));
-        startMovingMe();
+        computeNextMoveAnimationBasedOnRandomDirection();
+        moveMeFromStart();
     }
 }

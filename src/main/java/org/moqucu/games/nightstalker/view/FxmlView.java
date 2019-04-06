@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.controller;
+package org.moqucu.games.nightstalker.view;
 
 import java.util.ResourceBundle;
 
