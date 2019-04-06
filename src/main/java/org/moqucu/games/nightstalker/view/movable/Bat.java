@@ -1,6 +1,5 @@
 package org.moqucu.games.nightstalker.view.movable;
 
-import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,8 +7,6 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Indices;
-import org.moqucu.games.nightstalker.model.MazeGraph;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -31,11 +28,10 @@ public class Bat extends SleepingSprite {
 
     private enum Events {wakeUp, move, stop}
 
-    private MazeGraph mazeGraph;
-
     private StateMachine<States, Events> stateMachine;
 
-    private StateMachineListener<States, Events> stateMachineListener = new StateMachineListenerAdapter<>() {
+    private StateMachineListener<States, Events> stateMachineListener
+            = new StateMachineListenerAdapter<>() {
 
         @Override
         public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
@@ -120,26 +116,13 @@ public class Bat extends SleepingSprite {
     private void wokeUp(StateContext stateContext) {
 
         log.debug("wokeUp: {}", stateContext);
-        playAnimation();
+        startAnimatingMe();
     }
 
     private void startedToMove(StateContext stateContext) {
 
         log.debug("startedToMove: {}", stateContext);
-        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Bat.Events.stop));
-        animation.play();
-    }
-
-    @SneakyThrows
-    protected MazeGraph getMazeGraph() {
-
-        if (mazeGraph == null)
-            mazeGraph = new MazeGraph(
-                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
-                            .getInputStream())
-            );
-
-        return mazeGraph;
+        computeNextMoveAnimationBasedOnRandomDirection(actionEvent -> stateMachine.sendEvent(Events.stop));
+        startMovingMe();
     }
 }

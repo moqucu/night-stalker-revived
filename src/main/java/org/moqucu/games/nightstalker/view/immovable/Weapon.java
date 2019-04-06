@@ -73,7 +73,7 @@ public class Weapon extends AnimatedSprite {
             }
         });
         stateMachine.start();
-        playAnimation();
+        startAnimatingMe();
     }
 
     @SneakyThrows

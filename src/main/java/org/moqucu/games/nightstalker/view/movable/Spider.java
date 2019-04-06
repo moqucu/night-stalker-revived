@@ -1,6 +1,5 @@
 package org.moqucu.games.nightstalker.view.movable;
 
-import javafx.animation.Animation;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.Data;
@@ -8,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Indices;
-import org.moqucu.games.nightstalker.model.MazeGraph;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -31,14 +28,10 @@ public class Spider extends ArtificiallyMovedSprite {
 
     private StateMachine<States, Events> stateMachine;
 
-    private MazeGraph mazeGraph;
-
     private Map<States, Indices> frameBoundaries = Map.of(
             States.movingVertically, Indices.builder().lower(1).upper(2).build(),
             States.movingHorizontally, Indices.builder().lower(3).upper(4).build()
     );
-
-    private Animation animation;
 
     public Spider() {
 
@@ -60,8 +53,9 @@ public class Spider extends ArtificiallyMovedSprite {
                 switch (transition.getTarget().getId()) {
 
                     case awake:
-                        animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-                        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                        computeNextMoveAnimationBasedOnRandomDirection(
+                                actionEvent -> stateMachine.sendEvent(Events.stop)
+                        );
                         Point2D deltaNode = getNextNode().subtract(getPreviousNode());
                         if (deltaNode.getX() != 0)
                             stateMachine.sendEvent(Events.moveHorizontally);
@@ -71,7 +65,7 @@ public class Spider extends ArtificiallyMovedSprite {
                     case movingHorizontally:
                     case movingVertically:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-                        animation.play();
+                        startMovingMe();
                         break;
                 }
             }
@@ -126,19 +120,7 @@ public class Spider extends ArtificiallyMovedSprite {
     private void timeToWakeUp(StateContext stateContext) {
 
         log.debug("timeToWakeUp: {}", stateContext);
-        playAnimation();
+        startAnimatingMe();
         stateMachine.sendEvent(Events.wakeUp);
-    }
-
-    @SneakyThrows
-    protected MazeGraph getMazeGraph() {
-
-        if (mazeGraph == null)
-            mazeGraph = new MazeGraph(
-                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
-                            .getInputStream())
-            );
-
-        return mazeGraph;
     }
 }

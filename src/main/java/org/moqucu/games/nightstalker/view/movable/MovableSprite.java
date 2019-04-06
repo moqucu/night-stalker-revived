@@ -1,5 +1,6 @@
 package org.moqucu.games.nightstalker.view.movable;
 
+import javafx.animation.Animation;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -18,8 +19,7 @@ import java.util.List;
 @ToString(callSuper = true)
 public abstract class MovableSprite extends AnimatedSprite {
 
-    private Point2D previousNode = null;
-    private Point2D nextNode = null;
+    protected Animation moveAnimation;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -29,6 +29,16 @@ public abstract class MovableSprite extends AnimatedSprite {
     MovableSprite() {
 
         super();
+    }
+
+    void startMovingMe() {
+
+        moveAnimation.play();
+    }
+
+    void stopMovingMe() {
+
+        moveAnimation.stop();
     }
 
     Duration calculateDurationAtConfiguredVelocity(Point2D currentNode, Point2D nextNode) {

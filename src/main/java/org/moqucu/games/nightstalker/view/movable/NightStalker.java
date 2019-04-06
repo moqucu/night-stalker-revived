@@ -1,6 +1,5 @@
 package org.moqucu.games.nightstalker.view.movable;
 
-import javafx.animation.Animation;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -49,8 +48,6 @@ public class NightStalker extends ManuallyMovedSprite implements Updatable {
 
     private Weapon weapon = null;
 
-    private Animation translateAnimation;
-
     @SneakyThrows
     public NightStalker() {
 
@@ -77,20 +74,20 @@ public class NightStalker extends ManuallyMovedSprite implements Updatable {
 
                     case Awake:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-                        translateAnimation.stop();
-                        stopAnimation();
+                        stopMovingMe();
+                        stopAnimatingMe();
                         break;
                     case MovingLeft:
                     case MovingRight:
                     case MovingVertically:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-                        playAnimation();
-                        translateAnimation.play();
+                        startAnimatingMe();
+                        startMovingMe();
                         break;
                     case Fainting:
                         log.debug("fainting...");
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-                        playAnimation();
+                        startAnimatingMe();
                         break;
                 }
             }
@@ -180,8 +177,11 @@ public class NightStalker extends ManuallyMovedSprite implements Updatable {
             case DOWN:
             case LEFT:
             case RIGHT:
-                translateAnimation = calculatePathTransition(point, keyEvent.getCode());
-                translateAnimation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
+                computePathTransitionBasedOnStartingPointAndDirection(
+                        point,
+                        keyEvent.getCode(),
+                        actionEvent -> stateMachine.sendEvent(Events.stop)
+                );
                 translateKeyCodeDirectionToStateMachineEvent(keyEvent.getCode());
                 break;
             case Q:

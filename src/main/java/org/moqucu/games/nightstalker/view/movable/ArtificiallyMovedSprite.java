@@ -1,11 +1,14 @@
 package org.moqucu.games.nightstalker.view.movable;
 
-import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.MazeGraph;
+import org.springframework.core.io.ClassPathResource;
 
 import java.util.List;
 import java.util.Random;
@@ -16,8 +19,12 @@ import java.util.Random;
 @ToString(callSuper = true)
 abstract class ArtificiallyMovedSprite extends MovableSprite {
 
+    private MazeGraph enemyMazeGraph;
+
+    private Point2D previousNode = null;
+    private Point2D nextNode = null;
+
     private Random random = new Random();
-    private Animation translateTransition;
 
     @SneakyThrows
     ArtificiallyMovedSprite() {
@@ -25,23 +32,20 @@ abstract class ArtificiallyMovedSprite extends MovableSprite {
         super();
     }
 
-    Animation prepareAnimationForMovingSpriteRandomlyAlongMazeGraph() {
+    void computeNextMoveAnimationBasedOnRandomDirection(EventHandler<ActionEvent> finishedEventHandler) {
 
         Point2D currentNode = getCurrentNode();
-        log.debug("current coordinates: {}, {}", getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
-        log.debug("Adjacency list: {} {}", getMazeGraph(), getMazeGraph().getAdjacencyList().get(currentNode));
 
         List<Point2D> adjacentNodes = getAdjacentNodes(currentNode);
 
-        if (getPreviousNode() != null && adjacentNodes.size() > 1)
-            adjacentNodes.remove(getPreviousNode());
-        setPreviousNode(currentNode);
+        if (previousNode != null && adjacentNodes.size() > 1)
+            adjacentNodes.remove(previousNode);
+        previousNode = currentNode;
 
-        setNextNode(adjacentNodes.get(random.nextInt(adjacentNodes.size())));
+        nextNode = adjacentNodes.get(random.nextInt(adjacentNodes.size()));
 
-        translateTransition = calculateTranslateTransition(currentNode, getNextNode());
-
-        return translateTransition;
+        moveAnimation = calculateTranslateTransition(currentNode, nextNode);
+        moveAnimation.setOnFinished(finishedEventHandler);
     }
 
     private TranslateTransition calculateTranslateTransition(Point2D currentNode, Point2D nextNode) {
@@ -58,5 +62,17 @@ abstract class ArtificiallyMovedSprite extends MovableSprite {
         translateTransition.setCycleCount(1);
 
         return translateTransition;
+    }
+
+    @SneakyThrows
+    protected MazeGraph getMazeGraph() {
+
+        if (enemyMazeGraph == null)
+            enemyMazeGraph = new MazeGraph(
+                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
+                            .getInputStream())
+            );
+
+        return enemyMazeGraph;
     }
 }

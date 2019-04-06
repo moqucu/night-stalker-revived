@@ -143,13 +143,13 @@ public abstract class AnimatedSprite extends Sprite {
         setViewport(getViewport(Long.valueOf(Math.round(indexAsDouble)).intValue()));
     }
 
-    protected void playAnimation() {
+    protected void startAnimatingMe() {
 
-        animation.setOnFinished(event -> playAnimation());
+        animation.setOnFinished(event -> startAnimatingMe());
         animation.playFromStart();
     }
 
-    protected void stopAnimation() {
+    protected void stopAnimatingMe() {
 
         animation.setOnFinished(null);
         animation.stop();
