@@ -1,9 +1,9 @@
-package org.moqucu.games.nightstalker.view.immovable;
+package org.moqucu.games.nightstalker.sprite.background;
 
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.sprite.Sprite;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 

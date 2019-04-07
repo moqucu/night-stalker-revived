@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.GameLoop;
+import org.moqucu.games.nightstalker.view.FxmlView;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.moqucu.games.nightstalker.view.StageManager;
 import org.springframework.beans.factory.annotation.Autowired;

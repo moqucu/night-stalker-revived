@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
-import org.moqucu.games.nightstalker.controller.FxmlView;
+import org.moqucu.games.nightstalker.view.FxmlView;
 import org.moqucu.games.nightstalker.view.StageManager;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

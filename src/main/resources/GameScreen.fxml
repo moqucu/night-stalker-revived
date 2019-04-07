@@ -4,19 +4,19 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.image.Image?>
-<?import org.moqucu.games.nightstalker.view.immovable.SolidBunker?>
-<?import org.moqucu.games.nightstalker.view.immovable.Bunker?>
-<?import org.moqucu.games.nightstalker.view.immovable.HalfSolidBunker?>
+<?import org.moqucu.games.nightstalker.sprite.background.SolidBunker?>
+<?import org.moqucu.games.nightstalker.sprite.background.Bunker?>
+<?import org.moqucu.games.nightstalker.sprite.background.HalfSolidBunker?>
 <?import org.moqucu.games.nightstalker.view.Maze?>
-<?import org.moqucu.games.nightstalker.view.immovable.Wall?>
-<?import org.moqucu.games.nightstalker.view.immovable.HallWay?>
+<?import org.moqucu.games.nightstalker.sprite.background.Wall?>
+<?import org.moqucu.games.nightstalker.sprite.background.HallWay?>
 
-<?import org.moqucu.games.nightstalker.view.immovable.SpiderWeb?>
-<?import org.moqucu.games.nightstalker.view.immovable.Weapon?>
-<?import org.moqucu.games.nightstalker.view.movable.NightStalker?>
-<?import org.moqucu.games.nightstalker.view.movable.GreyRobot?>
-<?import org.moqucu.games.nightstalker.view.movable.Spider?>
-<?import org.moqucu.games.nightstalker.view.movable.Bat?>
+<?import org.moqucu.games.nightstalker.sprite.background.SpiderWeb?>
+<?import org.moqucu.games.nightstalker.sprite.object.Weapon?>
+<?import org.moqucu.games.nightstalker.sprite.hero.NightStalker?>
+<?import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot?>
+<?import org.moqucu.games.nightstalker.sprite.enemy.Spider?>
+<?import org.moqucu.games.nightstalker.sprite.enemy.Bat?>
 
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"

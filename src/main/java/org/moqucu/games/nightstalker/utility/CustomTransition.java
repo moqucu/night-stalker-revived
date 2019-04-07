@@ -1,10 +1,10 @@
-package org.moqucu.games.nightstalker.model;
+package org.moqucu.games.nightstalker.utility;
 
 import javafx.animation.Transition;
 import javafx.util.Duration;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.view.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 
 import java.lang.reflect.Method;
 

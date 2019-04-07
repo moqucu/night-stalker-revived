@@ -1,12 +1,11 @@
-package org.moqucu.games.nightstalker.view.immovable;
+package org.moqucu.games.nightstalker.sprite.object;
 
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Indices;
-import org.moqucu.games.nightstalker.view.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
@@ -73,7 +72,7 @@ public class Weapon extends AnimatedSprite {
             }
         });
         stateMachine.start();
-        playAnimation();
+        animateMeFromStart();
     }
 
     @SneakyThrows

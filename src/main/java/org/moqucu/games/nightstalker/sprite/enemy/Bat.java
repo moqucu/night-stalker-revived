@@ -1,41 +1,37 @@
-package org.moqucu.games.nightstalker.view.movable;
+package org.moqucu.games.nightstalker.sprite.enemy;
 
-import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Indices;
-import org.moqucu.games.nightstalker.model.MazeGraph;
-import org.springframework.core.io.ClassPathResource;
+import org.moqucu.games.nightstalker.sprite.SleepingSprite;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
-import java.util.EnumSet;
+import java.util.*;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @Log4j2
-@ToString(callSuper = true)
 @SuppressWarnings("unused")
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GreyRobot extends SleepingSprite {
+public class Bat extends SleepingSprite {
 
     private enum States {asleep, awake, moving}
 
     private enum Events {wakeUp, move, stop}
 
-    private MazeGraph mazeGraph;
-
     private StateMachine<States, Events> stateMachine;
 
-    private StateMachineListener<States, Events> stateMachineListener = new StateMachineListenerAdapter<>() {
+    private StateMachineListener<States, Events> stateMachineListener
+            = new StateMachineListenerAdapter<>() {
 
         @Override
         public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
@@ -45,14 +41,12 @@ public class GreyRobot extends SleepingSprite {
         }
     };
 
-    public GreyRobot() {
+    public Bat() {
 
         super();
 
-        setImage(new Image(translate("images/grey-robot.png")));
-
-        setAutoReversible(false);
-        setFrameIndices(Indices.builder().lower(1).upper(2).build());
+        setImage(new Image(translate("images/bat.png")));
+        setFrameIndices(Indices.builder().lower(1).upper(5).build());
 
         sleepTimeInMillisProperty().addListener((observableValue, number, t1) -> {
 
@@ -61,6 +55,7 @@ public class GreyRobot extends SleepingSprite {
         });
 
         configureAndStartStateMachine();
+        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
     }
 
     private void stopAndDeconstructStateMachine() {
@@ -78,20 +73,20 @@ public class GreyRobot extends SleepingSprite {
     }
 
     @SneakyThrows
-    private StateMachine<GreyRobot.States, GreyRobot.Events> buildStateMachine() {
+    private StateMachine<States, Events> buildStateMachine() {
 
-        StateMachineBuilder.Builder<GreyRobot.States, GreyRobot.Events> builder = StateMachineBuilder.builder();
+        StateMachineBuilder.Builder<States, Events> builder = StateMachineBuilder.builder();
 
         builder.configureStates()
                 .withStates()
                 .initial(States.asleep)
-                .states(EnumSet.allOf(GreyRobot.States.class));
+                .states(EnumSet.allOf(States.class));
 
         builder.configureTransitions()
                 .withInternal()
                 .source(States.asleep)
                 .action(this::timeToWakeUp)
-                .timerOnce(1000)
+                .timerOnce(getSleepTimeInMillis())
                 .and()
                 .withExternal()
                 .source(States.asleep)
@@ -122,26 +117,13 @@ public class GreyRobot extends SleepingSprite {
     private void wokeUp(StateContext stateContext) {
 
         log.debug("wokeUp: {}", stateContext);
-        playAnimation();
+        animateMeFromStart();
     }
 
     private void startedToMove(StateContext stateContext) {
 
         log.debug("startedToMove: {}", stateContext);
-        Animation animation = prepareAnimationForMovingSpriteRandomlyAlongMazeGraph();
-        animation.setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-        animation.play();
-    }
-
-    @SneakyThrows
-    protected MazeGraph getMazeGraph() {
-
-        if (mazeGraph == null)
-            mazeGraph = new MazeGraph(
-                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
-                            .getInputStream())
-            );
-
-        return mazeGraph;
+        computeNextMoveAnimationBasedOnRandomDirection();
+        moveMeFromStart();
     }
 }

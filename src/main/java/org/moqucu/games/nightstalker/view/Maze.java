@@ -6,6 +6,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Hittable;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -19,7 +21,7 @@ public class Maze extends StackPane {
 
     private final ConcurrentMap<AnimatedSprite, AnimatedSprite> animatedSprites = new ConcurrentHashMap<>();
 
-    private final ConcurrentMap<Updatable, Updatable> updatableSprites = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Hittable, Hittable> updatableSprites = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public Maze() {
@@ -51,10 +53,10 @@ public class Maze extends StackPane {
 
                     ((Pane) addedPane)
                             .getChildren()
-                            .filtered(node -> node instanceof Updatable)
+                            .filtered(node -> node instanceof Hittable)
                             .forEach(sprite -> {
 
-                                updatableSprites.putIfAbsent((Updatable) sprite, (Updatable) sprite);
+                                updatableSprites.putIfAbsent((Hittable) sprite, (Hittable) sprite);
                                 log.debug(
                                         "Added updatable sprite of type {} to set.",
                                         sprite.getClass().getName()
@@ -74,9 +76,9 @@ public class Maze extends StackPane {
                                 );
                             }
 
-                            if (addedChild instanceof Updatable) {
+                            if (addedChild instanceof Hittable) {
 
-                                updatableSprites.putIfAbsent((Updatable) addedChild, (Updatable) addedChild);
+                                updatableSprites.putIfAbsent((Hittable) addedChild, (Hittable) addedChild);
                                 log.debug(
                                         "Added updatable sprite of type {} to set.",
                                         addedChild.getClass().getName()
@@ -94,7 +96,7 @@ public class Maze extends StackPane {
         return animatedSprites.keySet();
     }
 
-    public Set<Updatable> getAllUpdatableSprites() {
+    public Set<Hittable> getAllHittableSprites() {
 
         return updatableSprites.keySet();
     }
