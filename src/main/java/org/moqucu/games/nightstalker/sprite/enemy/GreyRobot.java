@@ -24,7 +24,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class GreyRobot extends SleepingSprite {
 
-    private enum States {asleep, awake, moving}
+    private enum States {Asleep, Awake, SlowlyMoving, FastMoving}
 
     private enum Events {wakeUp, move, stop}
 
@@ -35,7 +35,7 @@ public class GreyRobot extends SleepingSprite {
         @Override
         public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
-            if (transition.getTarget().getId().equals(States.awake))
+            if (transition.getTarget().getId().equals(States.Awake))
                 stateMachine.sendEvent(Events.move);
         }
     };
@@ -80,33 +80,44 @@ public class GreyRobot extends SleepingSprite {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.asleep)
+                .initial(States.Asleep)
                 .states(EnumSet.allOf(GreyRobot.States.class));
 
         builder.configureTransitions()
                 .withInternal()
-                .source(States.asleep)
+                .source(States.Asleep)
                 .action(this::timeToWakeUp)
                 .timerOnce(1000)
                 .and()
                 .withExternal()
-                .source(States.asleep)
+                .source(States.Asleep)
                 .action(this::wokeUp)
-                .target(States.awake)
+                .target(States.Awake)
                 .event(Events.wakeUp)
                 .and()
                 .withExternal()
-                .source(States.awake)
-                .target(States.moving)
+                .source(States.Awake)
+                .target(States.SlowlyMoving)
                 .action(this::startedToMove)
                 .event(Events.move)
                 .and()
+                .withInternal()
+                .source(States.SlowlyMoving)
+                .action(this::timeToMoveFaster)
+                .timerOnce(4000)
+                .and()
                 .withExternal()
-                .source(States.moving)
-                .target(States.awake)
-                .event(Events.stop);
+                .source(States.SlowlyMoving)
+                .target(States.FastMoving)
+                .event(Events.move);
 
         return builder.build();
+    }
+
+    private void timeToMoveFaster(StateContext stateContext) {
+
+        log.debug("timeToMoveFaster: {}", stateContext);
+        stateMachine.sendEvent(Events.move);
     }
 
     private void timeToWakeUp(StateContext stateContext) {

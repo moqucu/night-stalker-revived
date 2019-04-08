@@ -36,9 +36,29 @@
         </Pane>
         <Pane>
             <Spider translateX="32.0" translateY="32.0" frameDurationInMillis="200"/>
-            <GreyRobot translateX="32.0" translateY="320.0"/>
-            <Bat translateX="544.0" translateY="96" sleepTimeInMillis="2500" frameDurationInMillis="50" velocity="70"/>
-            <Bat translateX="480.0" translateY="224" sleepTimeInMillis="5000" frameDurationInMillis="200"/>
+            <GreyRobot
+                    translateX="48.0"
+                    translateY="320.0"
+                    autoReversible="false"
+                    frameDurationInMillis="100"
+                    velocity="25"
+            />
+            <Bat
+                    translateX="528.0"
+                    translateY="96"
+                    sleepTimeInMillis="5000"
+                    autoReversible="false"
+                    frameDurationInMillis="100"
+                    velocity="50"
+            />
+            <Bat
+                    translateX="512.0"
+                    translateY="224"
+                    sleepTimeInMillis="2500"
+                    autoReversible="false"
+                    frameDurationInMillis="100"
+                    velocity="50"
+            />
         </Pane>
         <Pane>
             <NightStalker translateX="288.0" translateY="144.0"/>

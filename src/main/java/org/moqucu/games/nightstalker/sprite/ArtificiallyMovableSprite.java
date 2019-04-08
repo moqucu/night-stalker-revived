@@ -76,7 +76,7 @@ public abstract class ArtificiallyMovableSprite extends MovableSprite {
 
         if (enemyMazeGraph == null)
             enemyMazeGraph = new MazeGraph(
-                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph.json")
+                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph-enemy.json")
                             .getInputStream())
             );
 
