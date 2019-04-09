@@ -13,8 +13,6 @@ import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
-import java.util.EnumSet;
-
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
@@ -24,9 +22,9 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class GreyRobot extends SleepingSprite {
 
-    private enum States {Asleep, Awake, SlowlyMoving, FastMoving}
+    private enum States {Offline, Stopped, Moving, SlowlyMoving, FastMoving}
 
-    private enum Events {wakeUp, move, stop}
+    private enum Events {wakeUp, move, moveFaster, stop}
 
     private StateMachine<States, Events> stateMachine;
 
@@ -35,8 +33,14 @@ public class GreyRobot extends SleepingSprite {
         @Override
         public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
-            if (transition.getTarget().getId().equals(States.Awake))
-                stateMachine.sendEvent(Events.move);
+            switch (transition.getTarget().getId()) {
+                case Stopped:
+                    stateMachine.sendEvent(Events.move);
+                    break;
+                case FastMoving:
+                    setVelocity(50);
+                    break;
+            }
         }
     };
 
@@ -80,26 +84,37 @@ public class GreyRobot extends SleepingSprite {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.Asleep)
-                .states(EnumSet.allOf(GreyRobot.States.class));
+                .initial(States.Offline)
+                .state(States.Stopped)
+                .state(States.Moving)
+                .and()
+                .withStates()
+                .parent(States.Moving)
+                .initial(States.SlowlyMoving)
+                .state(States.FastMoving);
 
         builder.configureTransitions()
                 .withInternal()
-                .source(States.Asleep)
+                .source(States.Offline)
                 .action(this::timeToWakeUp)
                 .timerOnce(1000)
                 .and()
                 .withExternal()
-                .source(States.Asleep)
+                .source(States.Offline)
                 .action(this::wokeUp)
-                .target(States.Awake)
+                .target(States.Stopped)
                 .event(Events.wakeUp)
                 .and()
                 .withExternal()
-                .source(States.Awake)
-                .target(States.SlowlyMoving)
+                .source(States.Stopped)
+                .target(States.Moving)
                 .action(this::startedToMove)
                 .event(Events.move)
+                .and()
+                .withExternal()
+                .source(States.Moving)
+                .target(States.Stopped)
+                .event(Events.stop)
                 .and()
                 .withInternal()
                 .source(States.SlowlyMoving)
@@ -109,7 +124,7 @@ public class GreyRobot extends SleepingSprite {
                 .withExternal()
                 .source(States.SlowlyMoving)
                 .target(States.FastMoving)
-                .event(Events.move);
+                .event(Events.moveFaster);
 
         return builder.build();
     }
@@ -117,7 +132,7 @@ public class GreyRobot extends SleepingSprite {
     private void timeToMoveFaster(StateContext stateContext) {
 
         log.debug("timeToMoveFaster: {}", stateContext);
-        stateMachine.sendEvent(Events.move);
+        stateMachine.sendEvent(Events.moveFaster);
     }
 
     private void timeToWakeUp(StateContext stateContext) {
