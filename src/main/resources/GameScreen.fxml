@@ -61,7 +61,13 @@
             />
         </Pane>
         <Pane>
-            <NightStalker translateX="288.0" translateY="144.0"/>
+            <NightStalker
+                    translateX="288.0"
+                    translateY="144.0"
+                    autoReversible="false"
+                    frameDurationInMillis="200"
+                    velocity="75"
+            />
         </Pane>
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
             <Wall id="org.moqucu.games.nightstalker.maze.00.00"/>

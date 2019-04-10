@@ -31,18 +31,19 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
-    enum States {Awake, MovingLeft, MovingRight, MovingVertically, Fainting}
+    enum States {Alive, Stopped, MovingLeft, MovingRight, MovingVertically, Fainting, Dying}
 
-    enum Events {moveLeft, moveRight, moveVertically, stop, faint, wakeUp}
+    enum Events {moveLeft, moveRight, moveVertically, stop, faint, wakeUp, die}
 
     private StateMachine<States, Events> stateMachine;
 
     private Map<States, Indices> frameBoundaries = Map.of(
-            States.Awake, Indices.builder().lower(0).upper(0).build(),
+            States.Alive, Indices.builder().lower(0).upper(0).build(),
             States.MovingVertically, Indices.builder().lower(1).upper(2).build(),
-            States.MovingRight, Indices.builder().lower(21).upper(28).build(),
+            States.MovingRight, Indices.builder().lower(11).upper(18).build(),
             States.MovingLeft, Indices.builder().lower(3).upper(10).build(),
-            States.Fainting, Indices.builder().lower(19).upper(20).build()
+            States.Fainting, Indices.builder().lower(19).upper(21).build(),
+            States.Dying, Indices.builder().lower(19).upper(21).build()
     );
 
     private MazeGraph mazeGraph;
@@ -55,9 +56,6 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         super();
 
         setImage(new Image(translate("images/night-stalker.png")));
-        setAutoReversible(false);
-        setVelocity(70);
-        setFrameDurationInMillis(200);
 
         setFocusTraversable(true);
         setOnKeyPressed(this::handleKeyPressedEvent);
@@ -73,7 +71,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
                 switch (transition.getTarget().getId()) {
 
-                    case Awake:
+                    case Alive:
                         setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
                         stopMovingMe();
                         stopAnimatingMe();
@@ -104,27 +102,27 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.Awake)
+                .initial(States.Alive)
                 .states(EnumSet.allOf(States.class));
 
         builder.configureTransitions()
                 .withExternal()
-                .source(States.Awake)
+                .source(States.Alive)
                 .target(States.MovingLeft)
                 .event(Events.moveLeft)
                 .and()
                 .withExternal()
                 .source(States.MovingLeft)
-                .target(States.Awake)
+                .target(States.Alive)
                 .event(Events.stop)
                 .and()
                 .withExternal()
-                .source(States.Awake)
+                .source(States.Alive)
                 .target(States.MovingRight)
                 .event(Events.moveRight)
                 .and()
                 .withExternal()
-                .source(States.Awake)
+                .source(States.Alive)
                 .target(States.Fainting)
                 .event(Events.faint)
                 .and()
@@ -135,22 +133,22 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 .and()
                 .withExternal()
                 .source(States.Fainting)
-                .target(States.Awake)
+                .target(States.Alive)
                 .event(Events.wakeUp)
                 .and()
                 .withExternal()
                 .source(States.MovingRight)
-                .target(States.Awake)
+                .target(States.Alive)
                 .event(Events.stop)
                 .and()
                 .withExternal()
-                .source(States.Awake)
+                .source(States.Alive)
                 .target(States.MovingVertically)
                 .event(Events.moveVertically)
                 .and()
                 .withExternal()
                 .source(States.MovingVertically)
-                .target(States.Awake)
+                .target(States.Alive)
                 .event(Events.stop);
 
         return builder.build();
@@ -167,7 +165,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
         log.debug("Key pressed: {}", keyEvent.getCode());
 
-        if (stateMachine.getState().getId() != States.Awake)
+        if (stateMachine.getState().getId() != States.Alive)
             return;
 
         switch (keyEvent.getCode()) {
