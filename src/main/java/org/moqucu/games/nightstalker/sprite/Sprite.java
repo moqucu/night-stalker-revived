@@ -3,6 +3,7 @@ package org.moqucu.games.nightstalker.sprite;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.view.Maze;
 
 @Data
 @Log4j2
@@ -66,5 +68,20 @@ public abstract class Sprite extends ImageView {
     public IntegerProperty stillImageIndexProperty() {
 
         return stillImageIndex;
+    }
+
+    protected Maze getMaze() {
+
+        boolean foundParentOrNothing = false;
+        Parent parent = this.getParent();
+        while (!foundParentOrNothing) {
+
+            if (parent instanceof Maze || parent == null)
+                foundParentOrNothing = true;
+            else
+                parent = parent.getParent();
+        }
+
+        return (Maze)parent;
     }
 }

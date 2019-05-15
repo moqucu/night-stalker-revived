@@ -13,6 +13,7 @@
 
 <?import org.moqucu.games.nightstalker.sprite.background.SpiderWeb?>
 <?import org.moqucu.games.nightstalker.sprite.object.Weapon?>
+<?import org.moqucu.games.nightstalker.sprite.object.Bullet?>
 <?import org.moqucu.games.nightstalker.sprite.hero.NightStalker?>
 <?import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot?>
 <?import org.moqucu.games.nightstalker.sprite.enemy.Spider?>
@@ -33,6 +34,7 @@
     >
         <Pane>
             <Weapon/>
+            <Bullet/>
         </Pane>
         <Pane>
             <Spider translateX="32.0" translateY="32.0" frameDurationInMillis="200"/>

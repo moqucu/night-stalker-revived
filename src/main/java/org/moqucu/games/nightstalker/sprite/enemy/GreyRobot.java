@@ -51,7 +51,7 @@ public class GreyRobot extends SleepingSprite {
         setImage(new Image(translate("images/grey-robot.png")));
 
         setAutoReversible(false);
-        setFrameIndices(Indices.builder().lower(1).upper(2).build());
+        setFrameIndices(Indices.builder().lower(0).upper(1).build());
 
         sleepTimeInMillisProperty().addListener((observableValue, number, t1) -> {
 

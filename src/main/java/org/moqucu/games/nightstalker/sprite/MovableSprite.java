@@ -55,11 +55,6 @@ public abstract class MovableSprite extends AnimatedSprite {
         return nextNode.subtract(currentNode).getY();
     }
 
-    Point2D getCurrentNode() {
-
-        return new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
-    }
-
     protected abstract MazeGraph getMazeGraph();
 
     @SuppressWarnings("WeakerAccess")
@@ -68,7 +63,6 @@ public abstract class MovableSprite extends AnimatedSprite {
         return velocity.get();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setVelocity(double velocity) {
 
         this.velocity.set(velocity);

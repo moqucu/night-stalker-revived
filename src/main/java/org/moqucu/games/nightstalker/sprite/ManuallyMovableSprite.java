@@ -51,7 +51,7 @@ public abstract class ManuallyMovableSprite extends MovableSprite {
 
     protected void computePathTransitionBasedOnDirection(KeyCode direction) {
 
-        Point2D startingPoint = getCurrentNode();
+        Point2D startingPoint = getCurrentLocation();
 
         resetPath();
 

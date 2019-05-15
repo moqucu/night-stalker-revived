@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.sprite;
 
 import javafx.animation.Animation;
 import javafx.beans.property.*;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -159,5 +160,10 @@ public abstract class AnimatedSprite extends Sprite {
 
         animation.setOnFinished(null);
         animation.stop();
+    }
+
+    protected Point2D getCurrentLocation() {
+
+        return new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
     }
 }

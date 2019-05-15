@@ -44,7 +44,7 @@ public abstract class ArtificiallyMovableSprite extends MovableSprite {
 
     protected void computeNextMoveAnimationBasedOnRandomDirection() {
 
-        Point2D currentNode = getCurrentNode();
+        Point2D currentNode = getCurrentLocation();
 
         List<Point2D> adjacentNodes = getAdjacentNodes(currentNode);
 

@@ -1,6 +1,8 @@
 package org.moqucu.games.nightstalker.sprite.object;
 
 import javafx.beans.property.*;
+import javafx.geometry.Point2D;
+import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import lombok.*;
@@ -147,6 +149,9 @@ public class Weapon extends AnimatedSprite {
             numberOfRounds.set(numberOfRounds.get() - 1);
             shootSound.setVolume(0.1f);
             shootSound.play();
+
+            getMaze().getAllBullets().stream().findAny().ifPresent(bullet -> bullet.shot(getCurrentLocation()));
+
         } else
             throw new NoMoreRoundsException();
     }

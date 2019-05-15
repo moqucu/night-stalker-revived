@@ -29,8 +29,8 @@ public class Spider extends ArtificiallyMovableSprite {
     private StateMachine<States, Events> stateMachine;
 
     private Map<States, Indices> frameBoundaries = Map.of(
-            States.movingVertically, Indices.builder().lower(1).upper(2).build(),
-            States.movingHorizontally, Indices.builder().lower(3).upper(4).build()
+            States.movingVertically, Indices.builder().lower(0).upper(1).build(),
+            States.movingHorizontally, Indices.builder().lower(2).upper(3).build()
     );
 
     public Spider() {

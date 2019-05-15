@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.sprite.object.Bullet;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -22,6 +23,8 @@ public class Maze extends StackPane {
     private final ConcurrentMap<AnimatedSprite, AnimatedSprite> animatedSprites = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<Hittable, Hittable> updatableSprites = new ConcurrentHashMap<>();
+
+    private final ConcurrentMap<Bullet, Bullet> bullets = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public Maze() {
@@ -63,6 +66,19 @@ public class Maze extends StackPane {
                                 );
                             });
 
+                    ((Pane) addedPane)
+                            .getChildren()
+                            .filtered(node -> node instanceof Bullet)
+                            .forEach(sprite -> {
+
+                                bullets.putIfAbsent((Bullet) sprite, (Bullet) sprite);
+                                log.debug(
+                                        "Added bullet of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
+
+
                     ((Pane) addedPane).getChildren().addListener((ListChangeListener<Node>) change1 -> {
                         change1.next();
                         change1.getAddedSubList().forEach(addedChild -> {
@@ -84,6 +100,15 @@ public class Maze extends StackPane {
                                         addedChild.getClass().getName()
                                 );
                             }
+
+                            if (addedChild instanceof Bullet) {
+
+                                bullets.putIfAbsent((Bullet) addedChild, (Bullet) addedChild);
+                                log.debug(
+                                        "Added bullet of type {} to set.",
+                                        addedChild.getClass().getName()
+                                );
+                            }
                         });
                     });
                 }
@@ -99,5 +124,10 @@ public class Maze extends StackPane {
     public Set<Hittable> getAllHittableSprites() {
 
         return updatableSprites.keySet();
+    }
+
+    public Set<Bullet> getAllBullets() {
+
+        return bullets.keySet();
     }
 }
