@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.ManuallyMovableSprite;
@@ -49,6 +50,8 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     private MazeGraph mazeGraph;
 
     private Weapon weapon = null;
+
+    private Direction direction;
 
     @SneakyThrows
     public NightStalker() {
@@ -174,6 +177,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             case DOWN:
             case LEFT:
             case RIGHT:
+                setDirectionBasedOnKeyEventCode(keyEvent.getCode());
                 computePathTransitionBasedOnDirection(keyEvent.getCode());
                 translateKeyCodeDirectionToStateMachineEvent(keyEvent.getCode());
                 break;
@@ -182,10 +186,29 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             case SPACE:
                 if (weapon != null)
                     try {
-                        weapon.fire();
+                        weapon.fire(getCurrentLocation(), getDirection());
                     } catch (Weapon.NoMoreRoundsException e) {
                         weapon.tossAway();
                     }
+        }
+    }
+
+    private void setDirectionBasedOnKeyEventCode(KeyCode keyEventCode) {
+
+        switch (keyEventCode) {
+
+            case UP:
+                direction = Direction.Up;
+                break;
+            case DOWN:
+                direction = Direction.Down;
+                break;
+            case LEFT:
+                direction = Direction.Left;
+                break;
+            case RIGHT:
+                direction = Direction.Right;
+                break;
         }
     }
 

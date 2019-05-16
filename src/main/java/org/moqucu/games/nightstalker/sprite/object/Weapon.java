@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.statemachine.StateContext;
@@ -142,7 +143,7 @@ public class Weapon extends AnimatedSprite {
         relocate(randomGunPositions[randomIndex][0] * 32, randomGunPositions[randomIndex][1] * 32);
     }
 
-    public void fire() throws NoMoreRoundsException {
+    public void fire(Point2D currentLocation, Direction direction) throws NoMoreRoundsException {
 
         if (numberOfRounds.get() > 0) {
 
@@ -150,7 +151,7 @@ public class Weapon extends AnimatedSprite {
             shootSound.setVolume(0.1f);
             shootSound.play();
 
-            getMaze().getAllBullets().stream().findAny().ifPresent(bullet -> bullet.shot(getCurrentLocation()));
+            getMaze().getAllBullets().stream().findAny().ifPresent(bullet -> bullet.shot(direction, currentLocation));
 
         } else
             throw new NoMoreRoundsException();

@@ -62,13 +62,24 @@ public abstract class ArtificiallyMovableSprite extends MovableSprite {
         return new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
     }
 
-    private void updateMoveAnimationWithNewLocationTranslation(Point2D startPoint, Point2D endPoint) {
+    protected void updateMoveAnimationWithNewLocationTranslation(Point2D startPoint, Point2D endPoint) {
 
         log.debug("Calculating transition between {} and {}", startPoint, endPoint);
 
         getMoveAnimation().setDuration(calculateDurationAtConfiguredVelocity(startPoint, endPoint));
         getMoveAnimation().setByX(deltaX(startPoint, endPoint));
         getMoveAnimation().setByY(deltaY(startPoint, endPoint));
+    }
+
+    protected void setMoveAnimation(Point2D startPoint, Point2D endPoint) {
+
+        log.debug("Calculating transition between {} and {}", startPoint, endPoint);
+
+        getMoveAnimation().setDuration(calculateDurationAtConfiguredVelocity(startPoint, endPoint));
+        getMoveAnimation().setFromX(startPoint.getX());
+        getMoveAnimation().setFromY(startPoint.getY());
+        getMoveAnimation().setToX(endPoint.getX());
+        getMoveAnimation().setToY(endPoint.getY());
     }
 
     @SneakyThrows

@@ -4,7 +4,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
+import org.moqucu.games.nightstalker.sprite.enemy.Bat;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -19,7 +22,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Bullet extends AnimatedSprite {
+public class Bullet extends ArtificiallyMovableSprite {
 
     enum States {Loaded, Shot}
 
@@ -30,14 +33,16 @@ public class Bullet extends AnimatedSprite {
     private Map<States, Indices> frameBoundaries = Map.of(
             States.Loaded, Indices.builder().lower(0).upper(0).build(),
             States.Shot, Indices.builder().lower(1).upper(1).build()
-        );
+    );
 
     public Bullet() {
 
         super();
         setImage(new Image(translate("images/bullet.png")));
+        setFrameBoundaries(frameBoundaries);
         setAutoReversible(false);
         setFrameDurationInMillis(500);
+        setVelocity(150);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
@@ -49,6 +54,8 @@ public class Bullet extends AnimatedSprite {
             }
         });
         stateMachine.start();
+        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.load));
+
         animateMeFromStart();
     }
 
@@ -80,20 +87,46 @@ public class Bullet extends AnimatedSprite {
 
     private void shot(StateContext stateContext) {
 
-        log.info("shot: {}", stateContext);
+        log.error("shot: {}", stateContext);
+        moveMeFromStart();
     }
 
-    void shot(Point2D startPoint) {
+    void shot(Direction direction, Point2D startPoint) {
+
+        if (stateMachine.getState().getId().equals(States.Shot))
+            return;
 
         log.info("Starting point: {}", startPoint);
 
-        relocate(startPoint.getX(), startPoint.getY());
+        Point2D endPoint;
+        switch (direction) {
+            case Up:
+                endPoint = new Point2D(startPoint.getX(), 0);
+                break;
+            case Down:
+                endPoint = new Point2D(startPoint.getX(), 12 * 32);
+                break;
+            case Left:
+                endPoint = new Point2D(0, startPoint.getY());
+                break;
+            case Right:
+                endPoint = new Point2D(20 * 32, startPoint.getY());
+                break;
+            default:
+                endPoint = startPoint;
+        }
+        setMoveAnimation(startPoint, endPoint);
         stateMachine.sendEvent(Events.shoot);
     }
 
     private void loaded(StateContext stateContext) {
 
-        log.debug("loaded: {}", stateContext);
+        log.error(
+                "At location {}with state loaded and following state context: {}",
+                getCurrentLocation(),
+                stateContext
+        );
+        stopMovingMe();
     }
 
 }
