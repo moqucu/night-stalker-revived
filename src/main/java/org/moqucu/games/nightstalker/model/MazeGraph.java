@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -88,18 +87,18 @@ public class MazeGraph {
         return adjacencyList.containsKey(point);
     }
 
-    public Point2D getFurthestReachableNode(Point2D point, KeyCode direction) {
+    public Point2D getFurthestReachableNode(Point2D point, Direction direction) {
 
         Point2D roundedPoint = new Point2D(Math.round(point.getX()), Math.round(point.getY()));
 
         switch (direction) {
-            case LEFT:
+            case Left:
                 return getFurthestReachableNodeToTheLeft(roundedPoint);
-            case UP:
+            case Up:
                 return getFurthestReachableNodeAbove(roundedPoint);
-            case RIGHT:
+            case Right:
                 return getFurthestReachableNodeToTheRight(roundedPoint);
-            case DOWN:
+            case Down:
                 return getFurthestReachableNodeBelow(roundedPoint);
             default:
                 throw new UnrecognizedDirectionException(
@@ -264,19 +263,19 @@ public class MazeGraph {
         return furthestNodeToTheLeft;
     }
 
-    public Point2D getClosestReachableNode(Point2D point, KeyCode direction, double maxOffset) {
+    public Point2D getClosestReachableNode(Point2D point, Direction direction, double maxOffset) {
 
         Point2D roundedPoint = new Point2D(Math.round(point.getX()), Math.round(point.getY()));
 
         switch (direction) {
 
-            case LEFT:
+            case Left:
                 return getClosestReachableNodeToTheLeft(roundedPoint, maxOffset);
-            case UP:
+            case Up:
                 return getClosestReachableNodeAbove(roundedPoint, maxOffset);
-            case RIGHT:
+            case Right:
                 return getClosestReachableNodeToTheRight(roundedPoint, maxOffset);
-            case DOWN:
+            case Down:
                 return getClosestReachableNodeBelow(roundedPoint, maxOffset);
             default:
                 throw new UnrecognizedDirectionException(

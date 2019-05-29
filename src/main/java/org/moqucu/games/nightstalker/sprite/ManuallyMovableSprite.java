@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -15,6 +16,7 @@ import javafx.scene.shape.PathElement;
 import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Direction;
 
 import java.util.*;
 
@@ -49,7 +51,7 @@ public abstract class ManuallyMovableSprite extends MovableSprite {
         moveAnimation.setOnFinished(finishedActionEventHandler);
     }
 
-    protected void computePathTransitionBasedOnDirection(KeyCode direction) {
+    protected void computePathTransitionBasedOnDirection(Direction direction) {
 
         Point2D startingPoint = getCurrentLocation();
 
@@ -100,7 +102,7 @@ public abstract class ManuallyMovableSprite extends MovableSprite {
         getMoveAnimation().setDuration(duration);
     }
 
-    private boolean nodeSupportsMovementToDirection(Point2D node, KeyCode direction) {
+    private boolean nodeSupportsMovementToDirection(Point2D node, Direction direction) {
 
         return !roundedPointsRepresentSameScreenLocation(
                 node,
@@ -110,18 +112,18 @@ public abstract class ManuallyMovableSprite extends MovableSprite {
 
     private Map<Double, Point2D> findClosestNeighboringNodesAndOrganizeByDistance(
             Point2D startingPoint,
-            KeyCode direction
+            Direction direction
     ) {
 
         Map<Double, Point2D> distanceToClosestNeighboringNodes = new HashMap<>(2);
 
         distanceToClosestNeighboringNodes.put(Double.MAX_VALUE, startingPoint);
 
-        determineOrthogonalKeyCodesFor(direction).forEach(keyCode -> {
+        determineOrthogonalDirectionFor(direction).forEach(directionValue -> {
 
             Point2D closedNodeInDirection = getMazeGraph().getClosestReachableNode(
                     startingPoint,
-                    keyCode,
+                    directionValue,
                     maxOffset.get()
             );
             distanceToClosestNeighboringNodes.put(
@@ -134,7 +136,7 @@ public abstract class ManuallyMovableSprite extends MovableSprite {
     }
 
     private Point2D determineClosestPointInDirection(
-            KeyCode direction,
+            Direction direction,
             Map<Double, Point2D> distanceToClosestNeighboringNodes
     ) {
 
@@ -206,16 +208,16 @@ public abstract class ManuallyMovableSprite extends MovableSprite {
         return currentPathPoint;
     }
 
-    private Set<KeyCode> determineOrthogonalKeyCodesFor(KeyCode keyCode) {
+    private Set<Direction> determineOrthogonalDirectionFor(Direction direction) {
 
-        switch (keyCode) {
+        switch (direction) {
 
-            case UP:
-            case DOWN:
-                return Set.of(KeyCode.RIGHT, KeyCode.LEFT);
-            case RIGHT:
-            case LEFT:
-                return Set.of(KeyCode.UP, KeyCode.DOWN);
+            case Up:
+            case Down:
+                return Set.of(Direction.Right, Direction.Left);
+            case Right:
+            case Left:
+                return Set.of(Direction.Up, Direction.Down);
             default:
                 return new HashSet<>();
         }

@@ -178,7 +178,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             case LEFT:
             case RIGHT:
                 setDirectionBasedOnKeyEventCode(keyEvent.getCode());
-                computePathTransitionBasedOnDirection(keyEvent.getCode());
+                computePathTransitionBasedOnDirection(getDirection());
                 translateKeyCodeDirectionToStateMachineEvent(keyEvent.getCode());
                 break;
             case Q:

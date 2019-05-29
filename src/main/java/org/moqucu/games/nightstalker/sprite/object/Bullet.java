@@ -5,9 +5,7 @@ import javafx.scene.image.Image;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
-import org.moqucu.games.nightstalker.sprite.enemy.Bat;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -98,24 +96,24 @@ public class Bullet extends ArtificiallyMovableSprite {
 
         log.info("Starting point: {}", startPoint);
 
-        Point2D endPoint;
+        Point2D endPoint = getMazeGraph().getFurthestReachableNode(startPoint, direction);
+
         switch (direction) {
             case Up:
-                endPoint = new Point2D(startPoint.getX(), 0);
+                setMoveAnimation(startPoint, endPoint.add(0, -16));
                 break;
             case Down:
-                endPoint = new Point2D(startPoint.getX(), 12 * 32);
+                setMoveAnimation(startPoint, endPoint.add(0, 16));
                 break;
             case Left:
-                endPoint = new Point2D(0, startPoint.getY());
+                setMoveAnimation(startPoint, endPoint.add(-16, 0));
                 break;
             case Right:
-                endPoint = new Point2D(20 * 32, startPoint.getY());
+                setMoveAnimation(startPoint, endPoint.add(16, 0));
                 break;
             default:
-                endPoint = startPoint;
+                setMoveAnimation(startPoint, startPoint);
         }
-        setMoveAnimation(startPoint, endPoint);
         stateMachine.sendEvent(Events.shoot);
     }
 
