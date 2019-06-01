@@ -14,4 +14,6 @@ public interface Hittable {
      * @param nearbySprites The set of sprites that is handed into this method and could cause a collision.
      */
     void detectCollision(Set<AnimatedSprite> nearbySprites);
+
+    boolean isHit();
 }

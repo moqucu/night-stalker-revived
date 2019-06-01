@@ -117,6 +117,11 @@ public class Bullet extends ArtificiallyMovableSprite {
         stateMachine.sendEvent(Events.shoot);
     }
 
+    public boolean isHittable() {
+
+        return stateMachine.getState().getId().equals(States.Shot);
+    }
+
     private void loaded(StateContext stateContext) {
 
         log.error(

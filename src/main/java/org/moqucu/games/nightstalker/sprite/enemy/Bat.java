@@ -8,7 +8,6 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.Hittable;
-import org.moqucu.games.nightstalker.sprite.SleepingSprite;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
@@ -27,9 +26,9 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Bat extends SleepingSprite implements Hittable {
 
-    private enum States {Asleep, Awake, Moving, Dying}
+    private enum States {Asleep, Awake, Moving, Hit}
 
-    private enum Events {wakeUp, move, stop, die}
+    private enum Events {wakeUp, move, stop, hit, spawn}
 
     private StateMachine<States, Events> stateMachine;
 
@@ -37,7 +36,7 @@ public class Bat extends SleepingSprite implements Hittable {
             States.Asleep, Indices.builder().lower(0).upper(0).build(),
             States.Awake, Indices.builder().lower(0).upper(0).build(),
             States.Moving, Indices.builder().lower(1).upper(5).build(),
-            States.Dying, Indices.builder().lower(6).upper(9).build()
+            States.Hit, Indices.builder().lower(6).upper(9).build()
     );
 
 
@@ -51,13 +50,9 @@ public class Bat extends SleepingSprite implements Hittable {
 
             setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
 
-            switch (transition.getTarget().getId()) {
-
-                case Awake:
-                    stateMachine.sendEvent(Events.move);
-                    break;
-             }
-       }
+            if (transition.getTarget().getId() == States.Awake)
+                stateMachine.sendEvent(Events.move);
+        }
     };
 
     public Bat() {
@@ -125,10 +120,29 @@ public class Bat extends SleepingSprite implements Hittable {
                 .and()
                 .withExternal()
                 .source(States.Moving)
-                .target(States.Dying)
-                .event(Events.die);
+                .target(States.Hit)
+                .event(Events.hit)
+                .and()
+                .withInternal()
+                .source(States.Hit)
+                .action(this::timeToRelocateAndFallAsleep)
+                .timerOnce(getSpawnTimeInMillis())
+                .and()
+                .withExternal()
+                .source(States.Hit)
+                .target(States.Asleep)
+                .event(Events.spawn)
+        ;
 
         return builder.build();
+    }
+
+    private void timeToRelocateAndFallAsleep(StateContext<States, Events> statesEventsStateContext) {
+
+        log.debug("timeToRelocateAndFallAsleep: {}", statesEventsStateContext);
+        this.translateXProperty().set(this.spawnCoordinateXProperty().get());
+        this.translateYProperty().set(this.spawnCoordinateYProperty().get());
+        stateMachine.sendEvent(Events.spawn);
     }
 
     private void timeToWakeUp(StateContext stateContext) {
@@ -150,17 +164,23 @@ public class Bat extends SleepingSprite implements Hittable {
         moveMeFromStart();
     }
 
+    public boolean isHit() {
+
+        return stateMachine.getState().getId().equals(States.Hit);
+    }
+
     @Override
     public void detectCollision(Set<AnimatedSprite> nearbySprites) {
 
         nearbySprites.forEach(animatedSprite -> {
 
             if ((animatedSprite instanceof Bullet)
-                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())) {
+                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
+                    && ((Bullet) animatedSprite).isHittable()) {
 
-                log.debug("Hit by bullet, dying.");
+                log.debug("Hit by bullet...");
                 stopMovingMe();
-                stateMachine.sendEvent(Events.die);
+                stateMachine.sendEvent(Events.hit);
             }
         });
     }

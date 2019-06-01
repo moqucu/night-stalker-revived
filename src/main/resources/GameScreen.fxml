@@ -37,7 +37,12 @@
             <Bullet/>
         </Pane>
         <Pane>
-            <Spider translateX="32.0" translateY="32.0" frameDurationInMillis="200"/>
+            <Spider
+                    spawnCoordinateX="32.0"
+                    spawnCoordinateY="32.0"
+                    spawnTimeInMillis="3000"
+                    frameDurationInMillis="200"
+            />
             <GreyRobot
                     translateX="48.0"
                     translateY="320.0"
@@ -46,16 +51,18 @@
                     velocity="25"
             />
             <Bat
-                    translateX="528.0"
-                    translateY="96"
+                    spawnCoordinateX="528.0"
+                    spawnCoordinateY="96"
                     sleepTimeInMillis="5000"
+                    spawnTimeInMillis="3000"
                     autoReversible="false"
                     frameDurationInMillis="100"
                     velocity="50"
             />
             <Bat
-                    translateX="512.0"
-                    translateY="224"
+                    spawnCoordinateX="512.0"
+                    spawnCoordinateY="224"
+                    spawnTimeInMillis="3000"
                     sleepTimeInMillis="2500"
                     autoReversible="false"
                     frameDurationInMillis="100"

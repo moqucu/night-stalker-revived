@@ -248,7 +248,8 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
             if ((animatedSprite instanceof Spider || animatedSprite instanceof Bat)
                     && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
-                    && stateMachine.getState().getId() != States.Fainting) {
+                    && stateMachine.getState().getId() != States.Fainting
+                    && !((Hittable) animatedSprite).isHit()) {
 
                 log.debug("Colliding with animal.");
                 stateMachine.sendEvent(Events.stop);
@@ -268,4 +269,9 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         stateMachine.sendEvent(Events.wakeUp);
     }
 
+    @Override
+    public boolean isHit() {
+
+        return false;
+    }
 }
