@@ -40,8 +40,11 @@
             <Spider
                     spawnCoordinateX="32.0"
                     spawnCoordinateY="32.0"
+                    sleepTimeInMillis="500"
                     spawnTimeInMillis="3000"
+                    autoReversible="false"
                     frameDurationInMillis="200"
+                    velocity="50"
             />
             <GreyRobot
                     translateX="48.0"

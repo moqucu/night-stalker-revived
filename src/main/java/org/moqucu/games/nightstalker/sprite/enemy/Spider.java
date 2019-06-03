@@ -8,12 +8,12 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.Hittable;
-import org.moqucu.games.nightstalker.sprite.SpawnableSprite;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.transition.Transition;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -24,7 +24,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @Data
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Spider extends SpawnableSprite implements Hittable {
+public class Spider extends SleepingSprite implements Hittable {
 
     private enum States {Asleep, Awake, MovingHorizontally, MovingVertically, Hit}
 
@@ -53,28 +53,13 @@ public class Spider extends SpawnableSprite implements Hittable {
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
 
             @Override
-            public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
+            public void transitionEnded(Transition<States, Events> transition) {
 
                 log.debug("State changed to {}", transition.getTarget().getId());
+                setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
 
-                switch (transition.getTarget().getId()) {
-
-                    case Awake:
-                        computeNextMoveAnimationBasedOnRandomDirection();
-                        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
-                        if (deltaNode.getX() != 0)
-                            stateMachine.sendEvent(Events.moveHorizontally);
-                        else if (deltaNode.getY() != 0)
-                            stateMachine.sendEvent(Events.moveVertically);
-                        break;
-                    case Asleep:
-                    case MovingHorizontally:
-                    case MovingVertically:
-                    case Hit:
-                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-                        moveMeFromStart();
-                        break;
-                }
+                if (transition.getTarget().getId() == States.Awake)
+                    wokeUp(transition);
             }
         });
         stateMachine.start();
@@ -95,7 +80,7 @@ public class Spider extends SpawnableSprite implements Hittable {
                 .withInternal()
                 .source(States.Asleep)
                 .action(this::timeToWakeUp)
-                .timerOnce(500)
+                .timerOnce(getSleepTimeInMillis())
                 .and()
                 .withExternal()
                 .source(States.Asleep)
@@ -104,6 +89,7 @@ public class Spider extends SpawnableSprite implements Hittable {
                 .and()
                 .withExternal()
                 .source(States.Awake)
+                .action(this::startedToMove)
                 .target(States.MovingHorizontally)
                 .event(Events.moveHorizontally)
                 .and()
@@ -114,6 +100,7 @@ public class Spider extends SpawnableSprite implements Hittable {
                 .and()
                 .withExternal()
                 .source(States.Awake)
+                .action(this::startedToMove)
                 .target(States.MovingVertically)
                 .event(Events.moveVertically)
                 .and()
@@ -146,19 +133,50 @@ public class Spider extends SpawnableSprite implements Hittable {
         return builder.build();
     }
 
+    private void timeToWakeUp(StateContext stateContext) {
+
+        log.trace("timeToWakeUp: {}", stateContext);
+
+        animateMeFromStart();
+        stateMachine.sendEvent(Events.wakeUp);
+    }
+
+    private void wokeUp(Transition<States, Events> transition) {
+
+        log.trace("wokeUp: {}", transition);
+
+        log.debug("Woke up, with current location = {}", getCurrentLocation());
+
+        computeNextMoveAnimationBasedOnRandomDirection();
+        log.debug("Animation computed, next node = {}", getNextNode());
+
+        Point2D deltaNode = getNextNode().subtract(getPreviousNode());
+        if (deltaNode.getX() != 0) {
+
+            log.debug("Looks like I need to move horizontally...");
+            stateMachine.sendEvent(Events.moveHorizontally);
+        }
+        else if (deltaNode.getY() != 0) {
+
+            log.debug("Looks like I need to move vertically...");
+            stateMachine.sendEvent(Events.moveVertically);
+        }
+        else
+            log.debug("Not clear where to move to based on deltaNode = {}?", deltaNode);
+    }
+
+    private void startedToMove(StateContext stateContext) {
+
+        log.debug("startedToMove: {}", stateContext);
+        moveMeFromStart();
+    }
+
     private void timeToRelocateAndFallAsleep(StateContext<States, Events> statesEventsStateContext) {
 
         log.debug("timeToRelocateAndFallAsleep: {}", statesEventsStateContext);
         this.translateXProperty().set(this.spawnCoordinateXProperty().get());
         this.translateYProperty().set(this.spawnCoordinateYProperty().get());
         stateMachine.sendEvent(Events.spawn);
-    }
-
-    private void timeToWakeUp(StateContext stateContext) {
-
-        log.debug("timeToWakeUp: {}", stateContext);
-        animateMeFromStart();
-        stateMachine.sendEvent(Events.wakeUp);
     }
 
     @Override

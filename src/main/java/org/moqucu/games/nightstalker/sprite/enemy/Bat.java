@@ -137,14 +137,6 @@ public class Bat extends SleepingSprite implements Hittable {
         return builder.build();
     }
 
-    private void timeToRelocateAndFallAsleep(StateContext<States, Events> statesEventsStateContext) {
-
-        log.debug("timeToRelocateAndFallAsleep: {}", statesEventsStateContext);
-        this.translateXProperty().set(this.spawnCoordinateXProperty().get());
-        this.translateYProperty().set(this.spawnCoordinateYProperty().get());
-        stateMachine.sendEvent(Events.spawn);
-    }
-
     private void timeToWakeUp(StateContext stateContext) {
 
         log.debug("timeToWakeUp: {}", stateContext);
@@ -164,9 +156,12 @@ public class Bat extends SleepingSprite implements Hittable {
         moveMeFromStart();
     }
 
-    public boolean isHit() {
+    private void timeToRelocateAndFallAsleep(StateContext<States, Events> statesEventsStateContext) {
 
-        return stateMachine.getState().getId().equals(States.Hit);
+        log.debug("timeToRelocateAndFallAsleep: {}", statesEventsStateContext);
+        this.translateXProperty().set(this.spawnCoordinateXProperty().get());
+        this.translateYProperty().set(this.spawnCoordinateYProperty().get());
+        stateMachine.sendEvent(Events.spawn);
     }
 
     @Override
@@ -183,5 +178,10 @@ public class Bat extends SleepingSprite implements Hittable {
                 stateMachine.sendEvent(Events.hit);
             }
         });
+    }
+
+    public boolean isHit() {
+
+        return stateMachine.getState().getId().equals(States.Hit);
     }
 }
