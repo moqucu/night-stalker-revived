@@ -2,7 +2,6 @@ package org.moqucu.games.nightstalker.sprite.object;
 
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
-import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import lombok.*;

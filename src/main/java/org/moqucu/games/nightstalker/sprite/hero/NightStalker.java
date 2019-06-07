@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.sprite.hero;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.AudioClip;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import javafx.scene.image.Image;
@@ -11,10 +12,12 @@ import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.ManuallyMovableSprite;
+import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.sprite.object.Weapon;
 import org.moqucu.games.nightstalker.sprite.enemy.Bat;
 import org.moqucu.games.nightstalker.sprite.enemy.Spider;
 import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
@@ -44,7 +47,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             States.MovingRight, Indices.builder().lower(11).upper(18).build(),
             States.MovingLeft, Indices.builder().lower(3).upper(10).build(),
             States.Fainting, Indices.builder().lower(19).upper(21).build(),
-            States.Dying, Indices.builder().lower(19).upper(21).build()
+            States.Dying, Indices.builder().lower(22).upper(23).build()
     );
 
     private MazeGraph mazeGraph;
@@ -52,6 +55,10 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     private Weapon weapon = null;
 
     private Direction direction;
+
+    private AudioClip beingZappedSound = new AudioClip(
+            Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/zap.wav").toString()
+    );
 
     @SneakyThrows
     public NightStalker() {
@@ -152,7 +159,12 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 .withExternal()
                 .source(States.MovingVertically)
                 .target(States.Alive)
-                .event(Events.stop);
+                .event(Events.stop)
+                .and()
+                .withInternal()
+                .source(States.Dying)
+                .action(this::dying)
+                .timerOnce(2000);
 
         return builder.build();
     }
@@ -259,6 +271,13 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
                 this.weapon = (Weapon) animatedSprite;
                 weapon.pickUp();
+            } else if (animatedSprite instanceof GreyRobot
+                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
+                    && !((Hittable) animatedSprite).isHit()) {
+
+                log.debug("Colliding with animal.");
+                stateMachine.sendEvent(Events.stop);
+                stateMachine.sendEvent(Events.die);
             }
         });
     }
@@ -266,6 +285,13 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     private void timeToWakeUp(StateContext stateContext) {
 
         log.debug("timeToWakeUp: {}", stateContext);
+        stateMachine.sendEvent(Events.wakeUp);
+    }
+
+
+    private void dying(StateContext stateContext) {
+
+        log.debug("I am dying: {}", stateContext);
         stateMachine.sendEvent(Events.wakeUp);
     }
 
