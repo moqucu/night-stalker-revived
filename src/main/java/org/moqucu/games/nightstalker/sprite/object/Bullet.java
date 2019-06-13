@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -20,7 +21,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Bullet extends ArtificiallyMovableSprite {
+public class Bullet extends ArtificiallyMovableSprite implements Collidable {
 
     enum States {Loaded, Shot}
 
@@ -117,7 +118,8 @@ public class Bullet extends ArtificiallyMovableSprite {
         stateMachine.sendEvent(Events.shoot);
     }
 
-    public boolean isHittable() {
+    @Override
+    public boolean isCollidable() {
 
         return stateMachine.getState().getId().equals(States.Shot);
     }

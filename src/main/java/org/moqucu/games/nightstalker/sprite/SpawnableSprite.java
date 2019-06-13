@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j2;
 @SuppressWarnings("unused")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class SpawnableSprite extends ArtificiallyMovableSprite {
+public abstract class SpawnableSprite extends MovableSprite {
 
     private final LongProperty spawnTineInMillis = new SimpleLongProperty(3000L);
 
@@ -22,7 +22,7 @@ public abstract class SpawnableSprite extends ArtificiallyMovableSprite {
 
     private final DoubleProperty spawnCoordinateY = new SimpleDoubleProperty(0.);
 
-    protected SpawnableSprite() {
+    SpawnableSprite() {
 
         super();
     }
@@ -53,7 +53,7 @@ public abstract class SpawnableSprite extends ArtificiallyMovableSprite {
         this.translateXProperty().set(spawnCoordinateX);
     }
 
-    public DoubleProperty spawnCoordinateXProperty() {
+    protected DoubleProperty spawnCoordinateXProperty() {
 
         return spawnCoordinateX;
     }
@@ -70,7 +70,7 @@ public abstract class SpawnableSprite extends ArtificiallyMovableSprite {
         this.translateYProperty().set(spawnCoordinateY);
     }
 
-    public DoubleProperty spawnCoordinateYProperty() {
+    protected DoubleProperty spawnCoordinateYProperty() {
 
         return spawnCoordinateY;
     }

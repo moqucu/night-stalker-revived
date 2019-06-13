@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
@@ -24,7 +25,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Weapon extends AnimatedSprite {
+public class Weapon extends AnimatedSprite implements Collidable {
 
     public class NoMoreRoundsException extends Exception {
     }
@@ -179,5 +180,11 @@ public class Weapon extends AnimatedSprite {
     public IntegerProperty numberOfRoundsProperty() {
 
         return numberOfRounds;
+    }
+
+    @Override
+    public boolean isCollidable() {
+
+        return stateMachine.getState().getId().equals(Weapon.States.ReappearedOnTheGround);
     }
 }

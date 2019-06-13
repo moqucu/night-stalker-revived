@@ -28,6 +28,7 @@ module org.moqucu.games.nightstalker {
     exports org.moqucu.games.nightstalker.controller;
     exports org.moqucu.games.nightstalker.view;
     exports org.moqucu.games.nightstalker.model;
+    exports org.moqucu.games.nightstalker.sprite;
     exports org.moqucu.games.nightstalker.sprite.object;
     exports org.moqucu.games.nightstalker.sprite.enemy;
     exports org.moqucu.games.nightstalker.sprite.hero;

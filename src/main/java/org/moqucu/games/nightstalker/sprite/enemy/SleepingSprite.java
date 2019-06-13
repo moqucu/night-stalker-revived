@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
 import org.moqucu.games.nightstalker.sprite.SpawnableSprite;
 
 @Data
@@ -13,7 +14,7 @@ import org.moqucu.games.nightstalker.sprite.SpawnableSprite;
 @SuppressWarnings("unused")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class SleepingSprite extends SpawnableSprite {
+public abstract class SleepingSprite extends ArtificiallyMovableSprite {
 
     private final LongProperty sleepTineInMillis = new SimpleLongProperty(1000L);
 

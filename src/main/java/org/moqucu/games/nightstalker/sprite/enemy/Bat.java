@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateContext;
@@ -24,7 +24,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Bat extends SleepingSprite implements Hittable {
+public class Bat extends SleepingSprite implements Hittable, Collidable {
 
     private enum States {Asleep, Awake, Moving, Hit}
 
@@ -38,7 +38,6 @@ public class Bat extends SleepingSprite implements Hittable {
             States.Moving, Indices.builder().lower(1).upper(5).build(),
             States.Hit, Indices.builder().lower(6).upper(9).build()
     );
-
 
     private StateMachineListener<States, Events> stateMachineListener
             = new StateMachineListenerAdapter<>() {
@@ -165,23 +164,38 @@ public class Bat extends SleepingSprite implements Hittable {
     }
 
     @Override
-    public void detectCollision(Set<AnimatedSprite> nearbySprites) {
+    public void detectCollision(Collidable collidableSprite) {
 
-        nearbySprites.forEach(animatedSprite -> {
 
-            if ((animatedSprite instanceof Bullet)
-                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
-                    && ((Bullet) animatedSprite).isHittable()) {
+        if (collidableSprite instanceof Bullet) {
 
-                log.debug("Hit by bullet...");
-                stopMovingMe();
-                stateMachine.sendEvent(Events.hit);
-            }
-        });
+            log.debug("Hit by bullet...");
+            stopMovingMe();
+            stateMachine.sendEvent(Events.hit);
+        }
     }
 
-    public boolean isHit() {
+    @Override
+    public boolean isCollidable() {
 
-        return stateMachine.getState().getId().equals(States.Hit);
+        return isActive();
     }
+
+    @Override
+    public boolean isHittable() {
+
+        return isActive();
+    }
+
+    private boolean isActive() {
+        switch (stateMachine.getState().getId()) {
+            case Moving:
+            case Asleep:
+            case Awake:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

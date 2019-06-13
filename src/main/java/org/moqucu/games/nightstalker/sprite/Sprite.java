@@ -29,7 +29,7 @@ public abstract class Sprite extends ImageView {
     /**
      * Exception is thrown whenever expected Maze object couldn't be found in sprite's parent hierarchy.
      */
-    public class MazeNotFoundException extends RuntimeException {
+    class MazeNotFoundException extends RuntimeException {
 
         MazeNotFoundException() {
 
@@ -40,7 +40,7 @@ public abstract class Sprite extends ImageView {
     /**
      * Exception is thrown whenever expected the index for accessing a sprite sheet's cell is < 0 or > 239.
      */
-    public class SpriteSheetIndexOutOfBoundsException extends RuntimeException {
+    class SpriteSheetIndexOutOfBoundsException extends RuntimeException {
 
         SpriteSheetIndexOutOfBoundsException() {
 

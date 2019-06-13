@@ -7,8 +7,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.control.skin.TextInputControlSkin;
-import javafx.scene.input.KeyCode;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -24,7 +22,7 @@ import java.util.*;
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class ManuallyMovableSprite extends MovableSprite {
+public abstract class ManuallyMovableSprite extends SpawnableSprite {
 
     private static final double MAX_OFFSET = 8.0;
 

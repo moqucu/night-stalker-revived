@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateContext;
@@ -17,14 +17,13 @@ import org.springframework.statemachine.transition.Transition;
 
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Spider extends SleepingSprite implements Hittable {
+public class Spider extends SleepingSprite implements Hittable, Collidable {
 
     private enum States {Asleep, Awake, MovingHorizontally, MovingVertically, Hit}
 
@@ -155,13 +154,11 @@ public class Spider extends SleepingSprite implements Hittable {
 
             log.debug("Looks like I need to move horizontally...");
             stateMachine.sendEvent(Events.moveHorizontally);
-        }
-        else if (deltaNode.getY() != 0) {
+        } else if (deltaNode.getY() != 0) {
 
             log.debug("Looks like I need to move vertically...");
             stateMachine.sendEvent(Events.moveVertically);
-        }
-        else
+        } else
             log.debug("Not clear where to move to based on deltaNode = {}?", deltaNode);
     }
 
@@ -180,24 +177,37 @@ public class Spider extends SleepingSprite implements Hittable {
     }
 
     @Override
-    public void detectCollision(Set<AnimatedSprite> nearbySprites) {
+    public void detectCollision(Collidable collidableSprite) {
 
-        nearbySprites.forEach(animatedSprite -> {
+        if (collidableSprite instanceof Bullet) {
 
-            if ((animatedSprite instanceof Bullet)
-                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
-                    && ((Bullet) animatedSprite).isHittable()) {
-
-                log.debug("Hit by bullet...");
-                stopMovingMe();
-                stateMachine.sendEvent(Events.hit);
-            }
-        });
+            log.debug("Hit by bullet...");
+            stopMovingMe();
+            stateMachine.sendEvent(Events.hit);
+        }
     }
 
     @Override
-    public boolean isHit() {
+    public boolean isCollidable() {
 
-        return stateMachine.getState().getId().equals(States.Hit);
+        return isActive();
+    }
+
+    @Override
+    public boolean isHittable() {
+
+        return isActive();
+    }
+
+    private boolean isActive() {
+        switch (stateMachine.getState().getId()) {
+            case MovingVertically:
+            case MovingHorizontally:
+            case Asleep:
+            case Awake:
+                return true;
+            default:
+                return false;
+        }
     }
 }

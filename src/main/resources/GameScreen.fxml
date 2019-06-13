@@ -74,8 +74,9 @@
         </Pane>
         <Pane>
             <NightStalker
-                    translateX="288.0"
-                    translateY="144.0"
+                    spawnCoordinateX="288.0"
+                    spawnCoordinateY="144.0"
+                    spawnTimeInMillis="3000"
                     autoReversible="false"
                     frameDurationInMillis="200"
                     velocity="75"

@@ -1,19 +1,24 @@
 package org.moqucu.games.nightstalker.sprite;
 
-import java.util.Set;
-
 /**
  * When classes want to indicate that they are 'hittable' by other classes, they shall implement this interface.
  */
 public interface Hittable {
 
     /**
-     * This method needs to be implemented for detecting collisions with other objects. Right now, the actual collision
-     * detection has to happen de-centrally as part of every class that implements this method.
+     * This method needs to be implemented for detecting collisions with other objects. Each object has to decide
+     * internally which objects it can collide with and how to react in case of a collision.
      *
-     * @param nearbySprites The set of sprites that is handed into this method and could cause a collision.
+     * @param collidableSprite The sprite that collides with the object.
      */
-    void detectCollision(Set<AnimatedSprite> nearbySprites);
+    void detectCollision(Collidable collidableSprite);
 
-    boolean isHit();
+    /**
+     * This method indicate whether an object that principally allows to be collided with, is currently
+     * in a state .
+     *
+     * @return true when object's internal state allows for being hit, otherwise false.
+     */
+    boolean isHittable();
+
 }

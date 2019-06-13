@@ -7,11 +7,13 @@ import javafx.scene.layout.StackPane;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 public class Maze extends StackPane {
@@ -20,9 +22,9 @@ public class Maze extends StackPane {
 
     private final static double PREF_HEIGHT = 384d;
 
-    private final ConcurrentMap<AnimatedSprite, AnimatedSprite> animatedSprites = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Collidable, Collidable> collidableSprites = new ConcurrentHashMap<>();
 
-    private final ConcurrentMap<Hittable, Hittable> updatableSprites = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Hittable, Hittable> hittableSprites = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<Bullet, Bullet> bullets = new ConcurrentHashMap<>();
 
@@ -44,12 +46,12 @@ public class Maze extends StackPane {
 
                     ((Pane) addedPane)
                             .getChildren()
-                            .filtered(node -> node instanceof AnimatedSprite)
+                            .filtered(node -> node instanceof Collidable)
                             .forEach(sprite -> {
 
-                                animatedSprites.putIfAbsent((AnimatedSprite) sprite, (AnimatedSprite) sprite);
+                                collidableSprites.putIfAbsent((Collidable) sprite, (Collidable) sprite);
                                 log.debug(
-                                        "Added animated sprite of type {} to set.",
+                                        "Added collidable sprite of type {} to set.",
                                         sprite.getClass().getName()
                                 );
                             });
@@ -59,9 +61,9 @@ public class Maze extends StackPane {
                             .filtered(node -> node instanceof Hittable)
                             .forEach(sprite -> {
 
-                                updatableSprites.putIfAbsent((Hittable) sprite, (Hittable) sprite);
+                                hittableSprites.putIfAbsent((Hittable) sprite, (Hittable) sprite);
                                 log.debug(
-                                        "Added updatable sprite of type {} to set.",
+                                        "Added hittable sprite of type {} to set.",
                                         sprite.getClass().getName()
                                 );
                             });
@@ -85,18 +87,18 @@ public class Maze extends StackPane {
 
                             if (addedChild instanceof AnimatedSprite) {
 
-                                animatedSprites.putIfAbsent((AnimatedSprite) addedChild, (AnimatedSprite) addedChild);
+                                collidableSprites.putIfAbsent((Collidable) addedChild, (Collidable) addedChild);
                                 log.debug(
-                                        "Added animated sprite of type {} to set.",
+                                        "Added collidable sprite of type {} to set.",
                                         addedChild.getClass().getName()
                                 );
                             }
 
                             if (addedChild instanceof Hittable) {
 
-                                updatableSprites.putIfAbsent((Hittable) addedChild, (Hittable) addedChild);
+                                hittableSprites.putIfAbsent((Hittable) addedChild, (Hittable) addedChild);
                                 log.debug(
-                                        "Added updatable sprite of type {} to set.",
+                                        "Added hittable sprite of type {} to set.",
                                         addedChild.getClass().getName()
                                 );
                             }
@@ -116,14 +118,22 @@ public class Maze extends StackPane {
         });
     }
 
-    public Set<AnimatedSprite> getAllAnimatedSprites() {
+    public Set<Collidable> getAllCurrentlyCollidableSprites() {
 
-        return animatedSprites.keySet();
+        return collidableSprites
+                .keySet()
+                .stream()
+                .filter(Collidable::isCollidable)
+                .collect(Collectors.toSet());
     }
 
     public Set<Hittable> getAllHittableSprites() {
 
-        return updatableSprites.keySet();
+        return hittableSprites
+                .keySet()
+                .stream()
+                .filter(Hittable::isHittable)
+                .collect(Collectors.toSet());
     }
 
     public Set<Bullet> getAllBullets() {

@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeGraph;
-import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.ManuallyMovableSprite;
 import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.sprite.object.Weapon;
@@ -26,7 +26,6 @@ import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
@@ -78,24 +77,23 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
                 log.debug("State changed to {}", transition.getTarget().getId());
+                setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
 
                 switch (transition.getTarget().getId()) {
 
                     case Alive:
-                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
                         stopMovingMe();
                         stopAnimatingMe();
                         break;
                     case MovingLeft:
                     case MovingRight:
                     case MovingVertically:
-                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
                         animateMeFromStart();
                         moveMeFromStart();
                         break;
                     case Fainting:
-                        log.debug("fainting...");
-                        setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                    case Dying:
+                        log.debug("fainting pr dying...");
                         animateMeFromStart();
                         break;
                 }
@@ -160,6 +158,31 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 .source(States.MovingVertically)
                 .target(States.Alive)
                 .event(Events.stop)
+                .and()
+                .withExternal()
+                .source(States.MovingVertically)
+                .target(States.Dying)
+                .event(Events.die)
+                .and()
+                .withExternal()
+                .source(States.Alive)
+                .target(States.Dying)
+                .event(Events.die)
+                .and()
+                .withExternal()
+                .source(States.Stopped)
+                .target(States.Dying)
+                .event(Events.die)
+                .and()
+                .withExternal()
+                .source(States.MovingLeft)
+                .target(States.Dying)
+                .event(Events.die)
+                .and()
+                .withExternal()
+                .source(States.MovingRight)
+                .target(States.Dying)
+                .event(Events.die)
                 .and()
                 .withInternal()
                 .source(States.Dying)
@@ -253,35 +276,6 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         return mazeGraph;
     }
 
-    @Override
-    public void detectCollision(Set<AnimatedSprite> nearbySprites) {
-
-        nearbySprites.forEach(animatedSprite -> {
-
-            if ((animatedSprite instanceof Spider || animatedSprite instanceof Bat)
-                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
-                    && stateMachine.getState().getId() != States.Fainting
-                    && !((Hittable) animatedSprite).isHit()) {
-
-                log.debug("Colliding with animal.");
-                stateMachine.sendEvent(Events.stop);
-                stateMachine.sendEvent(Events.faint);
-            } else if (animatedSprite instanceof Weapon
-                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())) {
-
-                this.weapon = (Weapon) animatedSprite;
-                weapon.pickUp();
-            } else if (animatedSprite instanceof GreyRobot
-                    && this.getBoundsInParent().intersects(animatedSprite.getBoundsInParent())
-                    && !((Hittable) animatedSprite).isHit()) {
-
-                log.debug("Colliding with animal.");
-                stateMachine.sendEvent(Events.stop);
-                stateMachine.sendEvent(Events.die);
-            }
-        });
-    }
-
     private void timeToWakeUp(StateContext stateContext) {
 
         log.debug("timeToWakeUp: {}", stateContext);
@@ -292,12 +286,44 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     private void dying(StateContext stateContext) {
 
         log.debug("I am dying: {}", stateContext);
+        this.translateXProperty().set(this.spawnCoordinateXProperty().get());
+        this.translateYProperty().set(this.spawnCoordinateYProperty().get());
         stateMachine.sendEvent(Events.wakeUp);
     }
 
     @Override
-    public boolean isHit() {
+    public void detectCollision(Collidable collidableSprite) {
 
-        return false;
+
+        if (collidableSprite instanceof Spider || collidableSprite instanceof Bat) {
+
+            log.debug("Colliding with animal.");
+            stateMachine.sendEvent(Events.stop);
+            stateMachine.sendEvent(Events.faint);
+        } else if (collidableSprite instanceof Weapon) {
+
+            log.debug("Colliding with weapon.");
+            this.weapon = (Weapon) collidableSprite;
+            weapon.pickUp();
+        } else if (collidableSprite instanceof GreyRobot) {
+
+            log.debug("Colliding with robot.");
+            stateMachine.sendEvent(Events.stop);
+            stateMachine.sendEvent(Events.die);
+        }
+    }
+
+    @Override
+    public boolean isHittable() {
+
+        switch (stateMachine.getState().getId()) {
+            case Stopped:
+            case MovingLeft:
+            case MovingRight:
+            case MovingVertically:
+                return true;
+            default:
+                return false;
+        }
     }
 }

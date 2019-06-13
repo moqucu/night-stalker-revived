@@ -6,15 +6,14 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
-
-import java.util.Set;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
@@ -23,7 +22,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @ToString(callSuper = true)
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
-public class GreyRobot extends SleepingSprite implements Hittable {
+public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
 
     private enum States {Offline, Stopped, Moving, SlowlyMoving, FastMoving}
 
@@ -158,13 +157,38 @@ public class GreyRobot extends SleepingSprite implements Hittable {
     }
 
     @Override
-    public void detectCollision(Set<AnimatedSprite> nearbySprites) {
+    public void detectCollision(Collidable collidableSprite) {
 
+        if (collidableSprite instanceof Bullet) {
+
+            log.debug("Hit by bullet...");
+            stopMovingMe();
+            stateMachine.sendEvent(Events.stop);
+        }
     }
 
     @Override
-    public boolean isHit() {
+    public boolean isCollidable() {
 
-        return false;
+        return isActive();
+    }
+
+    @Override
+    public boolean isHittable() {
+
+        return isActive();
+    }
+
+    private boolean isActive() {
+
+        switch (stateMachine.getState().getId()) {
+            case Stopped:
+            case FastMoving:
+            case Moving:
+            case SlowlyMoving:
+                return true;
+            default:
+                return false;
+        }
     }
 }

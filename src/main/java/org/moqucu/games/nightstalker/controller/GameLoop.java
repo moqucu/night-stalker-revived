@@ -2,8 +2,11 @@ package org.moqucu.games.nightstalker.controller;
 
 import javafx.animation.AnimationTimer;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.sprite.Collidable;
+import org.moqucu.games.nightstalker.sprite.Sprite;
 import org.moqucu.games.nightstalker.view.Maze;
 
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Log4j2
@@ -29,7 +32,19 @@ public class GameLoop {
                 log.trace("Delta time sincle last call: {}", deltaTime);
 
                 maze.getAllHittableSprites().forEach(
-                        updatableSprite -> updatableSprite.detectCollision(maze.getAllAnimatedSprites())
+
+                        hittableSprite -> {
+                            Set<Collidable> collidableSprites = maze.getAllCurrentlyCollidableSprites();
+                            if (hittableSprite instanceof Collidable)
+                                collidableSprites.remove(hittableSprite);
+                            collidableSprites.forEach(collidableSprite -> {
+                                if (((Sprite)hittableSprite).getBoundsInParent()
+                                        .intersects(((Sprite)collidableSprite).getBoundsInParent()))
+                                    hittableSprite.detectCollision(collidableSprite);
+
+                            });
+
+                        }
                 );
             }
         };

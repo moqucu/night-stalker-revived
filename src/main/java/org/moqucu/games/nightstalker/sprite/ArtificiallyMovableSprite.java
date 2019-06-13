@@ -18,7 +18,7 @@ import java.util.Random;
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class ArtificiallyMovableSprite extends MovableSprite {
+public abstract class ArtificiallyMovableSprite extends SpawnableSprite {
 
     private MazeGraph enemyMazeGraph;
 
@@ -62,7 +62,7 @@ public abstract class ArtificiallyMovableSprite extends MovableSprite {
         return new ArrayList<>(List.copyOf(getMazeGraph().getAdjacencyList().get(currentNode)));
     }
 
-    protected void updateMoveAnimationWithNewLocationTranslation(Point2D startPoint, Point2D endPoint) {
+    private void updateMoveAnimationWithNewLocationTranslation(Point2D startPoint, Point2D endPoint) {
 
         log.debug("Calculating transition between {} and {}", startPoint, endPoint);
 
