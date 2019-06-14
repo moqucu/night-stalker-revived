@@ -6,12 +6,12 @@ package org.moqucu.games.nightstalker.sprite;
 public interface Hittable {
 
     /**
-     * This method needs to be implemented for detecting collisions with other objects. Each object has to decide
-     * internally which objects it can collide with and how to react in case of a collision.
+     * This method needs to be implemented for detecting collisions with other objects. Only objects that are in a
+     * state that allows for collisions and that intersect with an instance of Hittable will be passed as a parameter.
      *
-     * @param collidableSprite The sprite that collides with the object.
+     * @param collidableObject The sprite that collides with the object.
      */
-    void detectCollision(Collidable collidableSprite);
+    void hitBy(Collidable collidableObject);
 
     /**
      * This method indicate whether an object that principally allows to be collided with, is currently
@@ -20,5 +20,4 @@ public interface Hittable {
      * @return true when object's internal state allows for being hit, otherwise false.
      */
     boolean isHittable();
-
 }

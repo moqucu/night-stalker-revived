@@ -40,7 +40,7 @@ public class GameLoop {
                             collidableSprites.forEach(collidableSprite -> {
                                 if (((Sprite)hittableSprite).getBoundsInParent()
                                         .intersects(((Sprite)collidableSprite).getBoundsInParent()))
-                                    hittableSprite.detectCollision(collidableSprite);
+                                    hittableSprite.hitBy(collidableSprite);
 
                             });
 

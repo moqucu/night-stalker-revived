@@ -157,9 +157,9 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
     }
 
     @Override
-    public void detectCollision(Collidable collidableSprite) {
+    public void hitBy(Collidable collidableObject) {
 
-        if (collidableSprite instanceof Bullet) {
+        if (collidableObject instanceof Bullet) {
 
             log.debug("Hit by bullet...");
             stopMovingMe();

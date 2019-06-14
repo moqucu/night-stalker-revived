@@ -76,7 +76,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             @Override
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
-                log.debug("State changed to {}", transition.getTarget().getId());
+                log.debug("My state changed to {}", transition.getTarget().getId());
                 setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
 
                 switch (transition.getTarget().getId()) {
@@ -92,15 +92,18 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                         moveMeFromStart();
                         break;
                     case Fainting:
-                    case Dying:
-                        log.debug("fainting pr dying...");
+                        log.debug("I am still fainting...");
                         animateMeFromStart();
+                        break;
+                    case Dying:
+                        log.debug("I am still dying...");
+                        animateMeFromStart();
+                        beingZappedSound.play();
                         break;
                 }
             }
         });
         stateMachine.start();
-        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
     }
 
     @SneakyThrows
@@ -186,22 +189,27 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 .and()
                 .withInternal()
                 .source(States.Dying)
-                .action(this::dying)
-                .timerOnce(2000);
+                .action(this::died)
+                .timerOnce(2000)
+                .and()
+                .withExternal()
+                .source(States.Dying)
+                .target(States.Alive)
+                .event(Events.wakeUp);
 
         return builder.build();
     }
 
     private void handleKeyReleasedEvent(KeyEvent keyEvent) {
 
-        log.debug("Key released: {}", keyEvent.getCode());
+        log.trace("The {} key was released on me.", keyEvent.getCode());
 
         stateMachine.sendEvent(Events.stop);
     }
 
     private void handleKeyPressedEvent(KeyEvent keyEvent) {
 
-        log.debug("Key pressed: {}", keyEvent.getCode());
+        log.trace("The {} key was pressed on me.", keyEvent.getCode());
 
         if (stateMachine.getState().getId() != States.Alive)
             return;
@@ -278,37 +286,37 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
     private void timeToWakeUp(StateContext stateContext) {
 
-        log.debug("timeToWakeUp: {}", stateContext);
+        log.debug("It is time for me to wake up!");
+        log.trace("For more context, see stateContext details: {}", stateContext);
         stateMachine.sendEvent(Events.wakeUp);
     }
 
+    private void died(StateContext stateContext) {
 
-    private void dying(StateContext stateContext) {
-
-        log.debug("I am dying: {}", stateContext);
+        log.debug("I died, time for me to wake up again!");
+        log.trace("For more context, see stateContext details: {}", stateContext);
         this.translateXProperty().set(this.spawnCoordinateXProperty().get());
         this.translateYProperty().set(this.spawnCoordinateYProperty().get());
         stateMachine.sendEvent(Events.wakeUp);
     }
 
     @Override
-    public void detectCollision(Collidable collidableSprite) {
+    public void hitBy(Collidable collidableObject) {
 
+        if (collidableObject instanceof Spider || collidableObject instanceof Bat) {
 
-        if (collidableSprite instanceof Spider || collidableSprite instanceof Bat) {
-
-            log.debug("Colliding with animal.");
+            log.debug("I collided with an animal, fainting...");
             stateMachine.sendEvent(Events.stop);
             stateMachine.sendEvent(Events.faint);
-        } else if (collidableSprite instanceof Weapon) {
+        } else if (collidableObject instanceof Weapon) {
 
-            log.debug("Colliding with weapon.");
-            this.weapon = (Weapon) collidableSprite;
+            log.debug("I collided with a weapon, picking it up...");
+            this.weapon = (Weapon) collidableObject;
             weapon.pickUp();
-        } else if (collidableSprite instanceof GreyRobot) {
+        } else if (collidableObject instanceof GreyRobot) {
 
-            log.debug("Colliding with robot.");
-            stateMachine.sendEvent(Events.stop);
+            log.debug("I collided with a robot, dying...");
+            stopMovingMe();
             stateMachine.sendEvent(Events.die);
         }
     }
@@ -316,14 +324,6 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     @Override
     public boolean isHittable() {
 
-        switch (stateMachine.getState().getId()) {
-            case Stopped:
-            case MovingLeft:
-            case MovingRight:
-            case MovingVertically:
-                return true;
-            default:
-                return false;
-        }
+        return stateMachine.getState().getId() != States.Dying;
     }
 }
