@@ -11,42 +11,31 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.utility.MazeNotFoundException;
+import org.moqucu.games.nightstalker.utility.SpriteSheetIndexOutOfBoundsException;
 import org.moqucu.games.nightstalker.view.Maze;
+import org.springframework.statemachine.config.StateMachineConfig;
+import org.springframework.statemachine.config.builders.*;
+import org.springframework.statemachine.config.common.annotation.AnnotationBuilder;
+import org.springframework.statemachine.config.common.annotation.ObjectPostProcessor;
 
 /**
  * Represents a basic sprite class that specializes ImageView.
  */
 @Data
 @Log4j2
-@SuppressWarnings("unused")
+@SuppressWarnings("ALL")
 @EqualsAndHashCode(callSuper = true)
-public abstract class Sprite extends ImageView {
+public abstract class Sprite<S, E> extends ImageView implements StateMachineConfigurer<S, E> {
 
     public static final double WIDTH = 32.0;
 
     public static final double HEIGHT = 32.0;
 
-    /**
-     * Exception is thrown whenever expected Maze object couldn't be found in sprite's parent hierarchy.
-     */
-    class MazeNotFoundException extends RuntimeException {
-
-        MazeNotFoundException() {
-
-            super("No Maze object found as part of sprite's parent hierarchy!");
-        }
-    }
-
-    /**
-     * Exception is thrown whenever expected the index for accessing a sprite sheet's cell is < 0 or > 239.
-     */
-    class SpriteSheetIndexOutOfBoundsException extends RuntimeException {
-
-        SpriteSheetIndexOutOfBoundsException() {
-
-            super("Index for accessing the sprite sheet has to be between 0 and 239!");
-        }
-    }
+    private StateMachineModelBuilder<S, E> modelBuilder;
+    private StateMachineTransitionBuilder<S, E> transitionBuilder;
+    private StateMachineStateBuilder<S, E> stateBuilder;
+    private StateMachineConfigurationBuilder<S, E> configurationBuilder;
 
     /**
      * Represents the cell index of the image tile that shall be used for rendering purposes. Default value is 0.
@@ -72,7 +61,7 @@ public abstract class Sprite extends ImageView {
      *
      * @return Rectangle that represents the boundaries of the accessed tile.
      *
-     * @throws RuntimeException if index is below 0 or above 239.
+     * @throws SpriteSheetIndexOutOfBoundsException if index is below 0 or above 239.
      */
     @SuppressWarnings("WeakerAccess")
     protected Rectangle2D getViewport(int index) {
@@ -141,5 +130,92 @@ public abstract class Sprite extends ImageView {
             throw new MazeNotFoundException();
 
         return (Maze)parent;
+    }
+
+    public final void init(StateMachineConfigBuilder<S, E> config) throws Exception {
+        config.setSharedObject(StateMachineModelBuilder.class, this.getStateMachineModelBuilder());
+        config.setSharedObject(StateMachineTransitionBuilder.class, this.getStateMachineTransitionBuilder());
+        config.setSharedObject(StateMachineStateBuilder.class, this.getStateMachineStateBuilder());
+        config.setSharedObject(StateMachineConfigurationBuilder.class, this.getStateMachineConfigurationBuilder());
+    }
+
+    @Override
+    public void configure(StateMachineConfigBuilder<S, E> config) {
+    }
+
+    @Override
+    public void configure(StateMachineModelConfigurer<S, E> model) {
+    }
+
+    @Override
+    public void configure(StateMachineConfigurationConfigurer<S, E> config) {
+    }
+
+    @Override
+    public void configure(StateMachineStateConfigurer<S, E> states) {
+    }
+
+    @Override
+    public void configure(StateMachineTransitionConfigurer<S, E> transitions) {
+    }
+
+    @Override
+    public boolean isAssignable(AnnotationBuilder<StateMachineConfig<S, E>> builder) {
+
+        return builder instanceof StateMachineConfigBuilder;
+    }
+
+    private StateMachineModelBuilder<S, E> getStateMachineModelBuilder() {
+        if (this.modelBuilder != null) {
+            return this.modelBuilder;
+        } else {
+            this.modelBuilder = new StateMachineModelBuilder(
+                    ObjectPostProcessor.QUIESCENT_POSTPROCESSOR,
+                    true
+            );
+            this.configure(this.modelBuilder);
+            return this.modelBuilder;
+        }
+    }
+
+    private StateMachineTransitionBuilder<S, E> getStateMachineTransitionBuilder() {
+
+        if (this.transitionBuilder != null) {
+            return this.transitionBuilder;
+        } else {
+            this.transitionBuilder = new StateMachineTransitionBuilder(
+                    ObjectPostProcessor.QUIESCENT_POSTPROCESSOR,
+                    true
+            );
+            this.configure(this.transitionBuilder);
+            return this.transitionBuilder;
+        }
+    }
+
+    private StateMachineStateBuilder<S, E> getStateMachineStateBuilder() {
+
+        if (this.stateBuilder != null) {
+            return this.stateBuilder;
+        } else {
+            this.stateBuilder = new StateMachineStateBuilder(
+                    ObjectPostProcessor.QUIESCENT_POSTPROCESSOR,
+                    true)
+            ;
+            this.configure(this.stateBuilder);
+            return this.stateBuilder;
+        }
+    }
+
+    private StateMachineConfigurationBuilder<S, E> getStateMachineConfigurationBuilder() throws Exception {
+        if (this.configurationBuilder != null) {
+            return this.configurationBuilder;
+        } else {
+            this.configurationBuilder = new StateMachineConfigurationBuilder(
+                    ObjectPostProcessor.QUIESCENT_POSTPROCESSOR,
+                    true
+            );
+            this.configure(this.configurationBuilder);
+            return this.configurationBuilder;
+        }
     }
 }

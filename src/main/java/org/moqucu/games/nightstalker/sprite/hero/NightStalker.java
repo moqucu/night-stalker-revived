@@ -19,10 +19,15 @@ import org.moqucu.games.nightstalker.sprite.enemy.Spider;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.ObjectStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineBuilder;
+import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.statemachine.config.model.StateMachineModel;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.uml.UmlStateMachineModelFactory;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -39,6 +44,9 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     enum Events {moveLeft, moveRight, moveVertically, stop, faint, wakeUp, die}
 
     private StateMachine<States, Events> stateMachine;
+
+    private StateMachine<String, String> stateMachine2;
+
 
     private Map<States, Indices> frameBoundaries = Map.of(
             States.Alive, Indices.builder().lower(0).upper(0).build(),
@@ -63,6 +71,18 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     public NightStalker() {
 
         super();
+
+        Resource model1 = new ClassPathResource("org/moqucu/games/nightstalker/statemachine/nightstalker.uml");
+        UmlStateMachineModelFactory builder = new UmlStateMachineModelFactory(model1);
+        builder.registerAction("action1", stateContext -> log.info("Event: {}, Source: {}, Target: {}", stateContext.getEvent(), stateContext.getSource(), stateContext.getTarget()));
+        StateMachineModel model = builder.build();
+        log.info("Model: {}", model);
+        log.info("Model States Data: {}", model.getStatesData());
+         model.getStatesData().getStateData().forEach(states -> {log.info("State: {}", states);});
+         model.getTransitionsData().getTransitions().forEach(log::info);
+
+        StateMachineFactory factory = new ObjectStateMachineFactory(model, builder);
+        log.info("factory: {}", factory);
 
         setImage(new Image(translate("images/night-stalker.png")));
 

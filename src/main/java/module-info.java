@@ -22,6 +22,7 @@ module org.moqucu.games.nightstalker {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
+    requires spring.statemachine.uml;
 
     exports org.moqucu.games.nightstalker;
     exports org.moqucu.games.nightstalker.configuration;

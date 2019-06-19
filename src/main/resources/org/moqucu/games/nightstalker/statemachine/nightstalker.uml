@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_PEIdgJCaEemDINas_5Dr7g" name="nightstalker.root">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_RVsQcJCaEemDINas_5Dr7g">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_3K-f8JCtEem7y4fCJ0UjqA" name="signals">
+    <packagedElement xmi:type="uml:Signal" xmi:id="_G-YxgJCyEem7y4fCJ0UjqA" name="spawn"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_OF1VUJCyEem7y4fCJ0UjqA" name="SignalEventSpawn" signal="_G-YxgJCyEem7y4fCJ0UjqA"/>
+    <packagedElement xmi:type="uml:Signal" xmi:id="_mhHHgJCpEemDINas_5Dr7g" name="stop"/>
+    <packagedElement xmi:type="uml:Signal" xmi:id="_IXrcgJCuEem7y4fCJ0UjqA" name="moveRight"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_LqlXsJCuEem7y4fCJ0UjqA" name="SignalEventMoveRight" signal="_IXrcgJCuEem7y4fCJ0UjqA"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_HVAJcJCsEem7y4fCJ0UjqA" name="SignalEventStop" signal="_mhHHgJCpEemDINas_5Dr7g"/>
+    <packagedElement xmi:type="uml:Signal" xmi:id="_Ys13oJCvEem7y4fCJ0UjqA" name="moveLeft"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_dQCWAJCvEem7y4fCJ0UjqA" name="SignalEventMoveLeft" signal="_Ys13oJCvEem7y4fCJ0UjqA"/>
+    <packagedElement xmi:type="uml:Signal" xmi:id="_Mld2IJCvEem7y4fCJ0UjqA" name="moveVertically"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_QG4HYJCvEem7y4fCJ0UjqA" name="SignalEventMoveVertically" signal="_Mld2IJCvEem7y4fCJ0UjqA"/>
+    <packagedElement xmi:type="uml:Signal" xmi:id="_Sp0IwJCwEem7y4fCJ0UjqA" name="faint"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_C_GjYJCwEem7y4fCJ0UjqA" name="SignalEventFaint" signal="_Sp0IwJCwEem7y4fCJ0UjqA"/>
+    <packagedElement xmi:type="uml:Signal" xmi:id="_M5q80JC1Eem7y4fCJ0UjqA" name="die"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_Pvt84JC1Eem7y4fCJ0UjqA" name="SignalEventDie" signal="_M5q80JC1Eem7y4fCJ0UjqA"/>
+    <packagedElement xmi:type="uml:Signal" xmi:id="_C54dcJC2Eem7y4fCJ0UjqA" name="wakeUp"/>
+    <packagedElement xmi:type="uml:SignalEvent" xmi:id="_BLyj8JC2Eem7y4fCJ0UjqA" name="SignalEventWakeUp" signal="_C54dcJC2Eem7y4fCJ0UjqA"/>
+    <packagedElement xmi:type="uml:TimeEvent" xmi:id="_hDBbQJC2Eem7y4fCJ0UjqA" name="TimeEventAfter2000" isRelative="true">
+      <when xmi:type="uml:TimeExpression" xmi:id="_akvTwJC3Eem7y4fCJ0UjqA">
+        <expr xmi:type="uml:LiteralInteger" xmi:id="_1dqeAJC3Eem7y4fCJ0UjqA" value="2000"/>
+      </when>
+    </packagedElement>
+  </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_QAEhUJCaEemDINas_5Dr7g" name="NightStalker">
+    <region xmi:type="uml:Region" xmi:id="_Qt4CgJCaEemDINas_5Dr7g" name="">
+      <transition xmi:type="uml:Transition" xmi:id="_XL6wEJCyEem7y4fCJ0UjqA" source="_6CBeMJCwEem7y4fCJ0UjqA" target="_MnQ9AJCbEemDINas_5Dr7g">
+        <trigger xmi:type="uml:Trigger" xmi:id="_lDHwcJCyEem7y4fCJ0UjqA" name="" event="_OF1VUJCyEem7y4fCJ0UjqA"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_FhODMJCiEemDINas_5Dr7g" name="" source="_JBS54JCxEem7y4fCJ0UjqA" target="_VXr3gJCgEemDINas_5Dr7g">
+        <trigger xmi:type="uml:Trigger" xmi:id="_oO0iUJCwEem7y4fCJ0UjqA" name="" event="_C_GjYJCwEem7y4fCJ0UjqA"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_XuxeIJC1Eem7y4fCJ0UjqA" source="_J2hKUJC0Eem7y4fCJ0UjqA" target="_692nkJCgEemDINas_5Dr7g">
+        <trigger xmi:type="uml:Trigger" xmi:id="_bZwiIJC1Eem7y4fCJ0UjqA" name="" event="_Pvt84JC1Eem7y4fCJ0UjqA"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_iJIkMJC1Eem7y4fCJ0UjqA" source="_JBS54JCxEem7y4fCJ0UjqA" target="_692nkJCgEemDINas_5Dr7g">
+        <trigger xmi:type="uml:Trigger" xmi:id="_qqoEIJC1Eem7y4fCJ0UjqA" name="" event="_Pvt84JC1Eem7y4fCJ0UjqA"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_6-GnwJC3Eem7y4fCJ0UjqA" source="_692nkJCgEemDINas_5Dr7g" target="_6CBeMJCwEem7y4fCJ0UjqA">
+        <trigger xmi:type="uml:Trigger" xmi:id="_9RsbAJC3Eem7y4fCJ0UjqA" name="" event="_hDBbQJC2Eem7y4fCJ0UjqA"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_LcM8cJC5Eem7y4fCJ0UjqA" source="_IeCiMJC5Eem7y4fCJ0UjqA" target="_6CBeMJCwEem7y4fCJ0UjqA"/>
+      <subvertex xmi:type="uml:State" xmi:id="_6CBeMJCwEem7y4fCJ0UjqA" name="Inactive"/>
+      <subvertex xmi:type="uml:State" xmi:id="_JBS54JCxEem7y4fCJ0UjqA" name="Active">
+        <region xmi:type="uml:Region" xmi:id="_pcUawZCxEem7y4fCJ0UjqA" name="">
+          <transition xmi:type="uml:Transition" xmi:id="_PEJncJChEemDINas_5Dr7g" name="" source="_MnQ9AJCbEemDINas_5Dr7g" target="_2bS_MJCcEemDINas_5Dr7g">
+            <trigger xmi:type="uml:Trigger" xmi:id="_baqlQJCuEem7y4fCJ0UjqA" name="" event="_LqlXsJCuEem7y4fCJ0UjqA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_SZBRgJChEemDINas_5Dr7g" name="" source="_MnQ9AJCbEemDINas_5Dr7g" target="_45EpMJCcEemDINas_5Dr7g">
+            <trigger xmi:type="uml:Trigger" xmi:id="_iVTmsJCvEem7y4fCJ0UjqA" name="" event="_dQCWAJCvEem7y4fCJ0UjqA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_g8SGoJChEemDINas_5Dr7g" name="" source="_MnQ9AJCbEemDINas_5Dr7g" target="_6ZpEEJCcEemDINas_5Dr7g">
+            <trigger xmi:type="uml:Trigger" xmi:id="_JM6JcJCwEem7y4fCJ0UjqA" name="" event="_QG4HYJCvEem7y4fCJ0UjqA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_b0sJcJCbEemDINas_5Dr7g" name="" source="_pGFRkJCcEemDINas_5Dr7g" target="_MnQ9AJCbEemDINas_5Dr7g">
+            <trigger xmi:type="uml:Trigger" xmi:id="_e9p1wJCsEem7y4fCJ0UjqA" name="" event="_HVAJcJCsEem7y4fCJ0UjqA"/>
+          </transition>
+          <subvertex xmi:type="uml:State" xmi:id="_MnQ9AJCbEemDINas_5Dr7g" name="Stopped"/>
+          <subvertex xmi:type="uml:State" xmi:id="_pGFRkJCcEemDINas_5Dr7g" name="Moving">
+            <region xmi:type="uml:Region" xmi:id="_2bJOMpCcEemDINas_5Dr7g" name="MovingRegion">
+              <subvertex xmi:type="uml:State" xmi:id="_2bS_MJCcEemDINas_5Dr7g" name="Right"/>
+              <subvertex xmi:type="uml:State" xmi:id="_45EpMJCcEemDINas_5Dr7g" name="Left"/>
+              <subvertex xmi:type="uml:State" xmi:id="_6ZpEEJCcEemDINas_5Dr7g" name="Vertically"/>
+            </region>
+          </subvertex>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_J2hKUJC0Eem7y4fCJ0UjqA" name="Paused">
+        <region xmi:type="uml:Region" xmi:id="_ZRmYQpC0Eem7y4fCJ0UjqA" name="">
+          <transition xmi:type="uml:Transition" xmi:id="_L10dsJC2Eem7y4fCJ0UjqA" source="_pOhfEJCgEemDINas_5Dr7g" target="_MnQ9AJCbEemDINas_5Dr7g">
+            <trigger xmi:type="uml:Trigger" xmi:id="_NvfVEJC2Eem7y4fCJ0UjqA" name="" event="_BLyj8JC2Eem7y4fCJ0UjqA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_GkxlYJC3Eem7y4fCJ0UjqA" source="_VXr3gJCgEemDINas_5Dr7g" target="_pOhfEJCgEemDINas_5Dr7g">
+            <trigger xmi:type="uml:Trigger" xmi:id="_KpPgYJC3Eem7y4fCJ0UjqA" name="" event="_hDBbQJC2Eem7y4fCJ0UjqA"/>
+          </transition>
+          <subvertex xmi:type="uml:State" xmi:id="_VXr3gJCgEemDINas_5Dr7g" name="Fainting"/>
+          <subvertex xmi:type="uml:State" xmi:id="_pOhfEJCgEemDINas_5Dr7g" name="Fainted"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_692nkJCgEemDINas_5Dr7g" name="Dying"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_IeCiMJC5Eem7y4fCJ0UjqA" name=""/>
+    </region>
+  </packagedElement>
+  <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_Rv-t0JCcEemDINas_5Dr7g">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_RwMwQJCcEemDINas_5Dr7g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
+    </eAnnotations>
+    <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
+  </profileApplication>
+</uml:Model>
