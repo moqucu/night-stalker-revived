@@ -18,6 +18,8 @@ import org.moqucu.games.nightstalker.sprite.enemy.Bat;
 import org.moqucu.games.nightstalker.sprite.enemy.Spider;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.view.Maze;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.statemachine.StateContext;
@@ -28,6 +30,7 @@ import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.config.model.StateMachineModel;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.uml.UmlStateMachineModelFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -36,6 +39,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @Log4j2
+@Component
 @EqualsAndHashCode(callSuper = true)
 public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
@@ -47,6 +51,8 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
     private StateMachine<String, String> stateMachine2;
 
+    @Autowired
+    private ApplicationContext appContext;
 
     private Map<States, Indices> frameBoundaries = Map.of(
             States.Alive, Indices.builder().lower(0).upper(0).build(),
@@ -83,6 +89,10 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
         StateMachineFactory factory = new ObjectStateMachineFactory(model, builder);
         log.info("factory: {}", factory);
+
+        StateMachine<String, String> stateMachine3 = appContext.getBean(StateMachine.class);
+        log.info("stateMachine: {}", stateMachine3);
+
 
         setImage(new Image(translate("images/night-stalker.png")));
 

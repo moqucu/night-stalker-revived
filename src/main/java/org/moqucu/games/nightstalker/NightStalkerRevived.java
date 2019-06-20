@@ -9,11 +9,13 @@ import org.moqucu.games.nightstalker.view.StageManager;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @SpringBootApplication
+@ComponentScan({"org.moqucu.games.nightstalker.sprite.hero"})
 public class NightStalkerRevived extends Application {
 
     private ConfigurableApplicationContext springContext;
