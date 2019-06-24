@@ -19,12 +19,10 @@ import org.moqucu.games.nightstalker.sprite.enemy.Spider;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
-import java.util.EnumSet;
 import java.util.Map;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
@@ -34,18 +32,20 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
-    enum States {Alive, Stopped, MovingLeft, MovingRight, MovingVertically, Fainting, Dying}
+    enum States {Inactive, Active, Paused, Dying, Stopped, Moving, Right, Left, Vertically, Fainting, Fainted}
 
-    enum Events {moveLeft, moveRight, moveVertically, stop, faint, wakeUp, die}
+    enum Events {spawn, moveRight, moveVertically, moveLeft, stop, faint, fallAsleep, die, becomeInactive, wakeUp}
 
     private StateMachine<States, Events> stateMachine;
 
     private Map<States, Indices> frameBoundaries = Map.of(
-            States.Alive, Indices.builder().lower(0).upper(0).build(),
-            States.MovingVertically, Indices.builder().lower(1).upper(2).build(),
-            States.MovingRight, Indices.builder().lower(11).upper(18).build(),
-            States.MovingLeft, Indices.builder().lower(3).upper(10).build(),
-            States.Fainting, Indices.builder().lower(19).upper(21).build(),
+            States.Inactive, Indices.builder().lower(24).upper(24).build(),
+            States.Stopped, Indices.builder().lower(0).upper(0).build(),
+            States.Vertically, Indices.builder().lower(1).upper(2).build(),
+            States.Right, Indices.builder().lower(11).upper(18).build(),
+            States.Left, Indices.builder().lower(3).upper(10).build(),
+            States.Fainting, Indices.builder().lower(19).upper(20).build(),
+            States.Fainted, Indices.builder().lower(21).upper(21).build(),
             States.Dying, Indices.builder().lower(22).upper(23).build()
     );
 
@@ -73,21 +73,28 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
 
+
+
             @Override
             public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
 
                 log.debug("My state changed to {}", transition.getTarget().getId());
-                setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
+                if (frameBoundaries.containsKey(transition.getTarget().getId()))
+                    setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
 
                 switch (transition.getTarget().getId()) {
 
-                    case Alive:
+                    case Inactive:
+                        translateXProperty().set(spawnCoordinateXProperty().get());
+                        translateYProperty().set(spawnCoordinateYProperty().get());
+                         break;
+                    case Stopped:
                         stopMovingMe();
                         stopAnimatingMe();
                         break;
-                    case MovingLeft:
-                    case MovingRight:
-                    case MovingVertically:
+                    case Left:
+                    case Right:
+                    case Vertically:
                         animateMeFromStart();
                         moveMeFromStart();
                         break;
@@ -113,89 +120,102 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.Alive)
-                .states(EnumSet.allOf(States.class));
-
+                .initial(States.Inactive)
+                .state(States.Inactive)
+                .state(States.Active)
+                .state(States.Paused)
+                .state(States.Dying)
+                .and()
+                .withStates()
+                .parent(States.Active)
+                .initial(States.Stopped)
+                .state(States.Stopped)
+                .state(States.Moving)
+                .and()
+                .withStates()
+                .parent(States.Moving)
+                .initial(States.Right)
+                .state(States.Right)
+                .state(States.Left)
+                .state(States.Vertically)
+                .and()
+                .withStates()
+                .parent(States.Paused)
+                .initial(States.Fainting)
+                .state(States.Fainting)
+                .state(States.Fainted)
+        ;
         builder.configureTransitions()
-                .withExternal()
-                .source(States.Alive)
-                .target(States.MovingLeft)
-                .event(Events.moveLeft)
+                .withInternal()
+                .source(States.Inactive)
+                .action(stateContext -> stateMachine.sendEvent(Events.spawn))
+                .timerOnce(1000)
                 .and()
                 .withExternal()
-                .source(States.MovingLeft)
-                .target(States.Alive)
-                .event(Events.stop)
+                .source(States.Inactive)
+                .target(States.Stopped)
+                .event(Events.spawn)
                 .and()
                 .withExternal()
-                .source(States.Alive)
-                .target(States.MovingRight)
+                .source(States.Stopped)
+                .target(States.Right)
                 .event(Events.moveRight)
                 .and()
                 .withExternal()
-                .source(States.Alive)
+                .source(States.Stopped)
+                .target(States.Left)
+                .event(Events.moveLeft)
+                .and()
+                .withExternal()
+                .source(States.Stopped)
+                .target(States.Vertically)
+                .event(Events.moveVertically)
+                .and()
+                .withExternal()
+                .source(States.Moving)
+                .target(States.Stopped)
+                .event(Events.stop)
+                .and()
+                .withExternal()
+                .source(States.Active)
                 .target(States.Fainting)
                 .event(Events.faint)
                 .and()
                 .withInternal()
                 .source(States.Fainting)
-                .action(this::timeToWakeUp)
-                .timerOnce(3000)
+                .action(stateContext -> stateMachine.sendEvent(Events.fallAsleep))
+                .timerOnce(2000)
                 .and()
                 .withExternal()
                 .source(States.Fainting)
-                .target(States.Alive)
+                .target(States.Fainted)
+                .event(Events.fallAsleep)
+                .and()
+                .withExternal()
+                .source(States.Fainted)
+                .target(States.Stopped)
                 .event(Events.wakeUp)
                 .and()
                 .withExternal()
-                .source(States.MovingRight)
-                .target(States.Alive)
-                .event(Events.stop)
-                .and()
-                .withExternal()
-                .source(States.Alive)
-                .target(States.MovingVertically)
-                .event(Events.moveVertically)
-                .and()
-                .withExternal()
-                .source(States.MovingVertically)
-                .target(States.Alive)
-                .event(Events.stop)
-                .and()
-                .withExternal()
-                .source(States.MovingVertically)
+                .source(States.Active)
                 .target(States.Dying)
                 .event(Events.die)
                 .and()
                 .withExternal()
-                .source(States.Alive)
-                .target(States.Dying)
-                .event(Events.die)
-                .and()
-                .withExternal()
-                .source(States.Stopped)
-                .target(States.Dying)
-                .event(Events.die)
-                .and()
-                .withExternal()
-                .source(States.MovingLeft)
-                .target(States.Dying)
-                .event(Events.die)
-                .and()
-                .withExternal()
-                .source(States.MovingRight)
+                .source(States.Paused)
                 .target(States.Dying)
                 .event(Events.die)
                 .and()
                 .withInternal()
                 .source(States.Dying)
-                .action(this::died)
+                .action(stateContext -> stateMachine.sendEvent(Events.becomeInactive))
                 .timerOnce(2000)
                 .and()
                 .withExternal()
                 .source(States.Dying)
-                .target(States.Alive)
-                .event(Events.wakeUp);
+                .target(States.Inactive)
+                .event(Events.becomeInactive)
+        ;
 
         return builder.build();
     }
@@ -211,7 +231,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
         log.trace("The {} key was pressed on me.", keyEvent.getCode());
 
-        if (stateMachine.getState().getId() != States.Alive)
+        if (stateMachine.getState().getId() != States.Active)
             return;
 
         switch (keyEvent.getCode()) {
@@ -284,29 +304,12 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         return mazeGraph;
     }
 
-    private void timeToWakeUp(StateContext stateContext) {
-
-        log.debug("It is time for me to wake up!");
-        log.trace("For more context, see stateContext details: {}", stateContext);
-        stateMachine.sendEvent(Events.wakeUp);
-    }
-
-    private void died(StateContext stateContext) {
-
-        log.debug("I died, time for me to wake up again!");
-        log.trace("For more context, see stateContext details: {}", stateContext);
-        this.translateXProperty().set(this.spawnCoordinateXProperty().get());
-        this.translateYProperty().set(this.spawnCoordinateYProperty().get());
-        stateMachine.sendEvent(Events.wakeUp);
-    }
-
     @Override
     public void hitBy(Collidable collidableObject) {
 
         if (collidableObject instanceof Spider || collidableObject instanceof Bat) {
 
             log.debug("I collided with an animal, fainting...");
-            stateMachine.sendEvent(Events.stop);
             stateMachine.sendEvent(Events.faint);
         } else if (collidableObject instanceof Weapon) {
 
