@@ -21,7 +21,7 @@ import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
-import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.transition.Transition;
 
 import java.util.Map;
 
@@ -37,17 +37,6 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     enum Events {spawn, moveRight, moveVertically, moveLeft, stop, faint, fallAsleep, die, becomeInactive, wakeUp}
 
     private StateMachine<States, Events> stateMachine;
-
-    private Map<States, Indices> frameBoundaries = Map.of(
-            States.Inactive, Indices.builder().lower(24).upper(24).build(),
-            States.Stopped, Indices.builder().lower(0).upper(0).build(),
-            States.Vertically, Indices.builder().lower(1).upper(2).build(),
-            States.Right, Indices.builder().lower(11).upper(18).build(),
-            States.Left, Indices.builder().lower(3).upper(10).build(),
-            States.Fainting, Indices.builder().lower(19).upper(20).build(),
-            States.Fainted, Indices.builder().lower(21).upper(21).build(),
-            States.Dying, Indices.builder().lower(22).upper(23).build()
-    );
 
     private MazeGraph mazeGraph;
 
@@ -65,52 +54,90 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         super();
 
         setImage(new Image(translate("images/night-stalker.png")));
+        setAnimationProperties(
+                Map.of
+                        (
+                                States.Inactive, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(24).upper(24).build())
+                                        .build(),
+                                States.Stopped, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(0).build())
+                                        .build(),
+                                States.Vertically, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(1).upper(2).build())
+                                        .build(),
+                                States.Right, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(11).upper(18).build())
+                                        .build(),
+                                States.Left, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(3).upper(10).build())
+                                        .build(),
+                                States.Fainting, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(250)
+                                        .frameIndices(Indices.builder().lower(19).upper(20).build())
+                                        .build(),
+                                States.Fainted, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(21).upper(21).build())
+                                        .build(),
+                                States.Dying, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(22).upper(23).build())
+                                        .build()
+                        )
+        );
 
         setFocusTraversable(true);
         setOnKeyPressed(this::handleKeyPressedEvent);
         setOnKeyReleased(this::handleKeyReleasedEvent);
 
         stateMachine = buildStateMachine();
-        stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
-
-
-
-            @Override
-            public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
-
-                log.debug("My state changed to {}", transition.getTarget().getId());
-                if (frameBoundaries.containsKey(transition.getTarget().getId()))
-                    setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-
-                switch (transition.getTarget().getId()) {
-
-                    case Inactive:
-                        translateXProperty().set(spawnCoordinateXProperty().get());
-                        translateYProperty().set(spawnCoordinateYProperty().get());
-                         break;
-                    case Stopped:
-                        stopMovingMe();
-                        stopAnimatingMe();
-                        break;
-                    case Left:
-                    case Right:
-                    case Vertically:
-                        animateMeFromStart();
-                        moveMeFromStart();
-                        break;
-                    case Fainting:
-                        log.debug("I am still fainting...");
-                        animateMeFromStart();
-                        break;
-                    case Dying:
-                        log.debug("I am still dying...");
-                        animateMeFromStart();
-                        beingZappedSound.play();
-                        break;
-                }
-            }
-        });
+        stateMachine.addStateListener(this);
         stateMachine.start();
+    }
+
+    @Override
+    public void transitionEnded(Transition transition) {
+
+        super.transitionEnded(transition);
+        switch ((States)transition.getTarget().getId()) {
+
+            case Inactive:
+                translateXProperty().set(spawnCoordinateXProperty().get());
+                translateYProperty().set(spawnCoordinateYProperty().get());
+                break;
+            case Stopped:
+                stopMovingMe();
+                stopAnimatingMe();
+                break;
+            case Left:
+            case Right:
+            case Vertically:
+                moveMeFromStart();
+                break;
+            case Fainting:
+                stopMovingMe();
+                log.debug("I am still fainting...");
+                break;
+            case Dying:
+                stopMovingMe();
+                log.debug("I am still dying...");
+                beingZappedSound.play();
+                break;
+        }
     }
 
     @SneakyThrows
@@ -149,7 +176,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 .withInternal()
                 .source(States.Inactive)
                 .action(stateContext -> stateMachine.sendEvent(Events.spawn))
-                .timerOnce(1000)
+                .timerOnce(500)
                 .and()
                 .withExternal()
                 .source(States.Inactive)
@@ -184,12 +211,17 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 .withInternal()
                 .source(States.Fainting)
                 .action(stateContext -> stateMachine.sendEvent(Events.fallAsleep))
-                .timerOnce(2000)
+                .timerOnce(500)
                 .and()
                 .withExternal()
                 .source(States.Fainting)
                 .target(States.Fainted)
                 .event(Events.fallAsleep)
+                .and()
+                .withInternal()
+                .source(States.Fainted)
+                .action(stateContext -> stateMachine.sendEvent(Events.wakeUp))
+                .timerOnce(500)
                 .and()
                 .withExternal()
                 .source(States.Fainted)
@@ -209,7 +241,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 .withInternal()
                 .source(States.Dying)
                 .action(stateContext -> stateMachine.sendEvent(Events.becomeInactive))
-                .timerOnce(2000)
+                .timerOnce(1750)
                 .and()
                 .withExternal()
                 .source(States.Dying)
@@ -319,7 +351,6 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         } else if (collidableObject instanceof GreyRobot) {
 
             log.debug("I collided with a robot, dying...");
-            stopMovingMe();
             stateMachine.sendEvent(Events.die);
         }
     }

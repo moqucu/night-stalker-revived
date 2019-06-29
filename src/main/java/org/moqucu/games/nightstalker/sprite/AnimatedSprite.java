@@ -7,6 +7,15 @@ import javafx.util.Duration;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.utility.CustomTransition;
+import org.springframework.messaging.Message;
+import org.springframework.statemachine.StateContext;
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.listener.StateMachineListener;
+import org.springframework.statemachine.state.State;
+import org.springframework.statemachine.transition.Transition;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static javafx.animation.Animation.INDEFINITE;
 
@@ -14,7 +23,7 @@ import static javafx.animation.Animation.INDEFINITE;
 @Log4j2
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
-public abstract class AnimatedSprite extends Sprite {
+public abstract class AnimatedSprite extends Sprite implements StateMachineListener {
 
     @Data
     @Builder
@@ -23,6 +32,19 @@ public abstract class AnimatedSprite extends Sprite {
         private int lower;
         private int upper;
     }
+
+    @Data
+    @Builder
+    static protected class AnimationProperty {
+
+        private Indices frameIndices;
+        private Boolean autoReversible;
+        private Integer frameDurationInMillis;
+    }
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final ObjectProperty<Map<Enum, AnimationProperty>> animationProperties;
 
     private Animation animation;
 
@@ -43,6 +65,7 @@ public abstract class AnimatedSprite extends Sprite {
 
         super();
         frameIndices = wrapIndicesInObjectProperty(Indices.builder().lower(0).upper(0).build());
+        animationProperties = wrapAnimationPropertiesInObjectProperty(new HashMap<>());
     }
 
     private ObjectProperty<Indices> wrapIndicesInObjectProperty(Indices indices) {
@@ -61,6 +84,28 @@ public abstract class AnimatedSprite extends Sprite {
             public String getName() {
 
                 return "indices";
+            }
+        };
+    }
+
+    private ObjectProperty<Map<Enum, AnimationProperty>> wrapAnimationPropertiesInObjectProperty(
+            Map<Enum, AnimationProperty> animationProperties
+    ) {
+
+        return new ObjectPropertyBase<>(animationProperties) {
+
+            Map<Enum, AnimationProperty> animationPropertiesObject = animationProperties;
+
+            @Override
+            public Object getBean() {
+
+                return animationPropertiesObject;
+            }
+
+            @Override
+            public String getName() {
+
+                return "animationProperties";
             }
         };
     }
@@ -101,6 +146,22 @@ public abstract class AnimatedSprite extends Sprite {
     public ObjectProperty<Indices> frameIndicesProperty() {
 
         return frameIndices;
+    }
+
+    public Map<Enum, AnimationProperty> getAnimationProperties() {
+
+        return animationProperties.get();
+    }
+
+    public void setAnimationProperties(Map<Enum, AnimationProperty> animationProperties) {
+
+        this.animationProperties.set(animationProperties);
+        configureAnimation();
+    }
+
+    public ObjectProperty<Map<Enum, AnimationProperty>> getAnimationPropertiesProperty() {
+
+        return animationProperties;
     }
 
     public boolean isAutoReversible() {
@@ -165,5 +226,66 @@ public abstract class AnimatedSprite extends Sprite {
     protected Point2D getCurrentLocation() {
 
         return new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
+    }
+
+    @Override
+    public void stateChanged(State state, State state1) {
+    }
+
+    @Override
+    public void stateEntered(State state) {
+    }
+
+    @Override
+    public void stateExited(State state) {
+    }
+
+    @Override
+    public void eventNotAccepted(Message message) {
+    }
+
+    @Override
+    public void transition(Transition transition) {
+    }
+
+    @Override
+    public void transitionStarted(Transition transition) {
+    }
+
+    @Override
+    @SuppressWarnings("SuspiciousMethodCalls")
+    public void transitionEnded(Transition transition) {
+
+        log.debug("My state changed to {}", transition.getTarget().getId());
+        stopAnimatingMe();
+        if (getAnimationProperties().containsKey(transition.getTarget().getId())) {
+
+            setFrameIndices(getAnimationProperties().get(transition.getTarget().getId()).getFrameIndices());
+            setAutoReversible(getAnimationProperties().get(transition.getTarget().getId()).getAutoReversible());
+            setFrameDurationInMillis(
+                    getAnimationProperties().get(transition.getTarget().getId()).getFrameDurationInMillis()
+            );
+        }
+        animateMeFromStart();
+    }
+
+    @Override
+    public void stateMachineStarted(StateMachine stateMachine) {
+    }
+
+    @Override
+    public void stateMachineStopped(StateMachine stateMachine) {
+    }
+
+    @Override
+    public void stateMachineError(StateMachine stateMachine, Exception e) {
+    }
+
+    @Override
+    public void extendedStateChanged(Object o, Object o1) {
+    }
+
+    @Override
+    public void stateContext(StateContext stateContext) {
     }
 }

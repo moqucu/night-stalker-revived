@@ -166,7 +166,6 @@ public class Bat extends SleepingSprite implements Hittable, Collidable {
     @Override
     public void hitBy(Collidable collidableObject) {
 
-
         if (collidableObject instanceof Bullet) {
 
             log.debug("Hit by bullet...");

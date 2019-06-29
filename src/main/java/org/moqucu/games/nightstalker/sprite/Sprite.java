@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.view.Maze;
+import org.springframework.statemachine.StateContext;
+import org.springframework.statemachine.state.StateListener;
 
 /**
  * Represents a basic sprite class that specializes ImageView.
