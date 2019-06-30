@@ -12,8 +12,7 @@ import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
-import org.springframework.statemachine.listener.StateMachineListener;
-import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.transition.Transition;
 
 import java.util.*;
 
@@ -32,33 +31,37 @@ public class Bat extends SleepingSprite implements Hittable, Collidable {
 
     private StateMachine<States, Events> stateMachine;
 
-    private Map<States, Indices> frameBoundaries = Map.of(
-            States.Asleep, Indices.builder().lower(0).upper(0).build(),
-            States.Awake, Indices.builder().lower(0).upper(0).build(),
-            States.Moving, Indices.builder().lower(1).upper(5).build(),
-            States.Hit, Indices.builder().lower(6).upper(9).build()
-    );
-
-    private StateMachineListener<States, Events> stateMachineListener
-            = new StateMachineListenerAdapter<>() {
-
-        @Override
-        public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
-
-            log.debug("State changed to {}", transition.getTarget().getId());
-
-            setFrameIndices(frameBoundaries.get(transition.getTarget().getId()));
-
-            if (transition.getTarget().getId() == States.Awake)
-                stateMachine.sendEvent(Events.move);
-        }
-    };
-
     public Bat() {
 
         super();
 
         setImage(new Image(translate("images/bat.png")));
+
+        setAnimationProperties(
+                Map.of
+                        (
+                                States.Asleep, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(0).build())
+                                        .build(),
+                                States.Awake, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(0).build())
+                                        .build(),
+                                States.Moving, AnimationProperty.builder()
+                                        .autoReversible(true)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(1).upper(5).build())
+                                        .build(),
+                                States.Hit, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(6).upper(9).build())
+                                        .build()
+                        )
+        );
 
         sleepTimeInMillisProperty().addListener((observableValue, number, t1) -> {
 
@@ -70,17 +73,19 @@ public class Bat extends SleepingSprite implements Hittable, Collidable {
         setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
     }
 
+    @SuppressWarnings("unchecked")
     private void stopAndDeconstructStateMachine() {
 
         stateMachine.stop();
-        stateMachine.removeStateListener(stateMachineListener);
+        stateMachine.removeStateListener(this);
         stateMachine = null;
     }
 
+    @SuppressWarnings("unchecked")
     private void configureAndStartStateMachine() {
 
         stateMachine = buildStateMachine();
-        stateMachine.addStateListener(stateMachineListener);
+        stateMachine.addStateListener(this);
         stateMachine.start();
     }
 
@@ -134,6 +139,15 @@ public class Bat extends SleepingSprite implements Hittable, Collidable {
         ;
 
         return builder.build();
+    }
+
+    @Override
+    public void transitionEnded(Transition transition) {
+
+        super.transitionEnded(transition);
+
+        if (transition.getTarget().getId() == States.Awake)
+            stateMachine.sendEvent(Events.move);
     }
 
     private void timeToWakeUp(StateContext stateContext) {
@@ -196,5 +210,4 @@ public class Bat extends SleepingSprite implements Hittable, Collidable {
                 return false;
         }
     }
-
 }

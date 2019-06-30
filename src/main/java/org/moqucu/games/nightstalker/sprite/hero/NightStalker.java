@@ -105,6 +105,8 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         setOnKeyReleased(this::handleKeyReleasedEvent);
 
         stateMachine = buildStateMachine();
+
+        //noinspection unchecked
         stateMachine.addStateListener(this);
         stateMachine.start();
     }

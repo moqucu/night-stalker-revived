@@ -24,9 +24,9 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
 
-    private enum States {Offline, Stopped, Moving, SlowlyMoving, FastMoving}
+    private enum States {Offline, Stopped, Moving, SlowlyMoving, FastMoving, Hit}
 
-    private enum Events {wakeUp, move, moveFaster, stop}
+    private enum Events {wakeUp, move, moveFaster, stop, hit, spawn}
 
     private StateMachine<States, Events> stateMachine;
 
