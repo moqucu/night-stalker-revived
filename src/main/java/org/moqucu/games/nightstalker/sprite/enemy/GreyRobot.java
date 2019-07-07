@@ -9,11 +9,11 @@ import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
-import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
-import org.springframework.statemachine.listener.StateMachineListener;
-import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.transition.Transition;
+
+import java.util.Map;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
@@ -24,58 +24,53 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
 
-    private enum States {Offline, Stopped, Moving, SlowlyMoving, FastMoving, Hit}
+    private enum States {Inactive, Active, Stopped, Moving, SlowlyMoving, MovingFast, FallingApart}
 
-    private enum Events {wakeUp, move, moveFaster, stop, hit, spawn}
+    private enum Events {spawn, move, faster, stop, fallApart, becomeInactive}
 
     private StateMachine<States, Events> stateMachine;
-
-    private StateMachineListener<States, Events> stateMachineListener = new StateMachineListenerAdapter<>() {
-
-        @Override
-        public void transitionEnded(org.springframework.statemachine.transition.Transition<States, Events> transition) {
-
-            switch (transition.getTarget().getId()) {
-                case Stopped:
-                    stateMachine.sendEvent(Events.move);
-                    break;
-                case FastMoving:
-                    setVelocity(50);
-                    break;
-            }
-        }
-    };
 
     public GreyRobot() {
 
         super();
 
         setImage(new Image(translate("images/grey-robot.png")));
-
-        setAutoReversible(false);
-        setFrameIndices(Indices.builder().lower(0).upper(1).build());
-
-        sleepTimeInMillisProperty().addListener((observableValue, number, t1) -> {
-
-            stopAndDeconstructStateMachine();
-            configureAndStartStateMachine();
-        });
-
-        configureAndStartStateMachine();
-        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
-    }
-
-    private void stopAndDeconstructStateMachine() {
-
-        stateMachine.stop();
-        stateMachine.removeStateListener(stateMachineListener);
-        stateMachine = null;
-    }
-
-    private void configureAndStartStateMachine() {
+        setAnimationProperties(
+                Map.of
+                        (
+                                States.Inactive, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(10).upper(10).build())
+                                        .build(),
+                                States.Stopped, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(0).build())
+                                        .build(),
+                                States.SlowlyMoving, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(1).build())
+                                        .build(),
+                                States.MovingFast, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(1).build())
+                                        .build(),
+                                States.FallingApart, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(6).upper(9).build())
+                                        .build()
+                        )
+        );
 
         stateMachine = buildStateMachine();
-        stateMachine.addStateListener(stateMachineListener);
+
+        //noinspection unchecked
+        stateMachine.addStateListener(this);
+        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.stop));
         stateMachine.start();
     }
 
@@ -86,74 +81,101 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.Offline)
+                .initial(States.Inactive)
+                .state(States.Active)
+                .state(States.FallingApart)
+                .and()
+                .withStates()
+                .parent(States.Active)
+                .initial(States.Stopped)
                 .state(States.Stopped)
                 .state(States.Moving)
                 .and()
                 .withStates()
                 .parent(States.Moving)
                 .initial(States.SlowlyMoving)
-                .state(States.FastMoving);
+                .state(States.SlowlyMoving)
+                .state(States.MovingFast);
 
         builder.configureTransitions()
                 .withInternal()
-                .source(States.Offline)
-                .action(this::timeToWakeUp)
-                .timerOnce(1000)
+                .source(States.Inactive)
+                .action(stateContext -> stateMachine.sendEvent(Events.spawn))
+                .timerOnce(500)
                 .and()
                 .withExternal()
-                .source(States.Offline)
-                .action(this::wokeUp)
+                .source(States.Inactive)
+                .event(Events.spawn)
                 .target(States.Stopped)
-                .event(Events.wakeUp)
                 .and()
                 .withExternal()
                 .source(States.Stopped)
-                .target(States.Moving)
-                .action(this::startedToMove)
                 .event(Events.move)
-                .and()
-                .withExternal()
-                .source(States.Moving)
-                .target(States.Stopped)
-                .event(Events.stop)
+                .target(States.SlowlyMoving)
                 .and()
                 .withInternal()
                 .source(States.SlowlyMoving)
-                .action(this::timeToMoveFaster)
+                .action(stateContext -> stateMachine.sendEvent(Events.faster))
                 .timerOnce(4000)
                 .and()
                 .withExternal()
                 .source(States.SlowlyMoving)
-                .target(States.FastMoving)
-                .event(Events.moveFaster);
+                .event(Events.faster)
+                .target(States.MovingFast)
+                .event(Events.move)
+                .and()
+                .withExternal()
+                .source(States.Moving)
+                .event(Events.stop)
+                .target(States.Stopped)
+                .and()
+                .withExternal()
+                .source(States.Active)
+                .event(Events.fallApart)
+                .target(States.FallingApart)
+                .and()
+                .withInternal()
+                .source(States.FallingApart)
+                .action(stateContext -> stateMachine.sendEvent(Events.becomeInactive))
+                .timerOnce(getSleepTimeInMillis())
+                .and()
+                .withExternal()
+                .source(States.FallingApart)
+                .event(Events.becomeInactive)
+                .target(States.Inactive);
 
         return builder.build();
     }
 
-    private void timeToMoveFaster(StateContext stateContext) {
+    @Override
+    public void transitionEnded(Transition transition) {
 
-        log.debug("timeToMoveFaster: {}", stateContext);
-        stateMachine.sendEvent(Events.moveFaster);
-    }
+        super.transitionEnded(transition);
 
-    private void timeToWakeUp(StateContext stateContext) {
+        switch ((States)transition.getTarget().getId()) {
 
-        log.debug("timeToWakeUp: {}", stateContext);
-        stateMachine.sendEvent(Events.wakeUp);
-    }
+            case Inactive:
+                translateXProperty().set(spawnCoordinateXProperty().get());
+                translateYProperty().set(spawnCoordinateYProperty().get());
+                break;
+            case Stopped:
+                stopMovingMe();
+                stateMachine.sendEvent(Events.move);
+                break;
+            case SlowlyMoving:
+                computeNextMoveAnimationBasedOnRandomDirection();
+                moveMeFromStart();
+                break;
+            case MovingFast:
+                computeNextMoveAnimationBasedOnRandomDirection();
+                moveMeFromStart();
+                setVelocity(50);
+                break;
+            case FallingApart:
+                stopMovingMe();
+                break;
+        }
 
-    private void wokeUp(StateContext stateContext) {
-
-        log.debug("wokeUp: {}", stateContext);
-        animateMeFromStart();
-    }
-
-    private void startedToMove(StateContext stateContext) {
-
-        log.debug("startedToMove: {}", stateContext);
-        computeNextMoveAnimationBasedOnRandomDirection();
-        moveMeFromStart();
     }
 
     @Override
@@ -163,7 +185,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
 
             log.debug("Hit by bullet...");
             stopMovingMe();
-            stateMachine.sendEvent(Events.stop);
+            stateMachine.sendEvent(Events.fallApart);
         }
     }
 
@@ -181,14 +203,6 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
 
     private boolean isActive() {
 
-        switch (stateMachine.getState().getId()) {
-            case Stopped:
-            case FastMoving:
-            case Moving:
-            case SlowlyMoving:
-                return true;
-            default:
-                return false;
-        }
+        return stateMachine.getState().getId().equals(States.Active);
     }
 }

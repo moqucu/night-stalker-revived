@@ -47,8 +47,8 @@
                     velocity="50"
             />
             <GreyRobot
-                    translateX="48.0"
-                    translateY="320.0"
+                    spawnCoordinateX="48.0"
+                    spawnCoordinateY="320.0"
                     autoReversible="false"
                     frameDurationInMillis="100"
                     velocity="25"
