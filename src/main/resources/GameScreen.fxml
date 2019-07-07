@@ -19,6 +19,7 @@
 <?import org.moqucu.games.nightstalker.sprite.enemy.Spider?>
 <?import org.moqucu.games.nightstalker.sprite.enemy.Bat?>
 
+<?import org.moqucu.games.nightstalker.sprite.object.LivesIndex?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
         xmlns:fx="http://javafx.com/fxml/1"
@@ -35,6 +36,11 @@
         <Pane>
             <Weapon/>
             <Bullet/>
+            <LivesIndex
+                x="98.0"
+                y="352.0"
+                style="-fx-fill: #FFE102; -fx-font-size: 40px;"
+            />
         </Pane>
         <Pane>
             <Spider
