@@ -1,7 +1,6 @@
 package org.moqucu.games.nightstalker.test;
 
 import javafx.geometry.Point2D;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Direction;
@@ -31,6 +30,5 @@ class MazeGraphTest {
                 Direction.Left,
                 0.0
         );
-        Assert.assertNotNull(reachablePoints);
     }
 }

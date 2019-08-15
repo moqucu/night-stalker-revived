@@ -21,6 +21,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="night-stalker-revived" target="11" />
+      <module name="night-stalker-revived.main" target="11" />
+      <module name="night-stalker-revived.test" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

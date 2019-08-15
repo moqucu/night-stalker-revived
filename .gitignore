@@ -1,27 +1,3 @@
-# Compiled class file
-*.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-
 # Created by https://www.gitignore.io/api/intellij
 
 ### Intellij ###
@@ -32,6 +8,7 @@ hs_err_pid*
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+.idea/*
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
@@ -43,8 +20,15 @@ hs_err_pid*
 .idea/**/uiDesigner.xml
 
 # Gradle:
+.idea
 .idea/**/gradle.xml
 .idea/**/libraries
+.gradle
+/build/
+.out/
+.dist/
+*/.out/
+*/out/*
 
 # CMake
 cmake-build-debug/
@@ -83,8 +67,6 @@ fabric.properties
 modules.xml
 .idea/misc.xml
 *.ipr
-*.java-version
-.idea
 
 # Sonarlint plugin
 .idea/sonarlint
@@ -100,6 +82,9 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+lombok.config
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+
+.java-version
