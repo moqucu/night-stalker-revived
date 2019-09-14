@@ -28,9 +28,9 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:mac:12" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-media:mac:12" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:mac:12" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:12" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-media:mac:12" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:mac:12" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:12" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:mac:12" level="project" />
@@ -45,8 +45,8 @@
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:5.1.7.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-core:5.1.7.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.26" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.yaml:snakeyaml:1.23" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.26" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-jcl:5.1.7.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.projectlombok:lombok:1.18.8" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.2.3" level="project" />
