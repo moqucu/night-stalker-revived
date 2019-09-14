@@ -20,7 +20,7 @@ public class SpringFXMLLoader {
     @Autowired
     public SpringFXMLLoader(ApplicationContext context) {
 
-        this.resourceBundle = ResourceBundle.getBundle("/Users/seikenberg/IdeaProjects/night-stalker-revived/src/main/resources/Bundle");
+        this.resourceBundle = ResourceBundle.getBundle("Bundle");
         this.context = context;
     }
 
