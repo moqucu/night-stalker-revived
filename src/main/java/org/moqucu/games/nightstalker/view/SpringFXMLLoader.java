@@ -20,7 +20,7 @@ public class SpringFXMLLoader {
     @Autowired
     public SpringFXMLLoader(ApplicationContext context) {
 
-        this.resourceBundle = ResourceBundle.getBundle("Bundle");
+        this.resourceBundle = ResourceBundle.getBundle("org.moqucu.games.nightstalker.Bundle");
         this.context = context;
     }
 

@@ -331,7 +331,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
         if (mazeGraph == null)
             mazeGraph = new MazeGraph(
-                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph-night-stalker.json")
+                    (new ClassPathResource("maze-graph-night-stalker.json")
                             .getInputStream())
             );
 
