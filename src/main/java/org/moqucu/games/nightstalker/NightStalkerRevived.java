@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import org.moqucu.games.nightstalker.configuration.NightStalkerRevivedConfiguration;
+import org.moqucu.games.nightstalker.controller.GameScreenController;
 import org.moqucu.games.nightstalker.controller.SplashScreenController;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
 import org.moqucu.games.nightstalker.view.FxmlView;
@@ -18,7 +19,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @SpringBootApplication
-@Import({ NightStalkerRevivedConfiguration.class, SpringFXMLLoader.class, SplashScreenController.class})
+@Import(
+        {
+                NightStalkerRevivedConfiguration.class,
+                SpringFXMLLoader.class,
+                SplashScreenController.class,
+                GameScreenController.class
+        }
+)
 public class NightStalkerRevived extends Application {
 
     private ConfigurableApplicationContext springContext;

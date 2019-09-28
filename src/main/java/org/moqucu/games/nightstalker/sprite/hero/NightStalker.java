@@ -1,13 +1,13 @@
 package org.moqucu.games.nightstalker.sprite.hero;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.AudioClip;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import javafx.scene.image.Image;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Collidable;
@@ -43,6 +43,10 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     private Weapon weapon = null;
 
     private Direction direction;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final IntegerProperty lives = new SimpleIntegerProperty(6);
 
     private AudioClip beingZappedSound = new AudioClip(
             Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/zap.wav").toString()
@@ -137,6 +141,8 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             case Dying:
                 stopMovingMe();
                 log.debug("I am still dying...");
+                lives.subtract(1);
+                log.debug("Lives left: {}", lives.get());
                 beingZappedSound.play();
                 break;
         }
@@ -331,7 +337,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
 
         if (mazeGraph == null)
             mazeGraph = new MazeGraph(
-                    (new ClassPathResource("org/moqucu/games/nightstalker/data/maze-graph-night-stalker.json")
+                    (new ClassPathResource("maze-graph-night-stalker.json")
                             .getInputStream())
             );
 
@@ -361,5 +367,23 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
     public boolean isHittable() {
 
         return stateMachine.getState().getId() != States.Dying;
+    }
+
+    @SuppressWarnings("unused")
+    public double getLives() {
+
+        return lives.get();
+    }
+
+    @SuppressWarnings("unused")
+    public void setLivest(int lives) {
+
+        this.lives.set(lives);
+    }
+
+    @SuppressWarnings("unused")
+    public IntegerProperty livesProperty() {
+
+        return lives;
     }
 }
