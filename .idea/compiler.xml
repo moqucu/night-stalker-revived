@@ -17,18 +17,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="night-stalker-revived" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="night-stalker-revived" target="11" />
       <module name="night-stalker-revived.main" target="11" />
       <module name="night-stalker-revived.test" target="11" />
+      <module name="org.moqucu.games.nightstalker" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="night-stalker-revived" options="-parameters" />
+      <module name="org.moqucu.games.nightstalker" options="-parameters" />
     </option>
   </component>
 </project>

@@ -12,8 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.view.Maze;
-import org.springframework.statemachine.StateContext;
-import org.springframework.statemachine.state.StateListener;
 
 /**
  * Represents a basic sprite class that specializes ImageView.
@@ -31,7 +29,7 @@ public abstract class Sprite extends ImageView {
     /**
      * Exception is thrown whenever expected Maze object couldn't be found in sprite's parent hierarchy.
      */
-    class MazeNotFoundException extends RuntimeException {
+    static class MazeNotFoundException extends RuntimeException {
 
         MazeNotFoundException() {
 
@@ -42,7 +40,7 @@ public abstract class Sprite extends ImageView {
     /**
      * Exception is thrown whenever expected the index for accessing a sprite sheet's cell is < 0 or > 239.
      */
-    class SpriteSheetIndexOutOfBoundsException extends RuntimeException {
+    static class SpriteSheetIndexOutOfBoundsException extends RuntimeException {
 
         SpriteSheetIndexOutOfBoundsException() {
 

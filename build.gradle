@@ -15,7 +15,7 @@ dependencyManagement {
 }
 
 allprojects {
-    group = 'com.apple.maps.sentinel.scheduler'
+    group = 'org.moqucu.games.nightstalker'
     version = '1.0.0-SNAPSHOT'
 
     apply plugin: 'java'
@@ -32,16 +32,6 @@ allprojects {
         mavenCentral()
     }
 
-    tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
-
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked"
-        }
-    }
-
     sourceCompatibility = 11
     targetCompatibility = 11
 
@@ -55,9 +45,11 @@ allprojects {
         implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.9'
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.9'
 
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+        runtime 'org.mapstruct:mapstruct-processor:1.2.0.Final'
 
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
     }
 
     javafx {
