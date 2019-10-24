@@ -20,8 +20,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="night-stalker-revived.main" target="11" />
-      <module name="night-stalker-revived.test" target="11" />
       <module name="org.moqucu.games.nightstalker" target="11" />
     </bytecodeTargetLevel>
   </component>

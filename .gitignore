@@ -6,6 +6,7 @@
 
 # User-specific stuff:
 .idea/**/workspace.xml
+.idea/**/*.xml
 .idea/**/tasks.xml
 .idea/dictionaries
 .idea/*

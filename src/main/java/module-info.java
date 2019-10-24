@@ -40,5 +40,4 @@ module org.moqucu.games.nightstalker {
     opens org.moqucu.games.nightstalker.view to spring.core;
     opens org.moqucu.games.nightstalker.sprite to javafx.fxml;
     opens org.moqucu.games.nightstalker.model to com.fasterxml.jackson.databind;
-
 }

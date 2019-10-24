@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
-import org.moqucu.games.nightstalker.utility.LoadListenerAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,21 +23,6 @@ public class StageManager {
     public StageManager(SpringFXMLLoader springFXMLLoader, Stage primaryStage) {
 
         this.springFXMLLoader = springFXMLLoader;
-        this.springFXMLLoader.addLoadListener(new LoadListenerAdapter() {
-            @Override
-            public void endElement(Object value) {
-
-                if (value instanceof NightStalker) {
-
-                    nightStalker = (NightStalker) value;
-                    nightStalker.livesProperty().addListener((observable, oldValue, newValue) -> {
-                        if (newValue.intValue() == 0)
-                            System.exit(0);
-                    });
-
-                }
-            }
-        });
         this.primaryStage = primaryStage;
     }
 
