@@ -31,8 +31,11 @@ module org.moqucu.games.nightstalker {
     exports org.moqucu.games.nightstalker.sprite;
     exports org.moqucu.games.nightstalker.sprite.object;
     exports org.moqucu.games.nightstalker.sprite.enemy;
+    exports org.moqucu.games.nightstalker.label;
+
     exports org.moqucu.games.nightstalker.sprite.hero;
     exports org.moqucu.games.nightstalker.sprite.background;
+    exports org.moqucu.games.nightstalker.utility;
 
     opens org.moqucu.games.nightstalker to javafx.graphics, spring.core;
     opens org.moqucu.games.nightstalker.configuration to spring.core, spring.beans, spring.context;

@@ -183,6 +183,7 @@ public class Spider extends SleepingSprite implements Hittable, Collidable {
 
             log.debug("Hit by bullet...");
             stopMovingMe();
+            notifyHitListenerAboutHit();
             stateMachine.sendEvent(Events.hit);
         }
     }

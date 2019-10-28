@@ -3,6 +3,7 @@ package org.moqucu.games.nightstalker.view;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadListener;
 import javafx.scene.Parent;
+import org.moqucu.games.nightstalker.utility.LoadListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -27,9 +28,10 @@ public class SpringFXMLLoader {
         this.context = context;
     }
 
-    Parent load(String fxmlPath) throws IOException {
+    Parent load(StageManager stageManager, String fxmlPath) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
+        loader.setLoadListener(new LoadListenerAdapter(stageManager));
 
         loader.setControllerFactory(context::getBean); //Spring now FXML Controller Factory
         loader.setResources(resourceBundle);

@@ -141,7 +141,7 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
             case Dying:
                 stopMovingMe();
                 log.debug("I am still dying...");
-                lives.subtract(1);
+                lives.setValue(lives.getValue()-1);
                 log.debug("Lives left: {}", lives.get());
                 beingZappedSound.play();
                 break;

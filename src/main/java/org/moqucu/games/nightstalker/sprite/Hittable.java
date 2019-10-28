@@ -1,9 +1,16 @@
 package org.moqucu.games.nightstalker.sprite;
 
+import org.moqucu.games.nightstalker.utility.HitListener;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * When classes want to indicate that they are 'hittable' by other classes, they shall implement this interface.
  */
 public interface Hittable {
+
+    Set<HitListener> hitListeners = new HashSet<>();
 
     /**
      * This method needs to be implemented for detecting collisions with other objects. Only objects that are in a
@@ -20,4 +27,19 @@ public interface Hittable {
      * @return true when object's internal state allows for being hit, otherwise false.
      */
     boolean isHittable();
+
+    default void addHitListener(HitListener hitListener) {
+
+        hitListeners.add(hitListener);
+    }
+
+    default void removeHitListener(HitListener hitListener) {
+
+        hitListeners.remove(hitListener);
+    }
+
+    default void notifyHitListenerAboutHit() {
+
+        hitListeners.forEach(hitListener -> hitListener.objectHit(this));
+    }
 }
