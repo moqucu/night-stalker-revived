@@ -22,6 +22,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
+import org.springframework.statemachine.transition.TransitionKind;
 
 import java.util.Map;
 
@@ -139,11 +140,14 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
                 log.debug("I am still fainting...");
                 break;
             case Dying:
-                stopMovingMe();
-                log.debug("I am still dying...");
-                lives.setValue(lives.getValue()-1);
-                log.debug("Lives left: {}", lives.get());
-                beingZappedSound.play();
+                if (transition.getKind().equals(TransitionKind.EXTERNAL)) {
+
+                    stopMovingMe();
+                    log.debug("I am still dying...");
+                    lives.setValue(lives.getValue()-1);
+                    log.debug("Lives left: {}", lives.get());
+                    beingZappedSound.play();
+                }
                 break;
         }
     }
