@@ -88,13 +88,11 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
                 .withStates()
                 .parent(States.Active)
                 .initial(States.Stopped)
-                .state(States.Stopped)
                 .state(States.Moving)
                 .and()
                 .withStates()
                 .parent(States.Moving)
                 .initial(States.SlowlyMoving)
-                .state(States.SlowlyMoving)
                 .state(States.MovingFast);
 
         builder.configureTransitions()
@@ -167,8 +165,6 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
                 moveMeFromStart();
                 break;
             case MovingFast:
-                computeNextMoveAnimationBasedOnRandomDirection();
-                moveMeFromStart();
                 setVelocity(50);
                 break;
             case FallingApart:
