@@ -12,6 +12,7 @@ import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
+import org.springframework.statemachine.transition.TransitionKind;
 
 import java.util.Map;
 
@@ -161,8 +162,11 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
                 stateMachine.sendEvent(Events.move);
                 break;
             case SlowlyMoving:
-                computeNextMoveAnimationBasedOnRandomDirection();
-                moveMeFromStart();
+                if (transition.getKind().equals(TransitionKind.EXTERNAL)) {
+
+                    computeNextMoveAnimationBasedOnRandomDirection();
+                    moveMeFromStart();
+                }
                 break;
             case MovingFast:
                 setVelocity(50);
