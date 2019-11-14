@@ -86,7 +86,7 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
 
     private void shot(StateContext stateContext) {
 
-        log.error("shot: {}", stateContext);
+        log.info("shot: {}", stateContext);
         moveMeFromStart();
     }
 

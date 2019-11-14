@@ -27,7 +27,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class Weapon extends AnimatedSprite implements Collidable {
 
-    public class NoMoreRoundsException extends Exception {
+    public static class NoMoreRoundsException extends Exception {
     }
 
     enum States {TossedAway, ReappearedOnTheGround, PickedUp}
