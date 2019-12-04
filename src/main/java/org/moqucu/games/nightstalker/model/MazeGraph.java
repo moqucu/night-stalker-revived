@@ -13,12 +13,13 @@ import lombok.extern.log4j.Log4j2;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Log4j2
 public class MazeGraph {
 
-    private class UnrecognizedDirectionException extends RuntimeException {
+    private static class UnrecognizedDirectionException extends RuntimeException {
 
         UnrecognizedDirectionException(String message) {
             super(message);
@@ -46,6 +47,9 @@ public class MazeGraph {
     }
 
     private Map<Point2D, List<Point2D>> adjacencyList = new HashMap<>();
+
+    private Comparator<Point2D> ascByVerticalAxis = Comparator.comparing(Point2D::getY);
+    private Comparator<Point2D> ascByHorizontalAxis = Comparator.comparing(Point2D::getX);
 
     @SneakyThrows
     public MazeGraph(InputStream adjacencyListJsonArray) {
@@ -109,158 +113,82 @@ public class MazeGraph {
 
     private Point2D getFurthestReachableNodeBelow(Point2D point) {
 
-        if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() > point.getY())
-                .findAny()
-                .isEmpty()
-        )
-            return point;
+        Predicate<Point2D> onSameVerticalAxis = point2D -> point2D.getX() == point.getX();
+        Predicate<Point2D> belowTheGivenPoint = point2D -> point2D.getY() > point.getY();
+        Predicate<Point2D> anyNodeBelow = onSameVerticalAxis.and(belowTheGivenPoint);
 
-        List<Point2D> nodesBelow = adjacencyList
-                .keySet()
-                .stream()
-                .filter(point2D -> point2D.getX() == point.getX())
-                .filter(point2D -> point2D.getY() > point.getY())
-                .sorted(Comparator.comparing(Point2D::getY))
-                .collect(Collectors.toList());
-
-        if (log.isTraceEnabled()) {
-
-            log.trace("Nodes below...");
-            nodesBelow.forEach(log::trace);
-        }
-
-        Point2D furthestNodeBelow = nodesBelow.size() > 0 ? nodesBelow.get(0) : point;
-        for (int i = 0; i + 1 < nodesBelow.size(); i++)
-
-            if (adjacencyList.get(nodesBelow.get(i)).contains(nodesBelow.get(i + 1)))
-                furthestNodeBelow = nodesBelow.get(i + 1);
-            else
-                break;
-
-        log.debug("Returning furthest reachable node below: {}", furthestNodeBelow);
-
-        return furthestNodeBelow;
+        return returnClosestNodeInDirectionThatMatchesCondition(
+                point,
+                Direction.Down,
+                anyNodeBelow,
+                ascByVerticalAxis
+        );
     }
 
     private Point2D getFurthestReachableNodeAbove(Point2D point) {
 
-        if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() < point.getY())
-                .findAny()
-                .isEmpty()
-        )
-            return point;
+        Predicate<Point2D> onSameVerticalAxis = point2D -> point2D.getX() == point.getX();
+        Predicate<Point2D> aboveTheGivenPoint = point2D -> point2D.getY() < point.getY();
+        Predicate<Point2D> anyNodeAbove = onSameVerticalAxis.and(aboveTheGivenPoint);
 
-        List<Point2D> nodesAbove = adjacencyList
-                .keySet()
-                .stream()
-                .filter(point2D -> point2D.getX() == point.getX())
-                .filter(point2D -> point2D.getY() < point.getY())
-                .sorted(Comparator.comparing(Point2D::getY))
-                .collect(Collectors.toList());
-
-        if (log.isTraceEnabled()) {
-
-            log.trace("Nodes above...");
-            nodesAbove.forEach(log::trace);
-        }
-
-        Point2D furthestNodeAbove = nodesAbove.size() > 0 ? nodesAbove.get(nodesAbove.size() - 1) : point;
-
-        for (int i = nodesAbove.size() - 1; i > 0; i--)
-
-            if (adjacencyList.get(nodesAbove.get(i)).contains(nodesAbove.get(i - 1)))
-                furthestNodeAbove = nodesAbove.get(i - 1);
-            else
-                break;
-
-        log.debug("Returning furthest reachable node above: {}", furthestNodeAbove);
-
-        return furthestNodeAbove;
+        return returnClosestNodeInDirectionThatMatchesCondition(
+                point,
+                Direction.Up,
+                anyNodeAbove,
+                ascByVerticalAxis
+        );
     }
 
     private Point2D getFurthestReachableNodeToTheRight(Point2D point) {
 
-        if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() > point.getX())
-                .findAny()
-                .isEmpty()
-        )
-            return point;
+        Predicate<Point2D> onSameHorizontalAxis = point2D -> point2D.getY() == point.getY();
+        Predicate<Point2D> toTheRight = point2D -> point2D.getX() > point.getX();
+        Predicate<Point2D> anyNodeToTheRight = onSameHorizontalAxis.and(toTheRight);
 
-        List<Point2D> nodesToTheRight = adjacencyList
-                .keySet()
-                .stream()
-                .filter(point2D -> point2D.getY() == point.getY())
-                .filter(point2D -> point2D.getX() > point.getX())
-                .sorted(Comparator.comparing(Point2D::getX))
-                .collect(Collectors.toList());
-
-        if (log.isTraceEnabled()) {
-
-            log.trace("Nodes to the right...");
-            nodesToTheRight.forEach(log::trace);
-        }
-
-        Point2D furthestNodeToTheRight = nodesToTheRight.size() > 0 ? nodesToTheRight.get(0) : point;
-
-        for (int i = 0; i + 1 < nodesToTheRight.size(); i++)
-
-            if (adjacencyList.get(nodesToTheRight.get(i)).contains(nodesToTheRight.get(i + 1)))
-                furthestNodeToTheRight = nodesToTheRight.get(i + 1);
-            else
-                break;
-
-        log.debug("Returning furthest reachable node to the right: {}", furthestNodeToTheRight);
-
-        return furthestNodeToTheRight;
+        return returnClosestNodeInDirectionThatMatchesCondition(
+                point,
+                Direction.Right,
+                anyNodeToTheRight,
+                ascByHorizontalAxis
+        );
     }
 
     private Point2D getFurthestReachableNodeToTheLeft(Point2D point) {
 
-        if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() < point.getX())
-                .findAny()
-                .isEmpty()
-        )
+        Predicate<Point2D> onSameHorizontalAxis = point2D -> point2D.getY() == point.getY();
+        Predicate<Point2D> toTheLeft = point2D -> point2D.getX() < point.getX();
+        Predicate<Point2D> anyNodeToTheLeft = onSameHorizontalAxis.and(toTheLeft);
+
+        return returnClosestNodeInDirectionThatMatchesCondition(
+                point,
+                Direction.Left,
+                anyNodeToTheLeft,
+                ascByHorizontalAxis
+        );
+    }
+
+    private Point2D returnClosestNodeInDirectionThatMatchesCondition(
+            Point2D point,
+            Direction direction,
+            Predicate<Point2D> condition,
+            Comparator<Point2D> comparator
+    ) {
+
+        if (isPointOnNode(point) && noNodesThatMatchCondition(point, condition))
             return point;
 
-        List<Point2D> nodesToTheLeft = adjacencyList
-                .keySet()
-                .stream()
-                .filter(point2D -> point2D.getY() == point.getY())
-                .filter(point2D -> point2D.getX() < point.getX())
-                .sorted(Comparator.comparing(Point2D::getX))
-                .collect(Collectors.toList());
+        List<Point2D> sortedListOfNodesThatMatchCondition
+                = returnAllNodesThatMatchConditionAsOrderedList(condition, comparator);
 
-        if (log.isTraceEnabled()) {
+        logAllNodesIndividuallyWhenInTraceMode(direction, sortedListOfNodesThatMatchCondition);
 
-            log.trace("Nodes to the left...");
-            nodesToTheLeft.forEach(log::trace);
+        switch (direction) {
+            case Down:
+            case Right:
+                return findAndReturnFurthestNodesInAscOrder(direction, point, sortedListOfNodesThatMatchCondition);
+            default: // Up & Left
+                return findAndReturnFurthestNodesInDescOrder(direction, point, sortedListOfNodesThatMatchCondition);
         }
-
-        Point2D furthestNodeToTheLeft
-                = nodesToTheLeft.size() > 0 ? nodesToTheLeft.get(nodesToTheLeft.size() - 1) : point;
-
-        for (int i = nodesToTheLeft.size() - 1; i > 0; i--)
-
-            if (adjacencyList.get(nodesToTheLeft.get(i)).contains(nodesToTheLeft.get(i - 1)))
-                furthestNodeToTheLeft = nodesToTheLeft.get(i - 1);
-            else
-                break;
-
-        log.debug("Returning furthest reachable node to the left: {}", furthestNodeToTheLeft);
-
-        return furthestNodeToTheLeft;
     }
 
     public Point2D getClosestReachableNode(Point2D point, Direction direction, double maxOffset) {
@@ -362,5 +290,76 @@ public class MazeGraph {
                 .filter(point2D -> point2D.getX() < point.getX() + maxOffset)
                 .max(Comparator.comparing(Point2D::getX))
                 .orElse(point);
+    }
+
+    private void logAllNodesIndividuallyWhenInTraceMode(Direction direction, List<Point2D> nodes) {
+
+        if (log.isTraceEnabled()) {
+
+            log.trace("Nodes {} from here...", direction);
+            nodes.forEach(log::trace);
+        }
+    }
+
+    private Point2D findAndReturnFurthestNodesInAscOrder(
+            Direction direction,
+            Point2D point,
+            List<Point2D> nodes
+    ) {
+
+        Point2D furthestNode = nodes.size() > 0 ? nodes.get(0) : point;
+
+        for (int i = 0; i + 1 < nodes.size(); i++)
+
+            if (adjacencyList.get(nodes.get(i)).contains(nodes.get(i + 1)))
+                furthestNode = nodes.get(i + 1);
+            else
+                break;
+
+        log.debug("Returning furthest reachable node in direction {}: {}", direction, furthestNode);
+
+        return furthestNode;
+    }
+
+    private Point2D findAndReturnFurthestNodesInDescOrder(
+            Direction direction,
+            Point2D point,
+            List<Point2D> nodes
+    ) {
+
+        Point2D furthestNode = nodes.size() > 0 ? nodes.get(nodes.size() - 1) : point;
+
+        for (int i = nodes.size() - 1; i > 0; i--)
+
+            if (adjacencyList.get(nodes.get(i)).contains(nodes.get(i - 1)))
+                furthestNode = nodes.get(i - 1);
+            else
+                break;
+
+        log.debug("Returning furthest reachable node in direction {}: {}", direction, furthestNode);
+
+        return furthestNode;
+    }
+
+    private boolean noNodesThatMatchCondition(Point2D point, Predicate<Point2D> condition) {
+
+        return adjacencyList.get(point)
+                .stream()
+                .filter(condition)
+                .findAny()
+                .isEmpty();
+    }
+
+    private List<Point2D> returnAllNodesThatMatchConditionAsOrderedList(
+            Predicate<Point2D> condition,
+            Comparator<Point2D> comparator
+    ) {
+
+        return adjacencyList
+                .keySet()
+                .stream()
+                .filter(condition)
+                .sorted(comparator)
+                .collect(Collectors.toList());
     }
 }
