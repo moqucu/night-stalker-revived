@@ -94,77 +94,90 @@ public class MazeGraph {
     public Point2D getFurthestReachableNode(Point2D point, Direction direction) {
 
         Point2D roundedPoint = new Point2D(Math.round(point.getX()), Math.round(point.getY()));
+        Predicate<Point2D> predicate;
+        Comparator<Point2D> comparator;
 
         switch (direction) {
             case Left:
-                return getFurthestReachableNodeToTheLeft(roundedPoint);
+                predicate = getPredicateForAnyNodeToTheLeft(roundedPoint);
+                comparator = ascByHorizontalAxis;
+                break;
             case Up:
-                return getFurthestReachableNodeAbove(roundedPoint);
+                predicate = getPredicateForAnyNodeAbove(roundedPoint);
+                comparator = ascByVerticalAxis;
+                break;
             case Right:
-                return getFurthestReachableNodeToTheRight(roundedPoint);
+                predicate = getPredicateForAnyNodeToTheRight(roundedPoint);
+                comparator = ascByHorizontalAxis;
+                break;
             case Down:
-                return getFurthestReachableNodeBelow(roundedPoint);
+                predicate = getPredicateForAnyNodeBelow(roundedPoint);
+                comparator = ascByVerticalAxis;
+                break;
             default:
                 throw new UnrecognizedDirectionException(
                         MessageFormat.format("Direction {0} is not a valid input for this method!", direction)
                 );
         }
+
+        return returnClosestNodeInDirectionThatMatchesCondition(
+                roundedPoint,
+                direction,
+                predicate,
+                comparator
+        );
     }
 
-    private Point2D getFurthestReachableNodeBelow(Point2D point) {
+    private Predicate<Point2D> getPredicateForAnyNodeBelow(Point2D point, double maxOffset) {
 
         Predicate<Point2D> onSameVerticalAxis = point2D -> point2D.getX() == point.getX();
-        Predicate<Point2D> belowTheGivenPoint = point2D -> point2D.getY() > point.getY();
-        Predicate<Point2D> anyNodeBelow = onSameVerticalAxis.and(belowTheGivenPoint);
+        Predicate<Point2D> belowTheGivenPoint = point2D -> point2D.getY() > point.getY() - maxOffset;
 
-        return returnClosestNodeInDirectionThatMatchesCondition(
-                point,
-                Direction.Down,
-                anyNodeBelow,
-                ascByVerticalAxis
-        );
+        return onSameVerticalAxis.and(belowTheGivenPoint);
     }
 
-    private Point2D getFurthestReachableNodeAbove(Point2D point) {
+    private Predicate<Point2D> getPredicateForAnyNodeBelow(Point2D point) {
+
+        return getPredicateForAnyNodeBelow(point, 0.);
+    }
+
+    private Predicate<Point2D> getPredicateForAnyNodeAbove(Point2D point, double maxOffset) {
 
         Predicate<Point2D> onSameVerticalAxis = point2D -> point2D.getX() == point.getX();
-        Predicate<Point2D> aboveTheGivenPoint = point2D -> point2D.getY() < point.getY();
-        Predicate<Point2D> anyNodeAbove = onSameVerticalAxis.and(aboveTheGivenPoint);
+        Predicate<Point2D> aboveTheGivenPoint = point2D -> point2D.getY() < point.getY() + maxOffset;
 
-        return returnClosestNodeInDirectionThatMatchesCondition(
-                point,
-                Direction.Up,
-                anyNodeAbove,
-                ascByVerticalAxis
-        );
+        return onSameVerticalAxis.and(aboveTheGivenPoint);
     }
 
-    private Point2D getFurthestReachableNodeToTheRight(Point2D point) {
+    private Predicate<Point2D> getPredicateForAnyNodeAbove(Point2D point) {
 
-        Predicate<Point2D> onSameHorizontalAxis = point2D -> point2D.getY() == point.getY();
-        Predicate<Point2D> toTheRight = point2D -> point2D.getX() > point.getX();
-        Predicate<Point2D> anyNodeToTheRight = onSameHorizontalAxis.and(toTheRight);
-
-        return returnClosestNodeInDirectionThatMatchesCondition(
-                point,
-                Direction.Right,
-                anyNodeToTheRight,
-                ascByHorizontalAxis
-        );
+        return getPredicateForAnyNodeAbove(point, 0.);
     }
 
-    private Point2D getFurthestReachableNodeToTheLeft(Point2D point) {
+    private Predicate<Point2D> getPredicateForAnyNodeToTheRight(Point2D point, double maxOffset) {
 
         Predicate<Point2D> onSameHorizontalAxis = point2D -> point2D.getY() == point.getY();
-        Predicate<Point2D> toTheLeft = point2D -> point2D.getX() < point.getX();
-        Predicate<Point2D> anyNodeToTheLeft = onSameHorizontalAxis.and(toTheLeft);
+        Predicate<Point2D> toTheRight = point2D -> point2D.getX() > point.getX() - maxOffset;
 
-        return returnClosestNodeInDirectionThatMatchesCondition(
-                point,
-                Direction.Left,
-                anyNodeToTheLeft,
-                ascByHorizontalAxis
-        );
+        return onSameHorizontalAxis.and(toTheRight);
+    }
+
+    private Predicate<Point2D> getPredicateForAnyNodeToTheRight(Point2D point) {
+
+        return getPredicateForAnyNodeToTheRight(point, 0.);
+    }
+
+    private Predicate<Point2D> getPredicateForAnyNodeToTheLeft(Point2D point, double maxOffset) {
+
+        Predicate<Point2D> onSameHorizontalAxis = point2D -> point2D.getY() == point.getY();
+        Predicate<Point2D> toTheLeft = point2D -> point2D.getX() < point.getX() + maxOffset;
+
+        return onSameHorizontalAxis.and(toTheLeft);
+    }
+
+    private Predicate<Point2D> getPredicateForAnyNodeToTheLeft(Point2D point) {
+
+        return getPredicateForAnyNodeToTheLeft(point, 0.);
     }
 
     private Point2D returnClosestNodeInDirectionThatMatchesCondition(
@@ -214,81 +227,54 @@ public class MazeGraph {
 
     private Point2D getClosestReachableNodeBelow(Point2D point, double maxOffset) {
 
-        if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() > point.getY() - maxOffset)
-                .findAny()
-                .isEmpty()
-        )
+        if (isPointOnNode(point) && noNodesThatMatchCondition(point, getPredicateForAnyNodeBelow(point, maxOffset)))
             return point;
 
         return adjacencyList
                 .keySet()
                 .stream()
-                .filter(point2D -> point2D.getX() == point.getX())
-                .filter(point2D -> point2D.getY() > point.getY() - maxOffset)
-                .min(Comparator.comparing(Point2D::getY))
+                .filter(getPredicateForAnyNodeBelow(point, maxOffset))
+                .min(ascByVerticalAxis)
                 .orElse(point);
     }
 
     private Point2D getClosestReachableNodeAbove(Point2D point, double maxOffset) {
 
-        if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getX() == point.getX() && point2D.getY() < point.getY() + maxOffset)
-                .findAny()
-                .isEmpty()
-        )
+        if (isPointOnNode(point) && noNodesThatMatchCondition(point, getPredicateForAnyNodeAbove(point, maxOffset)))
             return point;
 
         return adjacencyList
                 .keySet()
                 .stream()
-                .filter(point2D -> point2D.getX() == point.getX())
-                .filter(point2D -> point2D.getY() < point.getY() + maxOffset)
-                .max(Comparator.comparing(Point2D::getY))
+                .filter(getPredicateForAnyNodeAbove(point, maxOffset))
+                .max(ascByVerticalAxis)
                 .orElse(point);
     }
 
     private Point2D getClosestReachableNodeToTheRight(Point2D point, double maxOffset) {
 
         if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() > point.getX() - maxOffset)
-                .findAny()
-                .isEmpty()
-        )
+                && noNodesThatMatchCondition(point, getPredicateForAnyNodeToTheRight(point, maxOffset)))
             return point;
 
         return adjacencyList
                 .keySet()
                 .stream()
-                .filter(point2D -> point2D.getY() == point.getY())
-                .filter(point2D -> point2D.getX() > point.getX() - maxOffset)
-                .min(Comparator.comparing(Point2D::getX))
+                .filter(getPredicateForAnyNodeToTheRight(point, maxOffset))
+                .min(ascByHorizontalAxis)
                 .orElse(point);
     }
 
     private Point2D getClosestReachableNodeToTheLeft(Point2D point, double maxOffset) {
 
-        if (isPointOnNode(point)
-                && adjacencyList.get(point)
-                .stream()
-                .filter(point2D -> point2D.getY() == point.getY() && point2D.getX() < point.getX() + maxOffset)
-                .findAny()
-                .isEmpty()
-        )
+        if (isPointOnNode(point) && noNodesThatMatchCondition(point, getPredicateForAnyNodeToTheLeft(point, maxOffset)))
             return point;
 
         return adjacencyList
                 .keySet()
                 .stream()
-                .filter(point2D -> point2D.getY() == point.getY())
-                .filter(point2D -> point2D.getX() < point.getX() + maxOffset)
-                .max(Comparator.comparing(Point2D::getX))
+                .filter(getPredicateForAnyNodeToTheLeft(point, maxOffset))
+                .max(ascByHorizontalAxis)
                 .orElse(point);
     }
 
