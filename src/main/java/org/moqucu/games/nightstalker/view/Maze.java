@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
+import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
@@ -25,6 +26,8 @@ public class Maze extends StackPane {
     private final ConcurrentMap<Collidable, Collidable> collidableSprites = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<Hittable, Hittable> hittableSprites = new ConcurrentHashMap<>();
+
+    private final ConcurrentMap<Approachable, Approachable> approachableSprites = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<Bullet, Bullet> bullets = new ConcurrentHashMap<>();
 
@@ -70,6 +73,18 @@ public class Maze extends StackPane {
 
                     ((Pane) addedPane)
                             .getChildren()
+                            .filtered(node -> node instanceof Approachable)
+                            .forEach(sprite -> {
+
+                                approachableSprites.putIfAbsent((Approachable) sprite, (Approachable) sprite);
+                                log.debug(
+                                        "Added approachable sprite of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
+
+                    ((Pane) addedPane)
+                            .getChildren()
                             .filtered(node -> node instanceof Bullet)
                             .forEach(sprite -> {
 
@@ -99,6 +114,15 @@ public class Maze extends StackPane {
                                 hittableSprites.putIfAbsent((Hittable) addedChild, (Hittable) addedChild);
                                 log.debug(
                                         "Added hittable sprite of type {} to set.",
+                                        addedChild.getClass().getName()
+                                );
+                            }
+
+                            if (addedChild instanceof Approachable) {
+
+                                approachableSprites.putIfAbsent((Approachable) addedChild, (Approachable) addedChild);
+                                log.debug(
+                                        "Added approachable sprite of type {} to set.",
                                         addedChild.getClass().getName()
                                 );
                             }
@@ -134,6 +158,12 @@ public class Maze extends StackPane {
                 .stream()
                 .filter(Hittable::isHittable)
                 .collect(Collectors.toSet());
+    }
+
+    public Set<Approachable> getAllApproachableSprites() {
+
+        return new HashSet<>(approachableSprites
+                .keySet());
     }
 
     public Set<Bullet> getAllBullets() {

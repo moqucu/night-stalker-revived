@@ -43,7 +43,18 @@ public class GameLoop {
                                       hittableSprite.hitBy(collidableSprite);
 
                             });
+                        }
+                );
 
+                maze.getAllApproachableSprites().forEach(
+                        approachableSprite -> {
+                            // get direction of approachable sprite
+                            // get all collidable sprites
+                            // remove itself from that list
+                            // get furthest node to direction
+                            // draw line
+                            // see if any collidable sprite is on line
+                            // provide set of collidable sprites that are on line
                         }
                 );
             }

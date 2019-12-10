@@ -6,8 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.sprite.Sprite;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -23,7 +26,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @ToString(callSuper = true)
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
-public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
+public class GreyRobot extends SleepingSprite implements Hittable, Collidable, Approachable {
 
     private enum States {Inactive, Active, Stopped, Moving, SlowlyMoving, MovingFast, FallingApart}
 
@@ -205,5 +208,17 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable {
     private boolean isActive() {
 
         return stateMachine.getState().getId().equals(States.Active);
+    }
+
+    @Override
+    public void approachedBy(Sprite sprite) {
+
+        log.debug("Approached by {} to the direction {}.", sprite, getDirection());
+    }
+
+    @Override
+    public Direction getSightDirection() {
+
+        return getDirection();
     }
 }

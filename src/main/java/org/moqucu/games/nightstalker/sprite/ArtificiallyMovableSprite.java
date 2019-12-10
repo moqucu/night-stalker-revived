@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.springframework.core.io.ClassPathResource;
 
@@ -26,6 +27,8 @@ public abstract class ArtificiallyMovableSprite extends SpawnableSprite {
     private Point2D nextNode = null;
 
     private Random random = new Random();
+
+    private Direction direction = null;
 
     @SneakyThrows
     protected ArtificiallyMovableSprite() {
@@ -53,6 +56,8 @@ public abstract class ArtificiallyMovableSprite extends SpawnableSprite {
         previousNode = currentNode;
 
         nextNode = adjacentNodes.get(random.nextInt(adjacentNodes.size()));
+
+        direction = Direction.calculateDirection(previousNode, nextNode);
 
         updateMoveAnimationWithNewLocationTranslation(currentNode, nextNode);
     }

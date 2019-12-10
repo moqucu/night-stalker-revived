@@ -34,7 +34,7 @@
         <Logger name="org.moqucu.games.nightstalker.sprite.hero.NightStalker" level="INFO" additivity="false">
             <AppenderRef ref="STDOUT"/>
         </Logger>
-        <Logger name="org.moqucu.games.nightstalker.sprite.enemy.GreyRobot" level="WARN" additivity="false">
+        <Logger name="org.moqucu.games.nightstalker.sprite.enemy.GreyRobot" level="DEBUG" additivity="false">
             <AppenderRef ref="STDOUT"/>
         </Logger>
         <Logger name="org.springframework.statemachine.support.LifecycleObjectSupport" level="WARN" additivity="false">
