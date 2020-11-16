@@ -115,9 +115,7 @@ public class MazeGraph {
                 comparator = ascByVerticalAxis;
                 break;
             default:
-                throw new UnrecognizedDirectionException(
-                        MessageFormat.format("Direction {0} is not a valid input for this method!", direction)
-                );
+                return roundedPoint;
         }
 
         return returnClosestNodeInDirectionThatMatchesCondition(

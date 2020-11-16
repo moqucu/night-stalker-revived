@@ -1,11 +1,13 @@
 package org.moqucu.games.nightstalker.controller;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.shape.Line;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
 import org.moqucu.games.nightstalker.view.Maze;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -48,13 +50,20 @@ public class GameLoop {
 
                 maze.getAllApproachableSprites().forEach(
                         approachableSprite -> {
-                            // get direction of approachable sprite
-                            // get all collidable sprites
-                            // remove itself from that list
-                            // get furthest node to direction
-                            // draw line
-                            // see if any collidable sprite is on line
-                            // provide set of collidable sprites that are on line
+
+                            Set<Sprite> approachingSprites = new HashSet<>();
+
+                            Set<Collidable> collidableSprites = maze.getAllCurrentlyCollidableSprites();
+                            if (approachableSprite instanceof Collidable)
+                                collidableSprites.remove(approachableSprite);
+
+                            Line lineOfSide = approachableSprite.getLineOfSight();
+                            collidableSprites.forEach(collidable -> {
+                                if (lineOfSide.intersects(((Sprite)collidable).getBoundsInParent()))
+                                    approachingSprites.add((Sprite)collidable);
+                             });
+
+                            approachableSprite.approachedBy(approachingSprites);
                         }
                 );
             }

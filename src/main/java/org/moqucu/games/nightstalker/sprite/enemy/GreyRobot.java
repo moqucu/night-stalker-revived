@@ -1,12 +1,15 @@
 package org.moqucu.games.nightstalker.sprite.enemy;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Line;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
@@ -18,6 +21,7 @@ import org.springframework.statemachine.transition.Transition;
 import org.springframework.statemachine.transition.TransitionKind;
 
 import java.util.Map;
+import java.util.Set;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
@@ -211,14 +215,33 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     }
 
     @Override
-    public void approachedBy(Sprite sprite) {
+    public void approachedBy(Set<Sprite> sprite) {
 
-        log.debug("Approached by {} to the direction {}.", sprite, getDirection());
+        sprite.forEach(log::debug);
     }
 
     @Override
-    public Direction getSightDirection() {
+    public MazeGraph getMazeGraph() {
 
-        return getDirection();
+        return getEnemyMazeGraph();
+    }
+
+    @Override
+    public Line getLineOfSight() {
+
+        Point2D currentNode = getCurrentLocation();
+        Direction direction = getDirection();
+        if (currentNode == null)
+            log.error("current node is null!");
+        if (direction == null)
+            log.error("direction is null!");
+        Point2D furthestReachableNode = getEnemyMazeGraph().getFurthestReachableNode(currentNode, direction);
+
+        return new Line(
+                currentNode.getX(),
+                currentNode.getY(),
+                furthestReachableNode.getX(),
+                furthestReachableNode.getY()
+        );
     }
 }

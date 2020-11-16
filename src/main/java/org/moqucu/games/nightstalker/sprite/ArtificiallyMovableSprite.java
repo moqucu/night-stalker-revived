@@ -28,7 +28,7 @@ public abstract class ArtificiallyMovableSprite extends SpawnableSprite {
 
     private Random random = new Random();
 
-    private Direction direction = null;
+    private Direction direction = Direction.Undefined;
 
     @SneakyThrows
     protected ArtificiallyMovableSprite() {

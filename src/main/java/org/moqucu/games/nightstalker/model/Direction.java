@@ -7,7 +7,7 @@ import java.util.Set;
 
 public enum Direction {
 
-    Up, Down, Left, Right;
+    Up, Down, Left, Right, Undefined;
 
     public static Direction calculateDirection(Point2D sourcePoint, Point2D targetPoint) {
 
