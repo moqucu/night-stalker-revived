@@ -18,7 +18,7 @@ public class SpriteTest {
 
         // Given
 
-        int randomIndex = random.nextInt();
+        int randomIndex = random.nextInt(239);
 
         // When
 
@@ -26,13 +26,5 @@ public class SpriteTest {
 
         // Then
         assertEquals(randomIndex, sprite.getStillImageIndex());
-    }
-
-    @Test
-    void thisTestShallFail() {
-
-        // Then
-
-        fail();
     }
 }
