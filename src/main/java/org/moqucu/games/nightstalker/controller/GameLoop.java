@@ -31,7 +31,7 @@ public class GameLoop {
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
 
                 log.trace("Delta time since start: {}", deltaTimeSinceStart);
-                log.trace("Delta time sincle last call: {}", deltaTime);
+                log.trace("Delta time since last call: {}", deltaTime);
 
                 maze.getAllHittableSprites().forEach(
 

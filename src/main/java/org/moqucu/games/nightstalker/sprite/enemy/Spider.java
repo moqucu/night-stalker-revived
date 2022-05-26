@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
-import org.moqucu.games.nightstalker.sprite.object.Bullet;
+import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -179,7 +179,7 @@ public class Spider extends SleepingSprite implements Hittable, Collidable {
     @Override
     public void hitBy(Collidable collidableObject) {
 
-        if (collidableObject instanceof Bullet) {
+        if (collidableObject instanceof BulletSprite) {
 
             log.debug("Hit by bullet...");
             stopMovingMe();

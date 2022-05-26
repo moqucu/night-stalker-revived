@@ -16,10 +16,17 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Represents on ordered graph of Point2D objects. Also offers service methods for determining the closest
+ * and furthest point, given a starting point and a direction.
+ */
 @Log4j2
 public class MazeGraph {
 
-    private static class UnrecognizedDirectionException extends RuntimeException {
+    public static final int WIDTH = 32;
+    public static final int HEIGHT = 32;
+
+    public static class UnrecognizedDirectionException extends RuntimeException {
 
         UnrecognizedDirectionException(String message) {
             super(message);
@@ -46,10 +53,10 @@ public class MazeGraph {
         private List<XY> adjacentNodes;
     }
 
-    private Map<Point2D, List<Point2D>> adjacencyList = new HashMap<>();
+    private final Map<Point2D, List<Point2D>> adjacencyList = new HashMap<>();
 
-    private Comparator<Point2D> ascByVerticalAxis = Comparator.comparing(Point2D::getY);
-    private Comparator<Point2D> ascByHorizontalAxis = Comparator.comparing(Point2D::getX);
+    private final Comparator<Point2D> ascByVerticalAxis = Comparator.comparing(Point2D::getY);
+    private final Comparator<Point2D> ascByHorizontalAxis = Comparator.comparing(Point2D::getX);
 
     @SneakyThrows
     public MazeGraph(InputStream adjacencyListJsonArray) {
@@ -61,8 +68,8 @@ public class MazeGraph {
 
         adjacencyLists.forEach(adjacencyListItem -> adjacencyListItem.getAdjacentNodes().forEach(node ->
                 addEge(
-                        new Point2D(adjacencyListItem.node.x * 32, adjacencyListItem.node.y * 32),
-                        new Point2D(node.x * 32, node.y * 32)
+                        new Point2D(adjacencyListItem.node.x * WIDTH, adjacencyListItem.node.y * HEIGHT),
+                        new Point2D(node.x * WIDTH, node.y * HEIGHT)
                 )));
     }
 
