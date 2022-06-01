@@ -9,7 +9,6 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
@@ -218,12 +217,6 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     public void approachedBy(Set<Sprite> sprite) {
 
         sprite.forEach(log::debug);
-    }
-
-    @Override
-    public MazeGraph getMazeGraph() {
-
-        return getEnemyMazeGraph();
     }
 
     @Override
