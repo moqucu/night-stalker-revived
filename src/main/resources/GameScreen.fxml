@@ -22,6 +22,7 @@
 
 <?import org.moqucu.games.nightstalker.label.LivesLabel?>
 <?import org.moqucu.games.nightstalker.label.ScoreLabel?>
+<?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartTwo?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
         xmlns:fx="http://javafx.com/fxml/1"
@@ -59,20 +60,29 @@
                     frameDurationInMillis="200"
                     velocity="50"
             />
-            <GreyRobot
-                    spawnCoordinateX="48.0"
-                    spawnCoordinateY="320.0"
-                    autoReversible="false"
-                    frameDurationInMillis="100"
-                    velocity="25"
-            />
-            <GreyRobotPartOne
-                    spawnCoordinateX="400.0"
-                    spawnCoordinateY="320.0"
-                    autoReversible="false"
-                    frameDurationInMillis="5000"
-                    velocity="250"
-            />
+            <Group>
+                <GreyRobot
+                        spawnCoordinateX="48.0"
+                        spawnCoordinateY="320.0"
+                        autoReversible="false"
+                        frameDurationInMillis="100"
+                        velocity="25"
+                />
+                <GreyRobotPartOne
+                        spawnCoordinateX="48.0"
+                        spawnCoordinateY="320.0"
+                        autoReversible="false"
+                        frameDurationInMillis="5000"
+                        velocity="250"
+                />
+                <GreyRobotPartTwo
+                        spawnCoordinateX="48.0"
+                        spawnCoordinateY="320.0"
+                        autoReversible="false"
+                        frameDurationInMillis="5000"
+                        velocity="250"
+                />
+            </Group>
             <Bat
                     spawnCoordinateX="528.0"
                     spawnCoordinateY="96"

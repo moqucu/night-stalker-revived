@@ -23,7 +23,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Collidable {
+public class GreyRobotPartTwo extends ArtificiallyMovableSprite implements Collidable {
 
     enum States {Flying, Hidden}
 
@@ -32,11 +32,11 @@ public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Colli
     StateMachine<States, Events> stateMachine;
 
     private Map<States, Indices> frameBoundaries = Map.of(
-            States.Flying, Indices.builder().lower(2).upper(3).build(),
+            States.Flying, Indices.builder().lower(4).upper(5).build(),
             States.Hidden, Indices.builder().lower(10).upper(10).build()
     );
 
-    public GreyRobotPartOne() {
+    public GreyRobotPartTwo() {
 
         super();
         setImage(new Image(translate("images/grey-robot.png")));
@@ -132,6 +132,5 @@ public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Colli
         );
         stopMovingMe();
     }
-
 
 }
