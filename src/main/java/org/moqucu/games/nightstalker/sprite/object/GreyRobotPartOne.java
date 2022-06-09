@@ -64,7 +64,7 @@ public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Colli
 
         builder.configureStates()
                 .withStates()
-                .initial(States.Flying)
+                .initial(States.Hidden)
                 .states(EnumSet.allOf(States.class));
 
         builder.configureTransitions()
@@ -89,7 +89,7 @@ public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Colli
         moveMeFromStart();
     }
 
-    void shot(Direction direction, Point2D startPoint) {
+    public void startFlying(Direction direction, Point2D startPoint) {
 
         if (stateMachine.getState().getId().equals(States.Flying))
             return;

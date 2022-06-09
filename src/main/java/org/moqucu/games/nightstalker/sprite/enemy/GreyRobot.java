@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.sprite.enemy;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.scene.shape.Line;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,10 @@ import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
 import org.moqucu.games.nightstalker.sprite.object.Bullet;
+import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne;
+import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartTwo;
+import org.moqucu.games.nightstalker.view.Maze;
+import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
@@ -36,6 +41,13 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     private enum Events {spawn, move, faster, stop, fallApart, becomeInactive}
 
     private StateMachine<States, Events> stateMachine;
+
+    private GreyRobotPartOne partOne;
+    private GreyRobotPartTwo partTwo;
+
+    private AudioClip destruction = new AudioClip(
+            Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/destruct.wav").toString()
+    );
 
     public GreyRobot() {
 
@@ -68,7 +80,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                                 States.FallingApart, AnimationProperty.builder()
                                         .autoReversible(false)
                                         .frameDurationInMillis(100)
-                                        .frameIndices(Indices.builder().lower(6).upper(9).build())
+                                        .frameIndices(Indices.builder().lower(10).upper(10).build())
                                         .build()
                         )
         );
@@ -141,7 +153,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                 .and()
                 .withInternal()
                 .source(States.FallingApart)
-                .action(stateContext -> stateMachine.sendEvent(Events.becomeInactive))
+                .action(this::fallApart)
                 .timerOnce(getSleepTimeInMillis())
                 .and()
                 .withExternal()
@@ -194,6 +206,17 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
             notifyHitListenerAboutHit();
             stateMachine.sendEvent(Events.fallApart);
         }
+    }
+
+    private void fallApart(StateContext stateContext) {
+
+        log.trace("fallApart: {}", stateContext);
+        destruction.setVolume(0.1f);
+        destruction.play();
+
+        partOne.startFlying(this.getDirection(), this.getCurrentLocation());
+        partTwo.startFlying(this.getDirection(), this.getCurrentLocation());
+        stateMachine.sendEvent(Events.becomeInactive);
     }
 
     @Override

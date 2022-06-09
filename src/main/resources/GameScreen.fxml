@@ -40,9 +40,9 @@
             <Weapon/>
             <Bullet/>
             <LivesLabel
-                x="98.0"
-                y="352.0"
-                style="-fx-font-weight: BOLD; -fx-fill: #FFE102; -fx-font-size: 40px;"
+                    x="98.0"
+                    y="352.0"
+                    style="-fx-font-weight: BOLD; -fx-fill: #FFE102; -fx-font-size: 40px;"
             />
             <ScoreLabel
                     x="320.0"
@@ -60,29 +60,27 @@
                     frameDurationInMillis="200"
                     velocity="50"
             />
-            <Group>
-                <GreyRobot
-                        spawnCoordinateX="48.0"
-                        spawnCoordinateY="320.0"
-                        autoReversible="false"
-                        frameDurationInMillis="100"
-                        velocity="25"
-                />
-                <GreyRobotPartOne
-                        spawnCoordinateX="48.0"
-                        spawnCoordinateY="320.0"
-                        autoReversible="false"
-                        frameDurationInMillis="5000"
-                        velocity="250"
-                />
-                <GreyRobotPartTwo
-                        spawnCoordinateX="48.0"
-                        spawnCoordinateY="320.0"
-                        autoReversible="false"
-                        frameDurationInMillis="5000"
-                        velocity="250"
-                />
-            </Group>
+            <GreyRobot
+                    spawnCoordinateX="48.0"
+                    spawnCoordinateY="320.0"
+                    autoReversible="false"
+                    frameDurationInMillis="100"
+                    velocity="25"
+            />
+            <GreyRobotPartOne
+                    spawnCoordinateX="48.0"
+                    spawnCoordinateY="320.0"
+                    autoReversible="false"
+                    frameDurationInMillis="5000"
+                    velocity="250"
+            />
+            <GreyRobotPartTwo
+                    spawnCoordinateX="48.0"
+                    spawnCoordinateY="320.0"
+                    autoReversible="false"
+                    frameDurationInMillis="5000"
+                    velocity="250"
+            />
             <Bat
                     spawnCoordinateX="528.0"
                     spawnCoordinateY="96"

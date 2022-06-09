@@ -61,6 +61,8 @@ public class StageManager implements SpriteCreationListener {
             GreyRobot greyRobot = (GreyRobot) createdSprites.get(GreyRobot.class);
             GreyRobotPartOne greyRobotPartOne = (GreyRobotPartOne) createdSprites.get(GreyRobotPartOne.class);
             GreyRobotPartTwo greyRobotPartTwo = (GreyRobotPartTwo) createdSprites.get(GreyRobotPartTwo.class);
+            greyRobot.setPartOne(greyRobotPartOne);
+            greyRobot.setPartTwo(greyRobotPartTwo);
             greyRobot.translateXProperty().addListener(
                     (observable, oldValue, newValue) -> {
                         greyRobotPartOne.setTranslateX((double) newValue);
