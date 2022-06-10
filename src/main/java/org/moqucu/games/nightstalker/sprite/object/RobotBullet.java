@@ -21,7 +21,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Bullet extends ArtificiallyMovableSprite implements Collidable {
+public class RobotBullet extends ArtificiallyMovableSprite implements Collidable {
 
     enum States {Loaded, Shot}
 
@@ -34,7 +34,7 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
             States.Shot, Indices.builder().lower(1).upper(1).build()
     );
 
-    public Bullet() {
+    public RobotBullet() {
 
         super();
         setImage(new Image(translate("images/bullet.png")));
@@ -90,10 +90,11 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
         moveMeFromStart();
     }
 
-    void shot(Direction direction, Point2D startPoint) {
+    public void shot(Direction direction, Point2D startPoint) {
 
         if (stateMachine.getState().getId().equals(States.Shot))
             return;
+
         log.info("Starting point: {}", startPoint);
 
         Point2D endPoint = getMazeGraph().getFurthestReachableNode(startPoint, direction);
@@ -133,4 +134,9 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
         stopMovingMe();
     }
 
+    public boolean isShot() {
+            if (stateMachine.getState().getId().equals(States.Shot))
+                return true;
+            return false;
+    }
 }
