@@ -1,7 +1,6 @@
 package org.moqucu.games.nightstalker.test;
 
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,6 +15,8 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
+import java.util.concurrent.TimeUnit;
+
 @ExtendWith(ApplicationExtension.class)
 public class CurveAnimationTest {
 
@@ -23,7 +24,6 @@ public class CurveAnimationTest {
     Anchor start;
     Anchor end;
     Rectangle rectPath;
-    PathTransition pathTransition;
 
     private Point2D bezier(double t, Point2D... points) {
         if (points.length == 2) {
@@ -54,7 +54,7 @@ public class CurveAnimationTest {
      * @param stage - Will be injected by the test runner.
      */
     @Start
-    private void start(Stage stage) {
+    public void start(Stage stage) {
 
         curve.setStartX(100);
         curve.setStartY(200);
@@ -88,17 +88,40 @@ public class CurveAnimationTest {
      * @param robot - Will be injected by the test runner.
      */
     @Test
-    void testTransition(FxRobot robot) throws InterruptedException {
-        pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(2000));
-        pathTransition.setPath(curve);
-        pathTransition.setNode(rectPath);
-        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pathTransition.setCycleCount(Timeline.INDEFINITE);
-        pathTransition.setAutoReverse(true);
-        pathTransition.play();
+    void testTransition(FxRobot robot) {
 
-        Thread.sleep(10000);
+        Transition transition = new Transition() {
+
+            {
+                setCycleDuration(Duration.millis(2000));
+            }
+
+            @Override
+            protected void interpolate(double frac) {
+                Point2D start = new Point2D(curve.getStartX(), curve.getStartY());
+                Point2D control1 = new Point2D(curve.getControlX1(), curve.getControlY1());
+                Point2D control2 = new Point2D(curve.getControlX2(), curve.getControlY2());
+                Point2D end = new Point2D(curve.getEndX(), curve.getEndY());
+
+                Point2D center = bezier(frac, start, control1, control2, end);
+
+                double width = rectPath.getBoundsInLocal().getWidth() ;
+                double height = rectPath.getBoundsInLocal().getHeight() ;
+
+                rectPath.setTranslateX(center.getX() - width /2);
+                rectPath.setTranslateY(center.getY() - height / 2);
+
+                Point2D tangent = bezierDeriv(frac, start, control1, control2, end);
+                double angle = Math.toDegrees(Math.atan2(tangent.getY(), tangent.getX()));
+                rectPath.setRotate(angle);
+            }
+
+        };
+
+        transition.setCycleCount(1);
+        transition.setAutoReverse(false);
+        transition.play();
+
+        robot.sleep(2, TimeUnit.SECONDS);
     }
-
 }
