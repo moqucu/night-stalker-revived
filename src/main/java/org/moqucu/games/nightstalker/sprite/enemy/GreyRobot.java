@@ -250,6 +250,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
 
     public Direction getPlayerShootable(Point2D playerLocation) {
 
+
         if (!isActive()) {
             return Direction.Undefined;
         }
@@ -297,11 +298,17 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     public static AudioClip shootSound
             = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/shoot.wav").toString());
 
-    public void fire(Point2D currentLocation, Direction direction) {
+    public void fire(NightStalker player) {
+        Direction playerDirection = this.getPlayerShootable(player.getCurrentLocation());
+
+        if (playerDirection == Direction.Undefined) {
+            return;
+        }
+
         if (bullet != null && bullet.isShot())
             return;
         getMaze().getAllRobotBullets().stream().findAny().ifPresent(bullet -> this.bullet = bullet);
-        bullet.shot(direction, currentLocation);
+        bullet.shot(playerDirection, this.getCurrentLocation());
         shootSound.setVolume(0.1f);
         shootSound.play();
 

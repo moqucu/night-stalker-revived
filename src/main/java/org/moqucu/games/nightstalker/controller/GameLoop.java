@@ -74,15 +74,7 @@ public class GameLoop {
 
                 maze.getAllRobots().forEach(
                         robot -> {
-                            Direction playerDirection = robot.getPlayerShootable(maze.getPlayer().getCurrentLocation());
-                            if (playerDirection != Direction.Undefined) {
-
-                                System.out.println("FIRE");
-
-                                Point2D bulletOrigin = robot.getCurrentLocation();
-
-                                robot.fire(bulletOrigin, playerDirection);
-                            }
+                            robot.fire(maze.getPlayer());
                         }
 
 
