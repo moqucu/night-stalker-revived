@@ -1,9 +1,13 @@
 package org.moqucu.games.nightstalker.sprite.enemy;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -42,12 +46,38 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
 
     private StateMachine<States, Events> stateMachine;
 
+    private Group partsAnimationGroup;
     private GreyRobotPartOne partOne;
     private GreyRobotPartTwo partTwo;
+
+    private CubicCurve curve = new CubicCurve();
 
     private AudioClip destruction = new AudioClip(
             Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/destruct.wav").toString()
     );
+
+    private Point2D bezier(double t, Point2D... points) {
+        if (points.length == 2) {
+            return points[0].multiply(1 - t).add(points[1].multiply(t));
+        }
+        Point2D[] leftArray = new Point2D[points.length - 1];
+        System.arraycopy(points, 0, leftArray, 0, points.length - 1);
+        Point2D[] rightArray = new Point2D[points.length - 1];
+        System.arraycopy(points, 1, rightArray, 0, points.length - 1);
+        return bezier(t, leftArray).multiply(1 - t).add(bezier(t, rightArray).multiply(t));
+    }
+
+    private Point2D bezierDeriv(double t, Point2D... points) {
+        if (points.length == 2) {
+            return points[1].subtract(points[0]);
+        }
+        Point2D[] leftArray = new Point2D[points.length - 1];
+        System.arraycopy(points, 0, leftArray, 0, points.length - 1);
+        Point2D[] rightArray = new Point2D[points.length - 1];
+        System.arraycopy(points, 1, rightArray, 0, points.length - 1);
+        return bezier(t, leftArray).multiply(-1).add(bezierDeriv(t, leftArray).multiply(1 - t))
+                .add(bezier(t, rightArray)).add(bezierDeriv(t, rightArray).multiply(t));
+    }
 
     public GreyRobot() {
 
@@ -169,7 +199,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
 
         super.transitionEnded(transition);
 
-        switch ((States)transition.getTarget().getId()) {
+        switch ((States) transition.getTarget().getId()) {
 
             case Inactive:
                 translateXProperty().set(spawnCoordinateXProperty().get());
@@ -214,8 +244,55 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
         destruction.setVolume(0.1f);
         destruction.play();
 
-        partOne.startFlying(this.getDirection(), this.getCurrentLocation());
-        partTwo.startFlying(this.getDirection(), this.getCurrentLocation());
+        curve.setStartX(getX());
+        curve.setStartY(getY());
+
+        curve.setControlX1(getX() + 50);
+        curve.setControlY1(getY() - 200);
+        curve.setControlX2(getX() + 100);
+        curve.setControlY2(getY() - 150);
+        curve.setEndX(getX() + 150);
+        curve.setEndY(getY() + 200);
+        curve.setStroke(Color.TRANSPARENT);
+        curve.setStrokeWidth(1);
+        curve.setFill(Color.TRANSPARENT);
+
+        javafx.animation.Transition transition = new javafx.animation.Transition() {
+
+            {
+                setCycleDuration(Duration.millis(2000));
+            }
+
+            @Override
+            protected void interpolate(double frac) {
+                Point2D start = new Point2D(curve.getStartX(), curve.getStartY());
+                Point2D control1 = new Point2D(curve.getControlX1(), curve.getControlY1());
+                Point2D control2 = new Point2D(curve.getControlX2(), curve.getControlY2());
+                Point2D end = new Point2D(curve.getEndX(), curve.getEndY());
+
+                Point2D center = bezier(frac, start, control1, control2, end);
+
+                double width = partOne.getBoundsInLocal().getWidth();
+                double height = partOne.getBoundsInLocal().getHeight();
+
+                partOne.setTranslateX(center.getX() - width / 2);
+                partOne.setTranslateY(center.getY() - height / 2);
+
+                Point2D tangent = bezierDeriv(frac, start, control1, control2, end);
+                double angle = Math.toDegrees(Math.atan2(tangent.getY(), tangent.getX()));
+                // rectPath.setRotate(angle);
+            }
+
+        };
+
+        transition.setCycleCount(1);
+        transition.setAutoReverse(false);
+        transition.play();
+
+        //   this.getParent().getC
+        // partOne.startFlying(this.getDirection(), this.getCurrentLocation());
+        // partTwo.startFlying(this.getDirection(), this.getCurrentLocation());
+
         stateMachine.sendEvent(Events.becomeInactive);
     }
 

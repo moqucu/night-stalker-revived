@@ -33,7 +33,7 @@ public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Colli
 
     private Map<States, Indices> frameBoundaries = Map.of(
             States.Flying, Indices.builder().lower(2).upper(3).build(),
-            States.Hidden, Indices.builder().lower(10).upper(10).build()
+            States.Hidden, Indices.builder().lower(2).upper(2).build()
     );
 
     public GreyRobotPartOne() {
