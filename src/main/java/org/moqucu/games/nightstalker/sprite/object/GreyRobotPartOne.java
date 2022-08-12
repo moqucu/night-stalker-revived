@@ -89,31 +89,14 @@ public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Colli
         moveMeFromStart();
     }
 
-    public void startFlying(Direction direction, Point2D startPoint) {
+    public void startFlying(Point2D startPoint) {
 
         if (stateMachine.getState().getId().equals(States.Flying))
             return;
 
         log.info("Starting point: {}", startPoint);
 
-        Point2D endPoint = getMazeGraph().getFurthestReachableNode(startPoint, direction);
-
-        switch (direction) {
-            case Up:
-                setMoveAnimation(startPoint, endPoint.add(0, -16));
-                break;
-            case Down:
-                setMoveAnimation(startPoint, endPoint.add(0, 16));
-                break;
-            case Left:
-                setMoveAnimation(startPoint, endPoint.add(-16, 0));
-                break;
-            case Right:
-                setMoveAnimation(startPoint, endPoint.add(16, 0));
-                break;
-            default:
-                setMoveAnimation(startPoint, startPoint);
-        }
+        setMoveAnimation(startPoint, startPoint);
         stateMachine.sendEvent(Events.fly);
     }
 
