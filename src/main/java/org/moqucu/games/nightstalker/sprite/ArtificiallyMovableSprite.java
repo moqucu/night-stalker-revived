@@ -103,4 +103,6 @@ public abstract class ArtificiallyMovableSprite extends SpawnableSprite {
 
         return (TranslateTransition) moveAnimation;
     }
+
+
 }

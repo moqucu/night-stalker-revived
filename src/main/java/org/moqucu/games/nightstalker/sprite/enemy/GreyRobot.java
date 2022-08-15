@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.sprite.enemy;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.scene.shape.Line;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,12 +10,14 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
+import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
 import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
+import org.moqucu.games.nightstalker.sprite.object.RobotBullet;
+import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
@@ -32,11 +35,13 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @EqualsAndHashCode(callSuper = true)
 public class GreyRobot extends SleepingSprite implements Hittable, Collidable, Approachable {
 
-    private enum States {Inactive, Active, Stopped, Moving, SlowlyMoving, MovingFast, FallingApart}
+    private enum States {Inactive, Active, Stopped, Moving, SlowlyMoving, MovingFast, FallingApart, Fired}
 
-    private enum Events {spawn, move, faster, stop, fallApart, becomeInactive}
+    private enum Events {spawn, move, faster, stop, fallApart, becomeInactive, fire, canFireAgain}
 
     private StateMachine<States, Events> stateMachine;
+
+    private RobotBullet bullet;
 
     public GreyRobot() {
 
@@ -74,6 +79,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                         )
         );
 
+        //getMaze().getAllRobotBullets().stream().findAny().ifPresent(bullet -> this.bullet = bullet);
         stateMachine = buildStateMachine();
 
         //noinspection unchecked
@@ -97,6 +103,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                 .parent(States.Active)
                 .initial(States.Stopped)
                 .state(States.Moving)
+                .state(States.Fired)
                 .and()
                 .withStates()
                 .parent(States.Moving)
@@ -149,7 +156,6 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                 .source(States.FallingApart)
                 .event(Events.becomeInactive)
                 .target(States.Inactive);
-
         return builder.build();
     }
 
@@ -220,11 +226,6 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
         sprite.forEach(log::debug);
     }
 
-    @Override
-    public MazeGraph getMazeGraph() {
-
-        return getEnemyMazeGraph();
-    }
 
     @Override
     public Line getLineOfSight() {
@@ -243,5 +244,70 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                 furthestReachableNode.getX(),
                 furthestReachableNode.getY()
         );
+    }
+
+    public Direction getPlayerShootable(Point2D playerLocation) {
+
+
+        if (!isActive()) {
+            return Direction.Undefined;
+        }
+
+        Point2D startingNode = getCurrentLocation();
+        Direction playerDirection = Direction.Undefined;
+        /*
+        Look in each orthogonal direction and see if there's anything in that direction.
+        If player is in that direction then return that direction, otherwise return null
+
+        If the player's location doesn't share a coordinate with my location then
+        don't even bother looking
+        */
+
+        if (playerLocation.getX() == startingNode.getX() || playerLocation.getY() == startingNode.getY()) {
+            Point2D currentNode = new Point2D(startingNode.getX(), startingNode.getY());
+            playerDirection = Direction.calculateDirection(startingNode, playerLocation);
+            Point2D furthestNode = getEnemyMazeGraph().getFurthestReachableNode(currentNode, playerDirection);
+            System.out.println(playerDirection);
+
+            /* If player is between furthest reachable node and the robot, robot can see the player.*/
+
+            if (playerDirection == Direction.Right && furthestNode.getX() > playerLocation.getX()) {
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                return playerDirection;
+            }
+            else if (playerDirection == Direction.Left && furthestNode.getX() < playerLocation.getX()){
+                System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                return playerDirection;
+            }
+            else if (playerDirection == Direction.Up && furthestNode.getY() < playerLocation.getY()){
+                System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                return playerDirection;
+            }
+            else if (playerDirection == Direction.Down && furthestNode.getY() > playerLocation.getY()){
+                System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+                return playerDirection;
+            }
+
+        }
+
+        return Direction.Undefined;
+    }
+
+    public static AudioClip shootSound
+            = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/shoot.wav").toString());
+
+    public void fire(NightStalker player) {
+        Direction playerDirection = this.getPlayerShootable(player.getCurrentLocation());
+
+        if (playerDirection == Direction.Undefined) {
+            return;
+        }
+
+        if (bullet != null && bullet.isShot())
+            return;
+        getMaze().getAllRobotBullets().stream().findAny().ifPresent(bullet -> this.bullet = bullet);
+        bullet.shot(playerDirection, this.getCurrentLocation());
+        shootSound.setVolume(0.1f);
+        shootSound.play();
     }
 }

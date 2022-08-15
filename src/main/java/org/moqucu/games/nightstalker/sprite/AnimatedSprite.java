@@ -223,7 +223,7 @@ public abstract class AnimatedSprite extends Sprite implements StateMachineListe
         animation.stop();
     }
 
-    protected Point2D getCurrentLocation() {
+    public Point2D getCurrentLocation() {
 
         return new Point2D(getBoundsInParent().getMinX(), getBoundsInParent().getMinY());
     }

@@ -4,9 +4,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Bullet;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
+import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -21,7 +21,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class BulletSprite extends ArtificiallyMovableSprite implements Bullet {
+public class RobotBullet extends ArtificiallyMovableSprite implements Collidable {
 
     enum States {Loaded, Shot}
 
@@ -34,7 +34,7 @@ public class BulletSprite extends ArtificiallyMovableSprite implements Bullet {
             States.Shot, Indices.builder().lower(1).upper(1).build()
     );
 
-    public BulletSprite() {
+    public RobotBullet() {
 
         super();
         setImage(new Image(translate("images/bullet.png")));
@@ -94,6 +94,7 @@ public class BulletSprite extends ArtificiallyMovableSprite implements Bullet {
 
         if (stateMachine.getState().getId().equals(States.Shot))
             return;
+
         log.info("Starting point: {}", startPoint);
 
         Point2D endPoint = getMazeGraph().getFurthestReachableNode(startPoint, direction);
@@ -126,11 +127,16 @@ public class BulletSprite extends ArtificiallyMovableSprite implements Bullet {
     private void loaded(StateContext stateContext) {
 
         log.error(
-                "At location {} with state loaded and following state context: {}",
+                "At location {}with state loaded and following state context: {}",
                 getCurrentLocation(),
                 stateContext
         );
         stopMovingMe();
     }
 
+    public boolean isShot() {
+            if (stateMachine.getState().getId().equals(States.Shot))
+                return true;
+            return false;
+    }
 }

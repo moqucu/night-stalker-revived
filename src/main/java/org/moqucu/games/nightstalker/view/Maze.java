@@ -12,6 +12,9 @@ import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
+import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
+import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
+import org.moqucu.games.nightstalker.sprite.object.RobotBullet;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -37,6 +40,12 @@ public class Maze extends StackPane {
     private final ConcurrentMap<Approachable, Approachable> approachableSprites = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<Bullet, Bullet> bullets = new ConcurrentHashMap<>();
+
+    private final ConcurrentMap<GreyRobot, GreyRobot> robots = new ConcurrentHashMap<>();
+
+    private NightStalker player;
+
+    private final ConcurrentMap<RobotBullet, RobotBullet> robotBullets = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public Maze() {
@@ -102,6 +111,41 @@ public class Maze extends StackPane {
                                 );
                             });
 
+                    ((Pane) addedPane)
+                            .getChildren()
+                            .filtered(node -> node instanceof GreyRobot)
+                            .forEach(sprite -> {
+
+                                robots.putIfAbsent((GreyRobot) sprite, (GreyRobot) sprite);
+                                log.debug(
+                                        "Added ArtificiallyMovableSprite of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
+
+                    ((Pane) addedPane)
+                            .getChildren()
+                            .filtered(node -> node instanceof NightStalker)
+                            .forEach(sprite -> {
+
+                                player = (NightStalker) sprite;
+                                log.debug(
+                                        "Added player of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
+
+                    ((Pane) addedPane)
+                            .getChildren()
+                            .filtered(node -> node instanceof RobotBullet)
+                            .forEach(sprite -> {
+
+                                robotBullets.putIfAbsent((RobotBullet) sprite, (RobotBullet) sprite);
+                                log.debug(
+                                        "Added ArtificiallyMovableSprite of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
 
                     ((Pane) addedPane).getChildren().addListener((ListChangeListener<Node>) change1 -> {
                         change1.next();
@@ -142,6 +186,28 @@ public class Maze extends StackPane {
                                         addedChild.getClass().getName()
                                 );
                             }
+                            if (addedChild instanceof GreyRobot) {
+                                robots.putIfAbsent((GreyRobot) addedChild, (GreyRobot) addedChild);
+                                log.debug(
+                                        "Added GreyRobot of type {} to set.",
+                                        addedChild.getClass().getName()
+                                );
+                            }
+                            if (addedChild instanceof NightStalker) {
+
+                                player = (NightStalker) addedChild;
+                                log.debug(
+                                        "Added NightStalker of type {} to set.",
+                                        addedChild.getClass().getName()
+                                );
+                            }
+                            if (addedChild instanceof RobotBullet) {
+                                robotBullets.putIfAbsent((RobotBullet) addedChild, (RobotBullet) addedChild);
+                                log.debug(
+                                        "Added RobotBullet of type {} to set.",
+                                        addedChild.getClass().getName()
+                                );
+                            }
                         });
                     });
                 }
@@ -177,4 +243,17 @@ public class Maze extends StackPane {
 
         return bullets.keySet();
     }
+
+    public Set<GreyRobot> getAllRobots() {
+        return robots.keySet();
+    }
+
+    public NightStalker getPlayer() {
+        return player;
+    }
+
+    public Set<RobotBullet> getAllRobotBullets() {
+        return robotBullets.keySet();
+    }
+
 }

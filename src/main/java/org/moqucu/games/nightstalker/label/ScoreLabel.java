@@ -11,6 +11,7 @@ import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.sprite.enemy.Spider;
 import org.moqucu.games.nightstalker.utility.HitListener;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,8 @@ public class ScoreLabel extends Text implements HitListener {
 
     public ScoreLabel() {
 
-        setFont(Font.loadFont("fonts/intellect.ttf", 40.0));
+        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("fonts/intellect.ttf");
+        setFont(Font.loadFont(stream, 40.0));
 
         fadeTransition = new FadeTransition(Duration.millis(2000), this);
         fadeTransition.setFromValue(0.0);

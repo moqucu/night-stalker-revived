@@ -14,6 +14,7 @@
 <?import org.moqucu.games.nightstalker.sprite.background.SpiderWeb?>
 <?import org.moqucu.games.nightstalker.sprite.object.Weapon?>
 <?import org.moqucu.games.nightstalker.sprite.object.BulletSprite?>
+<?import org.moqucu.games.nightstalker.sprite.object.RobotBullet?>
 <?import org.moqucu.games.nightstalker.sprite.hero.NightStalker?>
 <?import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot?>
 <?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne?>
@@ -40,6 +41,7 @@
         <Pane>
             <Weapon/>
             <BulletSprite/>
+            <RobotBullet/>
             <LivesLabel
                     x="98.0"
                     y="352.0"
