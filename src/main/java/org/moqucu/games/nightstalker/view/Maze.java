@@ -6,22 +6,29 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Bullet;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
-import org.moqucu.games.nightstalker.sprite.object.Bullet;
+import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+/**
+ * Game maze represented as a JavaX stack pane. Keeps track of all added collidable sprites, hittable sprites,
+ * approachable sprites, and bullets. Provides service methods for accessing any of these.
+ */
 @Log4j2
 public class Maze extends StackPane {
 
-    private final static double PREF_WIDTH = 640d;
+    public final static double PREF_WIDTH = 640d;
 
-    private final static double PREF_HEIGHT = 384d;
+    public final static double PREF_HEIGHT = 384d;
+
+    public static final String ID = "org.moqucu.games.nightstalker.maze";
 
     private final ConcurrentMap<Collidable, Collidable> collidableSprites = new ConcurrentHashMap<>();
 
@@ -35,7 +42,7 @@ public class Maze extends StackPane {
     public Maze() {
 
         super();
-        setId("org.moqucu.games.nightstalker.maze");
+        setId(ID);
 
         setWidth(PREF_WIDTH);
         setPrefWidth(PREF_WIDTH);
@@ -127,9 +134,9 @@ public class Maze extends StackPane {
                                 );
                             }
 
-                            if (addedChild instanceof Bullet) {
+                            if (addedChild instanceof BulletSprite) {
 
-                                bullets.putIfAbsent((Bullet) addedChild, (Bullet) addedChild);
+                                bullets.putIfAbsent((BulletSprite) addedChild, (BulletSprite) addedChild);
                                 log.debug(
                                         "Added bullet of type {} to set.",
                                         addedChild.getClass().getName()

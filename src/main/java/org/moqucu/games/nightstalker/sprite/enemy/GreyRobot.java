@@ -14,7 +14,7 @@ import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
-import org.moqucu.games.nightstalker.sprite.object.Bullet;
+import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
@@ -188,7 +188,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     @Override
     public void hitBy(Collidable collidableObject) {
 
-        if (collidableObject instanceof Bullet) {
+        if (collidableObject instanceof BulletSprite) {
 
             log.debug("Hit by bullet...");
             stopMovingMe();

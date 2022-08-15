@@ -38,8 +38,8 @@ and robots in their tracks. Remember, you can on-
 ly shoot when the man is standing still!
 
 IMPORTANT: Time your shots carefully! Once you
-fire, you cannot shoot again until that bullet disap-
-pears from the screen. While his bullet is traveling,
+fire, you cannot shoot again until that bulletSprite disap-
+pears from the screen. While his bulletSprite is traveling,
 the man can run to dodge alien fire.
 
 
@@ -115,9 +115,9 @@ features.
 
 All robots fire at the man! They have unlimited am-
 munition. Their shots are the same as the man's...
-only one bullet shows on the screen at a time.
+only one bulletSprite shows on the screen at a time.
 
-When the man's bullet hits a robot, he explodes.
+When the man's bulletSprite hits a robot, he explodes.
 Then quickly, another robot replaces him. Robots
 always enter the maze at the lower left corner.
 
@@ -261,7 +261,7 @@ invisible robots, it's
 
 helpful to count /our
 bullets. Try to use your
-last bullet lo blast the
+last bulletSprite lo blast the
 robot. This gives you
 some time -o run and
 pick up the weapon
