@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public enum Direction {
 
-    Up, Down, Left, Right, OnTop;
+    Up, Down, Left, Right, OnTop, Undefined;
 
     /**
      * Given two points, determine the direction that targetPoint is relative to sourcePoint.

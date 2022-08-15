@@ -13,7 +13,6 @@ import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.ManuallyMovableSprite;
 import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
-import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.moqucu.games.nightstalker.sprite.object.RobotBullet;
 import org.moqucu.games.nightstalker.sprite.object.Weapon;
 import org.moqucu.games.nightstalker.sprite.enemy.Bat;

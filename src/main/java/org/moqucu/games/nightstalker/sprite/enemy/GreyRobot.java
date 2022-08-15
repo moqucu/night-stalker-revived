@@ -10,16 +10,13 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
-import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
-import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
+import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
 import org.moqucu.games.nightstalker.sprite.object.RobotBullet;
-import org.moqucu.games.nightstalker.sprite.object.Weapon;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -312,8 +309,5 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
         bullet.shot(playerDirection, this.getCurrentLocation());
         shootSound.setVolume(0.1f);
         shootSound.play();
-
-
-
     }
 }

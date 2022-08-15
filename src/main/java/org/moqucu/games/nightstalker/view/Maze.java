@@ -6,15 +6,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Bullet;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
-import org.moqucu.games.nightstalker.sprite.*;
 import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
-import org.moqucu.games.nightstalker.sprite.object.Bullet;
 import org.moqucu.games.nightstalker.sprite.object.RobotBullet;
 
 import java.util.*;
