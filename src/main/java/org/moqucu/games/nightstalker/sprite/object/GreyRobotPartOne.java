@@ -2,7 +2,9 @@ package org.moqucu.games.nightstalker.sprite.object;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
@@ -21,27 +23,24 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Bullet extends ArtificiallyMovableSprite implements Collidable {
+public class GreyRobotPartOne extends ArtificiallyMovableSprite implements Collidable {
 
-    enum States {Loaded, Shot}
+    enum States {Flying, Hidden}
 
-    enum Events {shoot, load}
+    enum Events {fly, hide}
 
     StateMachine<States, Events> stateMachine;
 
     private Map<States, Indices> frameBoundaries = Map.of(
-            States.Loaded, Indices.builder().lower(0).upper(0).build(),
-            States.Shot, Indices.builder().lower(1).upper(1).build()
+            States.Flying, Indices.builder().lower(2).upper(3).build(),
+            States.Hidden, Indices.builder().lower(2).upper(2).build()
     );
 
-    public Bullet() {
+    public GreyRobotPartOne() {
 
         super();
-        setImage(new Image(translate("images/bullet.png")));
+        setImage(new Image(translate("images/grey-robot.png")));
         setFrameBoundaries(frameBoundaries);
-        setAutoReversible(false);
-        setFrameDurationInMillis(500);
-        setVelocity(150);
 
         stateMachine = buildStateMachine();
         stateMachine.addStateListener(new StateMachineListenerAdapter<>() {
@@ -53,7 +52,7 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
             }
         });
         stateMachine.start();
-        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.load));
+        setOnFinished(actionEvent -> stateMachine.sendEvent(Events.hide));
 
         animateMeFromStart();
     }
@@ -65,65 +64,49 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
 
         builder.configureStates()
                 .withStates()
-                .initial(States.Loaded)
+                .initial(States.Hidden)
                 .states(EnumSet.allOf(States.class));
 
         builder.configureTransitions()
                 .withExternal()
-                .source(States.Loaded)
-                .action(this::shot)
-                .target(States.Shot)
-                .event(Events.shoot)
+                .source(States.Hidden)
+                .action(this::fly)
+                .target(States.Flying)
+                .event(Events.fly)
                 .and()
                 .withExternal()
-                .source(States.Shot)
-                .target(States.Loaded)
-                .action(this::loaded)
-                .event(Events.load);
+                .source(States.Flying)
+                .target(States.Hidden)
+                .action(this::fly)
+                .event(Events.hide);
 
         return builder.build();
     }
 
-    private void shot(StateContext stateContext) {
+    private void fly(StateContext<States, Events> stateContext) {
 
         log.info("shot: {}", stateContext);
         moveMeFromStart();
     }
 
-    void shot(Direction direction, Point2D startPoint) {
+    public void startFlying(Point2D startPoint) {
 
-        if (stateMachine.getState().getId().equals(States.Shot))
+        if (stateMachine.getState().getId().equals(States.Flying))
             return;
+
         log.info("Starting point: {}", startPoint);
 
-        Point2D endPoint = getMazeGraph().getFurthestReachableNode(startPoint, direction);
-
-        switch (direction) {
-            case Up:
-                setMoveAnimation(startPoint, endPoint.add(0, -16));
-                break;
-            case Down:
-                setMoveAnimation(startPoint, endPoint.add(0, 16));
-                break;
-            case Left:
-                setMoveAnimation(startPoint, endPoint.add(-16, 0));
-                break;
-            case Right:
-                setMoveAnimation(startPoint, endPoint.add(16, 0));
-                break;
-            default:
-                setMoveAnimation(startPoint, startPoint);
-        }
-        stateMachine.sendEvent(Events.shoot);
+        setMoveAnimation(startPoint, startPoint);
+        stateMachine.sendEvent(Events.fly);
     }
 
     @Override
     public boolean isCollidable() {
 
-        return stateMachine.getState().getId().equals(States.Shot);
+        return stateMachine.getState().getId().equals(States.Flying);
     }
 
-    private void loaded(StateContext stateContext) {
+    private void hide(StateContext<States, Events> stateContext) {
 
         log.error(
                 "At location {}with state loaded and following state context: {}",
@@ -132,5 +115,6 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
         );
         stopMovingMe();
     }
+
 
 }

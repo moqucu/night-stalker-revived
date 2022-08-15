@@ -26,8 +26,6 @@ import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
 import org.springframework.statemachine.transition.TransitionKind;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
