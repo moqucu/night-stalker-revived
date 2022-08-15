@@ -1,5 +1,7 @@
 package org.moqucu.games.nightstalker.utility;
 
+import javafx.scene.Group;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,15 @@ public interface SpriteCreationListener {
     default void addCreatedSprite(Object createdSprite) {
 
         if (spriteClassesOfInterest.contains(createdSprite.getClass()))
-            createdSprites.put(createdSprite.getClass(), createdSprite);
+            if (
+                    createdSprite.getClass().equals(Group.class)
+                            && (
+                                    ((Group) createdSprite).getId() == null
+                                            || !((Group) createdSprite).getId().trim().equals("GreyRobotAnimationGroup"))
+            )
+                System.out.println("NOP");
+                // do nothing
+            else
+                createdSprites.put(createdSprite.getClass(), createdSprite);
     }
 }

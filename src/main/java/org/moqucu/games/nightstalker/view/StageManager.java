@@ -1,5 +1,7 @@
 package org.moqucu.games.nightstalker.view;
 
+import javafx.scene.Group;
+import javafx.scene.shape.CubicCurve;
 import lombok.extern.log4j.Log4j2;
 
 import javafx.scene.Parent;
@@ -11,6 +13,8 @@ import org.moqucu.games.nightstalker.label.ScoreLabel;
 import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.sprite.enemy.Spider;
 import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
+import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne;
+import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartTwo;
 import org.moqucu.games.nightstalker.utility.SpriteCreationListener;
 
 import java.util.HashMap;
@@ -22,15 +26,19 @@ public class StageManager implements SpriteCreationListener {
 
     private final Stage primaryStage;
     private final SpringFXMLLoader springFXMLLoader;
-    private Map<Parent, Scene> scenes = new HashMap<>();
+    private final Map<Parent, Scene> scenes = new HashMap<>();
 
     public StageManager(SpringFXMLLoader springFXMLLoader, Stage primaryStage) {
 
         this.springFXMLLoader = springFXMLLoader;
         this.primaryStage = primaryStage;
+        this.registerSpriteClass(Group.class);
         this.registerSpriteClass(NightStalker.class);
         this.registerSpriteClass(Spider.class);
         this.registerSpriteClass(GreyRobot.class);
+        this.registerSpriteClass(GreyRobotPartOne.class);
+        this.registerSpriteClass(GreyRobotPartTwo.class);
+        this.registerSpriteClass(CubicCurve.class);
 
         this.registerSpriteClass(LivesLabel.class);
         this.registerSpriteClass(ScoreLabel.class);
@@ -49,15 +57,34 @@ public class StageManager implements SpriteCreationListener {
             NightStalker nightStalker = (NightStalker) createdSprites.get(NightStalker.class);
             LivesLabel livesLabel = (LivesLabel) createdSprites.get(LivesLabel.class);
             livesLabel.bindLivesProperty(nightStalker.livesProperty());
-            nightStalker.livesProperty().addListener((observable, oldValue, newValue) -> {
-
-                log.info("Observed lives change: {} -> {}", oldValue, newValue);
-            });
+            nightStalker.livesProperty().addListener(
+                    (observable, oldValue, newValue)
+                            -> log.info("Observed lives change: {} -> {}", oldValue, newValue));
 
             Spider spider = (Spider) createdSprites.get(Spider.class);
             ScoreLabel scoreLabel = (ScoreLabel) createdSprites.get(ScoreLabel.class);
             spider.addHitListener(scoreLabel);
-            GreyRobot greyRobot  = (GreyRobot) createdSprites.get(GreyRobot.class);
+            GreyRobot greyRobot = (GreyRobot) createdSprites.get(GreyRobot.class);
+            Group animationGroup = (Group) createdSprites.get(Group.class);
+            CubicCurve cubicCurve = (CubicCurve) createdSprites.get(CubicCurve.class);
+//            greyRobot.setPartsAnimationGroup(animationGroup);
+//            greyRobot.setCurve(cubicCurve);
+            GreyRobotPartOne greyRobotPartOne = (GreyRobotPartOne) createdSprites.get(GreyRobotPartOne.class);
+            GreyRobotPartTwo greyRobotPartTwo = (GreyRobotPartTwo) createdSprites.get(GreyRobotPartTwo.class);
+//            greyRobot.setPartOne(greyRobotPartOne);
+//            greyRobot.setPartTwo(greyRobotPartTwo);
+            greyRobot.translateXProperty().addListener(
+                    (observable, oldValue, newValue) -> {
+                        greyRobotPartOne.setTranslateX((double) newValue);
+                        greyRobotPartTwo.setTranslateX((double) newValue);
+                    }
+            );
+            greyRobot.translateYProperty().addListener(
+                    (observable, oldValue, newValue) -> {
+                        greyRobotPartOne.setTranslateY((double) newValue);
+                        greyRobotPartTwo.setTranslateY((double) newValue);
+                    }
+            );
         }
 
         show(viewRootNodeHierarchy, view.getTitle());
