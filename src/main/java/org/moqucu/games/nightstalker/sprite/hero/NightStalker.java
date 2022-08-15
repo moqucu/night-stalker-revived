@@ -13,6 +13,7 @@ import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.ManuallyMovableSprite;
 import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
+import org.moqucu.games.nightstalker.sprite.object.RobotBullet;
 import org.moqucu.games.nightstalker.sprite.object.Weapon;
 import org.moqucu.games.nightstalker.sprite.enemy.Bat;
 import org.moqucu.games.nightstalker.sprite.enemy.Spider;
@@ -24,8 +25,6 @@ import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
 import org.springframework.statemachine.transition.TransitionKind;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
@@ -365,6 +364,10 @@ public class NightStalker extends ManuallyMovableSprite implements Hittable {
         } else if (collidableObject instanceof GreyRobot) {
 
             log.debug("I collided with a robot, dying...");
+            stateMachine.sendEvent(Events.die);
+        } else if (collidableObject instanceof RobotBullet) {
+
+            log.debug("Hit by bullet...");
             stateMachine.sendEvent(Events.die);
         }
     }

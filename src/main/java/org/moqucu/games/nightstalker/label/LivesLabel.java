@@ -1,11 +1,13 @@
 package org.moqucu.games.nightstalker.label;
 
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import java.io.InputStream;
 
 public class LivesLabel extends Text {
 
@@ -13,15 +15,17 @@ public class LivesLabel extends Text {
 
     private FadeTransition fadeTransition;
 
-    public LivesLabel() {
 
-        setFont(Font.loadFont("fonts/intellect.ttf", 40.0));
+    public LivesLabel() {
+        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("fonts/intellect.ttf");
+        setFont(Font.loadFont(stream, 40.0));
 
         fadeTransition = new FadeTransition(Duration.millis(2000), this);
         fadeTransition.setFromValue(0.0);
         fadeTransition.setToValue(1.0);
         fadeTransition.setCycleCount(2);
         fadeTransition.setAutoReverse(true);
+
 
         lives.addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {

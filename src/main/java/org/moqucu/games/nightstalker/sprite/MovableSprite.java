@@ -21,7 +21,6 @@ public abstract class MovableSprite extends AnimatedSprite {
     @Setter(AccessLevel.NONE)
     private final DoubleProperty velocity = new SimpleDoubleProperty(35d);
 
-    @SneakyThrows
     MovableSprite() {
 
         super();
