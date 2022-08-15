@@ -1,28 +1,20 @@
 package org.moqucu.games.nightstalker.sprite.enemy;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Line;
-import javafx.util.Duration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
-import org.moqucu.games.nightstalker.sprite.object.Bullet;
-import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne;
-import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartTwo;
-import org.moqucu.games.nightstalker.view.Maze;
-import org.springframework.statemachine.StateContext;
+import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.transition.Transition;
@@ -45,39 +37,6 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     private enum Events {spawn, move, faster, stop, fallApart, becomeInactive}
 
     private StateMachine<States, Events> stateMachine;
-
-    private Group partsAnimationGroup;
-    private GreyRobotPartOne partOne;
-    private GreyRobotPartTwo partTwo;
-
-    private CubicCurve curve = new CubicCurve();
-
-    private AudioClip destruction = new AudioClip(
-            Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/destruct.wav").toString()
-    );
-
-    private Point2D bezier(double t, Point2D... points) {
-        if (points.length == 2) {
-            return points[0].multiply(1 - t).add(points[1].multiply(t));
-        }
-        Point2D[] leftArray = new Point2D[points.length - 1];
-        System.arraycopy(points, 0, leftArray, 0, points.length - 1);
-        Point2D[] rightArray = new Point2D[points.length - 1];
-        System.arraycopy(points, 1, rightArray, 0, points.length - 1);
-        return bezier(t, leftArray).multiply(1 - t).add(bezier(t, rightArray).multiply(t));
-    }
-
-    private Point2D bezierDeriv(double t, Point2D... points) {
-        if (points.length == 2) {
-            return points[1].subtract(points[0]);
-        }
-        Point2D[] leftArray = new Point2D[points.length - 1];
-        System.arraycopy(points, 0, leftArray, 0, points.length - 1);
-        Point2D[] rightArray = new Point2D[points.length - 1];
-        System.arraycopy(points, 1, rightArray, 0, points.length - 1);
-        return bezier(t, leftArray).multiply(-1).add(bezierDeriv(t, leftArray).multiply(1 - t))
-                .add(bezier(t, rightArray)).add(bezierDeriv(t, rightArray).multiply(t));
-    }
 
     public GreyRobot() {
 
@@ -110,7 +69,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                                 States.FallingApart, AnimationProperty.builder()
                                         .autoReversible(false)
                                         .frameDurationInMillis(100)
-                                        .frameIndices(Indices.builder().lower(10).upper(10).build())
+                                        .frameIndices(Indices.builder().lower(6).upper(9).build())
                                         .build()
                         )
         );
@@ -183,7 +142,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
                 .and()
                 .withInternal()
                 .source(States.FallingApart)
-                .action(this::fallApart)
+                .action(stateContext -> stateMachine.sendEvent(Events.becomeInactive))
                 .timerOnce(getSleepTimeInMillis())
                 .and()
                 .withExternal()
@@ -199,7 +158,7 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
 
         super.transitionEnded(transition);
 
-        switch ((States) transition.getTarget().getId()) {
+        switch ((States)transition.getTarget().getId()) {
 
             case Inactive:
                 translateXProperty().set(spawnCoordinateXProperty().get());
@@ -229,71 +188,13 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     @Override
     public void hitBy(Collidable collidableObject) {
 
-        if (collidableObject instanceof Bullet) {
+        if (collidableObject instanceof BulletSprite) {
 
             log.debug("Hit by bullet...");
             stopMovingMe();
             notifyHitListenerAboutHit();
             stateMachine.sendEvent(Events.fallApart);
         }
-    }
-
-    private void fallApart(StateContext stateContext) {
-
-        log.trace("fallApart: {}", stateContext);
-        destruction.setVolume(0.1f);
-        destruction.play();
-
-        curve.setStartX(getX());
-        curve.setStartY(getY());
-
-        curve.setControlX1(getX() + 50);
-        curve.setControlY1(getY() - 200);
-        curve.setControlX2(getX() + 100);
-        curve.setControlY2(getY() - 150);
-        curve.setEndX(getX() + 150);
-        curve.setEndY(getY() + 200);
-        curve.setStroke(Color.TRANSPARENT);
-        curve.setStrokeWidth(1);
-        curve.setFill(Color.TRANSPARENT);
-
-        javafx.animation.Transition transition = new javafx.animation.Transition() {
-
-            {
-                setCycleDuration(Duration.millis(2000));
-            }
-
-            @Override
-            protected void interpolate(double frac) {
-                Point2D start = new Point2D(curve.getStartX(), curve.getStartY());
-                Point2D control1 = new Point2D(curve.getControlX1(), curve.getControlY1());
-                Point2D control2 = new Point2D(curve.getControlX2(), curve.getControlY2());
-                Point2D end = new Point2D(curve.getEndX(), curve.getEndY());
-
-                Point2D center = bezier(frac, start, control1, control2, end);
-
-                double width = partOne.getBoundsInLocal().getWidth();
-                double height = partOne.getBoundsInLocal().getHeight();
-
-                partOne.setTranslateX(center.getX() - width / 2);
-                partOne.setTranslateY(center.getY() - height / 2);
-
-                Point2D tangent = bezierDeriv(frac, start, control1, control2, end);
-                double angle = Math.toDegrees(Math.atan2(tangent.getY(), tangent.getX()));
-                // rectPath.setRotate(angle);
-            }
-
-        };
-
-        transition.setCycleCount(1);
-        transition.setAutoReverse(false);
-        transition.play();
-
-        //   this.getParent().getC
-        // partOne.startFlying(this.getDirection(), this.getCurrentLocation());
-        // partTwo.startFlying(this.getDirection(), this.getCurrentLocation());
-
-        stateMachine.sendEvent(Events.becomeInactive);
     }
 
     @Override
@@ -317,6 +218,12 @@ public class GreyRobot extends SleepingSprite implements Hittable, Collidable, A
     public void approachedBy(Set<Sprite> sprite) {
 
         sprite.forEach(log::debug);
+    }
+
+    @Override
+    public MazeGraph getMazeGraph() {
+
+        return getEnemyMazeGraph();
     }
 
     @Override

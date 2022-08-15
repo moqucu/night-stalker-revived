@@ -2,10 +2,10 @@ plugins {
     id 'java'
     id 'application'
     id 'idea'
-    id 'org.springframework.boot' version '2.7.0'
+    id 'org.springframework.boot' version '2.5.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id "io.freefair.lombok" version "6.4.3"
-    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id "io.freefair.lombok" version "6.0.0-m2"
+    id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 repositories {
@@ -16,23 +16,36 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-autoconfigure'
     implementation 'org.springframework.statemachine:spring-statemachine-core:2.1.0.RELEASE'
-    implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    implementation 'org.apache.logging.log4j:log4j-api:2.12.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.12.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.9'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.9'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.9'
 
-    runtimeOnly 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    runtimeOnly 'org.mapstruct:mapstruct-processor:1.2.0.Final'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testImplementation "org.testfx:testfx-core:4.0.16-alpha"
-    testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
+    testImplementation(platform('org.junit:junit-bom:5.7.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    testImplementation('org.mockito:mockito-core:2.21.0')
+    testImplementation('org.mockito:mockito-junit-jupiter:2.23.0')
+    testImplementation('org.testfx:testfx-core:4.0.+')
+    testImplementation('org.testfx:testfx-junit5:4.0.+')
+    testImplementation('org.mockito:mockito-junit-jupiter:2.23.0')
     testImplementation('org.hamcrest:hamcrest:2.2')
+}
 
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+application.mainClassName = 'org.moqucu.games.nightstalker.NightStalkerRevived'
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 javafx {
+    version = '15'
     modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.graphics' ]
 }
 
@@ -44,30 +57,24 @@ jar {
     enabled = true
 }
 
-//sourceSets {
-//    main {
-//        java {
-//            srcDirs = ['src/main/java']
-//        }
-//        resources {
-//            srcDir 'src/main/resources'
-//        }
-//        output.resourcesDir = "build/classes/java/main"
-//    }
-//
-//    test {
-//        java {
-//            srcDirs = ['src/test/java']
-//        }
-//        resources {
-//            srcDir 'src/test/resources'
-//        }
-//        output.resourcesDir = "build/classes/java/test"
-//    }
-//}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+        output.resourcesDir = "build/classes/java/main"
+    }
 
-mainClassName = 'org.moqucu.games.nightstalker.NightStalkerRevived'
-
-test {
-    useJUnitPlatform()
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDir 'src/test/resources'
+        }
+        output.resourcesDir = "build/classes/java/test"
+    }
 }

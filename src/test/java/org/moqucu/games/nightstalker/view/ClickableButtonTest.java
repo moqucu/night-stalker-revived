@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.test;
+package org.moqucu.games.nightstalker.view;
 
 import javafx.animation.RotateTransition;
 import javafx.scene.Scene;

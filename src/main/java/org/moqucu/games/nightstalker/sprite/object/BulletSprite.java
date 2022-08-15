@@ -4,9 +4,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Bullet;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
-import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -21,7 +21,7 @@ import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 @SuppressWarnings("unused")
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
-public class Bullet extends ArtificiallyMovableSprite implements Collidable {
+public class BulletSprite extends ArtificiallyMovableSprite implements Bullet {
 
     enum States {Loaded, Shot}
 
@@ -34,7 +34,7 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
             States.Shot, Indices.builder().lower(1).upper(1).build()
     );
 
-    public Bullet() {
+    public BulletSprite() {
 
         super();
         setImage(new Image(translate("images/bullet.png")));
@@ -90,7 +90,7 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
         moveMeFromStart();
     }
 
-    void shot(Direction direction, Point2D startPoint) {
+    public void shot(Direction direction, Point2D startPoint) {
 
         if (stateMachine.getState().getId().equals(States.Shot))
             return;
@@ -127,7 +127,7 @@ public class Bullet extends ArtificiallyMovableSprite implements Collidable {
     private void loaded(StateContext stateContext) {
 
         log.error(
-                "At location {}with state loaded and following state context: {}",
+                "At location {} with state loaded and following state context: {}",
                 getCurrentLocation(),
                 stateContext
         );

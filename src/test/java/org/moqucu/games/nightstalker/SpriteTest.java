@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.test;
+package org.moqucu.games.nightstalker;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.sprite.Sprite;

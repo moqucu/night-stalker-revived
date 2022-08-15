@@ -52,6 +52,8 @@ public class StageManager implements SpriteCreationListener {
 
         if (view.equals(FxmlView.GAME_SCREEN)) {
 
+            // ToDo: unclear why I am accessing these sprites? Maybe, trying to make connections?
+
             NightStalker nightStalker = (NightStalker) createdSprites.get(NightStalker.class);
             LivesLabel livesLabel = (LivesLabel) createdSprites.get(LivesLabel.class);
             livesLabel.bindLivesProperty(nightStalker.livesProperty());
