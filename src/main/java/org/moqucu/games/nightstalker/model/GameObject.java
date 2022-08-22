@@ -7,7 +7,7 @@ import java.util.UUID;
 public abstract class GameObject {
 
     @Getter
-    private final Position position = new Position();
+    private final AbsolutePosition absolutePosition = new AbsolutePosition();
 
     @Getter
     private final UUID id = UUID.randomUUID();

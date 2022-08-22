@@ -25,16 +25,16 @@ public abstract class MovableGameObject extends GameObject implements TimeListen
             switch (getDirection()) {
 
                 case Up:
-                    getPosition().addToY(-1.0 * milliseconds / 1000 * getVelocity());
+                    getAbsolutePosition().addToY(-1.0 * milliseconds / 1000 * getVelocity());
                     break;
                 case Down:
-                    getPosition().addToY(1.0 * milliseconds / 1000 * getVelocity());
+                    getAbsolutePosition().addToY(1.0 * milliseconds / 1000 * getVelocity());
                     break;
                 case Left:
-                    getPosition().addToX(-1.0 * milliseconds / 1000 * getVelocity());
+                    getAbsolutePosition().addToX(-1.0 * milliseconds / 1000 * getVelocity());
                     break;
                 case Right:
-                    getPosition().addToX(1.0 * milliseconds / 1000 * getVelocity());
+                    getAbsolutePosition().addToX(1.0 * milliseconds / 1000 * getVelocity());
                     break;
             }
         }

@@ -3,7 +3,7 @@ package org.moqucu.games.nightstalker.model;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Position {
+public class AbsolutePosition {
 
     public static final double MAX_X = 639.0;
 

@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.test.model;
+package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.event.TimeListener;

@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.test.model;
+package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Direction;
@@ -75,37 +75,37 @@ public class GameWorldTest {
 
         final MovableGameObject gameObject = new MovableGameObject() {
         };
-        gameObject.getPosition().setX(0.0);
-        gameObject.getPosition().setY(0.0);
+        gameObject.getAbsolutePosition().setX(0.0);
+        gameObject.getAbsolutePosition().setY(0.0);
         gameObject.setVelocity(20);
         gameWorld.add(gameObject);
 
         gameObject.setDirection(Direction.Down);
         gameObject.setInMotion();
         gameWorld.pulse(2000);
-        assertThat(gameObject.getPosition().getX(), is(0.0));
-        assertThat(gameObject.getPosition().getY(), is(40.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(0.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(40.0));
         gameObject.stop();
 
         gameObject.setDirection(Direction.Up);
         gameObject.setInMotion();
         gameWorld.pulse(1000);
-        assertThat(gameObject.getPosition().getX(), is(0.0));
-        assertThat(gameObject.getPosition().getY(), is(20.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(0.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(20.0));
         gameObject.stop();
 
         gameObject.setDirection(Direction.Right);
         gameObject.setInMotion();
         gameWorld.pulse(2000);
-        assertThat(gameObject.getPosition().getX(), is(40.0));
-        assertThat(gameObject.getPosition().getY(), is(20.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(40.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(20.0));
         gameObject.stop();
 
         gameObject.setDirection(Direction.Left);
         gameObject.setInMotion();
         gameWorld.pulse(1000);
-        assertThat(gameObject.getPosition().getX(), is(20.0));
-        assertThat(gameObject.getPosition().getY(), is(20.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(20.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(20.0));
         gameObject.stop();
     }
 }

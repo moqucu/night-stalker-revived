@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.test.model;
+package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.GameObject;
@@ -18,7 +18,7 @@ public class GameObjectTest {
     @Test
     public void hasPosition() {
 
-        assertThat(genericGameObject, hasProperty("position"));
+        assertThat(genericGameObject, hasProperty("absolutePosition"));
     }
 
     @Test
