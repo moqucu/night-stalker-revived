@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Represents on ordered graph of relative positions. Also offers service methods for determining the closest
@@ -174,4 +175,139 @@ public class MazeGraphV2 {
                 );
         }
     }
+
+    private boolean isNodeOnNode(RelativePosition node) {
+
+        return adjacencyList.containsKey(node);
+    }
+
+    private boolean noNodesThatMatchCondition(RelativePosition node, Predicate<RelativePosition> condition) {
+
+        return adjacencyList.get(node)
+                .stream()
+                .filter(condition)
+                .findAny()
+                .isEmpty();
+    }
+
+    private List<RelativePosition> returnAllNodesThatMatchConditionAsOrderedList(
+            Predicate<RelativePosition> condition,
+            Comparator<RelativePosition> comparator
+    ) {
+
+        return adjacencyList
+                .keySet()
+                .stream()
+                .filter(condition)
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
+    private void logAllNodesIndividuallyWhenInTraceMode(Direction direction, List<RelativePosition> nodes) {
+
+        if (log.isTraceEnabled()) {
+
+            log.trace("Nodes {} from here...", direction);
+            nodes.forEach(log::trace);
+        }
+    }
+
+    private RelativePosition findAndReturnFurthestNodesInAscOrder(
+            Direction direction,
+            RelativePosition node,
+            List<RelativePosition> nodes
+    ) {
+
+        RelativePosition furthestNode = nodes.size() > 0 ? nodes.get(0) : node;
+
+        for (int i = 0; i + 1 < nodes.size(); i++)
+
+            if (adjacencyList.get(nodes.get(i)).contains(nodes.get(i + 1)))
+                furthestNode = nodes.get(i + 1);
+            else
+                break;
+
+        log.debug("Returning furthest reachable node in direction {}: {}", direction, furthestNode);
+
+        return furthestNode;
+    }
+
+    private RelativePosition findAndReturnFurthestNodesInDescOrder(
+            Direction direction,
+            RelativePosition node,
+            List<RelativePosition> nodes
+    ) {
+
+        RelativePosition furthestNode = nodes.size() > 0 ? nodes.get(nodes.size() - 1) : node;
+
+        for (int i = nodes.size() - 1; i > 0; i--)
+
+            if (adjacencyList.get(nodes.get(i)).contains(nodes.get(i - 1)))
+                furthestNode = nodes.get(i - 1);
+            else
+                break;
+
+        log.debug("Returning furthest reachable node in direction {}: {}", direction, furthestNode);
+
+        return furthestNode;
+    }
+
+    private RelativePosition returnClosestNodeInDirectionThatMatchesCondition(
+            RelativePosition node,
+            Direction direction,
+            Predicate<RelativePosition> condition,
+            Comparator<RelativePosition> comparator
+    ) {
+
+        if (isNodeOnNode(node) && noNodesThatMatchCondition(node, condition))
+            return node;
+
+        List<RelativePosition> sortedListOfNodesThatMatchCondition
+                = returnAllNodesThatMatchConditionAsOrderedList(condition, comparator);
+
+        logAllNodesIndividuallyWhenInTraceMode(direction, sortedListOfNodesThatMatchCondition);
+
+        switch (direction) {
+            case Down:
+            case Right:
+                return findAndReturnFurthestNodesInAscOrder(direction, node, sortedListOfNodesThatMatchCondition);
+            default: // Up & Left
+                return findAndReturnFurthestNodesInDescOrder(direction, node, sortedListOfNodesThatMatchCondition);
+        }
+    }
+
+    public RelativePosition getFurthestReachableNode(RelativePosition node, Direction direction) {
+
+        Predicate<RelativePosition> predicate;
+        Comparator<RelativePosition> comparator;
+
+        switch (direction) {
+            case Left:
+                predicate = getPredicateForAnyNodeToTheLeft(node);
+                comparator = ascByHorizontalAxis;
+                break;
+            case Up:
+                predicate = getPredicateForAnyNodeAbove(node);
+                comparator = ascByVerticalAxis;
+                break;
+            case Right:
+                predicate = getPredicateForAnyNodeToTheRight(node);
+                comparator = ascByHorizontalAxis;
+                break;
+            case Down:
+                predicate = getPredicateForAnyNodeBelow(node);
+                comparator = ascByVerticalAxis;
+                break;
+            default:
+                return node;
+        }
+
+        return returnClosestNodeInDirectionThatMatchesCondition(
+                node,
+                direction,
+                predicate,
+                comparator
+        );
+    }
+
 }
