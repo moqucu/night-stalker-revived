@@ -1,10 +1,7 @@
 package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.GameObject;
-import org.moqucu.games.nightstalker.model.GameWorld;
-import org.moqucu.games.nightstalker.model.MovableGameObject;
+import org.moqucu.games.nightstalker.model.*;
 
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +23,18 @@ public class GameWorldTest {
     public void timePropertyOfTypeTime() {
 
         assertThat(gameWorld.getTime(), isA(Long.class));
+    }
+
+    @Test
+    public void hasMazeGrahProperty() {
+
+        assertThat(gameWorld, hasProperty("mazeGraph"));
+    }
+
+    @Test
+    public void mazeGraphPropertyOfTypeTime() {
+
+        assertThat(gameWorld.getMazeGraph(), isA(MazeGraphV2.class));
     }
 
     @Test
