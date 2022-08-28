@@ -1,12 +1,8 @@
 package org.moqucu.games.nightstalker.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -29,16 +25,6 @@ public class MazeGraphV2 {
 
             super(message);
         }
-    }
-
-    @Data
-    @NoArgsConstructor
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    static class AdjacencyList {
-
-        private RelativePosition node;
-        private Set<RelativePosition> adjacentNodes;
     }
 
     @Getter
@@ -68,13 +54,13 @@ public class MazeGraphV2 {
     public void loadFromJson(InputStream adjacencyListJsonArray) {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        List<AdjacencyList> adjacencyLists
-                = objectMapper.readValue(adjacencyListJsonArray, new TypeReference<List<AdjacencyList>>() {
+        List<AdjacencyListElement> adjacencyLists
+                = objectMapper.readValue(adjacencyListJsonArray, new TypeReference<List<AdjacencyListElement>>() {
         });
 
         adjacencyLists.forEach(adjacencyListItem -> adjacencyListItem.getAdjacentNodes().forEach(node ->
                 addEge(
-                        new RelativePosition(adjacencyListItem.node.getX(), adjacencyListItem.node.getY()),
+                        new RelativePosition(adjacencyListItem.getNode().getX(), adjacencyListItem.getNode().getY()),
                         new RelativePosition(node.getX(), node.getY())
                 )));
     }

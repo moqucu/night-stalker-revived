@@ -1,20 +1,18 @@
 package org.moqucu.games.nightstalker.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AbsolutePosition {
 
     public static final double MAX_X = 639.0;
 
     public static final double MAX_Y = 383.0;
 
-    @Getter
-    @Setter
     private double x;
 
-    @Getter
-    @Setter
     private double y;
 
     public void addToX(double numberToBeAdded) {
