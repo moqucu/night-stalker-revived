@@ -2,8 +2,18 @@ package org.moqucu.games.nightstalker.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AbsMazeGraph {
+
+    public static class PositionOutOfBoundsException extends RuntimeException {
+
+        PositionOutOfBoundsException(String message) {
+
+            super(message);
+        }
+    }
 
     public static final int WIDTH = 32;
     public static final int HEIGHT = 32;
@@ -50,7 +60,6 @@ public class AbsMazeGraph {
 
     public AbsolutePosition getClosestReachablePosition(AbsolutePosition position, Direction direction) {
 
-
         final RelativePosition closestRelativePosition = getClosestNodeToAbsPos(position);
         final RelativePosition closestReachableNode
                 = mazeGraph.getClosestReachableNode(closestRelativePosition, direction);
@@ -59,5 +68,29 @@ public class AbsMazeGraph {
                 closestReachableNode.getX() * WIDTH,
                 closestReachableNode.getY() * HEIGHT
         );
+    }
+
+    public boolean isWithinBounds(AbsolutePosition position) {
+
+        final Set<Double> distinctXPositions = mazeGraph.getAdjacencyList()
+                .keySet()
+                .stream()
+                .map(relativePosition -> relativePosition.getX() * WIDTH * 1.0)
+                .collect(Collectors.toSet());
+        final boolean isOnXPos = distinctXPositions.contains(position.getX());
+
+        final Set<Double> distinctYPositions = mazeGraph.getAdjacencyList()
+                .keySet()
+                .stream()
+                .map(relativePosition -> relativePosition.getY() * HEIGHT * 1.0)
+                .collect(Collectors.toSet());
+        final boolean isOnYPos = distinctYPositions.contains((position.getY()));
+
+        if (isOnXPos)
+            return true;
+        else if (isOnYPos)
+            return true;
+        else
+            return false;
     }
 }

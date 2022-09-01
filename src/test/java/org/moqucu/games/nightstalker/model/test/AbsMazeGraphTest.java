@@ -219,4 +219,124 @@ public class AbsMazeGraphTest {
                 absMazeGraph.getClosestReachablePosition(startingPoint, Direction.Up)
         );
     }
+
+    @Test
+    @DisplayName("Position that is for outside the maze graph's nodes raises exception")
+    public void posOutsideBoundsRaisesException() {
+
+        final AbsolutePosition farOutThere = new AbsolutePosition(900, 900);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(farOutThere),
+                is(false)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 64.0, 32.0 is within bounds")
+    public void pointOnNodeTwoOneIsWithinBounds() {
+
+        final AbsolutePosition onNodeTwoOne = new AbsolutePosition(64.0, 32.0);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(onNodeTwoOne),
+                is(true)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 32.0, 12.0 is within bounds")
+    public void position32_12IsWithinBounds() {
+
+        final AbsolutePosition position32_12 = new AbsolutePosition(32.0, 12.0);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(position32_12),
+                is(true)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 70.3, 32.0 is within bounds")
+    public void position70_3_32IsWithinBounds() {
+
+        final AbsolutePosition position70_3_32 = new AbsolutePosition(70.3, 32.0);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(position70_3_32),
+                is(true)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 11.0, 32.0 is within bounds")
+    public void position11_32IsWithinBounds() {
+
+        final AbsolutePosition position11_32 = new AbsolutePosition(11.0, 32.0);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(position11_32),
+                is(true)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 32.0, 40.5 is within bounds")
+    public void position32_40_5IsWithinBounds() {
+
+        final AbsolutePosition position32_40_5 = new AbsolutePosition(32.0, 40.5);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(position32_40_5),
+                is(true)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 31.9, 32 is outside bounds")
+    public void position31_9_32IsOutsideBounds() {
+
+        final AbsolutePosition position31_9_32 = new AbsolutePosition(31.9, 32);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(position31_9_32),
+                is(false)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 96.1, 32 is outside bounds")
+    public void position96_2_32IsOutsideBounds() {
+
+        final AbsolutePosition position96_2_32 = new AbsolutePosition(96.1, 32);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(position96_2_32),
+                is(false)
+        );
+    }
+
+    @Test
+    @DisplayName("Position 0, 0 is outside bounds")
+    public void position0_0IsOutsideBounds() {
+
+        final AbsolutePosition position0_0 = new AbsolutePosition(0, 0);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(position0_0),
+                is(false)
+        );
+    }
+
+    @Test
+    @DisplayName("Position -32, -32 is outside bounds")
+    public void positionNegative32_Negative32IsOutsideBounds() {
+
+        final AbsolutePosition positionNegative32_Negative32 = new AbsolutePosition(-32, -32);
+
+        assertThat(
+                absMazeGraph.isWithinBounds(positionNegative32_Negative32),
+                is(false)
+        );
+    }
 }
