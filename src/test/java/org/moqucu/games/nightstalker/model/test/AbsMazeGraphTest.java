@@ -19,7 +19,7 @@ public class AbsMazeGraphTest {
     @SneakyThrows
     public AbsMazeGraphTest() {
 
-        try(InputStream inputStream = getClass().getResourceAsStream("MazeGraphTest.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("MazeGraphTest.json")) {
 
             final MazeGraphV2 mazeGraph = new MazeGraphV2();
             mazeGraph.loadFromJson(inputStream);
@@ -225,10 +225,9 @@ public class AbsMazeGraphTest {
     public void posOutsideBoundsRaisesException() {
 
         final AbsolutePosition farOutThere = new AbsolutePosition(900, 900);
-
-        assertThat(
-                absMazeGraph.isWithinBounds(farOutThere),
-                is(false)
+        assertThrows(
+                AbsMazeGraph.PositionOutOfBoundsException.class,
+                () -> absMazeGraph.getClosestReachablePosition(farOutThere, Direction.Left)
         );
     }
 
@@ -293,13 +292,13 @@ public class AbsMazeGraphTest {
     }
 
     @Test
-    @DisplayName("Position 31.9, 32 is outside bounds")
-    public void position31_9_32IsOutsideBounds() {
+    @DisplayName("Position 32, 64.01 is outside bounds")
+    public void position32_64_01IsOutsideBounds() {
 
-        final AbsolutePosition position31_9_32 = new AbsolutePosition(31.9, 32);
+        final AbsolutePosition position32_64_01 = new AbsolutePosition(32, 64.01);
 
         assertThat(
-                absMazeGraph.isWithinBounds(position31_9_32),
+                absMazeGraph.isWithinBounds(position32_64_01),
                 is(false)
         );
     }

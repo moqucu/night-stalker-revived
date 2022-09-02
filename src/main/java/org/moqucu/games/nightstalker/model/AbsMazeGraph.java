@@ -3,6 +3,7 @@ package org.moqucu.games.nightstalker.model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class AbsMazeGraph {
@@ -48,6 +49,15 @@ public class AbsMazeGraph {
 
     public AbsolutePosition getFurthestReachablePosition(AbsolutePosition position, Direction direction) {
 
+        if (!isWithinBounds(position))
+            throw new PositionOutOfBoundsException(
+                    String.format(
+                            "Absolute position with coordinates x=%f and y=%f is outside the graph's boundary!",
+                            position.getX(),
+                            position.getY()
+                    )
+            );
+
         final RelativePosition closestRelativePosition = getClosestNodeToAbsPos(position);
         final RelativePosition furthestReachableNode
                 = mazeGraph.getFurthestReachableNode(closestRelativePosition, direction);
@@ -59,6 +69,15 @@ public class AbsMazeGraph {
     }
 
     public AbsolutePosition getClosestReachablePosition(AbsolutePosition position, Direction direction) {
+
+        if (!isWithinBounds(position))
+            throw new PositionOutOfBoundsException(
+                    String.format(
+                            "Absolute position with coordinates x=%f and y=%f is outside the graph's boundary!",
+                            position.getX(),
+                            position.getY()
+                    )
+            );
 
         final RelativePosition closestRelativePosition = getClosestNodeToAbsPos(position);
         final RelativePosition closestReachableNode
@@ -72,25 +91,44 @@ public class AbsMazeGraph {
 
     public boolean isWithinBounds(AbsolutePosition position) {
 
-        final Set<Double> distinctXPositions = mazeGraph.getAdjacencyList()
+        final AtomicBoolean isWithinBounds = new AtomicBoolean(false);
+
+        final Set<RelativePosition> positionsThatMatchXCoordinate = mazeGraph.getAdjacencyList()
                 .keySet()
                 .stream()
-                .map(relativePosition -> relativePosition.getX() * WIDTH * 1.0)
+                .filter(relativePosition -> relativePosition.getX() * WIDTH * 1.0 == position.getX())
                 .collect(Collectors.toSet());
-        final boolean isOnXPos = distinctXPositions.contains(position.getX());
+        positionsThatMatchXCoordinate.forEach(
+                xMatchingPosition -> {
+                    final double minYPosition = mazeGraph
+                            .getFurthestReachableNode(xMatchingPosition, Direction.Up)
+                            .getY() * HEIGHT * 1.0;
+                    final double maxYPosition = mazeGraph
+                            .getFurthestReachableNode(xMatchingPosition, Direction.Down)
+                            .getY() * HEIGHT * 1.0;
+                    if (position.getY() >= minYPosition && position.getY() <= maxYPosition)
+                        isWithinBounds.set(true);
+                }
+        );
 
-        final Set<Double> distinctYPositions = mazeGraph.getAdjacencyList()
+        final Set<RelativePosition> positionsThatMatchYCoordinate = mazeGraph.getAdjacencyList()
                 .keySet()
                 .stream()
-                .map(relativePosition -> relativePosition.getY() * HEIGHT * 1.0)
+                .filter(relativePosition -> relativePosition.getY() * HEIGHT * 1.0 == position.getY())
                 .collect(Collectors.toSet());
-        final boolean isOnYPos = distinctYPositions.contains((position.getY()));
+        positionsThatMatchYCoordinate.forEach(
+                yMatchingPosition -> {
+                    final double minXPosition = mazeGraph
+                            .getFurthestReachableNode(yMatchingPosition, Direction.Left)
+                            .getX() * WIDTH * 1.0;
+                    final double maxXPosition = mazeGraph
+                            .getFurthestReachableNode(yMatchingPosition, Direction.Right)
+                            .getX() * WIDTH * 1.0;
+                    if (position.getX() >= minXPosition && position.getX() <= maxXPosition)
+                        isWithinBounds.set(true);
+                }
+        );
 
-        if (isOnXPos)
-            return true;
-        else if (isOnYPos)
-            return true;
-        else
-            return false;
+        return isWithinBounds.get();
     }
 }
