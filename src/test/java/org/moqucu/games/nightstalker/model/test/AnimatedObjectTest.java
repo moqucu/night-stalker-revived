@@ -164,4 +164,49 @@ public class AnimatedObjectTest {
 
         assertThat(animatedObject.getImageIndex(), is(1));
     }
+
+    @Test
+    @DisplayName("Given frame rate of 4 per second, setting pulse to 500 ms should switch to frame 3 (index 2).")
+    public void testFrameRateCalculationPartOne() {
+
+        animatedObject.setFrameRate(4);
+        animatedObject.setLowerAnimationIndex(0);
+        animatedObject.setUpperAnimationIndex(3);
+        final GameWorld gameWorld = new GameWorld();
+        gameWorld.add(animatedObject);
+        animatedObject.setAnimated(true);
+        gameWorld.pulse(500);
+
+        assertThat(animatedObject.getImageIndex(), is(2));
+    }
+
+    @Test
+    @DisplayName("Given frame rate of 4 per second and 2 frames, setting pulse to 500 ms should switch to frame 0 (index 0).")
+    public void testFrameRateCalculationPartTwo() {
+
+        animatedObject.setFrameRate(4);
+        animatedObject.setLowerAnimationIndex(0);
+        animatedObject.setUpperAnimationIndex(1);
+        final GameWorld gameWorld = new GameWorld();
+        gameWorld.add(animatedObject);
+        animatedObject.setAnimated(true);
+        gameWorld.pulse(500);
+
+        assertThat(animatedObject.getImageIndex(), is(0));
+    }
+
+    @Test
+    @DisplayName("Given frame rate of 50 and 7 frames, setting pulse to 900 ms should switch to frame 4 (index 3).")
+    public void testFrameRateCalculationPartThree() {
+
+        animatedObject.setFrameRate(50);
+        animatedObject.setLowerAnimationIndex(0);
+        animatedObject.setUpperAnimationIndex(6);
+        final GameWorld gameWorld = new GameWorld();
+        gameWorld.add(animatedObject);
+        animatedObject.setAnimated(true);
+        gameWorld.pulse(900);
+
+        assertThat(animatedObject.getImageIndex(), is(3));
+    }
 }

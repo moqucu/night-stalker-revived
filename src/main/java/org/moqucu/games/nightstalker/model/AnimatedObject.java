@@ -68,7 +68,7 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
             final long elapsedTimeSinceLastFullSecond = elapsedTime - (elapsedTime / 1000) * 1000;
             double remainingTimeForLoop = elapsedTimeSinceLastFullSecond - frameInterval;
 
-            while (remainingTimeForLoop > 0) {
+            while (remainingTimeForLoop >= 0) {
 
                 imageIndex++;
                 if (imageIndex > upperAnimationIndex)
