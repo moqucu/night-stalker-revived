@@ -5,14 +5,17 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AbsolutePosition {
 
     public static final double MAX_X = 639.0;
 
     public static final double MAX_Y = 383.0;
 
+    @EqualsAndHashCode.Include
     private double x;
 
+    @EqualsAndHashCode.Include
     private double y;
 
     public void addToX(double numberToBeAdded) {
