@@ -39,7 +39,7 @@ public class AbsMazeGraphTest {
         final RelativePosition oneZero = new RelativePosition(1, 0);
         final AbsolutePosition _32_12 = new AbsolutePosition(32, 12);
 
-        assertThat(absMazeGraph.getClosestNodeToAbsPos(_32_12), is(oneZero));
+        assertThat(absMazeGraph.getClosestNodeToAbsPos(_32_12, Direction.Undefined), is(oneZero));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class AbsMazeGraphTest {
         final RelativePosition oneOne = new RelativePosition(1, 1);
         final AbsolutePosition _32_17 = new AbsolutePosition(32, 17);
 
-        assertThat(absMazeGraph.getClosestNodeToAbsPos(_32_17), is(oneOne));
+        assertThat(absMazeGraph.getClosestNodeToAbsPos(_32_17, Direction.Undefined), is(oneOne));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class AbsMazeGraphTest {
         final RelativePosition zeroOne = new RelativePosition(0, 1);
         final AbsolutePosition _13_32 = new AbsolutePosition(13, 32);
 
-        assertThat(absMazeGraph.getClosestNodeToAbsPos(_13_32), is(zeroOne));
+        assertThat(absMazeGraph.getClosestNodeToAbsPos(_13_32, Direction.Undefined), is(zeroOne));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class AbsMazeGraphTest {
         final RelativePosition twoOne = new RelativePosition(2, 1);
         final AbsolutePosition _53_32 = new AbsolutePosition(53, 32);
 
-        assertThat(absMazeGraph.getClosestNodeToAbsPos(_53_32), is(twoOne));
+        assertThat(absMazeGraph.getClosestNodeToAbsPos(_53_32, Direction.Undefined), is(twoOne));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class AbsMazeGraphTest {
         final RelativePosition threeOne = new RelativePosition(3, 1);
         final AbsolutePosition _96_32 = new AbsolutePosition(96, 32);
 
-        assertThat(absMazeGraph.getClosestNodeToAbsPos(_96_32), is(threeOne));
+        assertThat(absMazeGraph.getClosestNodeToAbsPos(_96_32, Direction.Undefined), is(threeOne));
     }
 
     @Test
@@ -89,19 +89,18 @@ public class AbsMazeGraphTest {
         final RelativePosition oneTwo = new RelativePosition(1, 2);
         final AbsolutePosition _32_55 = new AbsolutePosition(32, 55);
 
-        assertThat(absMazeGraph.getClosestNodeToAbsPos(_32_55), is(oneTwo));
+        assertThat(absMazeGraph.getClosestNodeToAbsPos(_32_55, Direction.Undefined), is(oneTwo));
     }
 
     @Test
-    @DisplayName("When starting with (1, 1), the furthest reachable point with dummy direction should be (1, 1)")
+    @DisplayName("When starting with (1, 1), the furthest reachable point with dummy direction should trigger exception.")
     public void testWithFurthestReachableNodeWithDummyDirection() {
 
         AbsolutePosition startingPos = createAbsPos(1, 1);
-        AbsolutePosition expectedFurthestPosToTheBottom = createAbsPos(1, 1);
 
-        assertEquals(
-                expectedFurthestPosToTheBottom,
-                absMazeGraph.getFurthestReachablePosition(startingPos, Direction.OnTop)
+        assertThrows(
+                Direction.NoOppositeDirectionAvailable.class,
+                () -> absMazeGraph.getFurthestReachablePosition(startingPos, Direction.OnTop)
         );
     }
 
@@ -163,7 +162,7 @@ public class AbsMazeGraphTest {
 
         AbsolutePosition startingPoint = createAbsPos(1, 1);
         assertThrows(
-                MazeGraphV2.UnrecognizedDirectionException.class,
+                Direction.NoOppositeDirectionAvailable.class,
                 () -> absMazeGraph.getClosestReachablePosition(startingPoint, Direction.OnTop)
         );
     }
@@ -336,6 +335,24 @@ public class AbsMazeGraphTest {
         assertThat(
                 absMazeGraph.isWithinBounds(positionNegative32_Negative32),
                 is(false)
+        );
+    }
+
+    @Test
+    public void closestPosOnNodeIsTheSameNode() {
+
+        assertThat(
+                absMazeGraph.getClosestNodeToAbsPos(createAbsPos(1, 1), Direction.Left),
+                is(new RelativePosition(1, 1))
+        );
+    }
+
+    @Test
+    public void nodeTwoOneIsClosestToAbs40_32ToTheRight() {
+
+        assertThat(
+                absMazeGraph.getClosestNodeToAbsPos(new AbsolutePosition(40, 32), Direction.Right),
+                is(new RelativePosition(2, 1))
         );
     }
 }

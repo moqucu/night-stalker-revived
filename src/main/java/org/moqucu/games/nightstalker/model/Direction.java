@@ -13,6 +13,14 @@ public enum Direction {
 
     Up, Down, Left, Right, OnTop, Undefined;
 
+    public static class NoOppositeDirectionAvailable extends RuntimeException {
+
+        NoOppositeDirectionAvailable(String message) {
+
+            super(message);
+        }
+    }
+
     /**
      * Given two points, determine the direction that targetPoint is relative to sourcePoint.
      * This assumes that a point can only have on relative direction, meaning that either the
@@ -66,5 +74,23 @@ public enum Direction {
             return Direction.Right;
         else
             return availableDirections.toArray(new Direction[]{})[0];
+    }
+
+    public static Direction opposite(Direction direction) {
+
+        switch (direction) {
+            case Right:
+                return Direction.Left;
+            case Left:
+                return Direction.Right;
+            case Down:
+                return Direction.Up;
+            case Up:
+                return Direction.Down;
+            default:
+                throw new NoOppositeDirectionAvailable(
+                        String.format("No opposite direction available to %s", direction)
+                );
+        }
     }
 }

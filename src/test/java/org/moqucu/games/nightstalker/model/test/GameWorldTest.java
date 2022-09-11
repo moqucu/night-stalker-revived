@@ -100,20 +100,38 @@ public class GameWorldTest {
 
         gameObject.setInMotion(true);
         gameWorld.pulse(1000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(44.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(4.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
+        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(36.0));
+        gameObject.setInMotion(false);
+
+        gameObject.setInMotion(true);
+        gameWorld.pulse(1000);
+        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(56.0));
+        gameObject.setInMotion(false);
+
+        gameObject.setInMotion(true);
+        gameWorld.pulse(4000);
+        assertThat(gameObject.getAbsolutePosition().getX(), is(72.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
+        gameObject.setInMotion(false);
+
+        gameObject.setInMotion(true);
+        gameWorld.pulse(4000);
         assertThat(gameObject.getAbsolutePosition().getX(), is(40.0));
         assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
-        gameWorld.pulse(1000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(60.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
+        gameWorld.pulse(2000);
+        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(0.0));
         gameObject.setInMotion(false);
     }
 }

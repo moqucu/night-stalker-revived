@@ -133,10 +133,18 @@ public class MovableObjectTest {
 
         genericMovableObject.setDirection(Direction.Undefined);
         genericMovableObject.setMazeAlgorithm(MazeAlgorithm.None);
-        genericMovableObject.setInMotion(true);
+        assertThrows(
+                MovableObject.PreconditionNotMetForSettingObjectInMotionException.class,
+                () -> genericMovableObject.setInMotion(true)
+        );
         assertThat(genericMovableObject.isInMotion(), is(false));
 
+        genericMovableObject.getAbsolutePosition().setX(32);
+        genericMovableObject.getAbsolutePosition().setY(32);
+        genericMovableObject.setVelocity(20);
         genericMovableObject.setDirection(Direction.Left);
+        genericMovableObject.setMazeGraphFileName("MazeGraphTest.json");
+        genericMovableObject.setMazeAlgorithm(MazeAlgorithm.OuterRing);
         genericMovableObject.setInMotion(true);
         assertThat(genericMovableObject.isInMotion(), is(true));
         genericMovableObject.setInMotion(false);

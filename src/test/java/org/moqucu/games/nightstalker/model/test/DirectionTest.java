@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DirectionTest {
 
@@ -105,5 +106,63 @@ public class DirectionTest {
                 Direction.Right,
                 Direction.calculateDirection(new AbsolutePosition(0, 0), new AbsolutePosition(+20, -20)),
                 "Second point should be on top of first point");
+    }
+
+    @Test
+    @DisplayName("Opposite of Left is Right")
+    public void testOppositeDirectionOfLeft() {
+
+        assertEquals(
+                Direction.Right,
+                Direction.opposite(Direction.Left),
+                "Right is opposite to left!"
+        );
+    }
+
+    @Test
+    @DisplayName("Opposite of Right is Left")
+    public void testOppositeDirectionOfRight() {
+
+        assertEquals(
+                Direction.Left,
+                Direction.opposite(Direction.Right),
+                "Left is opposite to right!"
+        );
+    }
+
+    @Test
+    @DisplayName("Opposite of Up is Down")
+    public void testOppositeDirectionOfTop() {
+
+        assertEquals(
+                Direction.Down,
+                Direction.opposite(Direction.Up),
+                "Down is opposite to up!"
+        );
+    }
+
+    @Test
+    @DisplayName("Opposite of Down is Up")
+    public void testOppositeDirectionOfDpwn() {
+
+        assertEquals(
+                Direction.Up,
+                Direction.opposite(Direction.Down),
+                "Up is opposite to down!"
+        );
+    }
+
+    @Test
+    @DisplayName("No other opposite directions available")
+    public void noOtherOppositeDirectionsAvailable() {
+
+        assertThrows(
+                Direction.NoOppositeDirectionAvailable.class,
+                () -> Direction.opposite(Direction.Undefined)
+        );
+        assertThrows(
+                Direction.NoOppositeDirectionAvailable.class,
+                () -> Direction.opposite(Direction.OnTop)
+        );
     }
 }
