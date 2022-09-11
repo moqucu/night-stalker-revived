@@ -45,36 +45,91 @@ public abstract class MovableObject extends AnimatedObject {
     @Getter
     private AbsMazeGraph absMazeGraph;
 
+    private void updateAbsolutePosAndDirection(AbsPosAndDirection nextAbsPosAndDirection) {
+
+        getAbsolutePosition().setX(nextAbsPosAndDirection.getAbsolutePosition().getX());
+        getAbsolutePosition().setY(nextAbsPosAndDirection.getAbsolutePosition().getY());
+        setDirection(nextAbsPosAndDirection.getDirection());
+    }
+
     @Override
     public void elapseTime(long milliseconds) {
 
         super.elapseTime(milliseconds);
 
+        double range = 1.0 * milliseconds / 1000 * getVelocity();
+        double absDiff;
+
         if (isInMotion()) {
 
-            //todo: this needs to be flushed out
+            while (range > 0) {
 
-            switch (getDirection()) {
+                final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
+                        absMazeGraph,
+                        new AbsPosAndDirection(
+                                getAbsolutePosition(),
+                                direction
+                        )
+                );
 
-                case Up:
-                    getAbsolutePosition().addToY(-1.0 * milliseconds / 1000 * getVelocity());
-                    break;
-                case Down:
-                    getAbsolutePosition().addToY(1.0 * milliseconds / 1000 * getVelocity());
-                    break;
-                case Left:
-                    getAbsolutePosition().addToX(-1.0 * milliseconds / 1000 * getVelocity());
-                    break;
-                case Right:
-                    getAbsolutePosition().addToX(1.0 * milliseconds / 1000 * getVelocity());
-                    break;
+                switch (nextAbsPos.getDirection()) {
+
+                    case Up:
+                        absDiff = getAbsolutePosition().getY() - nextAbsPos.getAbsolutePosition().getY();
+                        if (range < absDiff) {
+                            getAbsolutePosition().addToY(-1.0 * range);
+                            setDirection(nextAbsPos.getDirection());
+                            range = 0;
+                        }
+                        else {
+                            updateAbsolutePosAndDirection(nextAbsPos);
+                            range -= absDiff;
+                        }
+                        break;
+                    case Down:
+                        absDiff = nextAbsPos.getAbsolutePosition().getY() - getAbsolutePosition().getY();
+                        if (range < absDiff) {
+                            getAbsolutePosition().addToY(range);
+                            setDirection(nextAbsPos.getDirection());
+                            range = 0;
+                        }
+                        else {
+                            updateAbsolutePosAndDirection(nextAbsPos);
+                            range -= absDiff;
+                        }
+                        break;
+                    case Left:
+                        absDiff = getAbsolutePosition().getX() - nextAbsPos.getAbsolutePosition().getX();
+                        if (range < absDiff) {
+                            getAbsolutePosition().addToX(-1.0 * range);
+                            setDirection(nextAbsPos.getDirection());
+                            range = 0;
+                        }
+                        else {
+                            updateAbsolutePosAndDirection(nextAbsPos);
+                            range -= absDiff;
+                        }
+                        break;
+                    case Right:
+                        absDiff = nextAbsPos.getAbsolutePosition().getX() - getAbsolutePosition().getX();
+                        if (range < absDiff) {
+                            getAbsolutePosition().addToX(range);
+                            setDirection(nextAbsPos.getDirection());
+                            range = 0;
+                        }
+                        else {
+                            updateAbsolutePosAndDirection(nextAbsPos);
+                            range -= absDiff;
+                        }
+                        break;
+                }
             }
         }
     }
 
     public void setInMotion(boolean inMotion) {
 
-        if (direction != Direction.Undefined)
+        if (direction == Direction.Undefined)
             throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
         else if (absMazeGraph == null)
             throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");

@@ -15,20 +15,19 @@ public class OuterRing implements MazeAlgorithmImpl {
     @Override
     public AbsPosAndDirection getNextAbsPos(AbsMazeGraph absMazeGraph, AbsPosAndDirection absPosAndDirection) {
 
-        //todo: this algorithm needs to be hand-crafted
         List<Direction> directionSequence;
         switch (absPosAndDirection.getDirection()) {
             case Up:
-                directionSequence = Arrays.asList(Direction.Up, Direction.Left, Direction.Down, Direction.Right);
+                directionSequence = Arrays.asList(Direction.Right, Direction.Left, Direction.Up, Direction.Down);
                 break;
             case Down:
-                directionSequence = Arrays.asList(Direction.Down, Direction.Right, Direction.Up, Direction.Left);
+                directionSequence = Arrays.asList(Direction.Left, Direction.Right, Direction.Down, Direction.Up);
                 break;
             case Left:
-                directionSequence = Arrays.asList(Direction.Left, Direction.Down, Direction.Right, Direction.Up);
+                directionSequence = Arrays.asList(Direction.Up, Direction.Down, Direction.Left, Direction.Right);
                 break;
             case Right:
-                directionSequence = Arrays.asList(Direction.Right, Direction.Up, Direction.Left, Direction.Down);
+                directionSequence = Arrays.asList(Direction.Down, Direction.Up, Direction.Right, Direction.Left);
                 break;
             default:
                 throw new UnacceptableDirectionException(

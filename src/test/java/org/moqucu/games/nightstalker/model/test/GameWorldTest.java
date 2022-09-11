@@ -84,7 +84,9 @@ public class GameWorldTest {
 
         final MovableObject gameObject = new MovableObject() {
         };
-        gameObject.getAbsolutePosition().setX(0.0);
+        gameObject.setMazeGraphFileName("MazeGraphTest.json");
+        gameObject.setMazeAlgorithm(MazeAlgorithm.OuterRing);
+        gameObject.getAbsolutePosition().setX(32.0);
         gameObject.getAbsolutePosition().setY(0.0);
         gameObject.setVelocity(20);
         gameWorld.add(gameObject);
@@ -92,29 +94,26 @@ public class GameWorldTest {
         gameObject.setDirection(Direction.Down);
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(0.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(40.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(24.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
         gameObject.setInMotion(false);
 
-        gameObject.setDirection(Direction.Up);
         gameObject.setInMotion(true);
         gameWorld.pulse(1000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(0.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(20.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(44.0));
         gameObject.setInMotion(false);
 
-        gameObject.setDirection(Direction.Right);
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
         assertThat(gameObject.getAbsolutePosition().getX(), is(40.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(20.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
         gameObject.setInMotion(false);
 
-        gameObject.setDirection(Direction.Left);
         gameObject.setInMotion(true);
         gameWorld.pulse(1000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(20.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(20.0));
+        assertThat(gameObject.getAbsolutePosition().getX(), is(60.0));
+        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
         gameObject.setInMotion(false);
     }
 }
