@@ -1,9 +1,13 @@
 package org.moqucu.games.nightstalker.model.test;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.event.TimeListener;
 import org.moqucu.games.nightstalker.model.*;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
@@ -14,98 +18,98 @@ import static org.moqucu.games.nightstalker.model.MovableObject.JSON_FILE_WITH_M
 
 public class MovableObjectTest {
 
-    private final MovableObject genericMovableObject = new MovableObject() {
+    private final MovableObject movableObject = new MovableObject() {
     };
 
     @Test
     public void ofTypeGameObject() {
 
-        assertThat(genericMovableObject.getClass(), typeCompatibleWith(GameObject.class));
+        assertThat(movableObject.getClass(), typeCompatibleWith(GameObject.class));
     }
 
     @Test
     public void hasVelocity() {
 
-        assertThat(genericMovableObject, hasProperty("velocity"));
+        assertThat(movableObject, hasProperty("velocity"));
     }
 
     @Test
     @DisplayName("Velocity property is of type Double.")
     public void velocityPropertyOfTypeDouble() {
 
-        assertThat(genericMovableObject.getVelocity(), isA(Double.class));
+        assertThat(movableObject.getVelocity(), isA(Double.class));
     }
 
     @Test
     public void hasDirection() {
 
-        assertThat(genericMovableObject, hasProperty("direction"));
+        assertThat(movableObject, hasProperty("direction"));
     }
 
     @Test
     @DisplayName("Direction property is of type Direction.")
     public void directionPropertyOfTypeDirection() {
 
-        assertThat(genericMovableObject.getDirection(), isA(Direction.class));
+        assertThat(movableObject.getDirection(), isA(Direction.class));
     }
 
     @Test
     public void ofTypeTimeListener() {
 
-        assertThat(genericMovableObject.getClass(), typeCompatibleWith(TimeListener.class));
+        assertThat(movableObject.getClass(), typeCompatibleWith(TimeListener.class));
     }
 
     @Test
     public void hasPropertyInMotion() {
 
-        assertThat(genericMovableObject, hasProperty("inMotion"));
+        assertThat(movableObject, hasProperty("inMotion"));
     }
 
     @Test
     @DisplayName("In motion property is of type Boolean.")
     public void inMotionPropertyOfTypeBoolean() {
 
-        assertThat(genericMovableObject.isInMotion(), isA(Boolean.class));
+        assertThat(movableObject.isInMotion(), isA(Boolean.class));
     }
 
     @Test
     public void hasPropertyMazeAlgorithm() {
 
-        assertThat(genericMovableObject, hasProperty("mazeAlgorithm"));
+        assertThat(movableObject, hasProperty("mazeAlgorithm"));
     }
 
     @Test
     @DisplayName("Maze algorithm property is of type MazeAlgorithm.")
     public void mazeAlgorithmPropertyOfTypeMazeAlgorithm() {
 
-        assertThat(genericMovableObject.getMazeAlgorithm(), isA(MazeAlgorithm.class));
+        assertThat(movableObject.getMazeAlgorithm(), isA(MazeAlgorithm.class));
     }
 
     @Test
     public void hasPropertyMazeGraphFileName() {
 
-        assertThat(genericMovableObject, hasProperty("mazeGraphFileName"));
+        assertThat(movableObject, hasProperty("mazeGraphFileName"));
     }
 
     @Test
     @DisplayName("Maze graph file name property is of type String.")
     public void mazeGraphFileNamePropertyOfTypeString() {
 
-        assertThat(genericMovableObject.getMazeGraphFileName(), isA(String.class));
+        assertThat(movableObject.getMazeGraphFileName(), isA(String.class));
     }
 
     @Test
     public void hasPropertyAbsMazeGraph() {
 
-        assertThat(genericMovableObject, hasProperty("absMazeGraph"));
+        assertThat(movableObject, hasProperty("absMazeGraph"));
     }
 
     @Test
     public void afterSettingCorrectMazeGraphFileNameAbsMazeGraphPropertyIsSet() {
 
-        genericMovableObject.setMazeGraphFileName("MazeGraphTest.json");
+        movableObject.setMazeGraphFileName("MazeGraphTest.json");
 
-        assertThat(genericMovableObject.getAbsMazeGraph(), isA(AbsMazeGraph.class));
+        assertThat(movableObject.getAbsMazeGraph(), isA(AbsMazeGraph.class));
     }
 
     @Test
@@ -113,7 +117,7 @@ public class MovableObjectTest {
 
         final Exception exception = assertThrows(
                 MovableObject.PreconditionNotMetForSettingObjectInMotionException.class,
-                () -> genericMovableObject.setMazeGraphFileName(null)
+                () -> movableObject.setMazeGraphFileName(null)
         );
         assertThat(exception.getMessage(), is(MAZE_JSON_FILE_NAME_CANNOT_BE_NULL));
     }
@@ -123,7 +127,7 @@ public class MovableObjectTest {
 
         final Exception exception = assertThrows(
                 MovableObject.PreconditionNotMetForSettingObjectInMotionException.class,
-                () -> genericMovableObject.setMazeGraphFileName("")
+                () -> movableObject.setMazeGraphFileName("")
         );
         assertThat(exception.getMessage(), is(JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT));
     }
@@ -131,22 +135,73 @@ public class MovableObjectTest {
     @Test
     public void setInMotionWorkOnlyWithDefinedDirection() {
 
-        genericMovableObject.setDirection(Direction.Undefined);
-        genericMovableObject.setMazeAlgorithm(MazeAlgorithm.None);
+        movableObject.setDirection(Direction.Undefined);
+        movableObject.setMazeAlgorithm(MazeAlgorithm.None);
         assertThrows(
                 MovableObject.PreconditionNotMetForSettingObjectInMotionException.class,
-                () -> genericMovableObject.setInMotion(true)
+                () -> movableObject.setInMotion(true)
         );
-        assertThat(genericMovableObject.isInMotion(), is(false));
+        assertThat(movableObject.isInMotion(), is(false));
 
-        genericMovableObject.getAbsolutePosition().setX(32);
-        genericMovableObject.getAbsolutePosition().setY(32);
-        genericMovableObject.setVelocity(20);
-        genericMovableObject.setDirection(Direction.Left);
-        genericMovableObject.setMazeGraphFileName("MazeGraphTest.json");
-        genericMovableObject.setMazeAlgorithm(MazeAlgorithm.OuterRing);
-        genericMovableObject.setInMotion(true);
-        assertThat(genericMovableObject.isInMotion(), is(true));
-        genericMovableObject.setInMotion(false);
+        movableObject.setX(32);
+        movableObject.setY(32);
+        movableObject.setVelocity(20);
+        movableObject.setDirection(Direction.Left);
+        movableObject.setMazeGraphFileName("MazeGraphTest.json");
+        movableObject.setMazeAlgorithm(MazeAlgorithm.OuterRing);
+        movableObject.setInMotion(true);
+        assertThat(movableObject.isInMotion(), is(true));
+        movableObject.setInMotion(false);
     }
+
+    @Test
+    @DisplayName("PropertyChangeListener can be added and are supported")
+    public void propChangeListenerCanBeAddedAndAreSupported() {
+
+        @SuppressWarnings("Convert2Lambda")
+        final PropertyChangeListener listener = new PropertyChangeListener() {
+            @Override
+            @SneakyThrows
+            public void propertyChange(PropertyChangeEvent evt) {
+                throw new Exception(evt.getPropertyName());
+            }
+        };
+
+        Exception exception;
+
+        movableObject.addPropertyChangeListener(listener);
+
+        assertThrows(Exception.class, () -> movableObject.setX(32));
+        assertThrows(Exception.class, () -> movableObject.setY(32));
+        exception = assertThrows(
+                Exception.class,
+                () -> movableObject.setVelocity(20)
+        );
+        assertThat(exception.getMessage(), is("velocity"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> movableObject.setDirection(Direction.Left)
+        );
+        assertThat(exception.getMessage(), is("direction"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> movableObject.setMazeGraphFileName("MazeGraphTest.json")
+        );
+        assertThat(exception.getMessage(), is("mazeGraphFileName"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> movableObject.setMazeAlgorithm(MazeAlgorithm.OuterRing)
+        );
+        assertThat(exception.getMessage(), is("mazeAlgorithm"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> movableObject.setInMotion(true)
+        );
+        assertThat(exception.getMessage(), is("inMotion"));
+    }
+
 }

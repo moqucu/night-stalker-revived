@@ -1,9 +1,12 @@
 package org.moqucu.games.nightstalker.model.test;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.GameObject;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,10 +18,27 @@ public class GameObjectTest {
     private final GameObject genericGameObject = new GameObject() {
     };
 
-    @Test
-    public void hasPosition() {
+    @SuppressWarnings("Convert2Lambda")
+    private final PropertyChangeListener listener = new PropertyChangeListener() {
+        @Override
+        @SneakyThrows
+        public void propertyChange(PropertyChangeEvent evt) {
+            throw new Exception(evt.getPropertyName());
+        }
+    };
 
-        assertThat(genericGameObject, hasProperty("absolutePosition"));
+    private Exception exception;
+
+    @Test
+    public void hasX() {
+
+        assertThat(genericGameObject, hasProperty("x"));
+    }
+
+    @Test
+    public void hasY() {
+
+        assertThat(genericGameObject, hasProperty("y"));
     }
 
     @Test
@@ -113,5 +133,44 @@ public class GameObjectTest {
         genericGameObject.setInitialImageIndex(0);
         genericGameObject.setVisible(true);
         assertThat(genericGameObject.isVisible(), is(true));
+    }
+
+    @Test
+    @DisplayName("PropertyChangeListener can be added and are supported")
+    public void propChangeListenerCanBeAddedAndAreSupported() {
+
+        genericGameObject.addPropertyChangeListener(listener);
+
+        exception = assertThrows(
+                Exception.class,
+                () -> genericGameObject.setImageMapFileName("part_1_a.gif")
+        );
+        assertThat(exception.getMessage(), is("imageMapFileName"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> genericGameObject.setInitialImageIndex(0)
+        );
+        assertThat(exception.getMessage(), is("initialImageIndex"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> genericGameObject.setVisible(true)
+        );
+        assertThat(exception.getMessage(), is("visible"));
+    }
+
+    @Test
+    @DisplayName("PropertyChangeListener can be removed after having been added")
+    public void propChangeListenerCanBeRemovedAfterHavingBeenAdded() {
+
+        genericGameObject.addPropertyChangeListener(listener);
+        exception = assertThrows(
+                Exception.class,
+                () -> genericGameObject.setImageMapFileName("part_1_a.gif")
+        );
+        assertThat(exception.getMessage(), is("imageMapFileName"));
+        genericGameObject.removePropertyChangeListener(listener);
+        genericGameObject.setImageMapFileName("part_1_a.gif");
     }
 }

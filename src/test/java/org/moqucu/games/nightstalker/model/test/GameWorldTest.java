@@ -86,52 +86,52 @@ public class GameWorldTest {
         };
         gameObject.setMazeGraphFileName("MazeGraphTest.json");
         gameObject.setMazeAlgorithm(MazeAlgorithm.OuterRing);
-        gameObject.getAbsolutePosition().setX(32.0);
-        gameObject.getAbsolutePosition().setY(0.0);
+        gameObject.setX(32.0);
+        gameObject.setY(0.0);
         gameObject.setVelocity(20);
         gameWorld.add(gameObject);
 
         gameObject.setDirection(Direction.Down);
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(24.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
+        assertThat(gameObject.getX(), is(24.0));
+        assertThat(gameObject.getY(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(1000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(4.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
+        assertThat(gameObject.getX(), is(4.0));
+        assertThat(gameObject.getY(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(36.0));
+        assertThat(gameObject.getX(), is(32.0));
+        assertThat(gameObject.getY(), is(36.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(1000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(56.0));
+        assertThat(gameObject.getX(), is(32.0));
+        assertThat(gameObject.getY(), is(56.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(4000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(72.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
+        assertThat(gameObject.getX(), is(72.0));
+        assertThat(gameObject.getY(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(4000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(40.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(32.0));
+        assertThat(gameObject.getX(), is(40.0));
+        assertThat(gameObject.getY(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getAbsolutePosition().getX(), is(32.0));
-        assertThat(gameObject.getAbsolutePosition().getY(), is(0.0));
+        assertThat(gameObject.getX(), is(32.0));
+        assertThat(gameObject.getY(), is(0.0));
         gameObject.setInMotion(false);
     }
 }

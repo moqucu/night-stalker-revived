@@ -1,7 +1,6 @@
 package org.moqucu.games.nightstalker.model;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.moqucu.games.nightstalker.event.TimeListener;
 
 public abstract class AnimatedObject extends GameObject implements TimeListener {
@@ -24,11 +23,9 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
     private int lowerAnimationIndex = -1;
 
     @Getter
-    @Setter
     private int upperAnimationIndex = -1;
 
     @Getter
-    @Setter
     private int imageIndex = -1;
 
     private long elapsedTime = 0;
@@ -37,8 +34,25 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
 
     public void setLowerAnimationIndex(int lowerAnimationIndex) {
 
+        final int oldLowerAnimationIndex = this.lowerAnimationIndex;
         this.lowerAnimationIndex = lowerAnimationIndex;
-        this.imageIndex = lowerAnimationIndex;
+        propertyChangeSupport.firePropertyChange(
+                "lowerAnimationIndex",
+                oldLowerAnimationIndex,
+                lowerAnimationIndex
+        );
+        setImageIndex(lowerAnimationIndex);
+    }
+
+    public void setUpperAnimationIndex(int upperAnimationIndex) {
+
+        final int oldUpperAnimationIndex = this.upperAnimationIndex;
+        this.upperAnimationIndex = upperAnimationIndex;
+        propertyChangeSupport.firePropertyChange(
+                "upperAnimationIndex",
+                oldUpperAnimationIndex,
+                upperAnimationIndex
+        );
     }
 
     public void setAnimated(boolean animated) {
@@ -49,14 +63,38 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
             throw new PreconditionNotMetForAnimatingObjectException("Lower animation index not correctly set!");
         else if (upperAnimationIndex == -1)
             throw new PreconditionNotMetForAnimatingObjectException("Upper animation index not correctly set!");
-        else
+        else {
+            final boolean oldAnimated = this.animated;
             this.animated = animated;
+            propertyChangeSupport.firePropertyChange(
+                    "animated",
+                    oldAnimated,
+                    animated
+            );
+        }
     }
 
     public void setFrameRate(int frameRate) {
 
+        final int oldFrameRate = this.frameRate;
         this.frameRate = frameRate;
         frameInterval = 1000.0 / frameRate;
+        propertyChangeSupport.firePropertyChange(
+                "frameRate",
+                oldFrameRate,
+                frameRate
+        );
+    }
+
+    public void setImageIndex(int imageIndex) {
+
+        final int oldImageIndex = this.imageIndex;
+        this.imageIndex = imageIndex;
+        propertyChangeSupport.firePropertyChange(
+                "imageIndex",
+                oldImageIndex,
+                imageIndex
+        );
     }
 
     @Override

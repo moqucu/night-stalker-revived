@@ -3,7 +3,6 @@ package org.moqucu.games.nightstalker.model;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.Getter;
-import lombok.Setter;
 import org.moqucu.games.nightstalker.label.MazeAlgorithmFactory;
 
 import java.io.IOException;
@@ -24,14 +23,12 @@ public abstract class MovableObject extends AnimatedObject {
     }
 
     @Getter
-    @Setter
     private double velocity = 0.;
 
     @Getter
     private boolean inMotion = false;
 
     @Getter
-    @Setter
     private Direction direction = Direction.Undefined;
 
     @Getter
@@ -45,10 +42,91 @@ public abstract class MovableObject extends AnimatedObject {
     @Getter
     private AbsMazeGraph absMazeGraph;
 
+    public void setVelocity(double velocity) {
+
+        final double oldVelocity = this.velocity;
+        this.velocity = velocity;
+        propertyChangeSupport.firePropertyChange(
+                "velocity",
+                oldVelocity,
+                velocity
+        );
+    }
+
+    public void setInMotion(boolean inMotion) {
+
+        if (direction == Direction.Undefined)
+            throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
+        else if (absMazeGraph == null)
+            throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");
+        else if (!absMazeGraph.isWithinBounds(new AbsolutePosition(getX(), getY())))
+            throw new PreconditionNotMetForSettingObjectInMotionException("Absolute position is out of bounds!");
+        else if (velocity <= 0.)
+            throw new PreconditionNotMetForSettingObjectInMotionException("No velocity!");
+        else if (mazeAlgorithm == MazeAlgorithm.None)
+            throw new PreconditionNotMetForSettingObjectInMotionException("No maze algorithm!");
+        else {
+
+            final boolean oldInMotion = this.inMotion;
+            this.inMotion = inMotion;
+            propertyChangeSupport.firePropertyChange(
+                    "inMotion",
+                    oldInMotion,
+                    inMotion
+            );
+        }
+    }
+
+    public void setDirection(Direction direction) {
+
+        final Direction oldDirection = this.direction;
+        this.direction = direction;
+        propertyChangeSupport.firePropertyChange(
+                "direction",
+                oldDirection,
+                direction
+        );
+    }
+
+    public void setMazeAlgorithm(MazeAlgorithm mazeAlgorithm) {
+
+        final MazeAlgorithm oldMazeAlgorithm = this.mazeAlgorithm;
+        mazeAlgorithmImpl = MazeAlgorithmFactory.getInstance().createMazeAlgorithm(mazeAlgorithm);
+        this.mazeAlgorithm = mazeAlgorithm;
+        propertyChangeSupport.firePropertyChange(
+                "mazeAlgorithm",
+                oldMazeAlgorithm,
+                mazeAlgorithm
+        );
+    }
+
+    public void setMazeGraphFileName(String mazeGraphFileName) {
+
+        try (InputStream inputStream = getClass().getResourceAsStream(mazeGraphFileName)) {
+
+            final MazeGraphV2 mazeGraph = new MazeGraphV2();
+            mazeGraph.loadFromJson(inputStream);
+            absMazeGraph = new AbsMazeGraph(mazeGraph);
+            final String oldMazeGraphFileName = this.mazeGraphFileName;
+            this.mazeGraphFileName = mazeGraphFileName;
+            propertyChangeSupport.firePropertyChange(
+                    "mazeGraphFileName",
+                    oldMazeGraphFileName,
+                    mazeGraphFileName
+            );
+        } catch (NullPointerException exception) {
+            throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_CANNOT_BE_NULL);
+        } catch (JsonParseException | JsonMappingException exception) {
+            throw new PreconditionNotMetForSettingObjectInMotionException(JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT);
+        } catch (IOException exception) {
+            throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_NOT_CORRECTLY_SET);
+        }
+    }
+
     private void updateAbsolutePosAndDirection(AbsPosAndDirection nextAbsPosAndDirection) {
 
-        getAbsolutePosition().setX(nextAbsPosAndDirection.getAbsolutePosition().getX());
-        getAbsolutePosition().setY(nextAbsPosAndDirection.getAbsolutePosition().getY());
+        setX(nextAbsPosAndDirection.getAbsolutePosition().getX());
+        setY(nextAbsPosAndDirection.getAbsolutePosition().getY());
         setDirection(nextAbsPosAndDirection.getDirection());
     }
 
@@ -67,7 +145,7 @@ public abstract class MovableObject extends AnimatedObject {
                 final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
                         absMazeGraph,
                         new AbsPosAndDirection(
-                                getAbsolutePosition(),
+                                new AbsolutePosition(getX(), getY()),
                                 direction
                         )
                 );
@@ -75,9 +153,9 @@ public abstract class MovableObject extends AnimatedObject {
                 switch (nextAbsPos.getDirection()) {
 
                     case Up:
-                        absDiff = getAbsolutePosition().getY() - nextAbsPos.getAbsolutePosition().getY();
+                        absDiff = getY() - nextAbsPos.getAbsolutePosition().getY();
                         if (range < absDiff) {
-                            getAbsolutePosition().addToY(-1.0 * range);
+                            addToY(-1.0 * range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }
@@ -87,9 +165,9 @@ public abstract class MovableObject extends AnimatedObject {
                         }
                         break;
                     case Down:
-                        absDiff = nextAbsPos.getAbsolutePosition().getY() - getAbsolutePosition().getY();
+                        absDiff = nextAbsPos.getAbsolutePosition().getY() - getY();
                         if (range < absDiff) {
-                            getAbsolutePosition().addToY(range);
+                            addToY(range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }
@@ -99,9 +177,9 @@ public abstract class MovableObject extends AnimatedObject {
                         }
                         break;
                     case Left:
-                        absDiff = getAbsolutePosition().getX() - nextAbsPos.getAbsolutePosition().getX();
+                        absDiff = getX() - nextAbsPos.getAbsolutePosition().getX();
                         if (range < absDiff) {
-                            getAbsolutePosition().addToX(-1.0 * range);
+                            addToX(-1.0 * range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }
@@ -111,9 +189,9 @@ public abstract class MovableObject extends AnimatedObject {
                         }
                         break;
                     case Right:
-                        absDiff = nextAbsPos.getAbsolutePosition().getX() - getAbsolutePosition().getX();
+                        absDiff = nextAbsPos.getAbsolutePosition().getX() - getX();
                         if (range < absDiff) {
-                            getAbsolutePosition().addToX(range);
+                            addToX(range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }
@@ -125,45 +203,5 @@ public abstract class MovableObject extends AnimatedObject {
                 }
             }
         }
-    }
-
-    public void setInMotion(boolean inMotion) {
-
-        if (direction == Direction.Undefined)
-            throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
-        else if (absMazeGraph == null)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");
-        else if (!absMazeGraph.isWithinBounds(getAbsolutePosition()))
-            throw new PreconditionNotMetForSettingObjectInMotionException("Absolute position is out of bounds!");
-        else if (velocity <= 0.)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No velocity!");
-        else if (mazeAlgorithm == MazeAlgorithm.None)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No maze algorithm!");
-        else
-            this.inMotion = inMotion;
-    }
-
-    public void setMazeGraphFileName(String mazeGraphFileName) {
-
-        try (InputStream inputStream = getClass().getResourceAsStream(mazeGraphFileName)) {
-
-            final MazeGraphV2 mazeGraph = new MazeGraphV2();
-            mazeGraph.loadFromJson(inputStream);
-            absMazeGraph = new AbsMazeGraph(mazeGraph);
-            this.mazeGraphFileName = mazeGraphFileName;
-
-        } catch (NullPointerException exception) {
-            throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_CANNOT_BE_NULL);
-        } catch (JsonParseException | JsonMappingException exception) {
-            throw new PreconditionNotMetForSettingObjectInMotionException(JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT);
-        } catch (IOException exception) {
-            throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_NOT_CORRECTLY_SET);
-        }
-    }
-
-    public void setMazeAlgorithm(MazeAlgorithm mazeAlgorithm) {
-
-        mazeAlgorithmImpl = MazeAlgorithmFactory.getInstance().createMazeAlgorithm(mazeAlgorithm);
-        this.mazeAlgorithm = mazeAlgorithm;
     }
 }

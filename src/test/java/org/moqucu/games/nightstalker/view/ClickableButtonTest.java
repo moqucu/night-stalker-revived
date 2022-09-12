@@ -49,7 +49,7 @@ class ClickableButtonTest {
         );
         Pane pane = new Pane();
         pane.setStyle("-fx-background-color: black;");
-        image = new Image("part_1_a.gif");
+        image = new Image("org/moqucu/games/nightstalker/model/test/part_1_a.gif");
         pane.getChildren().add(button);
         button.relocate(20, 20);
         imageView = new ImageView(image);

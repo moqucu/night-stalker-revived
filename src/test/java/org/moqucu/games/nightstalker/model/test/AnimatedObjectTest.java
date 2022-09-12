@@ -1,11 +1,15 @@
 package org.moqucu.games.nightstalker.model.test;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.event.TimeListener;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -208,5 +212,53 @@ public class AnimatedObjectTest {
         gameWorld.pulse(900);
 
         assertThat(animatedObject.getImageIndex(), is(3));
+    }
+
+    @Test
+    @DisplayName("PropertyChangeListener can be added and are supported")
+    public void propChangeListenerCanBeAddedAndAreSupported() {
+
+        @SuppressWarnings("Convert2Lambda")
+        final PropertyChangeListener listener = new PropertyChangeListener() {
+            @Override
+            @SneakyThrows
+            public void propertyChange(PropertyChangeEvent evt) {
+                throw new Exception(evt.getPropertyName());
+            }
+        };
+
+        Exception exception;
+
+        animatedObject.addPropertyChangeListener(listener);
+
+        exception = assertThrows(
+                Exception.class,
+                () -> animatedObject.setFrameRate(50)
+        );
+        assertThat(exception.getMessage(), is("frameRate"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> animatedObject.setLowerAnimationIndex(0)
+        );
+        assertThat(exception.getMessage(), is("lowerAnimationIndex"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> animatedObject.setUpperAnimationIndex(6)
+        );
+        assertThat(exception.getMessage(), is("upperAnimationIndex"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> animatedObject.setAnimated(true)
+        );
+        assertThat(exception.getMessage(), is("animated"));
+
+        exception = assertThrows(
+                Exception.class,
+                () -> animatedObject.setImageIndex(2)
+        );
+        assertThat(exception.getMessage(), is("imageIndex"));
     }
 }
