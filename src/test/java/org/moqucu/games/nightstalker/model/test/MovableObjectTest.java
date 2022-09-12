@@ -24,7 +24,7 @@ public class MovableObjectTest {
     @Test
     public void ofTypeGameObject() {
 
-        assertThat(movableObject.getClass(), typeCompatibleWith(GameObject.class));
+        assertThat(movableObject.getClass(), typeCompatibleWith(GameObjectImpl.class));
     }
 
     @Test
@@ -143,8 +143,8 @@ public class MovableObjectTest {
         );
         assertThat(movableObject.isInMotion(), is(false));
 
-        movableObject.setX(32);
-        movableObject.setY(32);
+        movableObject.setXPosition(32);
+        movableObject.setYPosition(32);
         movableObject.setVelocity(20);
         movableObject.setDirection(Direction.Left);
         movableObject.setMazeGraphFileName("MazeGraphTest.json");
@@ -171,8 +171,8 @@ public class MovableObjectTest {
 
         movableObject.addPropertyChangeListener(listener);
 
-        assertThrows(Exception.class, () -> movableObject.setX(32));
-        assertThrows(Exception.class, () -> movableObject.setY(32));
+        assertThrows(Exception.class, () -> movableObject.setXPosition(32));
+        assertThrows(Exception.class, () -> movableObject.setYPosition(32));
         exception = assertThrows(
                 Exception.class,
                 () -> movableObject.setVelocity(20)

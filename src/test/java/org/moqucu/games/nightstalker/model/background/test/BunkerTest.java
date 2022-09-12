@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.model.background.test;
 
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.GameObjectImpl;
 import org.moqucu.games.nightstalker.model.background.Bunker;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,6 +14,6 @@ public class BunkerTest {
     @Test
     public void bunkerIsInstanceOfGameObject() {
 
-        assertThat(bunker, instanceOf(GameObject.class));
+        assertThat(bunker, instanceOf(GameObjectImpl.class));
     }
 }

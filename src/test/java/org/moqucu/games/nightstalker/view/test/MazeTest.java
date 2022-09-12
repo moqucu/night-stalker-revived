@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.view;
+package org.moqucu.games.nightstalker.view.test;
 
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
@@ -14,6 +14,7 @@ import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
+import org.moqucu.games.nightstalker.view.Maze;
 
 import java.util.Set;
 

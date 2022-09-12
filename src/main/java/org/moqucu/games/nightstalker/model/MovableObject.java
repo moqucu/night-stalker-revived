@@ -59,7 +59,7 @@ public abstract class MovableObject extends AnimatedObject {
             throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
         else if (absMazeGraph == null)
             throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");
-        else if (!absMazeGraph.isWithinBounds(new AbsolutePosition(getX(), getY())))
+        else if (!absMazeGraph.isWithinBounds(new AbsolutePosition(getXPosition(), getYPosition())))
             throw new PreconditionNotMetForSettingObjectInMotionException("Absolute position is out of bounds!");
         else if (velocity <= 0.)
             throw new PreconditionNotMetForSettingObjectInMotionException("No velocity!");
@@ -125,8 +125,8 @@ public abstract class MovableObject extends AnimatedObject {
 
     private void updateAbsolutePosAndDirection(AbsPosAndDirection nextAbsPosAndDirection) {
 
-        setX(nextAbsPosAndDirection.getAbsolutePosition().getX());
-        setY(nextAbsPosAndDirection.getAbsolutePosition().getY());
+        setXPosition(nextAbsPosAndDirection.getAbsolutePosition().getX());
+        setYPosition(nextAbsPosAndDirection.getAbsolutePosition().getY());
         setDirection(nextAbsPosAndDirection.getDirection());
     }
 
@@ -145,7 +145,7 @@ public abstract class MovableObject extends AnimatedObject {
                 final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
                         absMazeGraph,
                         new AbsPosAndDirection(
-                                new AbsolutePosition(getX(), getY()),
+                                new AbsolutePosition(getXPosition(), getYPosition()),
                                 direction
                         )
                 );
@@ -153,9 +153,9 @@ public abstract class MovableObject extends AnimatedObject {
                 switch (nextAbsPos.getDirection()) {
 
                     case Up:
-                        absDiff = getY() - nextAbsPos.getAbsolutePosition().getY();
+                        absDiff = getYPosition() - nextAbsPos.getAbsolutePosition().getY();
                         if (range < absDiff) {
-                            addToY(-1.0 * range);
+                            addToYPosition(-1.0 * range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }
@@ -165,9 +165,9 @@ public abstract class MovableObject extends AnimatedObject {
                         }
                         break;
                     case Down:
-                        absDiff = nextAbsPos.getAbsolutePosition().getY() - getY();
+                        absDiff = nextAbsPos.getAbsolutePosition().getY() - getYPosition();
                         if (range < absDiff) {
-                            addToY(range);
+                            addToYPosition(range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }
@@ -177,9 +177,9 @@ public abstract class MovableObject extends AnimatedObject {
                         }
                         break;
                     case Left:
-                        absDiff = getX() - nextAbsPos.getAbsolutePosition().getX();
+                        absDiff = getXPosition() - nextAbsPos.getAbsolutePosition().getX();
                         if (range < absDiff) {
-                            addToX(-1.0 * range);
+                            addToXPosition(-1.0 * range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }
@@ -189,9 +189,9 @@ public abstract class MovableObject extends AnimatedObject {
                         }
                         break;
                     case Right:
-                        absDiff = nextAbsPos.getAbsolutePosition().getX() - getX();
+                        absDiff = nextAbsPos.getAbsolutePosition().getX() - getXPosition();
                         if (range < absDiff) {
-                            addToX(range);
+                            addToXPosition(range);
                             setDirection(nextAbsPos.getDirection());
                             range = 0;
                         }

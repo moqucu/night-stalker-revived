@@ -11,7 +11,7 @@ public class GameWorld {
     private long time = 0;
 
     @Getter
-    private final Map<UUID, GameObject> objects = new HashMap<>();
+    private final Map<String, GameObjectImpl> objects = new HashMap<>();
 
     @Getter
     private final Set<TimeListener> timeListeners = new HashSet<>();
@@ -25,9 +25,9 @@ public class GameWorld {
         timeListeners.forEach(timeListener -> timeListener.elapseTime(milliseconds));
     }
 
-    public void add(GameObject gameObject) {
+    public void add(GameObjectImpl gameObject) {
 
-        objects.put(gameObject.getId(), gameObject);
+        objects.put(gameObject.getObjectId(), gameObject);
         if (gameObject instanceof TimeListener)
             timeListeners.add((TimeListener)gameObject);
     }

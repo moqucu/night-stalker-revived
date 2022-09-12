@@ -44,7 +44,7 @@ test {
 }
 
 javafx {
-    version = '15'
+    version = '16'
     modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.graphics' ]
 }
 

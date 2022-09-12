@@ -73,10 +73,10 @@ public class GameWorldTest {
     @Test
     public void afterAddingAGameObjectItCanBeAccessedByItsId() {
 
-        final GameObject genericGameObject = new GameObject() {
+        final GameObjectImpl genericGameObject = new GameObjectImpl() {
         };
         gameWorld.add(genericGameObject);
-        assertThat(gameWorld.getObjects().containsKey(genericGameObject.getId()), is(true));
+        assertThat(gameWorld.getObjects().containsKey(genericGameObject.getObjectId()), is(true));
     }
 
     @Test
@@ -86,52 +86,52 @@ public class GameWorldTest {
         };
         gameObject.setMazeGraphFileName("MazeGraphTest.json");
         gameObject.setMazeAlgorithm(MazeAlgorithm.OuterRing);
-        gameObject.setX(32.0);
-        gameObject.setY(0.0);
+        gameObject.setXPosition(32.0);
+        gameObject.setYPosition(0.0);
         gameObject.setVelocity(20);
         gameWorld.add(gameObject);
 
         gameObject.setDirection(Direction.Down);
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getX(), is(24.0));
-        assertThat(gameObject.getY(), is(32.0));
+        assertThat(gameObject.getXPosition(), is(24.0));
+        assertThat(gameObject.getYPosition(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(1000);
-        assertThat(gameObject.getX(), is(4.0));
-        assertThat(gameObject.getY(), is(32.0));
+        assertThat(gameObject.getXPosition(), is(4.0));
+        assertThat(gameObject.getYPosition(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getX(), is(32.0));
-        assertThat(gameObject.getY(), is(36.0));
+        assertThat(gameObject.getXPosition(), is(32.0));
+        assertThat(gameObject.getYPosition(), is(36.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(1000);
-        assertThat(gameObject.getX(), is(32.0));
-        assertThat(gameObject.getY(), is(56.0));
+        assertThat(gameObject.getXPosition(), is(32.0));
+        assertThat(gameObject.getYPosition(), is(56.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(4000);
-        assertThat(gameObject.getX(), is(72.0));
-        assertThat(gameObject.getY(), is(32.0));
+        assertThat(gameObject.getXPosition(), is(72.0));
+        assertThat(gameObject.getYPosition(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(4000);
-        assertThat(gameObject.getX(), is(40.0));
-        assertThat(gameObject.getY(), is(32.0));
+        assertThat(gameObject.getXPosition(), is(40.0));
+        assertThat(gameObject.getYPosition(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getX(), is(32.0));
-        assertThat(gameObject.getY(), is(0.0));
+        assertThat(gameObject.getXPosition(), is(32.0));
+        assertThat(gameObject.getYPosition(), is(0.0));
         gameObject.setInMotion(false);
     }
 }

@@ -3,7 +3,7 @@ package org.moqucu.games.nightstalker.model;
 import lombok.Getter;
 import org.moqucu.games.nightstalker.event.TimeListener;
 
-public abstract class AnimatedObject extends GameObject implements TimeListener {
+public abstract class AnimatedObject extends GameObjectImpl implements TimeListener {
 
     public static class PreconditionNotMetForAnimatingObjectException extends RuntimeException {
 
