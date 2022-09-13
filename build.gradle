@@ -5,7 +5,7 @@ plugins {
     id 'org.springframework.boot' version '2.5.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "io.freefair.lombok" version "6.0.0-m2"
-    id 'org.openjfx.javafxplugin' version '0.0.10'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 repositories {
@@ -44,7 +44,7 @@ test {
 }
 
 javafx {
-    version = '16'
+    version = '17'
     modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.graphics' ]
 }
 
