@@ -55,5 +55,10 @@ public class SpriteV2Test {
     public void javaFxNodeIdEqualsModelObjectId() {
 
         assertThat(sprite.getId(), is(sprite.getModel().getObjectId()));
+        sprite.setObjectVisible(true);
+        assertThat(sprite.isVisible(), is(sprite.getModel().isObjectVisible()));
+        sprite.setVisible(false);
+        assertThat(sprite.isVisible(), is(sprite.getModel().isObjectVisible()));
+
     }
 }

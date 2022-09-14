@@ -1,5 +1,9 @@
 package org.moqucu.games.nightstalker.view;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
+import javafx.beans.property.adapter.ReadOnlyJavaBeanBooleanPropertyBuilder;
+import javafx.beans.property.adapter.ReadOnlyJavaBeanStringPropertyBuilder;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
@@ -22,12 +26,28 @@ public abstract class SpriteV2 extends ImageView implements GameObject {
     protected GameObject model = new GameObjectImpl() {
     };
 
-     public SpriteV2() {
+    @SneakyThrows
+    public SpriteV2() {
 
         super();
-        setId(model.getObjectId());
-        setVisible(model.isObjectVisible());
-        ObservableMap<Object, Object> map = getProperties();
+        idProperty().bind(
+                ReadOnlyJavaBeanStringPropertyBuilder
+                        .create()
+                        .name("objectId")
+                        .bean(model)
+                        .build()
+        );
+        JavaBeanBooleanPropertyBuilder
+                .create()
+                .name("objectVisible")
+                .bean(model)
+                .build()
+                .bindBidirectional(visibleProperty());
+
+
+        // setId(model.getObjectId());
+        // setVisible(model.isObjectVisible());
+        // ObservableMap<Object, Object> map = getProperties();
         model.addPropertyChangeListener(
                 evt -> {
                     if (evt.getPropertyName().equals("initialImageIndex"))
