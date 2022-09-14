@@ -117,10 +117,10 @@ public class GameObjectTest {
     @DisplayName("Cannot set game object visible without correctly set image map and initial index.")
     public void settingVisibleToTrueOnlyPossibleWithRightConditions() {
 
-        gameObject.setImageMapFileName("");
-        gameObject.setInitialImageIndex(-1);
+        gameObject.setImageMapFileName(null);
+        gameObject.setInitialImageIndex(1);
         assertThrows(
-                GameObjectImpl.PreconditionNotMetForMakingObjectVisibleException.class,
+                GameObject.PreconditionNotMetForMakingObjectVisibleException.class,
                 () -> gameObject.setObjectVisible(true)
         );
     }
@@ -133,6 +133,20 @@ public class GameObjectTest {
         gameObject.setInitialImageIndex(0);
         gameObject.setObjectVisible(true);
         assertThat(gameObject.isObjectVisible(), is(true));
+    }
+
+    @Test
+    @DisplayName("Setting initial image below zero or above 239 leads to exception.")
+    public void testInitialImageOutOfBoundsException() {
+
+        assertThrows(
+                GameObject.InitialImageIndexOutOfBoundsException.class,
+                () -> gameObject.setInitialImageIndex(-1)
+        );
+        assertThrows(
+                GameObject.InitialImageIndexOutOfBoundsException.class,
+                () -> gameObject.setInitialImageIndex(240)
+        );
     }
 
     @Test

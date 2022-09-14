@@ -90,6 +90,9 @@ public abstract class GameObjectImpl implements GameObject {
     @Override
     public void setInitialImageIndex(int initialImageIndex) {
 
+        if (initialImageIndex < 0 || initialImageIndex > 239)
+            throw new InitialImageIndexOutOfBoundsException();
+
         final int oldInitialImageIndex = this.initialImageIndex;
         this.initialImageIndex = initialImageIndex;
         propertyChangeSupport.firePropertyChange(
@@ -102,13 +105,14 @@ public abstract class GameObjectImpl implements GameObject {
     @Override
     public void setObjectVisible(boolean objectVisible) {
 
+        if (imageMapFileName == null)
+            throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
+
         try (InputStream inputStream = getClass().getResourceAsStream(imageMapFileName)) {
 
-            if (inputStream == null)
+            if (inputStream == null || inputStream.readAllBytes().length == 0)
                 throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
-            else if (initialImageIndex == -1)
-                throw new PreconditionNotMetForMakingObjectVisibleException("Initial image index not correctly set!");
-            else {
+             else {
                 final boolean oldObjectVisible = this.objectVisible;
                 this.objectVisible = objectVisible;
                 propertyChangeSupport.firePropertyChange(

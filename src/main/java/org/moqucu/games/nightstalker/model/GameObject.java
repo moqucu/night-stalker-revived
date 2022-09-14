@@ -12,6 +12,17 @@ public interface GameObject {
         }
     }
 
+    /**
+     * Exception is thrown whenever expected the index for accessing a sprite sheet's cell is < 0 or > 239.
+     */
+    class InitialImageIndexOutOfBoundsException extends RuntimeException {
+
+        InitialImageIndexOutOfBoundsException() {
+
+            super("Index for accessing the initial image has to be between 0 and 239!");
+        }
+    }
+
     double getXPosition();
 
     void setXPosition(double xPosition);
