@@ -1,13 +1,19 @@
 package org.moqucu.games.nightstalker.view;
 
 import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
+import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.beans.property.adapter.ReadOnlyJavaBeanStringPropertyBuilder;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameObjectImpl;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 
 /**
  * Represents a basic sprite class that specializes ImageView.
@@ -27,6 +33,7 @@ public abstract class SpriteV2 extends ImageView implements GameObject {
     public SpriteV2() {
 
         super();
+
         idProperty().bind(
                 ReadOnlyJavaBeanStringPropertyBuilder
                         .create()
@@ -41,10 +48,33 @@ public abstract class SpriteV2 extends ImageView implements GameObject {
                 .build()
                 .bindBidirectional(visibleProperty());
 
+        JavaBeanDoublePropertyBuilder
+                .create()
+                .name("XPosition")
+                .bean(model)
+                .build()
+                .bindBidirectional(xProperty());
+
+        JavaBeanDoublePropertyBuilder
+                .create()
+                .name("YPosition")
+                .bean(model)
+                .build()
+                .bindBidirectional(yProperty());
+
         model.addPropertyChangeListener(
                 evt -> {
                     if (evt.getPropertyName().equals("initialImageIndex"))
                         setViewport(getViewport((Integer) evt.getNewValue()));
+                    else if (evt.getPropertyName().equals("imageMapFileName")) {
+                        if (evt.getNewValue() == null || evt.getNewValue().equals(""))
+                            setImage(null);
+                        try (InputStream inputStream = getClass().getResourceAsStream((String) evt.getNewValue())) {
+                            setImage(new Image(Objects.requireNonNull(inputStream)));
+                        } catch (IOException | NullPointerException ioException) {
+                            setImage(null);
+                        }
+                    }
                 }
         );
     }

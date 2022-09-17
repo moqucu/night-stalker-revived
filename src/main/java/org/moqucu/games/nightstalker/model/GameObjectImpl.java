@@ -48,7 +48,7 @@ public abstract class GameObjectImpl implements GameObject {
 
         final double oldXPosition = absolutePosition.getX();
         absolutePosition.addToX(xPosition - oldXPosition);
-        propertyChangeSupport.firePropertyChange("xPosition", oldXPosition, absolutePosition.getX());
+        propertyChangeSupport.firePropertyChange("XPosition", oldXPosition, absolutePosition.getX());
     }
 
     public void addToXPosition(double numberToBeAdded) {
@@ -67,7 +67,7 @@ public abstract class GameObjectImpl implements GameObject {
 
         final double oldYPosition = absolutePosition.getY();
         absolutePosition.addToY(yPosition - oldYPosition);
-        propertyChangeSupport.firePropertyChange("yPosition", oldYPosition, absolutePosition.getY());
+        propertyChangeSupport.firePropertyChange("YPosition", oldYPosition, absolutePosition.getY());
     }
 
     public void addToYPosition(double numberToBeAdded) {
