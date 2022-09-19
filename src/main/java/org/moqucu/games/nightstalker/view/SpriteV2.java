@@ -1,8 +1,6 @@
 package org.moqucu.games.nightstalker.view;
 
-import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
-import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
-import javafx.beans.property.adapter.ReadOnlyJavaBeanStringPropertyBuilder;
+import javafx.beans.property.adapter.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameObjectImpl;
 
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -21,62 +20,126 @@ import java.util.Objects;
 @Log4j2
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
-public abstract class SpriteV2 extends ImageView implements GameObject {
+public abstract class SpriteV2 extends ImageView {
 
     @Getter
-    @Delegate(types = GameObject.class)
-    @SuppressWarnings("deprecation")
     protected GameObject model = new GameObjectImpl() {
     };
 
+    private ReadOnlyJavaBeanStringProperty objectIdProperty;
+
+    private JavaBeanBooleanProperty objectVisibleProperty;
+
+    private JavaBeanDoubleProperty xPositionProperty;
+
+    private JavaBeanDoubleProperty yPositionProperty;
+
+    private final PropertyChangeListener propertyChangeListener = evt -> {
+
+        if (evt.getPropertyName().equals("initialImageIndex"))
+            initializeViewPortFromInitialImageIndex((Integer) evt.getNewValue());
+        else if (evt.getPropertyName().equals("imageMapFileName"))
+            initializeImageFromImageMapFileName((String) evt.getNewValue());
+    };
+
+    private void initializeViewPortFromInitialImageIndex(int initialImageIndex) {
+
+        setViewport(getViewport(initialImageIndex));
+    }
+
+    private void initializeImageFromImageMapFileName(String imageMapFileName) {
+
+        if (imageMapFileName == null || imageMapFileName.equals(""))
+            setImage(null);
+
+        Objects.requireNonNull(imageMapFileName);
+        try (InputStream inputStream = getClass().getResourceAsStream(imageMapFileName)) {
+            setImage(new Image(Objects.requireNonNull(inputStream)));
+        } catch (IOException | NullPointerException ioException) {
+            setImage(null);
+        }
+    }
+
     @SneakyThrows
-    public SpriteV2() {
+    protected void bindProperties(GameObject model) {
 
-        super();
+        objectIdProperty = ReadOnlyJavaBeanStringPropertyBuilder
+                .create()
+                .name("objectId")
+                .bean(model)
+                .build();
+        idProperty().bind(objectIdProperty);
 
-        idProperty().bind(
-                ReadOnlyJavaBeanStringPropertyBuilder
-                        .create()
-                        .name("objectId")
-                        .bean(model)
-                        .build()
-        );
-        JavaBeanBooleanPropertyBuilder
+        objectVisibleProperty = JavaBeanBooleanPropertyBuilder
                 .create()
                 .name("objectVisible")
                 .bean(model)
-                .build()
-                .bindBidirectional(visibleProperty());
+                .build();
+        objectVisibleProperty.bindBidirectional(visibleProperty());
 
-        JavaBeanDoublePropertyBuilder
+        xPositionProperty = JavaBeanDoublePropertyBuilder
                 .create()
                 .name("XPosition")
                 .bean(model)
-                .build()
-                .bindBidirectional(xProperty());
+                .build();
+        xPositionProperty.bindBidirectional(xProperty());
 
-        JavaBeanDoublePropertyBuilder
+        yPositionProperty = JavaBeanDoublePropertyBuilder
                 .create()
                 .name("YPosition")
                 .bean(model)
-                .build()
-                .bindBidirectional(yProperty());
+                .build();
+        yPositionProperty.bindBidirectional(yProperty());
 
-        model.addPropertyChangeListener(
-                evt -> {
-                    if (evt.getPropertyName().equals("initialImageIndex"))
-                        setViewport(getViewport((Integer) evt.getNewValue()));
-                    else if (evt.getPropertyName().equals("imageMapFileName")) {
-                        if (evt.getNewValue() == null || evt.getNewValue().equals(""))
-                            setImage(null);
-                        try (InputStream inputStream = getClass().getResourceAsStream((String) evt.getNewValue())) {
-                            setImage(new Image(Objects.requireNonNull(inputStream)));
-                        } catch (IOException | NullPointerException ioException) {
-                            setImage(null);
-                        }
-                    }
-                }
-        );
+        initializeImageFromImageMapFileName(model.getImageMapFileName());
+        initializeViewPortFromInitialImageIndex(model.getInitialImageIndex());
+
+        model.addPropertyChangeListener(propertyChangeListener);
+    }
+
+    protected void unbindProperties() {
+
+        model.removePropertyChangeListener(propertyChangeListener);
+
+        idProperty().unbind();
+        if (objectIdProperty != null) {
+
+            objectIdProperty.dispose();
+            objectIdProperty = null;
+        }
+
+        visibleProperty().unbindBidirectional(objectVisibleProperty);
+        if (objectVisibleProperty != null) {
+
+            objectVisibleProperty.unbind();
+            objectVisibleProperty.dispose();
+            objectVisibleProperty = null;
+        }
+
+        xProperty().unbindBidirectional(xPositionProperty);
+        if (xPositionProperty != null) {
+
+            xPositionProperty.unbind();
+            xPositionProperty.dispose();
+            xPositionProperty = null;
+        }
+
+        yProperty().unbindBidirectional(yPositionProperty);
+        if (yPositionProperty != null) {
+
+            yPositionProperty.unbind();
+            yPositionProperty.dispose();
+            yPositionProperty = null;
+        }
+
+        setImage(null);
+        setViewport(getViewport(0));
+    }
+
+    public SpriteV2() {
+
+        super();
+        bindProperties(model);
     }
 
     /**
@@ -94,10 +157,17 @@ public abstract class SpriteV2 extends ImageView implements GameObject {
         int verticalIndex = index / 20;
 
         return new Rectangle2D(
-                horizontalIndex * getWidth(),
-                verticalIndex * getHeight(),
-                getWidth(),
-                getHeight()
+                horizontalIndex * model.getWidth(),
+                verticalIndex * model.getHeight(),
+                model.getWidth(),
+                model.getHeight()
         );
+    }
+
+    public void setModel(GameObject model) {
+
+        unbindProperties();
+        this.model = model;
+        bindProperties(model);
     }
 }
