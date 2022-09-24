@@ -61,7 +61,7 @@ public abstract class SpriteV2 extends ImageView {
     }
 
     @SneakyThrows
-    protected void bindProperties(GameObject model) {
+    private void bindProperties(GameObject model) {
 
         objectIdProperty = ReadOnlyJavaBeanStringPropertyBuilder
                 .create()
@@ -97,7 +97,7 @@ public abstract class SpriteV2 extends ImageView {
         model.addPropertyChangeListener(propertyChangeListener);
     }
 
-    protected void unbindProperties() {
+    private void unbindProperties() {
 
         model.removePropertyChangeListener(propertyChangeListener);
 

@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.GameObjectImpl;
 import org.moqucu.games.nightstalker.view.SpriteV2;
 
 import java.util.Objects;
@@ -94,5 +95,29 @@ public class SpriteV2Test {
 
         sprite.setY(275);
         assertThat(sprite.getY(), is(sprite.getModel().getYPosition()));
+    }
+
+    @Test
+    public void settingNewModelRemovesAnyOldPropertyBindings() {
+
+        final GameObject gameObject = sprite.getModel();
+        gameObject.setImageMapFileName("test/bat.png");
+        gameObject.setInitialImageIndex(2);
+        gameObject.setObjectVisible(false);
+
+        assertThat(sprite.isVisible(), is(false));
+        gameObject.setObjectVisible(true);
+        assertThat(sprite.isVisible(), is(true));
+
+        final GameObject newGameObject = new GameObjectImpl() {
+        };
+        newGameObject.setImageMapFileName("bat.png");
+        newGameObject.setInitialImageIndex(2);
+        newGameObject.setObjectVisible(false);
+        sprite.setModel(newGameObject);
+
+        sprite.setVisible(false);
+        assertThat(gameObject.isObjectVisible(), is(true));
+        assertThat(sprite.getModel().isObjectVisible(), is(false));
     }
 }

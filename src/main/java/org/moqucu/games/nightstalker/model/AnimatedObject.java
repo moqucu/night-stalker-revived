@@ -41,7 +41,9 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
                 oldLowerAnimationIndex,
                 lowerAnimationIndex
         );
-        setImageIndex(lowerAnimationIndex);
+
+        if (getInitialImageIndex() == -1)
+            setImageIndex(lowerAnimationIndex);
     }
 
     public void setUpperAnimationIndex(int upperAnimationIndex) {
@@ -108,11 +110,21 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
 
             while (remainingTimeForLoop >= 0) {
 
-                imageIndex++;
-                if (imageIndex > upperAnimationIndex)
-                    imageIndex = lowerAnimationIndex;
+                int loopInternalCopyOfImageIndex = imageIndex;
+                loopInternalCopyOfImageIndex++;
+                if (loopInternalCopyOfImageIndex > upperAnimationIndex)
+                    loopInternalCopyOfImageIndex = lowerAnimationIndex;
+                setImageIndex(loopInternalCopyOfImageIndex);
+
                 remainingTimeForLoop -= frameInterval;
             }
         }
+    }
+
+    @Override
+    public void setInitialImageIndex(int initialImageIndex) {
+
+        super.setInitialImageIndex(initialImageIndex);
+        setImageIndex(initialImageIndex);
     }
 }
