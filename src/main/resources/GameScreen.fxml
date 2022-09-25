@@ -25,6 +25,7 @@
 <?import org.moqucu.games.nightstalker.label.ScoreLabel?>
 <?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartTwo?>
 <?import javafx.scene.shape.CubicCurve?>
+<?import org.moqucu.games.nightstalker.view.background.WallTypeOne?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
         xmlns:fx="http://javafx.com/fxml/1"
@@ -119,7 +120,8 @@
             />
         </Pane>
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
-            <Wall id="org.moqucu.games.nightstalker.maze.00.00"/>
+            <!--suppress JavaFxRedundantPropertyValue -->
+            <WallTypeOne visible="true"/>
             <Wall id="org.moqucu.games.nightstalker.maze.00.01" stillImageIndex="1"/>
             <Wall id="org.moqucu.games.nightstalker.maze.00.02" stillImageIndex="2"/>
             <Wall id="org.moqucu.games.nightstalker.maze.00.03" stillImageIndex="3"/>

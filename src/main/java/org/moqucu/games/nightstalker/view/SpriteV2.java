@@ -74,21 +74,21 @@ public abstract class SpriteV2 extends ImageView {
                 .name("objectVisible")
                 .bean(model)
                 .build();
-        objectVisibleProperty.bindBidirectional(visibleProperty());
+        visibleProperty().bindBidirectional(objectVisibleProperty);
 
         xPositionProperty = JavaBeanDoublePropertyBuilder
                 .create()
                 .name("XPosition")
                 .bean(model)
                 .build();
-        xPositionProperty.bindBidirectional(xProperty());
+        xProperty().bindBidirectional(xPositionProperty);
 
         yPositionProperty = JavaBeanDoublePropertyBuilder
                 .create()
                 .name("YPosition")
                 .bean(model)
                 .build();
-        yPositionProperty.bindBidirectional(yProperty());
+        yProperty().bindBidirectional(yPositionProperty);
 
         initializeImageFromImageMapFileName(model.getImageMapFileName());
         initializeViewPortFromInitialImageIndex(model.getInitialImageIndex());
@@ -138,6 +138,13 @@ public abstract class SpriteV2 extends ImageView {
     public SpriteV2() {
 
         super();
+        bindProperties(model);
+    }
+
+    protected SpriteV2(GameObject model) {
+
+        super();
+        this.model = model;
         bindProperties(model);
     }
 

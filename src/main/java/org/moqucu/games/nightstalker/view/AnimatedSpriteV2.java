@@ -43,6 +43,13 @@ public abstract class AnimatedSpriteV2 extends SpriteV2 {
         bindProperties(model);
     }
 
+    protected AnimatedSpriteV2(AnimatedObject model) {
+
+        super(model);
+        this.model = model;
+        bindProperties(model);
+    }
+
     public void setModel(AnimatedObject model) {
 
         super.setModel(model);

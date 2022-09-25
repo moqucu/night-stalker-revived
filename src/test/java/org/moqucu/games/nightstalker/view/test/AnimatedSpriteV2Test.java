@@ -126,5 +126,4 @@ public class AnimatedSpriteV2Test {
         gameWorld.pulse(25);
         assertThatViewportFollowsFrameIndex(0);
     }
-
 }
