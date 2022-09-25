@@ -66,17 +66,65 @@ public class AnimatedSpriteV2Test {
         gameWorld.pulse(100);
         assertThatViewportFollowsFrameIndex(2);
 
-        // todo: test code does not work according to expectation
-//        gameWorld.pulse(200);
-//        assertThatViewportFollowsFrameIndex(4);
-//
-//        gameWorld.pulse(400);
-//        assertThatViewportFollowsFrameIndex(8);
-//
-//        gameWorld.pulse(100);
-//        assertThatViewportFollowsFrameIndex(9);
-//
-//        gameWorld.pulse(100);
-//        assertThatViewportFollowsFrameIndex(0);
+        gameWorld.pulse(200);
+        assertThatViewportFollowsFrameIndex(4);
+
+        gameWorld.pulse(400);
+        assertThatViewportFollowsFrameIndex(8);
+
+        gameWorld.pulse(100);
+        assertThatViewportFollowsFrameIndex(9);
+
+        gameWorld.pulse(100);
+        assertThatViewportFollowsFrameIndex(0);
     }
+
+    @Test
+    public void ensureThatAnimationWillMoveTheViewPortAccordinglyWithHalfIntervals() {
+
+        final AnimatedObject animatedObject = new AnimatedObject() {
+        };
+        animatedObject.setImageMapFileName("bat.png");
+        animatedObject.setInitialImageIndex(1);
+        animatedObject.setObjectVisible(true);
+        animatedObject.setFrameRate(10);
+        animatedObject.setLowerAnimationIndex(0);
+        animatedObject.setUpperAnimationIndex(9);
+        animatedObject.setAnimated(true);
+        final GameWorld gameWorld = new GameWorld();
+        gameWorld.add(animatedObject);
+        animatedSprite.setModel(animatedObject);
+        assertThatViewportFollowsFrameIndex(1);
+
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        assertThatViewportFollowsFrameIndex(2);
+
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        assertThatViewportFollowsFrameIndex(4);
+
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        assertThatViewportFollowsFrameIndex(8);
+
+        gameWorld.pulse(25);
+        gameWorld.pulse(25);
+        gameWorld.pulse(25);
+        gameWorld.pulse(25);
+        assertThatViewportFollowsFrameIndex(9);
+
+        gameWorld.pulse(75);
+        gameWorld.pulse(25);
+        assertThatViewportFollowsFrameIndex(0);
+    }
+
 }

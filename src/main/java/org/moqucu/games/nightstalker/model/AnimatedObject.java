@@ -104,20 +104,19 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
 
         if (animated) {
 
-            elapsedTime += milliseconds;
-            final long elapsedTimeSinceLastFullSecond = elapsedTime - (elapsedTime / 1000) * 1000;
-            double remainingTimeForLoop = elapsedTimeSinceLastFullSecond - frameInterval;
+            final long numberOfFramesBefore = Math.round(elapsedTime / frameInterval);
+            final long numberOfFramesAfter = Math.round((elapsedTime + milliseconds) / frameInterval);
 
-            while (remainingTimeForLoop >= 0) {
+            for (int i = 0; i < (numberOfFramesAfter - numberOfFramesBefore); i++) {
 
                 int loopInternalCopyOfImageIndex = imageIndex;
                 loopInternalCopyOfImageIndex++;
                 if (loopInternalCopyOfImageIndex > upperAnimationIndex)
                     loopInternalCopyOfImageIndex = lowerAnimationIndex;
                 setImageIndex(loopInternalCopyOfImageIndex);
-
-                remainingTimeForLoop -= frameInterval;
             }
+
+            elapsedTime += milliseconds;
         }
     }
 
