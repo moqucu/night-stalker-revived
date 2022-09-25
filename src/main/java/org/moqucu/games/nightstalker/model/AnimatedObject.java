@@ -3,7 +3,7 @@ package org.moqucu.games.nightstalker.model;
 import lombok.Getter;
 import org.moqucu.games.nightstalker.event.TimeListener;
 
-public abstract class AnimatedObject extends GameObjectImpl implements TimeListener {
+public abstract class AnimatedObject extends GameObject implements TimeListener {
 
     public static class PreconditionNotMetForAnimatingObjectException extends RuntimeException {
 
@@ -36,25 +36,30 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
 
         final int oldLowerAnimationIndex = this.lowerAnimationIndex;
         this.lowerAnimationIndex = lowerAnimationIndex;
-        propertyChangeSupport.firePropertyChange(
-                "lowerAnimationIndex",
-                oldLowerAnimationIndex,
-                lowerAnimationIndex
-        );
 
-        if (getInitialImageIndex() == -1)
-            setImageIndex(lowerAnimationIndex);
+        if (oldLowerAnimationIndex != lowerAnimationIndex) {
+
+            propertyChangeSupport.firePropertyChange(
+                    "lowerAnimationIndex",
+                    oldLowerAnimationIndex,
+                    lowerAnimationIndex
+            );
+
+            if (getInitialImageIndex() == -1)
+                setImageIndex(lowerAnimationIndex);
+        }
     }
 
     public void setUpperAnimationIndex(int upperAnimationIndex) {
 
         final int oldUpperAnimationIndex = this.upperAnimationIndex;
         this.upperAnimationIndex = upperAnimationIndex;
-        propertyChangeSupport.firePropertyChange(
-                "upperAnimationIndex",
-                oldUpperAnimationIndex,
-                upperAnimationIndex
-        );
+        if (oldUpperAnimationIndex != upperAnimationIndex)
+            propertyChangeSupport.firePropertyChange(
+                    "upperAnimationIndex",
+                    oldUpperAnimationIndex,
+                    upperAnimationIndex
+            );
     }
 
     public void setAnimated(boolean animated) {
@@ -68,11 +73,12 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
         else {
             final boolean oldAnimated = this.animated;
             this.animated = animated;
-            propertyChangeSupport.firePropertyChange(
-                    "animated",
-                    oldAnimated,
-                    animated
-            );
+            if (oldAnimated != animated)
+                propertyChangeSupport.firePropertyChange(
+                        "animated",
+                        oldAnimated,
+                        animated
+                );
         }
     }
 
@@ -81,22 +87,24 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
         final int oldFrameRate = this.frameRate;
         this.frameRate = frameRate;
         frameInterval = 1000.0 / frameRate;
-        propertyChangeSupport.firePropertyChange(
-                "frameRate",
-                oldFrameRate,
-                frameRate
-        );
+        if (oldFrameRate != frameRate)
+            propertyChangeSupport.firePropertyChange(
+                    "frameRate",
+                    oldFrameRate,
+                    frameRate
+            );
     }
 
     public void setImageIndex(int imageIndex) {
 
         final int oldImageIndex = this.imageIndex;
         this.imageIndex = imageIndex;
-        propertyChangeSupport.firePropertyChange(
-                "imageIndex",
-                oldImageIndex,
-                imageIndex
-        );
+        if (oldImageIndex != imageIndex)
+            propertyChangeSupport.firePropertyChange(
+                    "imageIndex",
+                    oldImageIndex,
+                    imageIndex
+            );
     }
 
     @Override
@@ -107,14 +115,15 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
             final long numberOfFramesBefore = Math.round(elapsedTime / frameInterval);
             final long numberOfFramesAfter = Math.round((elapsedTime + milliseconds) / frameInterval);
 
+            int loopInternalCopyOfImageIndex = imageIndex;
+
             for (int i = 0; i < (numberOfFramesAfter - numberOfFramesBefore); i++) {
 
-                int loopInternalCopyOfImageIndex = imageIndex;
                 loopInternalCopyOfImageIndex++;
                 if (loopInternalCopyOfImageIndex > upperAnimationIndex)
                     loopInternalCopyOfImageIndex = lowerAnimationIndex;
-                setImageIndex(loopInternalCopyOfImageIndex);
             }
+            setImageIndex(loopInternalCopyOfImageIndex);
         }
 
         elapsedTime += milliseconds;

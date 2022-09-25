@@ -24,7 +24,7 @@ public class MovableObjectTest {
     @Test
     public void ofTypeGameObject() {
 
-        assertThat(movableObject.getClass(), typeCompatibleWith(GameObjectImpl.class));
+        assertThat(movableObject.getClass(), typeCompatibleWith(GameObject.class));
     }
 
     @Test

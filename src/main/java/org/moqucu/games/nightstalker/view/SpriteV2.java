@@ -7,7 +7,6 @@ import javafx.scene.image.ImageView;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.GameObject;
-import org.moqucu.games.nightstalker.model.GameObjectImpl;
 
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -23,7 +22,7 @@ import java.util.Objects;
 public abstract class SpriteV2 extends ImageView {
 
     @Getter
-    protected GameObject model = new GameObjectImpl() {
+    protected GameObject model = new GameObject() {
     };
 
     private ReadOnlyJavaBeanStringProperty objectIdProperty;

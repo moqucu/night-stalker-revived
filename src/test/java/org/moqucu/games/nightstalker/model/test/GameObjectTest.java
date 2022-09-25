@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.GameObject;
-import org.moqucu.games.nightstalker.model.GameObjectImpl;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GameObjectTest {
 
-    private final GameObject gameObject = new GameObjectImpl() {
+    private final GameObject gameObject = new GameObject() {
     };
 
     @SuppressWarnings("Convert2Lambda")

@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.GameObject;
-import org.moqucu.games.nightstalker.model.GameObjectImpl;
 import org.moqucu.games.nightstalker.view.SpriteV2;
 
 import java.util.Objects;
@@ -109,7 +108,7 @@ public class SpriteV2Test {
         gameObject.setObjectVisible(true);
         assertThat(sprite.isVisible(), is(true));
 
-        final GameObject newGameObject = new GameObjectImpl() {
+        final GameObject newGameObject = new GameObject() {
         };
         newGameObject.setImageMapFileName("bat.png");
         newGameObject.setInitialImageIndex(2);

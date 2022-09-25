@@ -1,12 +1,18 @@
 package org.moqucu.games.nightstalker.model;
 
+import lombok.Getter;
+
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 
-public interface GameObject {
+public abstract class GameObject {
 
-    class PreconditionNotMetForMakingObjectVisibleException extends RuntimeException {
+    public static class PreconditionNotMetForMakingObjectVisibleException extends RuntimeException {
 
-        PreconditionNotMetForMakingObjectVisibleException(String message) {
+        public PreconditionNotMetForMakingObjectVisibleException(String message) {
 
             super(message);
         }
@@ -15,41 +21,142 @@ public interface GameObject {
     /**
      * Exception is thrown whenever expected the index for accessing a sprite sheet's cell is < 0 or > 239.
      */
-    class InitialImageIndexOutOfBoundsException extends RuntimeException {
+    public static class InitialImageIndexOutOfBoundsException extends RuntimeException {
 
-        InitialImageIndexOutOfBoundsException() {
+        public InitialImageIndexOutOfBoundsException() {
 
             super("Index for accessing the initial image has to be between 0 and 239!");
         }
     }
 
-    double getXPosition();
+    private final UUID objectId = UUID.randomUUID();
 
-    void setXPosition(double xPosition);
+    @Getter
+    private final double width = 32.0;
 
-    double getYPosition();
+    @Getter
+    private final double height = 32.0;
 
-    void setYPosition(double yPosition);
+    private final AbsolutePosition absolutePosition = new AbsolutePosition();
 
-    void setImageMapFileName(String imageMapFileName);
+    @Getter
+    private String imageMapFileName = "";
 
-    void setInitialImageIndex(int initialImageIndex);
+    @Getter
+    private int initialImageIndex = -1;
 
-    void setObjectVisible(boolean objectVisible);
+    @Getter
+    private boolean objectVisible = false;
 
-    void addPropertyChangeListener(PropertyChangeListener listener);
+    protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    void removePropertyChangeListener(PropertyChangeListener listener);
+    public String getObjectId() {
 
-    String getObjectId();
+        return objectId.toString();
+    }
 
-    double getWidth();
+    public double getXPosition() {
 
-    double getHeight();
+        return absolutePosition.getX();
+    }
 
-    String getImageMapFileName();
+    public void setXPosition(double xPosition) {
 
-    int getInitialImageIndex();
+        final double oldXPosition = absolutePosition.getX();
+        if (oldXPosition != xPosition) {
 
-    boolean isObjectVisible();
+            absolutePosition.addToX(xPosition - oldXPosition);
+            propertyChangeSupport.firePropertyChange("XPosition", oldXPosition, absolutePosition.getX());
+        }
+    }
+
+    public void addToXPosition(double numberToBeAdded) {
+
+        setXPosition(getXPosition() + numberToBeAdded);
+    }
+
+    public double getYPosition() {
+
+        return absolutePosition.getY();
+    }
+
+    public void setYPosition(double yPosition) {
+
+        final double oldYPosition = absolutePosition.getY();
+
+        if (oldYPosition != yPosition) {
+
+            absolutePosition.addToY(yPosition - oldYPosition);
+            propertyChangeSupport.firePropertyChange("YPosition", oldYPosition, absolutePosition.getY());
+        }
+    }
+
+    public void addToYPosition(double numberToBeAdded) {
+
+        setYPosition(getYPosition() + numberToBeAdded);
+    }
+
+    public void setImageMapFileName(String imageMapFileName) {
+
+        final String oldImageMapFileName = this.imageMapFileName;
+        this.imageMapFileName = imageMapFileName;
+        if (!oldImageMapFileName.equals(imageMapFileName))
+            propertyChangeSupport.firePropertyChange(
+                    "imageMapFileName",
+                    oldImageMapFileName,
+                    imageMapFileName
+            );
+    }
+
+    public void setInitialImageIndex(int initialImageIndex) {
+
+        if (initialImageIndex < 0 || initialImageIndex > 239)
+            throw new InitialImageIndexOutOfBoundsException();
+
+        final int oldInitialImageIndex = this.initialImageIndex;
+        this.initialImageIndex = initialImageIndex;
+
+        if (oldInitialImageIndex != initialImageIndex)
+            propertyChangeSupport.firePropertyChange(
+                    "initialImageIndex",
+                    oldInitialImageIndex,
+                    initialImageIndex
+            );
+    }
+
+    public void setObjectVisible(boolean objectVisible) {
+
+        if (imageMapFileName == null)
+            throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
+
+        try (InputStream inputStream = getClass().getResourceAsStream(imageMapFileName)) {
+
+            if (inputStream == null || inputStream.readAllBytes().length == 0)
+                throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
+            else {
+                final boolean oldObjectVisible = this.objectVisible;
+                this.objectVisible = objectVisible;
+
+                if (oldObjectVisible != objectVisible)
+                    propertyChangeSupport.firePropertyChange(
+                            "objectVisible",
+                            oldObjectVisible,
+                            objectVisible
+                    );
+            }
+
+        } catch (IOException ioException) {
+            throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
+        }
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+
+        propertyChangeSupport.removePropertyChangeListener(listener);
+    }
 }
