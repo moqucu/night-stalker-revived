@@ -115,9 +115,9 @@ public abstract class AnimatedObject extends GameObjectImpl implements TimeListe
                     loopInternalCopyOfImageIndex = lowerAnimationIndex;
                 setImageIndex(loopInternalCopyOfImageIndex);
             }
-
-            elapsedTime += milliseconds;
         }
+
+        elapsedTime += milliseconds;
     }
 
     @Override
