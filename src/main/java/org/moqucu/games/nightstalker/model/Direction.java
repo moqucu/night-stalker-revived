@@ -13,6 +13,14 @@ public enum Direction {
 
     Up, Down, Left, Right, OnTop, Undefined;
 
+    public static class NoOppositeDirectionAvailable extends RuntimeException {
+
+        NoOppositeDirectionAvailable(String message) {
+
+            super(message);
+        }
+    }
+
     /**
      * Given two points, determine the direction that targetPoint is relative to sourcePoint.
      * This assumes that a point can only have on relative direction, meaning that either the
@@ -23,12 +31,21 @@ public enum Direction {
      * @param targetPoint Target point for determining the direction.
      * @return Either Up, Down, Right, Left, or OnTop, depending on the two points relative coordinates.
      */
+    @Deprecated
     public static Direction calculateDirection(Point2D sourcePoint, Point2D targetPoint) {
+
+        return calculateDirection(
+                new AbsolutePosition(sourcePoint.getX(), sourcePoint.getY()),
+                new AbsolutePosition(targetPoint.getX(), targetPoint.getY())
+        );
+    }
+
+    public static Direction calculateDirection(AbsolutePosition sourcePos, AbsolutePosition targetPos) {
 
         Set<Direction> availableDirections = new HashSet<>(Set.of(Up, Down, Left, Right, OnTop));
 
-        double deltaX = targetPoint.getX() - sourcePoint.getX();
-        double deltaY = targetPoint.getY() - sourcePoint.getY();
+        double deltaX = targetPos.getX() - sourcePos.getX();
+        double deltaY = targetPos.getY() - sourcePos.getY();
 
         if (deltaX == 0. && deltaY == 0.)
             List.of(Left,Right, Up, Down).forEach(availableDirections::remove);
@@ -57,5 +74,23 @@ public enum Direction {
             return Direction.Right;
         else
             return availableDirections.toArray(new Direction[]{})[0];
+    }
+
+    public static Direction opposite(Direction direction) {
+
+        switch (direction) {
+            case Right:
+                return Direction.Left;
+            case Left:
+                return Direction.Right;
+            case Down:
+                return Direction.Up;
+            case Up:
+                return Direction.Down;
+            default:
+                throw new NoOppositeDirectionAvailable(
+                        String.format("No opposite direction available to %s", direction)
+                );
+        }
     }
 }
