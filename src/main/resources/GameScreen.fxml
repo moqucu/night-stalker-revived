@@ -3,10 +3,7 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.image.Image?>
-<?import org.moqucu.games.nightstalker.sprite.background.SolidBunker?>
-<?import org.moqucu.games.nightstalker.sprite.background.Bunker?>
-<?import org.moqucu.games.nightstalker.sprite.background.HalfSolidBunker?>
+<?import org.moqucu.games.nightstalker.view.background.BunkerSprite?>
 <?import org.moqucu.games.nightstalker.view.Maze?>
 <?import org.moqucu.games.nightstalker.view.background.HallwaySprite?>
 
@@ -211,15 +208,9 @@
             <HallwaySprite/>
             <WallSprite initialImageIndex="18"/>
             <HallwaySprite/>
-            <SolidBunker id="org.moqucu.games.nightstalker.solidbunker.1">
-                <Image url="@org/moqucu/games/nightstalker/images/Sprite_031_Bunker_Solid.png"/>
-            </SolidBunker>
-            <Bunker id="org.moqucu.games.nightstalker.bunker.1">
-                <Image url="@org/moqucu/games/nightstalker/images/Sprite_032_Bunker.png"/>
-            </Bunker>
-            <SolidBunker id="org.moqucu.games.nightstalker.solidbunker.2">
-                <Image url="@org/moqucu/games/nightstalker/images/Sprite_033_Bunker_Solid.png"/>
-            </SolidBunker>
+            <BunkerSprite initialImageIndex="0"/>
+            <BunkerSprite initialImageIndex="1"/>
+            <BunkerSprite initialImageIndex="2"/>
             <HallwaySprite/>
 
             <WallSprite initialImageIndex="9"/>
@@ -239,15 +230,11 @@
             <HallwaySprite/>
             <WallSprite initialImageIndex="12"/>
             <HallwaySprite/>
-            <SolidBunker id="org.moqucu.games.nightstalker.solidbunker.3">
-                <Image url="@org/moqucu/games/nightstalker/images/Sprite_037_Bunker_Solid.png"/>
-            </SolidBunker>
-            <HalfSolidBunker id="org.moqucu.games.nightstalker.halfsolidbunker.1">
-                <Image url="@org/moqucu/games/nightstalker/images/Sprite_038_Bunker_Half_Solid.png"/>
-            </HalfSolidBunker>
-            <SolidBunker id="org.moqucu.games.nightstalker.solidbunker.4">
-                <Image url="@org/moqucu/games/nightstalker/images/Sprite_039_Bunker_Solid.png"/>
-            </SolidBunker>
+
+            <BunkerSprite initialImageIndex="3"/>
+            <BunkerSprite initialImageIndex="4"/>
+            <BunkerSprite initialImageIndex="5"/>
+
             <HallwaySprite/>
             <WallSprite initialImageIndex="23"/>
             <HallwaySprite/>
