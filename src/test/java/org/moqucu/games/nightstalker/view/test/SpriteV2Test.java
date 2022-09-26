@@ -11,9 +11,7 @@ import org.moqucu.games.nightstalker.view.SpriteV2;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.isA;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class SpriteV2Test {
 
@@ -94,6 +92,28 @@ public class SpriteV2Test {
 
         sprite.setY(275);
         assertThat(sprite.getY(), is(sprite.getModel().getYPosition()));
+    }
+
+    @Test
+    public void hasInitialImageIndexProperty() {
+
+        assertThat(sprite, hasProperty("initialImageIndex"));
+    }
+
+    @Test
+    public void initialIndexImagePropertyNotNull() {
+
+        assertThat(sprite.initialImageIndexProperty(), is(notNullValue()));
+    }
+
+    @Test
+    public void initialIndexImagePropertyIsBound() {
+
+        sprite.setInitialImageIndex(5);
+        assertThat(sprite.getModel().getInitialImageIndex(), is(5));
+
+        sprite.getModel().setInitialImageIndex(7);
+        assertThat(sprite.getInitialImageIndex(), is(7));
     }
 
     @Test

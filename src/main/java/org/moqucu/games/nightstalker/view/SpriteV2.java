@@ -1,5 +1,6 @@
 package org.moqucu.games.nightstalker.view;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.adapter.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -32,6 +33,8 @@ public abstract class SpriteV2 extends ImageView {
     private JavaBeanDoubleProperty xPositionProperty;
 
     private JavaBeanDoubleProperty yPositionProperty;
+
+    private JavaBeanIntegerProperty initialImageIndexProperty;
 
     private final PropertyChangeListener propertyChangeListener = evt -> {
 
@@ -74,8 +77,7 @@ public abstract class SpriteV2 extends ImageView {
                 .name("objectVisible")
                 .bean(model)
                 .build();
-        visibleProperty().bindBidirectional(objectVisibleProperty);
-
+        objectVisibleProperty.bindBidirectional(visibleProperty());
         xPositionProperty = JavaBeanDoublePropertyBuilder
                 .create()
                 .name("XPosition")
@@ -89,6 +91,12 @@ public abstract class SpriteV2 extends ImageView {
                 .bean(model)
                 .build();
         yProperty().bindBidirectional(yPositionProperty);
+
+        initialImageIndexProperty = JavaBeanIntegerPropertyBuilder
+                .create()
+                .name("initialImageIndex")
+                .bean(model)
+                .build();
 
         initializeImageFromImageMapFileName(model.getImageMapFileName());
         initializeViewPortFromInitialImageIndex(model.getInitialImageIndex());
@@ -129,6 +137,14 @@ public abstract class SpriteV2 extends ImageView {
             yPositionProperty.unbind();
             yPositionProperty.dispose();
             yPositionProperty = null;
+        }
+
+        if (initialImageIndexProperty.isBound())
+            initialImageIndexProperty.unbind();
+        if (initialImageIndexProperty != null) {
+
+            initialImageIndexProperty.dispose();
+            initialImageIndexProperty = null;
         }
 
         setImage(null);
@@ -175,5 +191,20 @@ public abstract class SpriteV2 extends ImageView {
         unbindProperties();
         this.model = model;
         bindProperties(model);
+    }
+
+    public IntegerProperty initialImageIndexProperty() {
+
+        return initialImageIndexProperty;
+    }
+
+    public int getInitialImageIndex() {
+
+        return initialImageIndexProperty.get();
+    }
+
+    public void setInitialImageIndex(int initialImageIndex) {
+
+        initialImageIndexProperty.set(initialImageIndex);
     }
 }
