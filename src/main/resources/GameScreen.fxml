@@ -6,8 +6,7 @@
 <?import org.moqucu.games.nightstalker.view.background.BunkerSprite?>
 <?import org.moqucu.games.nightstalker.view.Maze?>
 <?import org.moqucu.games.nightstalker.view.background.HallwaySprite?>
-
-<?import org.moqucu.games.nightstalker.sprite.background.SpiderWeb?>
+<?import org.moqucu.games.nightstalker.view.background.WebSprite?>
 <?import org.moqucu.games.nightstalker.sprite.object.Weapon?>
 <?import org.moqucu.games.nightstalker.sprite.object.BulletSprite?>
 <?import org.moqucu.games.nightstalker.sprite.object.RobotBullet?>
@@ -138,9 +137,9 @@
             <WallSprite initialImageIndex="6"/>
             <WallSprite initialImageIndex="7"/>
             <WallSprite initialImageIndex="8"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.01"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.02" stillImageIndex="1"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.01.03" stillImageIndex="2"/>
+            <WebSprite initialImageIndex="0"/>
+            <WebSprite initialImageIndex="1"/>
+            <WebSprite initialImageIndex="2"/>
             <WallSprite initialImageIndex="9"/>
             <HallwaySprite/>
             <HallwaySprite/>
@@ -158,9 +157,9 @@
             <HallwaySprite/>
             <WallSprite initialImageIndex="10"/>
             <WallSprite initialImageIndex="11"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.01" stillImageIndex="3"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.02" stillImageIndex="4"/>
-            <SpiderWeb id="org.moqucu.games.nightstalker.maze.02.03" stillImageIndex="5"/>
+            <WebSprite initialImageIndex="3"/>
+            <WebSprite initialImageIndex="4"/>
+            <WebSprite initialImageIndex="5"/>
 
             <WallSprite initialImageIndex="12"/>
             <HallwaySprite/>
