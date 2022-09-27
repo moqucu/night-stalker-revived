@@ -5,6 +5,7 @@ import org.moqucu.games.nightstalker.label.MazeAlgorithmFactory;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MazeAlgorithmImpl;
 import org.moqucu.games.nightstalker.model.OuterRing;
+import org.moqucu.games.nightstalker.model.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -24,4 +25,11 @@ public class MazeAlgorithmFactoryTest {
 
         assertThat(mazeAlgorithmFactory.createMazeAlgorithm(MazeAlgorithm.OuterRing), isA(OuterRing.class));
     }
+
+    @Test
+    public void whenConfrontedWithRandomEnumItReturnsRandom() {
+
+        assertThat(mazeAlgorithmFactory.createMazeAlgorithm(MazeAlgorithm.Random), isA(Random.class));
+    }
+
 }

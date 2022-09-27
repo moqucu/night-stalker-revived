@@ -3,6 +3,7 @@ package org.moqucu.games.nightstalker.label;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MazeAlgorithmImpl;
 import org.moqucu.games.nightstalker.model.OuterRing;
+import org.moqucu.games.nightstalker.model.Random;
 
 public class MazeAlgorithmFactory {
 
@@ -17,11 +18,16 @@ public class MazeAlgorithmFactory {
 
         return BillPughSingleton.INSTANCE;
     }
+
     public MazeAlgorithmImpl createMazeAlgorithm(MazeAlgorithm mazeAlgorithm) {
 
-        if (mazeAlgorithm == MazeAlgorithm.OuterRing)
-            return new OuterRing();
-        else
-            return null;
+        switch (mazeAlgorithm) {
+            case OuterRing:
+                return new OuterRing();
+            case Random:
+                return new Random();
+            default:
+                return null;
+        }
     }
 }
