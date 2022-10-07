@@ -5,8 +5,20 @@ import java.util.Set;
 
 public class Random implements MazeAlgorithmImpl {
 
+    public final java.util.Random random = new java.util.Random();
+
     @Override
     public AbsPosAndDirection getNextAbsPos(AbsMazeGraph absMazeGraph, AbsPosAndDirection absPosAndDirection) {
+
+        if (!absMazeGraph.isOnNode(absPosAndDirection.getAbsolutePosition()))
+
+            return new AbsPosAndDirection(
+                    absMazeGraph.getClosestReachablePosition(
+                            absPosAndDirection.getAbsolutePosition(),
+                            absPosAndDirection.getDirection()
+                    ),
+                    absPosAndDirection.getDirection()
+            );
 
         final Set<AbsPosAndDirection> reachablePositions = new HashSet<>();
         reachablePositions.add(
@@ -51,6 +63,14 @@ public class Random implements MazeAlgorithmImpl {
                         .equals(absPosAndDirection.getAbsolutePosition())
         );
 
-        return reachablePositions.stream().unordered().findFirst().orElseThrow();
+        if (reachablePositions.size() > 1)
+            reachablePositions.removeIf(
+                    absPosAndDirectionAlternative -> absPosAndDirectionAlternative
+                            .getDirection()
+                            .equals(Direction.opposite(absPosAndDirection.getDirection()))
+            );
+
+        final int index = random.ints(0, reachablePositions.size()).findFirst().orElseThrow();
+        return (AbsPosAndDirection) reachablePositions.toArray()[index];
     }
 }

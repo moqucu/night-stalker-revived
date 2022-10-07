@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.sprite.Collidable;
-import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.model.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;

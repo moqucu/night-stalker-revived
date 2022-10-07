@@ -12,7 +12,7 @@ import org.moqucu.games.nightstalker.model.Bullet;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
-import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.model.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
 import org.moqucu.games.nightstalker.view.Maze;
 

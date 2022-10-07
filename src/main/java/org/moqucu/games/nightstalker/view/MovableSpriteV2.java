@@ -14,6 +14,12 @@ public class MovableSpriteV2 extends AnimatedSpriteV2 {
         model = (MovableObject) super.getModel();
     }
 
+    public MovableSpriteV2(MovableObject model) {
+
+        super(model);
+        this.model = model;
+    }
+
     public void setModel(MovableObject model) {
 
         super.setModel(model);

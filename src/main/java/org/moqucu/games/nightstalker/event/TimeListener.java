@@ -2,5 +2,5 @@ package org.moqucu.games.nightstalker.event;
 
 public interface TimeListener {
 
-    void elapseTime(long milliseconds);
+    void elapseTime(double milliseconds);
 }

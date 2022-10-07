@@ -355,4 +355,31 @@ public class AbsMazeGraphTest {
                 is(new RelativePosition(2, 1))
         );
     }
+
+    @Test
+    public void isOnNodeTrueScenario() {
+
+        assertThat(
+                absMazeGraph.isOnNode(new AbsolutePosition(32, 32)),
+                is(true)
+        );
+    }
+
+    @Test
+    public void fakeIsOnNodeTrueScenario() {
+
+        assertThat(
+                absMazeGraph.isOnNode(new AbsolutePosition(320, 32)),
+                is(false)
+        );
+    }
+
+    @Test
+    public void isOnNodeFalseScenario() {
+
+        assertThat(
+                absMazeGraph.isOnNode(new AbsolutePosition(33, 32)),
+                is(false)
+        );
+    }
 }

@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
-import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.model.Hittable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
 import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
 import org.moqucu.games.nightstalker.sprite.object.BulletSprite;

@@ -10,7 +10,7 @@ import org.moqucu.games.nightstalker.model.Bullet;
 import org.moqucu.games.nightstalker.sprite.AnimatedSprite;
 import org.moqucu.games.nightstalker.sprite.Approachable;
 import org.moqucu.games.nightstalker.sprite.Collidable;
-import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.model.Hittable;
 import org.moqucu.games.nightstalker.sprite.object.BulletSprite;
 import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
@@ -47,6 +47,8 @@ public class Maze extends StackPane {
 
     private final ConcurrentMap<RobotBullet, RobotBullet> robotBullets = new ConcurrentHashMap<>();
 
+    private final ConcurrentMap<SpriteV2, SpriteV2> sprites = new ConcurrentHashMap<>();
+
     @SneakyThrows
     public Maze() {
 
@@ -63,6 +65,17 @@ public class Maze extends StackPane {
             change.getAddedSubList().forEach(addedPane -> {
                 if (addedPane instanceof Pane) {
 
+                    ((Pane) addedPane)
+                            .getChildren()
+                            .filtered(node -> node instanceof SpriteV2)
+                            .forEach(sprite -> {
+
+                                sprites.putIfAbsent(((SpriteV2) sprite), ((SpriteV2) sprite));
+                                log.debug(
+                                        "Added game object of type {} to set.",
+                                        sprite.getClass().getName()
+                                );
+                            });
                     ((Pane) addedPane)
                             .getChildren()
                             .filtered(node -> node instanceof Collidable)
@@ -256,4 +269,8 @@ public class Maze extends StackPane {
         return robotBullets.keySet();
     }
 
+    public Set<SpriteV2> getSprites() {
+
+        return sprites.keySet();
+    }
 }

@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.view.FxmlView;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.moqucu.games.nightstalker.view.StageManager;
@@ -27,6 +28,8 @@ public class SplashScreenController implements FxmlController {
     private final StageManager stageManager;
 
     private GameLoop gameLoop;
+
+    private GameWorld gameWorld = new GameWorld();
 
     @Autowired
     @Lazy //lazy since Stage for StageManager not available yet at initialization time
@@ -58,7 +61,7 @@ public class SplashScreenController implements FxmlController {
                 .filtered(node -> node instanceof Maze)
                 .get(0);
 
-        gameLoop = new GameLoop(maze);
+        gameLoop = new GameLoop(maze, gameWorld);
         gameLoop.start();
     }
 }

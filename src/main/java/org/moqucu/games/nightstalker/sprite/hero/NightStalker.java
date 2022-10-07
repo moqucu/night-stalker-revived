@@ -17,7 +17,7 @@ import org.moqucu.games.nightstalker.sprite.object.RobotBullet;
 import org.moqucu.games.nightstalker.sprite.object.Weapon;
 import org.moqucu.games.nightstalker.sprite.enemy.Bat;
 import org.moqucu.games.nightstalker.sprite.enemy.Spider;
-import org.moqucu.games.nightstalker.sprite.Hittable;
+import org.moqucu.games.nightstalker.model.Hittable;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.statemachine.StateMachine;

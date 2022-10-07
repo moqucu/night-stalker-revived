@@ -140,6 +140,9 @@ public class AbsMazeGraph {
             final RelativePosition closestReachableNode
                     = mazeGraph.getClosestReachableNode(closestRelativePosition, direction);
 
+            if (!mazeGraph.getAdjacencyList().get(closestReachableNode).contains(closestRelativePosition))
+                return position;
+
             closestAbsolutePosition = new AbsolutePosition(
                     closestReachableNode.getX() * WIDTH,
                     closestReachableNode.getY() * HEIGHT
@@ -210,5 +213,15 @@ public class AbsMazeGraph {
         );
 
         return isWithinBounds.get();
+    }
+
+    public boolean isOnNode(AbsolutePosition absolutePosition) {
+
+        final int relativeX = (int) absolutePosition.getX() / WIDTH;
+        final int relativeY = (int) absolutePosition.getY() / HEIGHT;
+
+        return !(absolutePosition.getY() % HEIGHT > 0)
+                && !(absolutePosition.getX() % HEIGHT > 0)
+                && mazeGraph.getAdjacencyList().containsKey(new RelativePosition(relativeX, relativeY));
     }
 }

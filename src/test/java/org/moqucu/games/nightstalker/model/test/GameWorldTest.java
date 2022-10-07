@@ -20,9 +20,9 @@ public class GameWorldTest {
     }
 
     @Test
-    public void timePropertyOfTypeTime() {
+    public void timePropertyOfTypeDouble() {
 
-        assertThat(gameWorld.getTime(), isA(Long.class));
+        assertThat(gameWorld.getTime(), isA(Double.class));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class GameWorldTest {
     @Test
     public void aPulseOfThousandMillisecondsWillProgressTimeAccordingly() {
 
-        long originalTime = gameWorld.getTime();
+        final double originalTime = gameWorld.getTime();
         gameWorld.pulse(1000);
         assertThat(gameWorld.getTime(), is(originalTime + 1000));
     }

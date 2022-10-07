@@ -1,15 +1,11 @@
 package org.moqucu.games.nightstalker.controller;
 
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Point2D;
 import javafx.scene.shape.Line;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.sprite.ArtificiallyMovableSprite;
+import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.sprite.Sprite;
-import org.moqucu.games.nightstalker.sprite.hero.NightStalker;
-import org.moqucu.games.nightstalker.sprite.object.Weapon;
 import org.moqucu.games.nightstalker.view.Maze;
 
 import java.util.HashSet;
@@ -25,7 +21,12 @@ public class GameLoop {
 
     private final AnimationTimer gameLoop;
 
-    public GameLoop(Maze maze) {
+    private final GameWorld gameWorld;
+
+    public GameLoop(Maze maze, GameWorld gameWorld) {
+
+        this.gameWorld = gameWorld;
+        maze.getSprites().forEach(sprite -> gameWorld.add(sprite.getModel()));
 
         gameLoop = new AnimationTimer() {
 
@@ -33,6 +34,8 @@ public class GameLoop {
                 /* calculate time since last update */
                 double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000000.0;
                 double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
+
+                gameWorld.pulse(deltaTime);
 
                 log.trace("Delta time since start: {}", deltaTimeSinceStart);
                 log.trace("Delta time since last call: {}", deltaTime);

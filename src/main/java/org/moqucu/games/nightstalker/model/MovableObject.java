@@ -141,11 +141,11 @@ public abstract class MovableObject extends AnimatedObject {
     }
 
     @Override
-    public void elapseTime(long milliseconds) {
+    public void elapseTime(double milliseconds) {
 
         super.elapseTime(milliseconds);
 
-        double range = 1.0 * milliseconds / 1000 * getVelocity();
+        double range = milliseconds * getVelocity();
         double absDiff;
 
         if (isInMotion()) {

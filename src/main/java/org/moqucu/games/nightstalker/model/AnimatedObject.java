@@ -28,7 +28,7 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
     @Getter
     private int imageIndex = -1;
 
-    private long elapsedTime = 0;
+    private double elapsedTime = 0;
 
     private double frameInterval = -1.0;
 
@@ -86,7 +86,7 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
 
         final int oldFrameRate = this.frameRate;
         this.frameRate = frameRate;
-        frameInterval = 1000.0 / frameRate;
+        frameInterval = 1.0 / frameRate;
         if (oldFrameRate != frameRate)
             propertyChangeSupport.firePropertyChange(
                     "frameRate",
@@ -108,7 +108,7 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
     }
 
     @Override
-    public void elapseTime(long milliseconds) {
+    public void elapseTime(double milliseconds) {
 
         if (animated) {
 

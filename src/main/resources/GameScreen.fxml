@@ -14,7 +14,7 @@
 <?import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot?>
 <?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne?>
 <?import org.moqucu.games.nightstalker.sprite.enemy.Spider?>
-<?import org.moqucu.games.nightstalker.sprite.enemy.Bat?>
+<?import org.moqucu.games.nightstalker.view.enemy.Bat?>
 
 <?import org.moqucu.games.nightstalker.label.LivesLabel?>
 <?import org.moqucu.games.nightstalker.label.ScoreLabel?>
@@ -86,23 +86,33 @@
                     velocity="250"
             />
             <Bat
-                    spawnCoordinateX="528.0"
-                    spawnCoordinateY="96"
-                    sleepTimeInMillis="5000"
-                    spawnTimeInMillis="3000"
-                    autoReversible="false"
-                    frameDurationInMillis="100"
-                    velocity="50"
+                    initialImageIndex="0"
+                    x="528.0"
+                    y="96"
             />
             <Bat
-                    spawnCoordinateX="512.0"
-                    spawnCoordinateY="224"
-                    spawnTimeInMillis="3000"
-                    sleepTimeInMillis="2500"
-                    autoReversible="false"
-                    frameDurationInMillis="100"
-                    velocity="50"
+                    initialImageIndex="0"
+                    x="512.0"
+                    y="224"
             />
+            <!--            <Bat-->
+            <!--                    spawnCoordinateX="528.0"-->
+            <!--                    spawnCoordinateY="96"-->
+            <!--                    sleepTimeInMillis="5000"-->
+            <!--                    spawnTimeInMillis="3000"-->
+            <!--                    autoReversible="false"-->
+            <!--                    frameDurationInMillis="100"-->
+            <!--                    velocity="50"-->
+            <!--            />-->
+            <!--            <Bat-->
+            <!--                    spawnCoordinateX="512.0"-->
+            <!--                    spawnCoordinateY="224"-->
+            <!--                    spawnTimeInMillis="3000"-->
+            <!--                    sleepTimeInMillis="2500"-->
+            <!--                    autoReversible="false"-->
+            <!--                    frameDurationInMillis="100"-->
+            <!--                    velocity="50"-->
+            <!--            />-->
         </Pane>
         <Pane>
             <NightStalker
