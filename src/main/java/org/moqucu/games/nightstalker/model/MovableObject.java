@@ -145,7 +145,7 @@ public abstract class MovableObject extends AnimatedObject {
 
         super.elapseTime(milliseconds);
 
-        double range = milliseconds * getVelocity();
+        double range = milliseconds / 1000 * getVelocity();
         double absDiff;
 
         if (isInMotion()) {

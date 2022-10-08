@@ -86,7 +86,7 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
 
         final int oldFrameRate = this.frameRate;
         this.frameRate = frameRate;
-        frameInterval = 1.0 / frameRate;
+        frameInterval = 1000.0 / frameRate;
         if (oldFrameRate != frameRate)
             propertyChangeSupport.firePropertyChange(
                     "frameRate",

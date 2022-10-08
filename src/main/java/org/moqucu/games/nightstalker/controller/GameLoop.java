@@ -21,19 +21,16 @@ public class GameLoop {
 
     private final AnimationTimer gameLoop;
 
-    private final GameWorld gameWorld;
-
     public GameLoop(Maze maze, GameWorld gameWorld) {
 
-        this.gameWorld = gameWorld;
         maze.getSprites().forEach(sprite -> gameWorld.add(sprite.getModel()));
 
         gameLoop = new AnimationTimer() {
 
             public void handle(long currentNanoTime) {
                 /* calculate time since last update */
-                double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000000.0;
-                double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000000.0;
+                double deltaTimeSinceStart = (currentNanoTime - startNanoTime) / 1000000.0;
+                double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000.0;
 
                 gameWorld.pulse(deltaTime);
 
@@ -76,9 +73,7 @@ public class GameLoop {
 
 
                 maze.getAllRobots().forEach(
-                        robot -> {
-                            robot.fire(maze.getPlayer());
-                        }
+                        robot -> robot.fire(maze.getPlayer())
 
 
                 );

@@ -31,7 +31,7 @@ public class BatModel extends MovableObject {
         super.elapseTime(milliseconds);
         this.elapsedTimeSinceSpawning += milliseconds;
 
-        if (elapsedTimeSinceSpawning > 3 && !awake) {
+        if (elapsedTimeSinceSpawning > 3000 && !awake) {
 
             setAnimated(true);
             setInMotion(true);
