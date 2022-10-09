@@ -14,7 +14,7 @@
 <?import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot?>
 <?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne?>
 <?import org.moqucu.games.nightstalker.sprite.enemy.Spider?>
-<?import org.moqucu.games.nightstalker.view.enemy.Bat?>
+<?import org.moqucu.games.nightstalker.view.enemy.BatSprite?>
 
 <?import org.moqucu.games.nightstalker.label.LivesLabel?>
 <?import org.moqucu.games.nightstalker.label.ScoreLabel?>
@@ -85,13 +85,17 @@
                     frameDurationInMillis="5000"
                     velocity="250"
             />
-            <Bat
+            <BatSprite
                     initialImageIndex="0"
+                    sleepTimeInMillis="5000"
+                    direction="Left"
                     x="528.0"
                     y="96"
             />
-            <Bat
+            <BatSprite
                     initialImageIndex="0"
+                    sleepTimeInMillis="3000"
+                    direction="Right"
                     x="512.0"
                     y="224"
             />
@@ -125,7 +129,6 @@
             />
         </Pane>
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
-            <!--suppress JavaFxRedundantPropertyValue -->
             <WallSprite initialImageIndex="0"/>
             <WallSprite initialImageIndex="1"/>
             <WallSprite initialImageIndex="2"/>
