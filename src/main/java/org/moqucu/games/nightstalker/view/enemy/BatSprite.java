@@ -4,7 +4,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.adapter.*;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.enemy.Bat;
 import org.moqucu.games.nightstalker.view.MovableSpriteV2;
 
@@ -15,8 +14,6 @@ public class BatSprite extends MovableSpriteV2 {
 
     private JavaBeanDoubleProperty sleepTimeInMillisProperty;
 
-    private JavaBeanObjectProperty<Direction> directionProperty;
-
     @SneakyThrows
     private void bindProperties(Bat model) {
 
@@ -25,14 +22,20 @@ public class BatSprite extends MovableSpriteV2 {
                 .name("sleepTime")
                 .bean(model)
                 .build();
-
-        //noinspection unchecked
-        directionProperty = JavaBeanObjectPropertyBuilder
-                .create()
-                .name("direction")
-                .bean(model)
-                .build();
     }
+
+    @SneakyThrows
+    private void unbindProperties() {
+
+        if (sleepTimeInMillisProperty != null) {
+
+            if(sleepTimeInMillisProperty.isBound())
+                sleepTimeInMillisProperty.unbind();
+
+            sleepTimeInMillisProperty.dispose();
+            sleepTimeInMillisProperty = null;
+        }
+     }
 
     public BatSprite() {
 
@@ -43,6 +46,7 @@ public class BatSprite extends MovableSpriteV2 {
 
     public void setModel(Bat model) {
 
+        unbindProperties();
         super.setModel(model);
         this.model = model;
         bindProperties(getModel());
@@ -61,20 +65,5 @@ public class BatSprite extends MovableSpriteV2 {
     public DoubleProperty sleepTimeInMillis() {
 
         return sleepTimeInMillisProperty;
-    }
-
-    public void setDirection(Direction direction) {
-
-        directionProperty.set(direction);
-    }
-
-    public Direction getDirection() {
-
-        return directionProperty.get();
-    }
-
-    public JavaBeanObjectProperty<Direction> directionProperty() {
-
-        return directionProperty;
     }
 }

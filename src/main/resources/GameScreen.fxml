@@ -13,7 +13,7 @@
 <?import org.moqucu.games.nightstalker.sprite.hero.NightStalker?>
 <?import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot?>
 <?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne?>
-<?import org.moqucu.games.nightstalker.sprite.enemy.Spider?>
+<?import org.moqucu.games.nightstalker.view.enemy.SpiderSprite?>
 <?import org.moqucu.games.nightstalker.view.enemy.BatSprite?>
 
 <?import org.moqucu.games.nightstalker.label.LivesLabel?>
@@ -50,14 +50,21 @@
             />
         </Pane>
         <Pane>
-            <Spider
-                    spawnCoordinateX="32.0"
-                    spawnCoordinateY="32.0"
-                    sleepTimeInMillis="500"
-                    spawnTimeInMillis="3000"
-                    autoReversible="false"
-                    frameDurationInMillis="200"
-                    velocity="50"
+<!--            <Spider-->
+<!--                    spawnCoordinateX="32.0"-->
+<!--                    spawnCoordinateY="32.0"-->
+<!--                    sleepTimeInMillis="500"-->
+<!--                    spawnTimeInMillis="3000"-->
+<!--                    autoReversible="false"-->
+<!--                    frameDurationInMillis="200"-->
+<!--                    velocity="50"-->
+<!--            />-->
+
+            <SpiderSprite
+                    initialImageIndex="0"
+                    x="96.0"
+                    y="32.0"
+                    direction="Down"
             />
             <Group
                     id="GreyRobotAnimationGroup">

@@ -1,9 +1,7 @@
 package org.moqucu.games.nightstalker.view.enemy.test;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.adapter.JavaBeanObjectProperty;
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.enemy.Bat;
 import org.moqucu.games.nightstalker.view.MovableSpriteV2;
 import org.moqucu.games.nightstalker.view.enemy.BatSprite;
@@ -49,24 +47,6 @@ public class BatSpriteTest {
     public void sleepTimePropertyOfTypeDoubleProperty() {
 
         assertThat(batSprite.sleepTimeInMillis(), isA(DoubleProperty.class));
-    }
-
-    @Test
-    public void hasInitialDirectionProperty() {
-
-        assertThat(batSprite, hasProperty("direction"));
-    }
-
-    @Test
-    public void directionOfTypeDirection() {
-
-        assertThat(batSprite.getDirection(), isA(Direction.class));
-    }
-
-    @Test
-    public void directionPropertyOfTypeDirectionProperty() {
-
-        assertThat(batSprite.directionProperty(), isA(JavaBeanObjectProperty.class));
     }
 
     @Test

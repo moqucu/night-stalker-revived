@@ -54,12 +54,11 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
 
         final int oldUpperAnimationIndex = this.upperAnimationIndex;
         this.upperAnimationIndex = upperAnimationIndex;
-        if (oldUpperAnimationIndex != upperAnimationIndex)
-            propertyChangeSupport.firePropertyChange(
-                    "upperAnimationIndex",
-                    oldUpperAnimationIndex,
-                    upperAnimationIndex
-            );
+        propertyChangeSupport.firePropertyChange(
+                "upperAnimationIndex",
+                oldUpperAnimationIndex,
+                upperAnimationIndex
+        );
     }
 
     public void setAnimated(boolean animated) {
@@ -73,12 +72,11 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
         else {
             final boolean oldAnimated = this.animated;
             this.animated = animated;
-            if (oldAnimated != animated)
-                propertyChangeSupport.firePropertyChange(
-                        "animated",
-                        oldAnimated,
-                        animated
-                );
+            propertyChangeSupport.firePropertyChange(
+                    "animated",
+                    oldAnimated,
+                    animated
+            );
         }
     }
 
@@ -87,24 +85,22 @@ public abstract class AnimatedObject extends GameObject implements TimeListener 
         final int oldFrameRate = this.frameRate;
         this.frameRate = frameRate;
         frameInterval = 1000.0 / frameRate;
-        if (oldFrameRate != frameRate)
-            propertyChangeSupport.firePropertyChange(
-                    "frameRate",
-                    oldFrameRate,
-                    frameRate
-            );
+        propertyChangeSupport.firePropertyChange(
+                "frameRate",
+                oldFrameRate,
+                frameRate
+        );
     }
 
     public void setImageIndex(int imageIndex) {
 
         final int oldImageIndex = this.imageIndex;
         this.imageIndex = imageIndex;
-        if (oldImageIndex != imageIndex)
-            propertyChangeSupport.firePropertyChange(
-                    "imageIndex",
-                    oldImageIndex,
-                    imageIndex
-            );
+        propertyChangeSupport.firePropertyChange(
+                "imageIndex",
+                oldImageIndex,
+                imageIndex
+        );
     }
 
     @Override

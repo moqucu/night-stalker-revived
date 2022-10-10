@@ -1,7 +1,6 @@
 package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
 
@@ -22,7 +21,6 @@ public class Bat extends MovableObject {
         setLowerAnimationIndex(1);
         setUpperAnimationIndex(5);
         setFrameRate(10);
-        setDirection(Direction.Left);
         setVelocity(50);
         setMazeGraphFileName("/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.Random);

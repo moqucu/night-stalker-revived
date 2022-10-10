@@ -63,7 +63,7 @@ public class StageManager implements SpriteCreationListener {
 
             Spider spider = (Spider) createdSprites.get(Spider.class);
             ScoreLabel scoreLabel = (ScoreLabel) createdSprites.get(ScoreLabel.class);
-            spider.addHitListener(scoreLabel);
+            // spider.addHitListener(scoreLabel);
             GreyRobot greyRobot = (GreyRobot) createdSprites.get(GreyRobot.class);
             Group animationGroup = (Group) createdSprites.get(Group.class);
             CubicCurve cubicCurve = (CubicCurve) createdSprites.get(CubicCurve.class);

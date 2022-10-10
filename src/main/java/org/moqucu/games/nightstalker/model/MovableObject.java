@@ -70,12 +70,11 @@ public abstract class MovableObject extends AnimatedObject {
             final boolean oldInMotion = this.inMotion;
             this.inMotion = inMotion;
 
-            if (oldInMotion != inMotion)
-                propertyChangeSupport.firePropertyChange(
-                        "inMotion",
-                        oldInMotion,
-                        inMotion
-                );
+            propertyChangeSupport.firePropertyChange(
+                    "inMotion",
+                    oldInMotion,
+                    inMotion
+            );
         }
     }
 
@@ -84,12 +83,11 @@ public abstract class MovableObject extends AnimatedObject {
         final Direction oldDirection = this.direction;
         this.direction = direction;
 
-        if (!oldDirection.equals(direction))
-            propertyChangeSupport.firePropertyChange(
-                    "direction",
-                    oldDirection,
-                    direction
-            );
+        propertyChangeSupport.firePropertyChange(
+                "direction",
+                oldDirection,
+                direction
+        );
     }
 
     public void setMazeAlgorithm(MazeAlgorithm mazeAlgorithm) {
@@ -118,13 +116,12 @@ public abstract class MovableObject extends AnimatedObject {
             final String oldMazeGraphFileName = this.mazeGraphFileName;
             this.mazeGraphFileName = mazeGraphFileName;
 
-            if (!oldMazeGraphFileName.equals(mazeGraphFileName))
-                propertyChangeSupport.firePropertyChange(
-                        "mazeGraphFileName",
-                        oldMazeGraphFileName,
-                        mazeGraphFileName
-                );
-        } catch (NullPointerException exception) {
+            propertyChangeSupport.firePropertyChange(
+                    "mazeGraphFileName",
+                    oldMazeGraphFileName,
+                    mazeGraphFileName
+            );
+         } catch (NullPointerException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_CANNOT_BE_NULL);
         } catch (JsonParseException | JsonMappingException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT);

@@ -18,8 +18,6 @@ import org.springframework.statemachine.transition.Transition;
 import java.util.EnumSet;
 import java.util.Map;
 
-import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
-
 @Data
 @Log4j2
 @EqualsAndHashCode(callSuper = true)
@@ -43,7 +41,8 @@ public class Spider extends SleepingSprite implements Hittable, Collidable {
 
         super();
 
-        setImage(new Image(translate("images/spider.png")));
+        // setImage(new Image(translate("images/spider.png")));
+        setImage(new Image("images/spider.png"));
         setAutoReversible(false);
         setFrameDurationInMillis(50);
         setVelocity(35);

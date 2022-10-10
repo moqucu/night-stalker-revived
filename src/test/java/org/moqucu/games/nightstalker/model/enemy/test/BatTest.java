@@ -91,7 +91,6 @@ public class BatTest {
     @Test
     public void beforeSleepTimeBatIsNotAwake() {
 
-
         final GameWorld gameWorld = new GameWorld();
         final Bat anotherBatModel = new Bat();
         anotherBatModel.setSleepTime(sleepTime);
