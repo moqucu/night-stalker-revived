@@ -9,4 +9,8 @@ public interface Collidable {
     BoundingBox getAbsoluteBounds();
 
     boolean isCollidingWith(Collidable anotherCollidable);
+
+    boolean canChangePosition();
+
+    void collisionOccuredWith(Collidable anotherCollidable);
 }

@@ -25,6 +25,12 @@ public class CollidableTest {
 
             return boundingBox;
         }
+
+        @Override
+        public boolean canChangePosition() {
+
+            return false;
+        }
     };
 
     private final Collidable collidableTwo = new CollidableImpl() {
@@ -41,6 +47,12 @@ public class CollidableTest {
             boundingBox.setMaxY(absY + getBoundingBox().getMaxY());
 
             return boundingBox;
+        }
+
+        @Override
+        public boolean canChangePosition() {
+
+            return true;
         }
     };
 
@@ -102,5 +114,18 @@ public class CollidableTest {
         collidableOne.setBoundingBox(boundingBox2);
 
         assertThat(collidableOne.isCollidingWith(collidableTwo), is(false));
+    }
+
+    @Test
+    public void collidableOneCannotChangePosition() {
+
+        assertThat(collidableOne.canChangePosition(), is(false));
+    }
+
+
+    @Test
+    public void collidableTwoCanChangePosition() {
+
+        assertThat(collidableTwo.canChangePosition(), is(true));
     }
 }

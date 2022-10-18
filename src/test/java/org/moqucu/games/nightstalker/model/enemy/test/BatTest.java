@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.model.enemy.test;
 
 import org.junit.jupiter.api.Test;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.enemy.Bat;
@@ -110,6 +111,7 @@ public class BatTest {
         anotherBatModel.setSleepTime(sleepTime);
         anotherBatModel.setXPosition(528.0);
         anotherBatModel.setYPosition(96.0);
+        anotherBatModel.setDirection(Direction.Up);
         gameWorld.add(anotherBatModel);
         gameWorld.pulse(sleepTime);
 

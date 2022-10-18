@@ -3,6 +3,7 @@ package org.moqucu.games.nightstalker.model.test;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.moqucu.games.nightstalker.model.Collidable;
 import org.moqucu.games.nightstalker.model.GameObject;
 
 import java.beans.PropertyChangeEvent;
@@ -185,5 +186,11 @@ public class GameObjectTest {
         assertThat(exception.getMessage(), is("imageMapFileName"));
         gameObject.removePropertyChangeListener(listener);
         gameObject.setImageMapFileName("part_1_a.gif");
+    }
+
+    @Test
+    public void implementsCollidableInterface() {
+
+        assertThat(gameObject, isA(Collidable.class));
     }
 }

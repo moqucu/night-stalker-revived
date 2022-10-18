@@ -65,6 +65,8 @@
                     x="96.0"
                     y="32.0"
                     direction="Down"
+                    animated="true"
+                    inMotion="true"
             />
             <Group
                     id="GreyRobotAnimationGroup">

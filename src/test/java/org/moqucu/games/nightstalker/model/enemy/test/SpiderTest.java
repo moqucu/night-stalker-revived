@@ -59,15 +59,15 @@ public class SpiderTest {
     }
 
     @Test
-    public void frameRateIsTwoHundred() {
+    public void frameRateIsFive() {
 
-        assertThat(spider.getFrameRate(), is(200));
+        assertThat(spider.getFrameRate(), is(5));
     }
 
     @Test
-    public void velocityIsFifty() {
+    public void velocityIsTwentyFive() {
 
-        assertThat(spider.getVelocity(), is(50.));
+        assertThat(spider.getVelocity(), is(25.0));
     }
 
     @Test

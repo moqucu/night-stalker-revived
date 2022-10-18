@@ -19,12 +19,7 @@ public class Spider extends MovableObject {
                 setLowerAnimationIndex(0);
                 setUpperAnimationIndex(1);
         }
-        if (!isAnimated() || !isInMotion()) {
-
-            setAnimated(true);
-            setInMotion(true);
-        }
-    }
+     }
 
     public Spider() {
 
