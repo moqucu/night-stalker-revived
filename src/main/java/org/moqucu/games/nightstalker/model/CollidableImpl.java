@@ -26,6 +26,6 @@ public abstract class CollidableImpl implements Collidable {
     }
 
     @Override
-    public void collisionOccuredWith(Collidable anotherCollidable) {
+    public void collisionOccurredWith(Collidable anotherCollidable) {
     }
 }

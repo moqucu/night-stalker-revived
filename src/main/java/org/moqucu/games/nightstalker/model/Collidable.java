@@ -12,5 +12,5 @@ public interface Collidable {
 
     boolean canChangePosition();
 
-    void collisionOccuredWith(Collidable anotherCollidable);
+    void collisionOccurredWith(Collidable anotherCollidable);
 }
