@@ -81,4 +81,10 @@ public class SpiderTest {
 
         assertThat(spider.getMazeAlgorithm(), is(MazeAlgorithm.Random));
     }
+
+    @Test
+    public void canChangePosition() {
+
+        assertThat(spider.canChangePosition(), is(true));
+    }
 }

@@ -119,4 +119,10 @@ public class BatTest {
         assertThat(anotherBatModel.isInMotion(), is(true));
         assertThat(anotherBatModel.isAnimated(), is(true));
     }
+
+    @Test
+    public void canChangePosition() {
+
+        assertThat(bat.canChangePosition(), is(true));
+    }
 }

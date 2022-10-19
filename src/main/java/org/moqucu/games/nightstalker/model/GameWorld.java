@@ -19,16 +19,42 @@ public class GameWorld {
     @Getter
     private final MazeGraphV2 mazeGraph = new MazeGraphV2();
 
+    private void advanceTime(double milliseconds) {
+
+        timeListeners.forEach(timeListener -> timeListener.elapseTime(milliseconds));
+    }
+
+    private void detectCollisions() {
+
+        objects.values().stream().filter(GameObject::canChangePosition).forEach(
+                gameObject -> objects
+                        .values()
+                        .stream()
+                        .filter(otherGameObject -> !otherGameObject.equals(gameObject))
+                        .forEach(
+                                otherGameObjectButNotItself -> {
+                                    if (gameObject.isCollidingWith(otherGameObjectButNotItself)) {
+                                        gameObject.collisionOccurredWith(otherGameObjectButNotItself);
+                                        if (!otherGameObjectButNotItself.canChangePosition())
+                                            otherGameObjectButNotItself.collisionOccurredWith(gameObject);
+                                    }
+                                }
+                        )
+        );
+
+    }
+
     public void pulse(double milliseconds) {
 
         time += milliseconds;
-        timeListeners.forEach(timeListener -> timeListener.elapseTime(milliseconds));
+        advanceTime(milliseconds);
+        detectCollisions();
     }
 
     public void add(GameObject gameObject) {
 
         objects.put(gameObject.getObjectId(), gameObject);
         if (gameObject instanceof TimeListener)
-            timeListeners.add((TimeListener)gameObject);
+            timeListeners.add((TimeListener) gameObject);
     }
 }

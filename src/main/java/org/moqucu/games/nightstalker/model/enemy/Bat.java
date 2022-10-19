@@ -46,4 +46,10 @@ public class Bat extends MovableObject {
         this.sleepTime = sleepTime;
         this.propertyChangeSupport.firePropertyChange("sleepTime", oldSleepTime, sleepTime);
     }
+
+    @Override
+    public boolean canChangePosition() {
+
+        return true;
+    }
 }

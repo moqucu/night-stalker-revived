@@ -36,4 +36,10 @@ public class Spider extends MovableObject {
         };
         addPropertyChangeListener(propertyChangeListener);
     }
+
+    @Override
+    public boolean canChangePosition() {
+
+        return true;
+    }
 }
