@@ -7,7 +7,6 @@
 <?import org.moqucu.games.nightstalker.view.Maze?>
 <?import org.moqucu.games.nightstalker.view.background.HallwaySprite?>
 <?import org.moqucu.games.nightstalker.view.background.WebSprite?>
-<?import org.moqucu.games.nightstalker.sprite.object.Weapon?>
 <?import org.moqucu.games.nightstalker.sprite.object.BulletSprite?>
 <?import org.moqucu.games.nightstalker.sprite.object.RobotBullet?>
 <?import org.moqucu.games.nightstalker.sprite.hero.NightStalker?>
@@ -21,6 +20,7 @@
 <?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartTwo?>
 <?import javafx.scene.shape.CubicCurve?>
 <?import org.moqucu.games.nightstalker.view.background.WallSprite?>
+<?import org.moqucu.games.nightstalker.view.object.WeaponSprite?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
         xmlns:fx="http://javafx.com/fxml/1"
@@ -35,7 +35,10 @@
             onMouseClicked="#onMouseClicked"
     >
         <Pane>
-            <Weapon/>
+            <WeaponSprite
+                    x="288.0"
+                    y="192.0"
+            />
             <BulletSprite/>
             <RobotBullet/>
             <LivesLabel
