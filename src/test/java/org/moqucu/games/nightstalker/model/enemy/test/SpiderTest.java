@@ -73,7 +73,7 @@ public class SpiderTest {
     @Test
     public void pointsToEnemyMazeGraph() {
 
-        assertThat(spider.getMazeGraphFileName(), is("/maze-graph-enemy.json"));
+        assertThat(spider.getMazeGraphFileName(), is("/json/maze-graph-enemy.json"));
     }
 
     @Test

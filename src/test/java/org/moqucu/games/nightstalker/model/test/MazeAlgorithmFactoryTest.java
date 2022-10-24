@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.label.MazeAlgorithmFactory;
+import org.moqucu.games.nightstalker.model.MazeAlgorithmFactory;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MazeAlgorithmImpl;
 import org.moqucu.games.nightstalker.model.OuterRing;

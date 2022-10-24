@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.label;
+package org.moqucu.games.nightstalker.view.object;
 
 import javafx.animation.*;
 import javafx.beans.property.IntegerProperty;

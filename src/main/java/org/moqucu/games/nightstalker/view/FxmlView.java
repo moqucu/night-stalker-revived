@@ -9,7 +9,7 @@ public enum FxmlView {
         @Override
         public String getTitle() {
 
-            return getStringFromResourceBundle("splash.screen.title");
+            return "Night Stalker Revived";
         }
 
         @Override
@@ -23,7 +23,7 @@ public enum FxmlView {
         @Override
         public String getTitle() {
 
-            return getStringFromResourceBundle("game.screen.title");
+            return "Now playing Night Stalker Revived";
         }
 
         @Override

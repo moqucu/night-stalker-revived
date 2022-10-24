@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.label;
+package org.moqucu.games.nightstalker.view.object;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.property.LongProperty;
@@ -6,9 +6,6 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import org.moqucu.games.nightstalker.sprite.enemy.Bat;
-import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot;
-import org.moqucu.games.nightstalker.sprite.enemy.Spider;
 import org.moqucu.games.nightstalker.utility.HitListener;
 
 import java.io.InputStream;
@@ -34,8 +31,8 @@ public class ScoreLabel extends Text implements HitListener {
         fadeTransition.setCycleCount(2);
         fadeTransition.setAutoReverse(true);
 
-        pointMap.put(Spider.class, 100L);
-        pointMap.put(GreyRobot.class, 300L);
+//        pointMap.put(Spider.class, 100L);
+//        pointMap.put(GreyRobot.class, 300L);
     }
 
     @Override

@@ -7,17 +7,11 @@
 <?import org.moqucu.games.nightstalker.view.Maze?>
 <?import org.moqucu.games.nightstalker.view.background.HallwaySprite?>
 <?import org.moqucu.games.nightstalker.view.background.WebSprite?>
-<?import org.moqucu.games.nightstalker.sprite.object.BulletSprite?>
-<?import org.moqucu.games.nightstalker.sprite.object.RobotBullet?>
-<?import org.moqucu.games.nightstalker.sprite.hero.NightStalker?>
-<?import org.moqucu.games.nightstalker.sprite.enemy.GreyRobot?>
-<?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartOne?>
 <?import org.moqucu.games.nightstalker.view.enemy.SpiderSprite?>
 <?import org.moqucu.games.nightstalker.view.enemy.BatSprite?>
 
-<?import org.moqucu.games.nightstalker.label.LivesLabel?>
-<?import org.moqucu.games.nightstalker.label.ScoreLabel?>
-<?import org.moqucu.games.nightstalker.sprite.object.GreyRobotPartTwo?>
+<?import org.moqucu.games.nightstalker.view.object.LivesLabel?>
+<?import org.moqucu.games.nightstalker.view.object.ScoreLabel?>
 <?import javafx.scene.shape.CubicCurve?>
 <?import org.moqucu.games.nightstalker.view.background.WallSprite?>
 <?import org.moqucu.games.nightstalker.view.object.WeaponSprite?>
@@ -39,8 +33,8 @@
                     x="288.0"
                     y="192.0"
             />
-            <BulletSprite/>
-            <RobotBullet/>
+<!--            <BulletSprite/>-->
+<!--            <RobotBullet/>-->
             <LivesLabel
                     x="98.0"
                     y="352.0"
@@ -76,27 +70,27 @@
                 <CubicCurve/>
 
             </Group>
-            <GreyRobot
-                    spawnCoordinateX="48.0"
-                    spawnCoordinateY="320.0"
-                    autoReversible="false"
-                    frameDurationInMillis="100"
-                    velocity="25"
-            />
-            <GreyRobotPartOne
-                    spawnCoordinateX="48.0"
-                    spawnCoordinateY="320.0"
-                    autoReversible="false"
-                    frameDurationInMillis="5000"
-                    velocity="250"
-            />
-            <GreyRobotPartTwo
-                    spawnCoordinateX="48.0"
-                    spawnCoordinateY="320.0"
-                    autoReversible="false"
-                    frameDurationInMillis="5000"
-                    velocity="250"
-            />
+<!--            <GreyRobot-->
+<!--                    spawnCoordinateX="48.0"-->
+<!--                    spawnCoordinateY="320.0"-->
+<!--                    autoReversible="false"-->
+<!--                    frameDurationInMillis="100"-->
+<!--                    velocity="25"-->
+<!--            />-->
+<!--            <GreyRobotPartOne-->
+<!--                    spawnCoordinateX="48.0"-->
+<!--                    spawnCoordinateY="320.0"-->
+<!--                    autoReversible="false"-->
+<!--                    frameDurationInMillis="5000"-->
+<!--                    velocity="250"-->
+<!--            />-->
+<!--            <GreyRobotPartTwo-->
+<!--                    spawnCoordinateX="48.0"-->
+<!--                    spawnCoordinateY="320.0"-->
+<!--                    autoReversible="false"-->
+<!--                    frameDurationInMillis="5000"-->
+<!--                    velocity="250"-->
+<!--            />-->
             <BatSprite
                     initialImageIndex="0"
                     sleepTimeInMillis="5000"
@@ -131,14 +125,14 @@
             <!--            />-->
         </Pane>
         <Pane>
-            <NightStalker
-                    spawnCoordinateX="288.0"
-                    spawnCoordinateY="144.0"
-                    spawnTimeInMillis="3000"
-                    autoReversible="false"
-                    frameDurationInMillis="200"
-                    velocity="75"
-            />
+<!--            <NightStalker-->
+<!--                    spawnCoordinateX="288.0"-->
+<!--                    spawnCoordinateY="144.0"-->
+<!--                    spawnTimeInMillis="3000"-->
+<!--                    autoReversible="false"-->
+<!--                    frameDurationInMillis="200"-->
+<!--                    velocity="75"-->
+<!--            />-->
         </Pane>
         <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
             <WallSprite initialImageIndex="0"/>

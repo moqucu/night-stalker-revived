@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.event;
+package org.moqucu.games.nightstalker.model;
 
 public interface TimeListener {
 

@@ -3,7 +3,7 @@ package org.moqucu.games.nightstalker.model.test;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.event.TimeListener;
+import org.moqucu.games.nightstalker.model.TimeListener;
 import org.moqucu.games.nightstalker.model.*;
 
 import java.beans.PropertyChangeEvent;

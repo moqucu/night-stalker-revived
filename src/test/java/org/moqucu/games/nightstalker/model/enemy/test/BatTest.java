@@ -13,6 +13,36 @@ import static org.hamcrest.Matchers.*;
 
 public class BatTest {
 
+        /*
+
+            setAnimationProperties(
+                Map.of
+                        (
+                                States.Asleep, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(0).build())
+                                        .build(),
+                                States.Awake, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(0).upper(0).build())
+                                        .build(),
+                                States.Moving, AnimationProperty.builder()
+                                        .autoReversible(true)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(1).upper(5).build())
+                                        .build(),
+                                States.Hit, AnimationProperty.builder()
+                                        .autoReversible(false)
+                                        .frameDurationInMillis(100)
+                                        .frameIndices(Indices.builder().lower(6).upper(9).build())
+                                        .build()
+                        )
+        );
+
+     */
+
     private final Bat bat = new Bat();
 
     private final double sleepTime;
@@ -80,7 +110,7 @@ public class BatTest {
     @Test
     public void pointsToEnemyMazeGraph() {
 
-        assertThat(bat.getMazeGraphFileName(), is("/maze-graph-enemy.json"));
+        assertThat(bat.getMazeGraphFileName(), is("/json/maze-graph-enemy.json"));
     }
 
     @Test

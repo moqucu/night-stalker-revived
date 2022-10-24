@@ -10,6 +10,30 @@ import static org.hamcrest.Matchers.isA;
 
 public class WeaponSpriteTest {
 
+    /*
+
+        enum States {TossedAway, ReappearedOnTheGround, PickedUp}
+
+    enum Events {reappear, pickUp, tossAway}
+
+    private Map<States, Indices> frameBoundaries = Map.of(
+            States.TossedAway, Indices.builder().lower(0).upper(0).build(),
+            States.ReappearedOnTheGround, Indices.builder().lower(0).upper(1).build(),
+            States.PickedUp, Indices.builder().lower(0).upper(0).build()
+    );
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final IntegerProperty numberOfRounds = new SimpleIntegerProperty(6);
+
+    private AudioClip pickUpGunSound = new AudioClip(
+            Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/pickupgun.wav").toString()
+    );
+
+    private AudioClip shootSound
+            = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/shoot.wav").toString());
+
+     */
+
     private final WeaponSprite weaponSprite = new WeaponSprite();
 
     @Test

@@ -32,7 +32,7 @@
         </ButtonBar>
         <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #534E03;"/>
         <ImageView fitHeight="384.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@Night_Stalker_Revived_Slash_Screen.png"/>
+            <Image url="@/images/Night_Stalker_Revived_Slash_Screen.png"/>
         </ImageView>
     </VBox>
 </Group>

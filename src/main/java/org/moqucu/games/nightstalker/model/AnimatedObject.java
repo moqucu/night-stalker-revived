@@ -1,7 +1,6 @@
 package org.moqucu.games.nightstalker.model;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.event.TimeListener;
 
 public abstract class AnimatedObject extends GameObject implements TimeListener {
 

@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.sprite.object;
+package org.moqucu.games.nightstalker.view.object;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -6,8 +6,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
-
-import static org.moqucu.games.nightstalker.NightStalkerRevived.translate;
 
 @Data
 @Log4j2
@@ -25,7 +23,7 @@ public class LivesIndex extends Text {
 
         super();
         setText(livesIndex.getValue().toString());
-        setFont(Font.loadFont(translate("fonts/intellect.ttf"), 32.0));
+        Font.loadFont(getClass().getResourceAsStream("fonts/intellect.ttf"), 32.0);
     }
 
     /**

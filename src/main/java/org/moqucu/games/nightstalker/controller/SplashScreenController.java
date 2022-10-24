@@ -10,13 +10,9 @@ import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.view.FxmlView;
 import org.moqucu.games.nightstalker.view.Maze;
 import org.moqucu.games.nightstalker.view.StageManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 @Data
 @Log4j2
-@Component
 public class SplashScreenController implements FxmlController {
 
     @FXML
@@ -31,8 +27,6 @@ public class SplashScreenController implements FxmlController {
 
     private GameWorld gameWorld = new GameWorld();
 
-    @Autowired
-    @Lazy //lazy since Stage for StageManager not available yet at initialization time
     public SplashScreenController(StageManager stageManager) {
 
         this.stageManager = stageManager;

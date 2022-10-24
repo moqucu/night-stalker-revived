@@ -1,7 +1,6 @@
 package org.moqucu.games.nightstalker.model;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.event.TimeListener;
 
 import java.util.*;
 

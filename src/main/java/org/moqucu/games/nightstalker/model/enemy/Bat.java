@@ -22,7 +22,7 @@ public class Bat extends MovableObject {
         setUpperAnimationIndex(5);
         setFrameRate(10);
         setVelocity(50);
-        setMazeGraphFileName("/maze-graph-enemy.json");
+        setMazeGraphFileName("/json/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.Random);
     }
 

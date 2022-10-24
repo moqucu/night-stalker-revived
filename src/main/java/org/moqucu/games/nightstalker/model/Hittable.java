@@ -1,6 +1,5 @@
 package org.moqucu.games.nightstalker.model;
 
-import org.moqucu.games.nightstalker.sprite.Collidable;
 import org.moqucu.games.nightstalker.utility.HitListener;
 
 import java.util.HashSet;

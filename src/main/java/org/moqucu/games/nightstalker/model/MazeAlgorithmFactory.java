@@ -1,9 +1,4 @@
-package org.moqucu.games.nightstalker.label;
-
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MazeAlgorithmImpl;
-import org.moqucu.games.nightstalker.model.OuterRing;
-import org.moqucu.games.nightstalker.model.Random;
+package org.moqucu.games.nightstalker.model;
 
 public class MazeAlgorithmFactory {
 

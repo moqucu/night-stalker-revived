@@ -26,7 +26,7 @@ public class Spider extends MovableObject {
         super();
         setFrameRate(5);
         setVelocity(25);
-        setMazeGraphFileName("/maze-graph-enemy.json");
+        setMazeGraphFileName("/json/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.Random);
         setImageMapFileName("/images/spider.png");
         PropertyChangeListener propertyChangeListener = evt -> {

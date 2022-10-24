@@ -3,7 +3,6 @@ package org.moqucu.games.nightstalker.model;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.Getter;
-import org.moqucu.games.nightstalker.label.MazeAlgorithmFactory;
 
 import java.io.IOException;
 import java.io.InputStream;

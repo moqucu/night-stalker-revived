@@ -2,8 +2,6 @@ plugins {
     id 'java'
     id 'application'
     id 'idea'
-    id 'org.springframework.boot' version '2.5.0'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "io.freefair.lombok" version "6.0.0-m2"
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
@@ -13,9 +11,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-autoconfigure'
-    implementation 'org.springframework.statemachine:spring-statemachine-core:2.1.0.RELEASE'
     implementation 'org.apache.logging.log4j:log4j-api:2.12.1'
     implementation 'org.apache.logging.log4j:log4j-core:2.12.1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.9'
@@ -46,10 +41,6 @@ test {
 javafx {
     version = '18'
     modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.graphics' ]
-}
-
-bootJar {
-    enabled = false
 }
 
 jar {
