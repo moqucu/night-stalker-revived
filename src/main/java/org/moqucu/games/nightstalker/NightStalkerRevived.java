@@ -3,55 +3,16 @@ package org.moqucu.games.nightstalker;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
-import org.moqucu.games.nightstalker.configuration.NightStalkerRevivedConfiguration;
-import org.moqucu.games.nightstalker.controller.GameScreenController;
-import org.moqucu.games.nightstalker.controller.SplashScreenController;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
 import org.moqucu.games.nightstalker.view.FxmlView;
-import org.moqucu.games.nightstalker.view.SpringFXMLLoader;
 import org.moqucu.games.nightstalker.view.StageManager;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Import;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SpringBootApplication
-@Import(
-        {
-                NightStalkerRevivedConfiguration.class,
-                SpringFXMLLoader.class,
-                SplashScreenController.class,
-                GameScreenController.class
-        }
-)
 public class NightStalkerRevived extends Application {
 
-    private ConfigurableApplicationContext springContext;
-
     private StageManager stageManager;
-
-    public static String translate(String relativePath) {
-
-        return NightStalkerRevived.class.getResource(relativePath).toExternalForm();
-    }
-
-    private ConfigurableApplicationContext bootstrapSpringApplicationContext() {
-
-        SpringApplicationBuilder builder = new SpringApplicationBuilder(NightStalkerRevived.class);
-        String[] args = getParameters().getRaw().toArray(new String[0]);
-        builder.headless(false);
-
-        return builder.run(args);
-    }
-
-    @Override
-    public void init() {
-
-        springContext = bootstrapSpringApplicationContext();
-    }
 
     private void displayInitialScene() {
 
@@ -61,22 +22,16 @@ public class NightStalkerRevived extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        stageManager = springContext.getBean(StageManager.class, primaryStage);
+        stageManager = new StageManager(primaryStage);
         displayInitialScene();
 
-        Task backGroundMusicLoop = new BackGroundMusicLoop();
+        Task<Void> backGroundMusicLoop = new BackGroundMusicLoop();
         ExecutorService service = Executors.newFixedThreadPool(4);
         service.execute(backGroundMusicLoop);
     }
 
-    @Override
-    public void stop() {
-
-        springContext.close();
-    }
-
     public static void main(String[] args) {
 
-        Application.launch(args);
+        launch(args);
     }
 }

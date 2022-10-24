@@ -20,11 +20,11 @@ public class AbsMazeGraph {
     public static final int WIDTH = 32;
     public static final int HEIGHT = 32;
 
-    private final MazeGraphV2 mazeGraph;
+    private final MazeGraph mazeGraph;
 
     private final Map<RelativePosition, AbsolutePosition> allRelativePosMappedToAbsPos = new HashMap<>();
 
-    public AbsMazeGraph(MazeGraphV2 mazeGraph) {
+    public AbsMazeGraph(MazeGraph mazeGraph) {
 
         this.mazeGraph = mazeGraph;
         mazeGraph.getAdjacencyList().keySet().forEach(
@@ -140,6 +140,9 @@ public class AbsMazeGraph {
             final RelativePosition closestReachableNode
                     = mazeGraph.getClosestReachableNode(closestRelativePosition, direction);
 
+            if (!mazeGraph.getAdjacencyList().get(closestReachableNode).contains(closestRelativePosition))
+                return position;
+
             closestAbsolutePosition = new AbsolutePosition(
                     closestReachableNode.getX() * WIDTH,
                     closestReachableNode.getY() * HEIGHT
@@ -163,7 +166,7 @@ public class AbsMazeGraph {
                 else
                     return position;
             default:
-                throw new MazeGraphV2.UnrecognizedDirectionException(
+                throw new MazeGraph.UnrecognizedDirectionException(
                         String.format("Direction %s unrecognized!", direction)
                 );
         }
@@ -210,5 +213,15 @@ public class AbsMazeGraph {
         );
 
         return isWithinBounds.get();
+    }
+
+    public boolean isOnNode(AbsolutePosition absolutePosition) {
+
+        final int relativeX = (int) absolutePosition.getX() / WIDTH;
+        final int relativeY = (int) absolutePosition.getY() / HEIGHT;
+
+        return !(absolutePosition.getY() % HEIGHT > 0)
+                && !(absolutePosition.getX() % HEIGHT > 0)
+                && mazeGraph.getAdjacencyList().containsKey(new RelativePosition(relativeX, relativeY));
     }
 }

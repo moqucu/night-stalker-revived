@@ -4,12 +4,14 @@ import javafx.concurrent.Task;
 import javafx.scene.media.AudioClip;
 import org.moqucu.games.nightstalker.view.Maze;
 
+import java.util.Objects;
+
 import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class BackGroundMusicLoop extends Task<Void> {
 
-    private AudioClip audio
-            = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/background.wav").toString());
+    private final AudioClip audio
+            = new AudioClip(Objects.requireNonNull(Maze.class.getResource("/sounds/background.wav")).toString());
 
     @Override
     protected Void call() {

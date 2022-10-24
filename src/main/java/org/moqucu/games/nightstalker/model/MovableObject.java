@@ -3,7 +3,6 @@ package org.moqucu.games.nightstalker.model;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.Getter;
-import org.moqucu.games.nightstalker.label.MazeAlgorithmFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,12 +69,11 @@ public abstract class MovableObject extends AnimatedObject {
             final boolean oldInMotion = this.inMotion;
             this.inMotion = inMotion;
 
-            if (oldInMotion != inMotion)
-                propertyChangeSupport.firePropertyChange(
-                        "inMotion",
-                        oldInMotion,
-                        inMotion
-                );
+            propertyChangeSupport.firePropertyChange(
+                    "inMotion",
+                    oldInMotion,
+                    inMotion
+            );
         }
     }
 
@@ -84,12 +82,11 @@ public abstract class MovableObject extends AnimatedObject {
         final Direction oldDirection = this.direction;
         this.direction = direction;
 
-        if (!oldDirection.equals(direction))
-            propertyChangeSupport.firePropertyChange(
-                    "direction",
-                    oldDirection,
-                    direction
-            );
+        propertyChangeSupport.firePropertyChange(
+                "direction",
+                oldDirection,
+                direction
+        );
     }
 
     public void setMazeAlgorithm(MazeAlgorithm mazeAlgorithm) {
@@ -112,19 +109,18 @@ public abstract class MovableObject extends AnimatedObject {
 
         try (InputStream inputStream = getClass().getResourceAsStream(mazeGraphFileName)) {
 
-            final MazeGraphV2 mazeGraph = new MazeGraphV2();
+            final MazeGraph mazeGraph = new MazeGraph();
             mazeGraph.loadFromJson(inputStream);
             absMazeGraph = new AbsMazeGraph(mazeGraph);
             final String oldMazeGraphFileName = this.mazeGraphFileName;
             this.mazeGraphFileName = mazeGraphFileName;
 
-            if (!oldMazeGraphFileName.equals(mazeGraphFileName))
-                propertyChangeSupport.firePropertyChange(
-                        "mazeGraphFileName",
-                        oldMazeGraphFileName,
-                        mazeGraphFileName
-                );
-        } catch (NullPointerException exception) {
+            propertyChangeSupport.firePropertyChange(
+                    "mazeGraphFileName",
+                    oldMazeGraphFileName,
+                    mazeGraphFileName
+            );
+         } catch (NullPointerException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_CANNOT_BE_NULL);
         } catch (JsonParseException | JsonMappingException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT);
@@ -141,11 +137,11 @@ public abstract class MovableObject extends AnimatedObject {
     }
 
     @Override
-    public void elapseTime(long milliseconds) {
+    public void elapseTime(double milliseconds) {
 
         super.elapseTime(milliseconds);
 
-        double range = 1.0 * milliseconds / 1000 * getVelocity();
+        double range = milliseconds / 1000 * getVelocity();
         double absDiff;
 
         if (isInMotion()) {

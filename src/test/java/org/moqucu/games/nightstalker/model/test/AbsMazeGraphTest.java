@@ -21,7 +21,7 @@ public class AbsMazeGraphTest {
 
         try (InputStream inputStream = getClass().getResourceAsStream("MazeGraphTest.json")) {
 
-            final MazeGraphV2 mazeGraph = new MazeGraphV2();
+            final MazeGraph mazeGraph = new MazeGraph();
             mazeGraph.loadFromJson(inputStream);
             absMazeGraph = new AbsMazeGraph(mazeGraph);
         }
@@ -353,6 +353,33 @@ public class AbsMazeGraphTest {
         assertThat(
                 absMazeGraph.getClosestNodeToAbsPos(new AbsolutePosition(40, 32), Direction.Right),
                 is(new RelativePosition(2, 1))
+        );
+    }
+
+    @Test
+    public void isOnNodeTrueScenario() {
+
+        assertThat(
+                absMazeGraph.isOnNode(new AbsolutePosition(32, 32)),
+                is(true)
+        );
+    }
+
+    @Test
+    public void fakeIsOnNodeTrueScenario() {
+
+        assertThat(
+                absMazeGraph.isOnNode(new AbsolutePosition(320, 32)),
+                is(false)
+        );
+    }
+
+    @Test
+    public void isOnNodeFalseScenario() {
+
+        assertThat(
+                absMazeGraph.isOnNode(new AbsolutePosition(33, 32)),
+                is(false)
         );
     }
 }

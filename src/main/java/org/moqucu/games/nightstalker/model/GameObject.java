@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.model;
 
 import lombok.Getter;
+import lombok.experimental.Delegate;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-public abstract class GameObject {
+public abstract class GameObject implements Collidable {
 
     public static class PreconditionNotMetForMakingObjectVisibleException extends RuntimeException {
 
@@ -49,6 +50,42 @@ public abstract class GameObject {
     private boolean objectVisible = false;
 
     protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+    @Delegate(types = Collidable.class)
+    protected Collidable collidable;
+
+    private BoundingBox createBoundingBoxFromObjectDimensions() {
+
+        return new BoundingBox(
+                getXPosition(),
+                getXPosition() + getWidth(),
+                getYPosition(),
+                getYPosition() + getHeight()
+        );
+    }
+
+    public GameObject() {
+
+        collidable = new CollidableImpl(createBoundingBoxFromObjectDimensions()) {
+
+            @Override
+            public BoundingBox getAbsoluteBounds() {
+
+                return new BoundingBox(
+                        getXPosition() + getBoundingBox().getMinX(),
+                        getXPosition() + getBoundingBox().getMaxX(),
+                        getYPosition() + getBoundingBox().getMinY(),
+                        getYPosition() + getBoundingBox().getMaxY()
+                );
+            }
+
+            @Override
+            public boolean canChangePosition() {
+
+                return false;
+            }
+        };
+    }
 
     public String getObjectId() {
 

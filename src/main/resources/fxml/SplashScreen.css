@@ -1,0 +1,7 @@
+@font-face {
+    src: url("/fonts/intellect.ttf");
+}
+
+.label {
+    -fx-font-family: "Intellect";
+}
