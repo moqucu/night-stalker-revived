@@ -16,7 +16,7 @@ public class GameWorld {
     private final Set<TimeListener> timeListeners = new HashSet<>();
 
     @Getter
-    private final MazeGraphV2 mazeGraph = new MazeGraphV2();
+    private final MazeGraph mazeGraph = new MazeGraph();
 
     private void advanceTime(double milliseconds) {
 

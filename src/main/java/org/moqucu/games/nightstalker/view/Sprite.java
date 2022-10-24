@@ -20,7 +20,7 @@ import java.util.Objects;
 @Log4j2
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
-public abstract class SpriteV2 extends ImageView {
+public abstract class Sprite extends ImageView {
 
     @Getter
     protected GameObject model = new GameObject() {
@@ -151,13 +151,13 @@ public abstract class SpriteV2 extends ImageView {
         setViewport(getViewport(0));
     }
 
-    public SpriteV2() {
+    public Sprite() {
 
         super();
         bindProperties(model);
     }
 
-    protected SpriteV2(GameObject model) {
+    protected Sprite(GameObject model) {
 
         super();
         this.model = model;

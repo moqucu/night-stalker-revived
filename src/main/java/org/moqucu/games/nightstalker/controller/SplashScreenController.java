@@ -13,7 +13,7 @@ import org.moqucu.games.nightstalker.view.StageManager;
 
 @Data
 @Log4j2
-public class SplashScreenController implements FxmlController {
+public class SplashScreenController {
 
     @FXML
     private Button quitButton;
@@ -32,10 +32,6 @@ public class SplashScreenController implements FxmlController {
         this.stageManager = stageManager;
     }
 
-    @Override
-    public void initialize() {
-    }
-
     @FXML
     public void quitButtonPressed(ActionEvent event) {
 
@@ -50,7 +46,7 @@ public class SplashScreenController implements FxmlController {
 
         log.debug(event);
         Parent parentNode = stageManager.switchScene(FxmlView.GAME_SCREEN);
-        Maze maze = (Maze)parentNode
+        Maze maze = (Maze) parentNode
                 .getChildrenUnmodifiable()
                 .filtered(node -> node instanceof Maze)
                 .get(0);

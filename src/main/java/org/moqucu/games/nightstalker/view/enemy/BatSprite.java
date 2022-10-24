@@ -5,9 +5,9 @@ import javafx.beans.property.adapter.*;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.enemy.Bat;
-import org.moqucu.games.nightstalker.view.MovableSpriteV2;
+import org.moqucu.games.nightstalker.view.MovableSprite;
 
-public class BatSprite extends MovableSpriteV2 {
+public class BatSprite extends MovableSprite {
 
     @Getter
     private Bat model;

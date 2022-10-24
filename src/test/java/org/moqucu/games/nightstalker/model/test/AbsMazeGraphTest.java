@@ -21,7 +21,7 @@ public class AbsMazeGraphTest {
 
         try (InputStream inputStream = getClass().getResourceAsStream("MazeGraphTest.json")) {
 
-            final MazeGraphV2 mazeGraph = new MazeGraphV2();
+            final MazeGraph mazeGraph = new MazeGraph();
             mazeGraph.loadFromJson(inputStream);
             absMazeGraph = new AbsMazeGraph(mazeGraph);
         }

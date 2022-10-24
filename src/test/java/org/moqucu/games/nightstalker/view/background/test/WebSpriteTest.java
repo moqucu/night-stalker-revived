@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.view.background.test;
 
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.view.SpriteV2;
+import org.moqucu.games.nightstalker.view.Sprite;
 import org.moqucu.games.nightstalker.view.background.WebSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,7 +15,7 @@ public class WebSpriteTest {
     @Test
     public void wallIsOfTypeSprite() {
 
-        assertThat(web, isA(SpriteV2.class));
+        assertThat(web, isA(Sprite.class));
     }
 
     @Test

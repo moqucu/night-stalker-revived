@@ -34,7 +34,7 @@ public class GameWorldTest {
     @Test
     public void mazeGraphPropertyOfTypeTime() {
 
-        assertThat(gameWorld.getMazeGraph(), isA(MazeGraphV2.class));
+        assertThat(gameWorld.getMazeGraph(), isA(MazeGraph.class));
     }
 
     @Test

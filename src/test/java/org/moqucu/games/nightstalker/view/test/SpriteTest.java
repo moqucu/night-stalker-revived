@@ -6,16 +6,16 @@ import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.GameObject;
-import org.moqucu.games.nightstalker.view.SpriteV2;
+import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class SpriteV2Test {
+public class SpriteTest {
 
-    private final SpriteV2 sprite = new SpriteV2() {
+    private final Sprite sprite = new Sprite() {
     };
 
     @Test

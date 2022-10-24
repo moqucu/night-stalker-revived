@@ -20,7 +20,7 @@ public class OuterRingTest {
 
         try (InputStream inputStream = getClass().getResourceAsStream(MAZE_GRAPH_NAME)) {
 
-            final MazeGraphV2 mazeGraph = new MazeGraphV2();
+            final MazeGraph mazeGraph = new MazeGraph();
             mazeGraph.loadFromJson(inputStream);
             absMazeGraph = new AbsMazeGraph(mazeGraph);
 

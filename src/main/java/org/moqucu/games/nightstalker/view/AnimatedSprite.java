@@ -6,7 +6,7 @@ import org.moqucu.games.nightstalker.model.AnimatedObject;
 
 import java.beans.PropertyChangeListener;
 
-public abstract class AnimatedSpriteV2 extends SpriteV2 {
+public abstract class AnimatedSprite extends Sprite {
 
     @Getter
     private AnimatedObject model = new AnimatedObject() {
@@ -38,12 +38,12 @@ public abstract class AnimatedSpriteV2 extends SpriteV2 {
         setViewport(getViewport(model.getInitialImageIndex()));
     }
 
-    public AnimatedSpriteV2() {
+    public AnimatedSprite() {
         super();
         bindProperties(model);
     }
 
-    protected AnimatedSpriteV2(AnimatedObject model) {
+    protected AnimatedSprite(AnimatedObject model) {
 
         super(model);
         this.model = model;

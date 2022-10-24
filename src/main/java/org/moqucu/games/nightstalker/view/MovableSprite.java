@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MovableObject;
 
-public class MovableSpriteV2 extends AnimatedSpriteV2 {
+public class MovableSprite extends AnimatedSprite {
 
     @Getter
     private MovableObject model;
@@ -37,14 +37,14 @@ public class MovableSpriteV2 extends AnimatedSpriteV2 {
         }
     }
 
-    public MovableSpriteV2() {
+    public MovableSprite() {
 
         super(new MovableObject(){});
         model = (MovableObject) super.getModel();
         bindProperties(model);
     }
 
-    public MovableSpriteV2(MovableObject model) {
+    public MovableSprite(MovableObject model) {
 
         super(model);
         this.model = model;

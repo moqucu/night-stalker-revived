@@ -2,7 +2,7 @@ package org.moqucu.games.nightstalker.view.object.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.object.Weapon;
-import org.moqucu.games.nightstalker.view.AnimatedSpriteV2;
+import org.moqucu.games.nightstalker.view.AnimatedSprite;
 import org.moqucu.games.nightstalker.view.object.WeaponSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,7 +39,7 @@ public class WeaponSpriteTest {
     @Test
     public void weaponSpriteIsAnAnimatedSprite() {
 
-        assertThat(weaponSprite, isA(AnimatedSpriteV2.class));
+        assertThat(weaponSprite, isA(AnimatedSprite.class));
     }
 
     @Test

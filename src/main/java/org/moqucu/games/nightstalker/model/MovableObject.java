@@ -109,7 +109,7 @@ public abstract class MovableObject extends AnimatedObject {
 
         try (InputStream inputStream = getClass().getResourceAsStream(mazeGraphFileName)) {
 
-            final MazeGraphV2 mazeGraph = new MazeGraphV2();
+            final MazeGraph mazeGraph = new MazeGraph();
             mazeGraph.loadFromJson(inputStream);
             absMazeGraph = new AbsMazeGraph(mazeGraph);
             final String oldMazeGraphFileName = this.mazeGraphFileName;

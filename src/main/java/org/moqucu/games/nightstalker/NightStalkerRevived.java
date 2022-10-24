@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
-import org.moqucu.games.nightstalker.view.FXMLLoader;
 import org.moqucu.games.nightstalker.view.FxmlView;
 import org.moqucu.games.nightstalker.view.StageManager;
 
@@ -23,10 +22,10 @@ public class NightStalkerRevived extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        stageManager = new StageManager(new FXMLLoader(), new Stage());
+        stageManager = new StageManager(primaryStage);
         displayInitialScene();
 
-        Task backGroundMusicLoop = new BackGroundMusicLoop();
+        Task<Void> backGroundMusicLoop = new BackGroundMusicLoop();
         ExecutorService service = Executors.newFixedThreadPool(4);
         service.execute(backGroundMusicLoop);
     }

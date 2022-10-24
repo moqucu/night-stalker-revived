@@ -2,7 +2,7 @@ package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeGraphV2;
+import org.moqucu.games.nightstalker.model.MazeGraph;
 import org.moqucu.games.nightstalker.model.RelativePosition;
 
 import java.util.Map;
@@ -14,9 +14,9 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MazeGraphV2Test {
+public class MazeGraphTest {
 
-    private final MazeGraphV2 mazeGraph = new MazeGraphV2();
+    private final MazeGraph mazeGraph = new MazeGraph();
 
     @Test
     public void hasAdjacencyListProperty() {
@@ -186,7 +186,7 @@ public class MazeGraphV2Test {
 
         final RelativePosition oneOne = new RelativePosition(1, 1);
         assertThrows(
-                MazeGraphV2.UnrecognizedDirectionException.class,
+                MazeGraph.UnrecognizedDirectionException.class,
                 () -> mazeGraph.getClosestReachableNode(oneOne, Direction.Undefined)
         );
     }

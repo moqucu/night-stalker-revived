@@ -23,7 +23,7 @@ public class Maze extends StackPane {
 
     public static final String ID = "org.moqucu.games.nightstalker.maze";
 
-    private final ConcurrentMap<SpriteV2, SpriteV2> sprites = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Sprite, Sprite> sprites = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public Maze() {
@@ -43,10 +43,10 @@ public class Maze extends StackPane {
 
                     ((Pane) addedPane)
                             .getChildren()
-                            .filtered(node -> node instanceof SpriteV2)
+                            .filtered(node -> node instanceof Sprite)
                             .forEach(sprite -> {
 
-                                sprites.putIfAbsent(((SpriteV2) sprite), ((SpriteV2) sprite));
+                                sprites.putIfAbsent(((Sprite) sprite), ((Sprite) sprite));
                                 log.debug(
                                         "Added game object of type {} to set.",
                                         sprite.getClass().getName()
@@ -57,7 +57,7 @@ public class Maze extends StackPane {
         });
     }
 
-    public Set<SpriteV2> getSprites() {
+    public Set<Sprite> getSprites() {
 
         return sprites.keySet();
     }

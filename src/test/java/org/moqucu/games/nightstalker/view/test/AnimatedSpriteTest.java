@@ -4,16 +4,16 @@ import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
-import org.moqucu.games.nightstalker.view.AnimatedSpriteV2;
-import org.moqucu.games.nightstalker.view.SpriteV2;
+import org.moqucu.games.nightstalker.view.AnimatedSprite;
+import org.moqucu.games.nightstalker.view.Sprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.is;
 
-public class AnimatedSpriteV2Test {
+public class AnimatedSpriteTest {
 
-    private final AnimatedSpriteV2 animatedSprite = new AnimatedSpriteV2() {
+    private final AnimatedSprite animatedSprite = new AnimatedSprite() {
     };
 
     @Test
@@ -31,7 +31,7 @@ public class AnimatedSpriteV2Test {
     @Test
     public void modelIsOfTypeSpriteV2() {
 
-        assertThat(animatedSprite, isA(SpriteV2.class));
+        assertThat(animatedSprite, isA(Sprite.class));
     }
 
     private void assertThatViewportFollowsFrameIndex(int frameIndex) {

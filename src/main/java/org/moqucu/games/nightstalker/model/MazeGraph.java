@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * and furthest point, given a starting point and a direction.
  */
 @Log4j2
-public class MazeGraphV2 {
+public class MazeGraph {
 
     public static class UnrecognizedDirectionException extends RuntimeException {
 
@@ -34,7 +34,7 @@ public class MazeGraphV2 {
 
     private final Comparator<RelativePosition> ascByVerticalAxis = Comparator.comparing(RelativePosition::getY);
 
-    public MazeGraphV2() {
+    public MazeGraph() {
     }
 
     private void addDirectedEdge(RelativePosition node, RelativePosition adjacentNode) {

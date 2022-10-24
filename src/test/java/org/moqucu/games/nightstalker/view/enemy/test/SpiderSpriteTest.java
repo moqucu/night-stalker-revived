@@ -3,7 +3,7 @@ package org.moqucu.games.nightstalker.view.enemy.test;
 import javafx.beans.property.BooleanProperty;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.enemy.Spider;
-import org.moqucu.games.nightstalker.view.MovableSpriteV2;
+import org.moqucu.games.nightstalker.view.MovableSprite;
 import org.moqucu.games.nightstalker.view.enemy.SpiderSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +17,7 @@ public class SpiderSpriteTest {
     @Test
     public void wallIsOfTypeSprite() {
 
-        assertThat(spiderSprite, isA(MovableSpriteV2.class));
+        assertThat(spiderSprite, isA(MovableSprite.class));
     }
 
     @Test

@@ -20,11 +20,11 @@ public class AbsMazeGraph {
     public static final int WIDTH = 32;
     public static final int HEIGHT = 32;
 
-    private final MazeGraphV2 mazeGraph;
+    private final MazeGraph mazeGraph;
 
     private final Map<RelativePosition, AbsolutePosition> allRelativePosMappedToAbsPos = new HashMap<>();
 
-    public AbsMazeGraph(MazeGraphV2 mazeGraph) {
+    public AbsMazeGraph(MazeGraph mazeGraph) {
 
         this.mazeGraph = mazeGraph;
         mazeGraph.getAdjacencyList().keySet().forEach(
@@ -166,7 +166,7 @@ public class AbsMazeGraph {
                 else
                     return position;
             default:
-                throw new MazeGraphV2.UnrecognizedDirectionException(
+                throw new MazeGraph.UnrecognizedDirectionException(
                         String.format("Direction %s unrecognized!", direction)
                 );
         }

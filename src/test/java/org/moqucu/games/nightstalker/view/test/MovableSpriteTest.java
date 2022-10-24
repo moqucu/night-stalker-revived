@@ -3,15 +3,15 @@ package org.moqucu.games.nightstalker.view.test;
 import javafx.beans.property.adapter.JavaBeanObjectProperty;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.*;
-import org.moqucu.games.nightstalker.view.AnimatedSpriteV2;
-import org.moqucu.games.nightstalker.view.MovableSpriteV2;
+import org.moqucu.games.nightstalker.view.AnimatedSprite;
+import org.moqucu.games.nightstalker.view.MovableSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class MovableSpriteV2Test {
+public class MovableSpriteTest {
 
-    private final MovableSpriteV2 movableSprite = new MovableSpriteV2(){
+    private final MovableSprite movableSprite = new MovableSprite(){
     };
 
     @Test
@@ -23,7 +23,7 @@ public class MovableSpriteV2Test {
     @Test
     public void spriteIsOfTypeAnimatedSprite() {
 
-        assertThat(movableSprite, isA(AnimatedSpriteV2.class));
+        assertThat(movableSprite, isA(AnimatedSprite.class));
     }
 
     @Test

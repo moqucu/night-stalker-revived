@@ -6,9 +6,9 @@ import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.enemy.Spider;
-import org.moqucu.games.nightstalker.view.MovableSpriteV2;
+import org.moqucu.games.nightstalker.view.MovableSprite;
 
-public class SpiderSprite extends MovableSpriteV2 {
+public class SpiderSprite extends MovableSprite {
 
     @Getter
     private Spider model;
