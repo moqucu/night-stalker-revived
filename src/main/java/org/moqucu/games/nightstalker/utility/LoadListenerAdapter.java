@@ -1,14 +1,16 @@
 package org.moqucu.games.nightstalker.utility;
 
 import javafx.fxml.LoadListener;
+import org.moqucu.games.nightstalker.controller.GameController;
+import org.moqucu.games.nightstalker.view.Sprite;
 
 public class LoadListenerAdapter implements LoadListener {
 
-    private SpriteCreationListener spriteCreationListener;
+    private final GameController gameController;
 
-    public LoadListenerAdapter(SpriteCreationListener spriteCreationListener) {
+    public LoadListenerAdapter(GameController gameController) {
 
-        this.spriteCreationListener = spriteCreationListener;
+        this.gameController = gameController;
     }
 
     @Override
@@ -82,6 +84,7 @@ public class LoadListenerAdapter implements LoadListener {
     @Override
     public void endElement(Object value) {
 
-        spriteCreationListener.addCreatedSprite(value);
+        if (value instanceof Sprite)
+            gameController.addSprite((Sprite) value);
     }
 }

@@ -1,33 +1,18 @@
 package org.moqucu.games.nightstalker;
 
 import javafx.application.Application;
-import javafx.concurrent.Task;
 import javafx.stage.Stage;
-import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
-import org.moqucu.games.nightstalker.view.FxmlView;
-import org.moqucu.games.nightstalker.view.StageManager;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.moqucu.games.nightstalker.controller.GameController;
 
 public class NightStalkerRevived extends Application {
 
-    private StageManager stageManager;
-
-    private void displayInitialScene() {
-
-        stageManager.switchScene(FxmlView.SPLASH_SCREEN);
-    }
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private GameController gameController;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage stage) {
 
-        stageManager = new StageManager(primaryStage);
-        displayInitialScene();
-
-        Task<Void> backGroundMusicLoop = new BackGroundMusicLoop();
-        ExecutorService service = Executors.newFixedThreadPool(4);
-        service.execute(backGroundMusicLoop);
+        gameController = new GameController(stage);
     }
 
     public static void main(String[] args) {
