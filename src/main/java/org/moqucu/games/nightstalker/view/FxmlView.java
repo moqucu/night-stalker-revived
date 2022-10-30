@@ -33,5 +33,4 @@ public enum FxmlView {
 
     public abstract String getTitle();
     public abstract String getFxmlFile();
-
 }

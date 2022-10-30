@@ -2,11 +2,12 @@ package org.moqucu.games.nightstalker;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.moqucu.games.nightstalker.controller.GameController;
 
 public class NightStalkerRevived extends Application {
 
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    @Getter
     private GameController gameController;
 
     @Override

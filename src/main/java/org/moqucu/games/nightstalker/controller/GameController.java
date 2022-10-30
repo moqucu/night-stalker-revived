@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class GameController {
 
+    @Getter
     private final Stage stage;
 
     private final GameWorld gameWorld = new GameWorld();
@@ -105,8 +107,11 @@ public class GameController {
     public GameController(Stage stage) {
 
         this.stage = stage;
-        startBackgroundMusicLoop();
-        switchScene(FxmlView.SPLASH_SCREEN);
+        if (stage != null) {
+
+            startBackgroundMusicLoop();
+            switchScene(FxmlView.SPLASH_SCREEN);
+        }
     }
 
     public void addSprite(Sprite sprite) {
