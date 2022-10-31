@@ -23,7 +23,7 @@ public class LivesIndex extends Text {
 
         super();
         setText(livesIndex.getValue().toString());
-        Font.loadFont(getClass().getResourceAsStream("fonts/intellect.ttf"), 32.0);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/intellect.ttf"), 32.0);
     }
 
     /**

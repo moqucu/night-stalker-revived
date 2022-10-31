@@ -3,7 +3,7 @@ package org.moqucu.games.nightstalker.controller;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.view.FxmlView;
+import org.moqucu.games.nightstalker.utility.FxmlView;
 
 @Log4j2
 public class GameScreenController {

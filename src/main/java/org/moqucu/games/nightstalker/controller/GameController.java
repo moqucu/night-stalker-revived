@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
@@ -13,11 +14,12 @@ import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
 import org.moqucu.games.nightstalker.utility.LoadListenerAdapter;
-import org.moqucu.games.nightstalker.view.FxmlView;
+import org.moqucu.games.nightstalker.utility.FxmlView;
 import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
@@ -56,7 +58,11 @@ public class GameController {
 
     private void startBackgroundMusicLoop() {
 
-        Task<Void> backGroundMusicLoop = new BackGroundMusicLoop();
+        Task<Void> backGroundMusicLoop = new BackGroundMusicLoop(
+                new AudioClip(
+                        Objects.requireNonNull(getClass().getResource("/sounds/background.wav")).toString()
+                )
+        );
         ExecutorService service = Executors.newFixedThreadPool(1);
         service.execute(backGroundMusicLoop);
     }

@@ -1,4 +1,4 @@
-package org.moqucu.games.nightstalker.view;
+package org.moqucu.games.nightstalker.utility;
 
 public enum FxmlView {
 

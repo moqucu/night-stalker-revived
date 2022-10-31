@@ -1,12 +1,8 @@
 package org.moqucu.games.nightstalker.utility;
 
 @SuppressWarnings("unused")
-public class GameConstants {
+public class IntellivisionColors {
  
-    public final static int WIDTH = 640, HEIGHT = 384;
-        
-    public static final int TITLE_BAR_HEIGHT = 22;
-
     /**
      * True.
      */

@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.view.FxmlView;
+import org.moqucu.games.nightstalker.utility.FxmlView;
 
 @Data
 @Log4j2
