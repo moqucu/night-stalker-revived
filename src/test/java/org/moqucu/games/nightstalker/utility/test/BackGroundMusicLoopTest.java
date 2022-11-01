@@ -51,6 +51,6 @@ public class BackGroundMusicLoopTest {
         final int testFlags = this.testFlags & 0B00000111;
         assertThat(testFlags, is(0));
         backGroundMusicLoop.publicCall();
-        // assertThat(testFlags, is(7));
+        assertThat(this.testFlags, is(7));
     }
 }
