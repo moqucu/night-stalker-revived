@@ -29,7 +29,7 @@ public class SplashScreenController {
 
         log.debug(event);
         gameController.stopGameLoop();
-        System.exit(0);
+        gameController.endGame();
     }
 
     @FXML

@@ -135,4 +135,9 @@ public class GameController {
 
         gameLoop.stop();
     }
+
+    public void endGame() {
+
+        System.exit(0);
+    }
 }
