@@ -3,12 +3,11 @@ package org.moqucu.games.nightstalker.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.utility.FxmlView;
 
-@Data
 @Log4j2
+@SuppressWarnings("unused")
 public class SplashScreenController {
 
     @FXML

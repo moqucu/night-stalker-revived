@@ -1,52 +1,42 @@
 package org.moqucu.games.nightstalker.controller;
 
-import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
-import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
-import org.moqucu.games.nightstalker.utility.LoadListenerAdapter;
-import org.moqucu.games.nightstalker.utility.FxmlView;
+import org.moqucu.games.nightstalker.utility.*;
 import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class GameController {
 
-    @Getter
+    private final SystemWrapper systemWrapper;
+
     private final Stage stage;
 
+    @Getter
     private final GameWorld gameWorld = new GameWorld();
 
+    @Getter
     private final Map<Parent, Scene> scenes = new HashMap<>();
 
+    private final BackGroundMusicLoop backGroundMusicLoop;
+
+    @Getter
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Map<Sprite, GameObject> gameElements = new HashMap<>();
 
-    private final AtomicLong lastNanoTime = new AtomicLong(System.nanoTime());
-
-    private final AnimationTimer gameLoop = new AnimationTimer() {
-
-        public void handle(long currentNanoTime) {
-
-            /* calculate time since last update */
-            double deltaTime = (currentNanoTime - lastNanoTime.getAndSet(currentNanoTime)) / 1000000.0;
-            gameWorld.pulse(deltaTime);
-        }
-    };
+    private final GameLoop gameLoop;
 
     private final Callback<Class<?>, Object> controllerFactory = param -> {
 
@@ -58,13 +48,12 @@ public class GameController {
 
     private void startBackgroundMusicLoop() {
 
-        Task<Void> backGroundMusicLoop = new BackGroundMusicLoop(
-                new AudioClip(
-                        Objects.requireNonNull(getClass().getResource("/sounds/background.wav")).toString()
-                )
-        );
-        ExecutorService service = Executors.newFixedThreadPool(1);
-        service.execute(backGroundMusicLoop);
+        if (backGroundMusicLoop != null) {
+
+            Task<Void> backGroundMusicLoop = this.backGroundMusicLoop;
+            ExecutorService service = Executors.newFixedThreadPool(1);
+            service.execute(backGroundMusicLoop);
+        }
     }
 
     /**
@@ -110,14 +99,23 @@ public class GameController {
         show(viewRootNodeHierarchy, view.getTitle());
     }
 
-    public GameController(Stage stage) {
+    public GameController(
+            Stage stage,
+            SystemWrapper systemWrapper,
+            BackGroundMusicLoop loop,
+            GameLoop gameLoop
+    ) {
 
+        backGroundMusicLoop = loop;
         this.stage = stage;
         if (stage != null) {
 
             startBackgroundMusicLoop();
             switchScene(FxmlView.SPLASH_SCREEN);
         }
+        this.systemWrapper = systemWrapper;
+        this.gameLoop = gameLoop;
+        gameLoop.setGameWorld(gameWorld);
     }
 
     public void addSprite(Sprite sprite) {
@@ -138,6 +136,6 @@ public class GameController {
 
     public void endGame() {
 
-        System.exit(0);
+        systemWrapper.exit(0);
     }
 }
