@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.TimeListener;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
-import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.DisplayableObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
 
 import java.beans.PropertyChangeEvent;
@@ -24,7 +24,7 @@ public class AnimatedObjectTest {
     @DisplayName("Inherits from game object.")
     public void hasInheritedFromGameObject() {
 
-        assertThat(animatedObject, isA(GameObject.class));
+        assertThat(animatedObject, isA(DisplayableObject.class));
     }
 
     @Test

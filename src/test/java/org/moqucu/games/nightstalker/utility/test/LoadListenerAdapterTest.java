@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.moqucu.games.nightstalker.controller.GameController;
 import org.moqucu.games.nightstalker.utility.LoadListenerAdapter;
-import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.view.DisplayableSprite;
 import org.moqucu.games.nightstalker.view.enemy.SpiderSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +28,7 @@ public class LoadListenerAdapterTest {
                 .lenient()
                 .doThrow(new RuntimeException("Hello!"))
                 .when(gameController)
-                .addSprite(any(Sprite.class));
+                .addSprite(any(DisplayableSprite.class));
         loadListener = new LoadListenerAdapter(gameController);
     }
 

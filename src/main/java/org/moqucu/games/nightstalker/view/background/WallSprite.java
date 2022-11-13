@@ -1,8 +1,8 @@
 package org.moqucu.games.nightstalker.view.background;
 
-import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.view.DisplayableSprite;
 
-public class WallSprite extends Sprite {
+public class WallSprite extends DisplayableSprite {
 
     public WallSprite() {
 

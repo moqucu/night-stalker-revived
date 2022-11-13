@@ -1,6 +1,6 @@
 package org.moqucu.games.nightstalker.model.background;
 
-import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.DisplayableObject;
 
-public class Bunker extends GameObject {
+public class Bunker extends DisplayableObject {
 }

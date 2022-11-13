@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
-import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.view.DisplayableSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -31,7 +31,7 @@ public class AnimatedSpriteTest {
     @Test
     public void modelIsOfTypeSpriteV2() {
 
-        assertThat(animatedSprite, isA(Sprite.class));
+        assertThat(animatedSprite, isA(DisplayableSprite.class));
     }
 
     private void assertThatViewportFollowsFrameIndex(int frameIndex) {

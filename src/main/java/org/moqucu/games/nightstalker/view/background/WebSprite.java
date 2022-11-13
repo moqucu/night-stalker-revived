@@ -2,11 +2,11 @@ package org.moqucu.games.nightstalker.view.background;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.moqucu.games.nightstalker.view.Sprite;
+import org.moqucu.games.nightstalker.view.DisplayableSprite;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class WebSprite extends Sprite {
+public class WebSprite extends DisplayableSprite {
 
     public WebSprite() {
 

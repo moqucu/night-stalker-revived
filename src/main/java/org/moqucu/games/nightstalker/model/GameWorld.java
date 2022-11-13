@@ -23,24 +23,35 @@ public class GameWorld {
         timeListeners.forEach(timeListener -> timeListener.elapseTime(milliseconds));
     }
 
+    private Set<DisplayableObject> getDisplayObjects() {
+
+        final Set<DisplayableObject> displayableObjects = new HashSet<>();
+
+        objects
+                .values()
+                .stream()
+                .filter(gameObject -> gameObject instanceof DisplayableObject)
+                .forEach(gameObject -> displayableObjects.add((DisplayableObject) gameObject));
+
+        return displayableObjects;
+    }
+
     private void detectCollisions() {
 
-        objects.values().stream().filter(GameObject::canChangePosition).forEach(
-                gameObject -> objects
-                        .values()
+        getDisplayObjects().stream().filter(DisplayableObject::canChangePosition).forEach(
+                displayableObject -> getDisplayObjects()
                         .stream()
-                        .filter(otherGameObject -> !otherGameObject.equals(gameObject))
+                        .filter(otherGameObject -> !otherGameObject.equals(displayableObject))
                         .forEach(
                                 otherGameObjectButNotItself -> {
-                                    if (gameObject.isCollidingWith(otherGameObjectButNotItself)) {
-                                        gameObject.collisionOccurredWith(otherGameObjectButNotItself);
+                                    if (displayableObject.isCollidingWith(otherGameObjectButNotItself)) {
+                                        displayableObject.collisionOccurredWith(otherGameObjectButNotItself);
                                         if (!otherGameObjectButNotItself.canChangePosition())
-                                            otherGameObjectButNotItself.collisionOccurredWith(gameObject);
+                                            otherGameObjectButNotItself.collisionOccurredWith(displayableObject);
                                     }
                                 }
                         )
         );
-
     }
 
     public void pulse(double milliseconds) {

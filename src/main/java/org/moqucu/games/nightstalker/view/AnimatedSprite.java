@@ -3,10 +3,11 @@ package org.moqucu.games.nightstalker.view;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
+import org.moqucu.games.nightstalker.model.GameObject;
 
 import java.beans.PropertyChangeListener;
 
-public abstract class AnimatedSprite extends Sprite {
+public class AnimatedSprite extends DisplayableSprite {
 
     @Getter
     private AnimatedObject model = new AnimatedObject() {
@@ -50,11 +51,19 @@ public abstract class AnimatedSprite extends Sprite {
         bindProperties(model);
     }
 
-    public void setModel(AnimatedObject model) {
+    private void setAnimatedObjectModel(AnimatedObject model) {
 
         super.setModel(model);
         unbindProperties();
         this.model = model;
         bindProperties(model);
+    }
+
+    @Override
+    public void setModel(GameObject model) {
+
+        if (!(model instanceof AnimatedObject))
+            throw new RuntimeException("Model needs to be of class AnimatedObject!");
+        setAnimatedObjectModel((AnimatedObject) model);
     }
 }

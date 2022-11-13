@@ -40,12 +40,12 @@
             <LivesLabel
                     x="98.0"
                     y="352.0"
-                    style="-fx-font-weight: BOLD; -fx-fill: #FFE102; -fx-font-size: 40px;"
+                    style="-fx-font-weight: BOLD; -fx-font-family: Intellect; -fx-font-size: 40px; -fx-background-color: #534E03; -fx-fill: #FFE102;"
             />
             <ScoreLabel
                     x="320.0"
                     y="64.0"
-                    style="-fx-font-weight: BOLD; -fx-fill: #FFE102; -fx-font-size: 40px;"
+                    style="-fx-font-weight: BOLD; -fx-font-family: Intellect; -fx-font-size: 40px; -fx-background-color: #534E03; -fx-fill: #FFE102;"
             />
         </Pane>
         <Pane>

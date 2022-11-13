@@ -5,6 +5,7 @@ import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.MovableObject;
 
 public class MovableSprite extends AnimatedSprite {
@@ -51,12 +52,20 @@ public class MovableSprite extends AnimatedSprite {
         bindProperties(model);
     }
 
-    public void setModel(MovableObject model) {
+    private void setMovableObjectModel(MovableObject model) {
 
         unbindProperties();
         super.setModel(model);
         this.model = model;
         bindProperties(model);
+    }
+
+    @Override
+    public void setModel(GameObject model) {
+
+        if (!(model instanceof MovableObject))
+            throw new RuntimeException("Model needs to be of class MovableObject!");
+        setMovableObjectModel((MovableObject) model);
     }
 
     public void setDirection(Direction direction) {

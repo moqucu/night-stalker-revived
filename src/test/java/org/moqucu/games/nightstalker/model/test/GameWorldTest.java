@@ -73,7 +73,7 @@ public class GameWorldTest {
     @Test
     public void afterAddingAGameObjectItCanBeAccessedByItsId() {
 
-        final GameObject genericGameObject = new GameObject() {
+        final DisplayableObject genericGameObject = new DisplayableObject() {
         };
         gameWorld.add(genericGameObject);
         assertThat(gameWorld.getObjects().containsKey(genericGameObject.getObjectId()), is(true));

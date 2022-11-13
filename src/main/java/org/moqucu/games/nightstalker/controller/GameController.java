@@ -10,7 +10,11 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
-import org.moqucu.games.nightstalker.utility.*;
+import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
+import org.moqucu.games.nightstalker.utility.FxmlView;
+import org.moqucu.games.nightstalker.utility.GameLoop;
+import org.moqucu.games.nightstalker.utility.LoadListenerAdapter;
+import org.moqucu.games.nightstalker.utility.SystemWrapper;
 import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.HashMap;

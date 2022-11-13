@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.adapter.*;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.enemy.Bat;
 import org.moqucu.games.nightstalker.view.MovableSprite;
 
@@ -44,12 +45,20 @@ public class BatSprite extends MovableSprite {
         bindProperties(getModel());
     }
 
-    public void setModel(Bat model) {
+    private void setBatModel(Bat model) {
 
         unbindProperties();
         super.setModel(model);
         this.model = model;
         bindProperties(getModel());
+    }
+
+    public void setModel(GameObject gameObject) {
+
+        if (!(gameObject instanceof Bat))
+            throw new RuntimeException("Game object needs to be of class Bat!");
+
+        setBatModel((Bat)gameObject);
     }
 
     public void setSleepTimeInMillis(double sleepTime) {

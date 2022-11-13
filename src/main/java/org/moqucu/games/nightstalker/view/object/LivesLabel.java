@@ -1,43 +1,55 @@
 package org.moqucu.games.nightstalker.view.object;
 
 import javafx.animation.*;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import lombok.Getter;
+import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.object.Lives;
+import org.moqucu.games.nightstalker.view.Sprite;
 
-import java.io.InputStream;
+public class LivesLabel extends Text implements Sprite {
 
-public class LivesLabel extends Text {
+    @Getter
+    private Lives model = new Lives();
 
-    private IntegerProperty lives = new SimpleIntegerProperty();
+    private final FadeTransition fadeTransition;
 
-    private FadeTransition fadeTransition;
+    public LivesLabel(FadeTransition fadeTransition) {
 
+        this.fadeTransition = fadeTransition;
 
-    public LivesLabel() {
-        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("fonts/intellect.ttf");
-        setFont(Font.loadFont(stream, 40.0));
+        setText(Integer.toString(model.getLives()));
+        setVisible(false);
 
-        fadeTransition = new FadeTransition(Duration.millis(2000), this);
-        fadeTransition.setFromValue(0.0);
-        fadeTransition.setToValue(1.0);
-        fadeTransition.setCycleCount(2);
-        fadeTransition.setAutoReverse(true);
+        model.addPropertyChangeListener(evt -> {
 
+            if (evt.getPropertyName().equals("lives")) {
 
-        lives.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-
-                setText(newValue.toString());
+                setText(evt.getNewValue().toString());
                 fadeTransition.play();
             }
         });
     }
 
-    public void bindLivesProperty(IntegerProperty livesPropertyToBeBound) {
+    @SuppressWarnings("unused")
+    public LivesLabel() {
 
-        this.lives.bind(livesPropertyToBeBound);
+        this(new FadeTransition(Duration.millis(2000)));
+        fadeTransition.setNode(this);
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+        fadeTransition.setCycleCount(2);
+        fadeTransition.setAutoReverse(true);
+    }
+
+    @Override
+    public void setModel(GameObject model) {
+
+        if (!(model instanceof Lives))
+            throw new RuntimeException("Model needs to be of type " + Lives.class
+                    + "but was of type " + model.getClass() + "!");
+        else
+            this.model = (Lives) model;
     }
 }
