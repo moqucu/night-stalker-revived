@@ -8,6 +8,7 @@ import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OuterRingTest {
 
@@ -145,5 +146,19 @@ public class OuterRingTest {
                 ),
                 is(new AbsPosAndDirection(new AbsolutePosition(32.0, 0.0), Direction.Up))
         );
+    }
+
+    @Test
+    public void testException() {
+
+        Throwable throwable = assertThrows(
+                RuntimeException.class,
+                () -> outerRing.getNextAbsPos(
+                        absMazeGraph,
+                        new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Undefined)
+                )
+
+        );
+        assertThat(throwable.getMessage(), is("Undefined is an unacceptable direction!"));
     }
 }

@@ -68,7 +68,7 @@ public enum Direction {
                 return Direction.Down;
             default:
                 throw new NoOppositeDirectionAvailable(
-                        String.format("No opposite direction available to %s", direction)
+                        String.format("No opposite direction available to %s!", direction)
                 );
         }
     }

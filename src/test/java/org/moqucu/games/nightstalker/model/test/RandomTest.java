@@ -8,11 +8,11 @@ import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RandomTest {
 
-    private final OuterRing outerRing = new OuterRing();
+    private final Random random = new Random();
     private static final String MAZE_GRAPH_NAME = "MazeGraphTest.json";
     private final AbsMazeGraph absMazeGraph;
 
@@ -24,7 +24,6 @@ public class RandomTest {
             final MazeGraph mazeGraph = new MazeGraph();
             mazeGraph.loadFromJson(inputStream);
             absMazeGraph = new AbsMazeGraph(mazeGraph);
-
         }
     }
 
@@ -32,7 +31,7 @@ public class RandomTest {
     public void from_32_00_Up_To_32_32_Down() {
 
         assertThat(
-                outerRing.getNextAbsPos(
+                random.getNextAbsPos(
                         absMazeGraph,
                         new AbsPosAndDirection(new AbsolutePosition(32.0, 0.0), Direction.Up)
                 ),
@@ -41,86 +40,16 @@ public class RandomTest {
     }
 
     @Test
-    public void from_32_32_Down_Not_To_32_00_Up() {
+    public void testException() {
 
-        assertThat(
-                outerRing.getNextAbsPos(
+        Throwable throwable = assertThrows(
+                RuntimeException.class,
+                () -> random.getNextAbsPos(
                         absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Down)
-                ),
-                is(not(new AbsPosAndDirection(new AbsolutePosition(32.0, 0.0), Direction.Up)))
+                        new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Undefined)
+                )
+
         );
-    }
-
-    @Test
-    public void from_32_32_Up_Not_To_32_64_Down() {
-
-        assertThat(
-                outerRing.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Up)
-                ),
-                is(not(new AbsPosAndDirection(new AbsolutePosition(32.0, 64.0), Direction.Down)))
-        );
-    }
-
-    @Test
-    public void from_32_32_Left_Not_To_64_32_Right() {
-
-        assertThat(
-                outerRing.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Left)
-                ),
-                is(not(new AbsPosAndDirection(new AbsolutePosition(64.0, 32.0), Direction.Right)))
-        );
-    }
-
-    @Test
-    public void from_32_32_Right_Not_To_00_32_Left() {
-
-        assertThat(
-                outerRing.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Right)
-                ),
-                is(not(new AbsPosAndDirection(new AbsolutePosition(0.0, 32.0), Direction.Left)))
-        );
-    }
-
-    @Test
-    public void from_00_32_Left_To_32_32_Right() {
-
-        assertThat(
-                outerRing.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(0.0, 32.0), Direction.Left)
-                ),
-                is(new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Right))
-        );
-    }
-
-    @Test
-    public void from_32_64_Down_To_32_32_Up() {
-
-        assertThat(
-                outerRing.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(32.0, 64.0), Direction.Down)
-                ),
-                is(new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Up))
-        );
-    }
-
-    @Test
-    public void from_96_32_Right_To_64_32_Left() {
-
-        assertThat(
-                outerRing.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(96.0, 32.0), Direction.Right)
-                ),
-                is(new AbsPosAndDirection(new AbsolutePosition(64.0, 32.0), Direction.Left))
-        );
+        assertThat(throwable.getMessage(), is("No opposite direction available to Undefined!"));
     }
 }
