@@ -15,6 +15,7 @@
 <?import org.moqucu.games.nightstalker.view.background.WallSprite?>
 <?import org.moqucu.games.nightstalker.view.object.WeaponSprite?>
 <?import javafx.scene.layout.StackPane?>
+<?import org.moqucu.games.nightstalker.view.enemy.GreyRobotSprite?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
         xmlns:fx="http://javafx.com/fxml/1"
@@ -72,13 +73,7 @@
                 <CubicCurve/>
 
             </Group>
-<!--            <GreyRobot-->
-<!--                    spawnCoordinateX="48.0"-->
-<!--                    spawnCoordinateY="320.0"-->
-<!--                    autoReversible="false"-->
-<!--                    frameDurationInMillis="100"-->
-<!--                    velocity="25"-->
-<!--            />-->
+            <GreyRobotSprite/>
 <!--            <GreyRobotPartOne-->
 <!--                    spawnCoordinateX="48.0"-->
 <!--                    spawnCoordinateY="320.0"-->

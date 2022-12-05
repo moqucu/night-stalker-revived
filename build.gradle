@@ -30,7 +30,10 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:4.8.0'
 }
 
-application.mainClassName = 'org.moqucu.games.nightstalker.NightStalkerRevived'
+
+application {
+    mainClass.set('org.moqucu.games.nightstalker.NightStalkerRevived')
+}
 
 test {
     useJUnitPlatform()
