@@ -2,5 +2,5 @@ package org.moqucu.games.nightstalker.model;
 
 public enum MazeAlgorithm {
 
-    None, OuterRing, Random
+    None, OuterRing, Random, FollowDirection
 }

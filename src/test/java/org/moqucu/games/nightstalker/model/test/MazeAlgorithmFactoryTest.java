@@ -1,11 +1,7 @@
 package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.model.MazeAlgorithmFactory;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MazeAlgorithmImpl;
-import org.moqucu.games.nightstalker.model.OuterRing;
-import org.moqucu.games.nightstalker.model.Random;
+import org.moqucu.games.nightstalker.model.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -32,4 +28,9 @@ public class MazeAlgorithmFactoryTest {
         assertThat(mazeAlgorithmFactory.createMazeAlgorithm(MazeAlgorithm.Random), isA(Random.class));
     }
 
+    @Test
+    public void whenConfrontedWithFollowDirectionEnumItReturnsFollowDirection() {
+
+        assertThat(mazeAlgorithmFactory.createMazeAlgorithm(MazeAlgorithm.FollowDirection), isA(FollowDirection.class));
+    }
 }

@@ -1,5 +1,6 @@
 package org.moqucu.games.nightstalker.model.enemy;
 
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
 
@@ -10,14 +11,14 @@ public class Spider extends MovableObject {
     private void setLowerAndUpperBoundaryBasedOnDirection() {
 
         switch (getDirection()) {
-            case Left:
-            case Right:
+            case Left, Right -> {
                 setLowerAnimationIndex(2);
                 setUpperAnimationIndex(3);
-                break;
-            default:
+            }
+            default -> {
                 setLowerAnimationIndex(0);
                 setUpperAnimationIndex(1);
+            }
         }
      }
 
@@ -27,14 +28,28 @@ public class Spider extends MovableObject {
         setFrameRate(5);
         setVelocity(25);
         setMazeGraphFileName("/json/maze-graph-enemy.json");
-        setMazeAlgorithm(MazeAlgorithm.Random);
+        setMazeAlgorithm(MazeAlgorithm.FollowDirection);
         setImageMapFileName("/images/spider.png");
+        setDirection(Direction.Down);
+        setLowerAndUpperBoundaryBasedOnDirection();
+        setInitialImageIndex(0);
+        setXPosition(96);
+        setYPosition(32);
         PropertyChangeListener propertyChangeListener = evt -> {
 
-            if (evt.getPropertyName().equals("direction"))
-                setLowerAndUpperBoundaryBasedOnDirection();
+            switch (evt.getPropertyName()) {
+                case "YPosition" -> {
+                    if (evt.getNewValue().equals(160.0) && getVelocity() < 50) {
+                        setMazeAlgorithm(MazeAlgorithm.Random);
+                        setVelocity(50.);
+                    }
+                }
+                case "direction" -> setLowerAndUpperBoundaryBasedOnDirection();
+            }
         };
         addPropertyChangeListener(propertyChangeListener);
+        setAnimated(true);
+        setInMotion(true);
     }
 
     @Override

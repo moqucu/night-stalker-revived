@@ -60,14 +60,7 @@
 <!--                    velocity="50"-->
 <!--            />-->
 
-            <SpiderSprite
-                    initialImageIndex="0"
-                    x="96.0"
-                    y="32.0"
-                    direction="Down"
-                    animated="true"
-                    inMotion="true"
-            />
+            <SpiderSprite/>
             <Group
                     id="GreyRobotAnimationGroup">
                 <CubicCurve/>

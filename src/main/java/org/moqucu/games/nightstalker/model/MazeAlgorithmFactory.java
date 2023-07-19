@@ -16,13 +16,11 @@ public class MazeAlgorithmFactory {
 
     public MazeAlgorithmImpl createMazeAlgorithm(MazeAlgorithm mazeAlgorithm) {
 
-        switch (mazeAlgorithm) {
-            case OuterRing:
-                return new OuterRing();
-            case Random:
-                return new Random();
-            default:
-                return null;
-        }
+        return switch (mazeAlgorithm) {
+            case OuterRing -> new OuterRing();
+            case Random -> new Random();
+            case FollowDirection -> new FollowDirection();
+            default -> null;
+        };
     }
 }

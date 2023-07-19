@@ -157,8 +157,7 @@ public abstract class MovableObject extends AnimatedObject {
                 );
 
                 switch (nextAbsPos.getDirection()) {
-
-                    case Up:
+                    case Up -> {
                         absDiff = getYPosition() - nextAbsPos.getAbsolutePosition().getY();
                         if (range < absDiff) {
                             addToYPosition(-1.0 * range);
@@ -168,8 +167,8 @@ public abstract class MovableObject extends AnimatedObject {
                             updateAbsolutePosAndDirection(nextAbsPos);
                             range -= absDiff;
                         }
-                        break;
-                    case Down:
+                    }
+                    case Down -> {
                         absDiff = nextAbsPos.getAbsolutePosition().getY() - getYPosition();
                         if (range < absDiff) {
                             addToYPosition(range);
@@ -179,8 +178,8 @@ public abstract class MovableObject extends AnimatedObject {
                             updateAbsolutePosAndDirection(nextAbsPos);
                             range -= absDiff;
                         }
-                        break;
-                    case Left:
+                    }
+                    case Left -> {
                         absDiff = getXPosition() - nextAbsPos.getAbsolutePosition().getX();
                         if (range < absDiff) {
                             addToXPosition(-1.0 * range);
@@ -190,8 +189,8 @@ public abstract class MovableObject extends AnimatedObject {
                             updateAbsolutePosAndDirection(nextAbsPos);
                             range -= absDiff;
                         }
-                        break;
-                    case Right:
+                    }
+                    case Right -> {
                         absDiff = nextAbsPos.getAbsolutePosition().getX() - getXPosition();
                         if (range < absDiff) {
                             addToXPosition(range);
@@ -201,7 +200,7 @@ public abstract class MovableObject extends AnimatedObject {
                             updateAbsolutePosAndDirection(nextAbsPos);
                             range -= absDiff;
                         }
-                        break;
+                    }
                 }
             }
         }

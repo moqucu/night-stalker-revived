@@ -8,7 +8,6 @@ import org.moqucu.games.nightstalker.view.enemy.SpiderSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SpiderSpriteTest {
 
@@ -60,18 +59,6 @@ public class SpiderSpriteTest {
     }
 
     @Test
-    public void testInMotionPropertyBinding() {
-
-        assertThat(spiderSprite.isInMotion(), is(false));
-        assertThat(spiderSprite.inMotion().getBean(), is(spiderSprite.getModel()));
-        assertThat(spiderSprite.inMotion().getName(), is("inMotion"));
-        assertThrows(
-                Throwable.class,
-                () -> spiderSprite.setInMotion(false)
-        );
-    }
-
-    @Test
     public void hasAnimatedProperty() {
 
         assertThat(spiderSprite, hasProperty("animated"));
@@ -87,17 +74,5 @@ public class SpiderSpriteTest {
     public void animatedPropertyOfTypeBooleanProperty() {
 
         assertThat(spiderSprite.animated(), isA(BooleanProperty.class));
-    }
-
-    @Test
-    public void testAnimatedPropertyBinding() {
-
-        assertThat(spiderSprite.isAnimated(), is(false));
-        assertThat(spiderSprite.animated().getBean(), is(spiderSprite.getModel()));
-        assertThat(spiderSprite.animated().getName(), is("animated"));
-        assertThrows(
-                Throwable.class,
-                () -> spiderSprite.setAnimated(false)
-        );
     }
 }

@@ -31,5 +31,10 @@ public class GreyRobot extends MovableObject {
         setYPosition(320);
         setAnimated(true);
         setInMotion(true);
+        addPropertyChangeListener(evt -> {
+
+            if (evt.getPropertyName().equals("direction"))
+                setVelocity(30.);
+        });
     }
 }
