@@ -59,6 +59,12 @@ public class SpiderSpriteTest {
     }
 
     @Test
+    public void inMotionPropertyIsInitiallyTrue() {
+
+        assertThat(spiderSprite.isInMotion(), is(true));
+    }
+
+    @Test
     public void hasAnimatedProperty() {
 
         assertThat(spiderSprite, hasProperty("animated"));
@@ -68,6 +74,12 @@ public class SpiderSpriteTest {
     public void animatedOfTypeBoolean() {
 
         assertThat(spiderSprite.isAnimated(), isA(Boolean.class));
+    }
+
+    @Test
+    public void animatedPropertyIsInitiallyTrue() {
+
+        assertThat(spiderSprite.isAnimated(), is(true));
     }
 
     @Test
