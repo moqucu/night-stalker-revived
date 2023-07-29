@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
+import org.moqucu.games.nightstalker.model.Resettable;
 import org.moqucu.games.nightstalker.model.enemy.Spider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,6 +13,22 @@ import static org.hamcrest.Matchers.*;
 public class SpiderTest {
 
     private final Spider spider = new Spider();
+
+    @Test
+    public void spiderOfTypeResettable() {
+
+        assertThat(spider, isA(Resettable.class));
+    }
+
+    @Test
+    public void resettingTheSpiderSetsEverythingBack() {
+
+        final Spider localSpider = new Spider();
+        localSpider.setDirection(Direction.Left);
+        localSpider.reset();
+
+        assertThat(localSpider.getDirection(), is(Direction.Down));
+    }
 
     @Test
     public void initialDirectionIsDown() {

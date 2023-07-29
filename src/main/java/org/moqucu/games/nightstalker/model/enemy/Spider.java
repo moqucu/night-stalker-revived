@@ -3,10 +3,24 @@ package org.moqucu.games.nightstalker.model.enemy;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
+import org.moqucu.games.nightstalker.model.Resettable;
 
 import java.beans.PropertyChangeListener;
 
-public class Spider extends MovableObject {
+public class Spider extends MovableObject implements Resettable {
+
+    private final PropertyChangeListener propertyChangeListener = evt -> {
+
+        switch (evt.getPropertyName()) {
+            case "YPosition" -> {
+                if (evt.getNewValue().equals(160.0) && getVelocity() < 50) {
+                    setMazeAlgorithm(MazeAlgorithm.Random);
+                    setVelocity(50.);
+                }
+            }
+            case "direction" -> setLowerAndUpperBoundaryBasedOnDirection();
+        }
+    };
 
     private void setLowerAndUpperBoundaryBasedOnDirection() {
 
@@ -25,29 +39,11 @@ public class Spider extends MovableObject {
     public Spider() {
 
         super();
-        setFrameRate(5);
-        setVelocity(25);
+
         setMazeGraphFileName("/json/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.FollowDirection);
         setImageMapFileName("/images/spider.png");
-        setDirection(Direction.Down);
-        setLowerAndUpperBoundaryBasedOnDirection();
-        setInitialImageIndex(0);
-        setXPosition(96);
-        setYPosition(32);
-        PropertyChangeListener propertyChangeListener = evt -> {
-
-            switch (evt.getPropertyName()) {
-                case "YPosition" -> {
-                    if (evt.getNewValue().equals(160.0) && getVelocity() < 50) {
-                        setMazeAlgorithm(MazeAlgorithm.Random);
-                        setVelocity(50.);
-                    }
-                }
-                case "direction" -> setLowerAndUpperBoundaryBasedOnDirection();
-            }
-        };
-        addPropertyChangeListener(propertyChangeListener);
+        reset();
         setAnimated(true);
         setInMotion(true);
     }
@@ -56,5 +52,19 @@ public class Spider extends MovableObject {
     public boolean canChangePosition() {
 
         return true;
+    }
+
+    @Override
+    public void reset() {
+
+        removePropertyChangeListener(propertyChangeListener);
+        setFrameRate(5);
+        setVelocity(25);
+        setDirection(Direction.Down);
+        setLowerAndUpperBoundaryBasedOnDirection();
+        setInitialImageIndex(0);
+        setXPosition(96);
+        setYPosition(32);
+        addPropertyChangeListener(propertyChangeListener);
     }
 }
