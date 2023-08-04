@@ -3,8 +3,9 @@ package org.moqucu.games.nightstalker.model.enemy;
 import lombok.Getter;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
+import org.moqucu.games.nightstalker.model.Resettable;
 
-public class Bat extends MovableObject {
+public class Bat extends MovableObject implements Resettable {
 
     private double elapsedTimeSinceSpawning = 0;
 
@@ -51,5 +52,14 @@ public class Bat extends MovableObject {
     public boolean canChangePosition() {
 
         return true;
+    }
+
+    @Override
+    public void reset() {
+
+        setAnimated(false);
+        setInMotion(false);
+        awake = false;
+        elapsedTimeSinceSpawning = 0;
     }
 }

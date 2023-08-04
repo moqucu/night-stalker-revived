@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
+import org.moqucu.games.nightstalker.model.Resettable;
 import org.moqucu.games.nightstalker.model.enemy.Bat;
 
 import java.util.Random;
@@ -51,6 +52,36 @@ public class BatTest {
 
         Random random = new Random();
         sleepTime = random.doubles(2999.0, 3001.0).findAny().orElseThrow();
+    }
+
+    @Test
+    public void batOfTypeResettable() {
+
+        assertThat(bat, isA(Resettable.class));
+    }
+
+    @Test
+    public void resettingTheBatSetsEverythingBack() {
+
+        final Bat localBat = new Bat();
+        localBat.setSleepTime(100);
+        localBat.setDirection(Direction.Left);
+        localBat.setXPosition(528.0);
+        localBat.setYPosition(96);
+        assertThat(localBat.isAwake(), is(false));
+        assertThat(localBat.isInMotion(), is(false));
+        assertThat(localBat.isAnimated(), is(false));
+
+        localBat.elapseTime(101);
+        assertThat(localBat.isAwake(), is(true));
+        assertThat(localBat.isInMotion(), is(true));
+        assertThat(localBat.isAnimated(), is(true));
+
+        localBat.reset();
+
+        assertThat(localBat.isAwake(), is(false));
+        assertThat(localBat.isInMotion(), is(false));
+        assertThat(localBat.isAnimated(), is(false));
     }
 
     @Test
