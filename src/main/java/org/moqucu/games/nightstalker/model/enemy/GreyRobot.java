@@ -4,8 +4,9 @@ import lombok.Getter;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
+import org.moqucu.games.nightstalker.model.Resettable;
 
-public class GreyRobot extends MovableObject {
+public class GreyRobot extends MovableObject implements Resettable {
 
     @Getter
     private boolean active = false;
@@ -24,17 +25,23 @@ public class GreyRobot extends MovableObject {
         setUpperAnimationIndex(1);
         setFrameRate(10);
         setVelocity(15);
-        setDirection(Direction.Right);
         setMazeGraphFileName("/json/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.Random);
-        setXPosition(48);
-        setYPosition(320);
-        setAnimated(true);
-        setInMotion(true);
+        reset();
         addPropertyChangeListener(evt -> {
 
             if (evt.getPropertyName().equals("direction"))
                 setVelocity(30.);
         });
+    }
+
+    @Override
+    public void reset() {
+
+        setXPosition(48);
+        setYPosition(320);
+        setDirection(Direction.Right);
+        setAnimated(true);
+        setInMotion(true);
     }
 }
