@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import java.util.*;
 
-public class GameWorld {
+public class GameWorld implements Resettable {
 
     @Getter
     private double time = 0;
@@ -66,5 +66,15 @@ public class GameWorld {
         objects.put(gameObject.getObjectId(), gameObject);
         if (gameObject instanceof TimeListener)
             timeListeners.add((TimeListener) gameObject);
+    }
+
+    @Override
+    public void reset() {
+
+        getObjects()
+                .values()
+                .stream()
+                .filter(gameObject -> gameObject instanceof Resettable)
+                .forEach(gameObject -> ((Resettable) gameObject).reset());
     }
 }

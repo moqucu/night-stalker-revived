@@ -1,14 +1,20 @@
 package org.moqucu.games.nightstalker.model.test;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.enemy.GreyRobot;
 
 import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(MockitoExtension.class)
 public class GameWorldTest {
 
     private final GameWorld gameWorld = new GameWorld();
@@ -133,5 +139,26 @@ public class GameWorldTest {
         assertThat(gameObject.getXPosition(), is(32.0));
         assertThat(gameObject.getYPosition(), is(0.0));
         gameObject.setInMotion(false);
+    }
+
+    @Test
+    public void aGameWorldIsResettable() {
+
+        assertThat(gameWorld, isA(Resettable.class));
+    }
+
+    @Test
+    public void whenAddingResettableObjectsResetIsOperatingOnThem() {
+
+        final String expectedThrowableMessage = "reset()!";
+
+        final GameWorld aGameWorld = new GameWorld();
+        final GreyRobot aGreyRobot = Mockito.mock(GreyRobot.class);
+        aGameWorld.add(aGreyRobot);
+
+        Mockito.doThrow(new RuntimeException(expectedThrowableMessage)).when(aGreyRobot).reset();
+
+         Throwable throwable = assertThrows(RuntimeException.class, aGameWorld::reset);
+         assertThat(throwable.getMessage(), is(expectedThrowableMessage));
     }
 }
