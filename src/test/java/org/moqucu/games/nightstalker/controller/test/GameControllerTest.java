@@ -32,10 +32,12 @@ public class GameControllerTest {
 
     private final GameLoop gameLoop;
 
+    private final GameWorld gameWorld;
+
     @Start
     private void start(Stage stage) {
 
-        gameController = new GameController(this.stage, systemWrapper, null, gameLoop);
+        gameController = new GameController(this.stage, systemWrapper, null, gameLoop, gameWorld);
     }
 
     @SneakyThrows
@@ -44,49 +46,55 @@ public class GameControllerTest {
         stage = mock(Stage.class);
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B00000001)
+                .doAnswer(invocation -> testFlags |= 0B000000001)
                 .when(stage)
                 .setTitle(any());
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B00000010)
+                .doAnswer(invocation -> testFlags |= 0B000000010)
                 .when(stage)
                 .setScene(any());
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B00000100)
+                .doAnswer(invocation -> testFlags |= 0B000000100)
                 .when(stage)
                 .sizeToScene();
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B00001000)
+                .doAnswer(invocation -> testFlags |= 0B000001000)
                 .when(stage)
                 .centerOnScreen();
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B00010000)
+                .doAnswer(invocation -> testFlags |= 0B000010000)
                 .when(stage)
                 .show();
 
         systemWrapper = mock(SystemWrapper.class);
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B00100000)
+                .doAnswer(invocation -> testFlags |= 0B000100000)
                 .when(systemWrapper)
                 .exit(0);
 
         gameLoop = mock(GameLoop.class);
-        gameLoop.setGameWorld(new GameWorld());
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B01000000)
+                .doAnswer(invocation -> testFlags |= 0B001000000)
                 .when(gameLoop)
                 .start();
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B10000000)
+                .doAnswer(invocation -> testFlags |= 0B010000000)
                 .when(gameLoop)
                 .stop();
+
+        gameWorld = mock(GameWorld.class);
+        Mockito
+                .lenient()
+                .doAnswer(invocation -> testFlags |= 0B100000000)
+                .when(gameWorld)
+                .reset();
     }
 
     @Test
@@ -135,5 +143,13 @@ public class GameControllerTest {
                 gameController.getGameElements().containsKey(spiderSprite),
                 is(true)
         );
+    }
+
+    @Test
+    public void testResetGameWorld() {
+
+        this.testFlags = 0;
+        gameController.resetGameWorld();
+        assertThat(this.testFlags, is(256));
     }
 }

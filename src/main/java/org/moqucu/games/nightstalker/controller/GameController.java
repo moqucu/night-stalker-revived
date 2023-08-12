@@ -29,7 +29,7 @@ public class GameController {
     private final Stage stage;
 
     @Getter
-    private final GameWorld gameWorld = new GameWorld();
+    private final GameWorld gameWorld;
 
     @Getter
     private final Map<Parent, Scene> scenes = new HashMap<>();
@@ -107,7 +107,8 @@ public class GameController {
             Stage stage,
             SystemWrapper systemWrapper,
             BackGroundMusicLoop loop,
-            GameLoop gameLoop
+            GameLoop gameLoop,
+            GameWorld gameWorld
     ) {
 
         backGroundMusicLoop = loop;
@@ -119,7 +120,19 @@ public class GameController {
         }
         this.systemWrapper = systemWrapper;
         this.gameLoop = gameLoop;
+        this.gameWorld = gameWorld;
         gameLoop.setGameWorld(gameWorld);
+    }
+
+
+    public GameController(
+            Stage stage,
+            SystemWrapper systemWrapper,
+            BackGroundMusicLoop loop,
+            GameLoop gameLoop
+    ) {
+
+        this(stage,systemWrapper, loop, gameLoop, new GameWorld());
     }
 
     public void addSprite(Sprite sprite) {
@@ -141,5 +154,10 @@ public class GameController {
     public void endGame() {
 
         systemWrapper.exit(0);
+    }
+
+    public void resetGameWorld() {
+
+        gameWorld.reset();
     }
 }
