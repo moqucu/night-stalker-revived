@@ -18,6 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 @ExtendWith(ApplicationExtension.class)
 public class GameControllerTest {
@@ -89,7 +90,7 @@ public class GameControllerTest {
                 .when(gameLoop)
                 .stop();
 
-        gameWorld = mock(GameWorld.class);
+        gameWorld = spy(GameWorld.class);
         Mockito
                 .lenient()
                 .doAnswer(invocation -> testFlags |= 0B100000000)

@@ -68,6 +68,7 @@ public class BatTest {
         localBat.setDirection(Direction.Left);
         localBat.setXPosition(528.0);
         localBat.setYPosition(96);
+        localBat.setInitialImageIndex(0);
         assertThat(localBat.isAwake(), is(false));
         assertThat(localBat.isInMotion(), is(false));
         assertThat(localBat.isAnimated(), is(false));
@@ -82,6 +83,10 @@ public class BatTest {
         assertThat(localBat.isAwake(), is(false));
         assertThat(localBat.isInMotion(), is(false));
         assertThat(localBat.isAnimated(), is(false));
+        assertThat(localBat.getDirection(), is (Direction.Left));
+        assertThat(localBat.getXPosition(), is (528.0));
+        assertThat(localBat.getYPosition(), is (96.0));
+        assertThat(localBat.getImageIndex(), is (0));
     }
 
     @Test

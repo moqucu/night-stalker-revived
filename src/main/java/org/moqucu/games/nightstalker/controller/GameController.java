@@ -88,19 +88,22 @@ public class GameController {
         return scenes.get(rootNode);
     }
 
-    private void show(Parent rootNode, String title) {
+    private Scene show(Parent rootNode, String title) {
 
         stage.setTitle(title);
-        stage.setScene(prepareScene(rootNode));
+        final Scene scene = prepareScene(rootNode);
+        stage.setScene(scene);
         stage.sizeToScene();
         stage.centerOnScreen();
         stage.show();
+
+        return scene;
     }
 
-    public void switchScene(final FxmlView view) {
+    public Scene switchScene(final FxmlView view) {
 
         Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
-        show(viewRootNodeHierarchy, view.getTitle());
+        return show(viewRootNodeHierarchy, view.getTitle());
     }
 
     public GameController(
