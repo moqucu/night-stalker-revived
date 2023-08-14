@@ -31,7 +31,7 @@ public class GreyRobotTest {
         anotherRobot.setInMotion(false);
         anotherRobot.setXPosition(96);
         assertThat(anotherRobot.isSlow(), is(false));
-        assertThat(anotherRobot.isSlow(), is(30));
+        assertThat(anotherRobot.getVelocity(), is(30.0));
         anotherRobot.setDirection(Direction.Left);
 
         anotherRobot.reset();
@@ -79,13 +79,14 @@ public class GreyRobotTest {
     }
 
     @Test
-    public void whenChangingDirectionForTheFirstTimeVelocityDoubles() {
+    public void whenXPositionGetsToNinetySixThenVelocityDoubles() {
 
         final GameWorld gameWorld = new GameWorld();
         final GreyRobot anotherGreyRobotModel = new GreyRobot();
         gameWorld.add(anotherGreyRobotModel);
 
-        anotherGreyRobotModel.setDirection(Direction.Left);
+        anotherGreyRobotModel.setXPosition(96);
+        assertThat(anotherGreyRobotModel.isSlow(), is(false));
         assertThat(anotherGreyRobotModel.getVelocity(), is(30.));
     }
 

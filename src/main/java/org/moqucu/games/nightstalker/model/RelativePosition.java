@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RelativePosition {
 
-    private int x;
+    private double x;
 
-    private int y;
+    private double y;
 }

@@ -19,7 +19,7 @@ public class RelativePositionTest {
     @Test
     public void xIsOfTypeInteger() {
 
-        assertThat(relativePosition.getX(), instanceOf(Integer.class));
+        assertThat(relativePosition.getX(), instanceOf(Double.class));
     }
 
     @Test
@@ -31,6 +31,6 @@ public class RelativePositionTest {
     @Test
     public void yIsOfTypeInteger() {
 
-        assertThat(relativePosition.getY(), instanceOf(Integer.class));
+        assertThat(relativePosition.getY(), instanceOf(Double.class));
     }
 }

@@ -1,5 +1,12 @@
 package org.moqucu.games.nightstalker.model.hero.test;
 
+import org.junit.jupiter.api.Test;
+import org.moqucu.games.nightstalker.model.MovableObject;
+import org.moqucu.games.nightstalker.model.NightStalker;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
 public class NightStalkerTest {
 
     /*
@@ -65,4 +72,105 @@ public class NightStalkerTest {
         );
 
      */
+
+    private final NightStalker nightStalker = new NightStalker();
+
+    @Test
+    public void ofTypeMovableObject() {
+
+        assertThat(nightStalker, isA(MovableObject.class));
+    }
+
+    @Test
+    public void hasRunningProperty() {
+
+        assertThat(nightStalker, hasProperty("running"));
+    }
+
+    @Test
+    public void runningPropertyOfTypeBoolean() {
+
+        assertThat(nightStalker.isRunning(), isA(Boolean.class));
+    }
+
+    @Test
+    public void pointsToNightStakerGraph() {
+
+        assertThat(nightStalker.getMazeGraphFileName(), is("/json/maze-graph-night-stalker.json"));
+    }
+
+    @Test
+    public void pointsToCorrectImageMap() {
+
+        assertThat(nightStalker.getImageMapFileName(), is("/images/night-stalker.png"));
+    }
+
+    @Test
+    public void initialImageIndexIsZero() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+        assertThat(anotherNightStalker.getInitialImageIndex(), is(0));
+    }
+
+    @Test
+    public void initialLowerAnimationIndexIsZero() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+        assertThat(anotherNightStalker.getLowerAnimationIndex(), is(0));
+    }
+
+    @Test
+    public void initialUpperAnimationIndexIsZero() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+        assertThat(anotherNightStalker.getUpperAnimationIndex(), is(0));
+    }
+
+    @Test
+    public void stopPutsRunningToFalseAndResetsAnimationIndicesToZero() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+        anotherNightStalker.setRunning(true);
+        anotherNightStalker.setLowerAnimationIndex(1);
+        anotherNightStalker.setUpperAnimationIndex(2);
+        anotherNightStalker.setAnimated(true);
+        anotherNightStalker.setInMotion(false);
+        anotherNightStalker.setLowerAnimationIndex(2);
+
+        anotherNightStalker.stop();
+
+        assertThat(anotherNightStalker.isRunning(), is(false));
+        assertThat(anotherNightStalker.getLowerAnimationIndex(), is(0));
+        assertThat(anotherNightStalker.getUpperAnimationIndex(), is(0));
+        assertThat(anotherNightStalker.isAnimated(), is(false));
+        assertThat(anotherNightStalker.isInMotion(), is(false));
+    }
+
+    @Test
+    public void frameRateIsTen() {
+
+        assertThat(nightStalker.getFrameRate(), is(10));
+    }
+
+    @Test
+    public void velocityIsThirty() {
+
+        assertThat(nightStalker.getVelocity(), is(30.));
+    }
+
+    @Test
+    public void initialYPositionIsOneHundredFortyFour() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+
+        assertThat(anotherNightStalker.getYPosition(), is(144.));
+    }
+
+    @Test
+    public void initialYPositionIsTwoHundredEightyEight() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+
+        assertThat(anotherNightStalker.getXPosition(), is(288.));
+    }
 }
