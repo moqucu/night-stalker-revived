@@ -25,9 +25,14 @@ public class SpiderTest {
 
         final Spider localSpider = new Spider();
         localSpider.setDirection(Direction.Left);
+        localSpider.setYPosition(160);
+        assertThat(localSpider.isSlow(), is(false));
+        assertThat(localSpider.getVelocity(), is(50.0));
         localSpider.reset();
 
         assertThat(localSpider.getDirection(), is(Direction.Down));
+        assertThat(localSpider.isSlow(), is(true));
+        assertThat(localSpider.getVelocity(), is(25.0));
     }
 
     @Test
@@ -162,5 +167,17 @@ public class SpiderTest {
     public void initiallyAnimated() {
 
         assertThat(spider.isAnimated(), is(true));
+    }
+
+    @Test
+    public void hasSlowProperty() {
+
+        assertThat(spider, hasProperty("slow"));
+    }
+
+    @Test
+    public void slowPropertyOfTypeBoolean() {
+
+        assertThat(spider.isSlow(), isA(Boolean.class));
     }
 }

@@ -29,7 +29,9 @@ public class GreyRobotTest {
         final GreyRobot anotherRobot = new GreyRobot();
         anotherRobot.setAnimated(false);
         anotherRobot.setInMotion(false);
-        anotherRobot.setXPosition(64);
+        anotherRobot.setXPosition(96);
+        assertThat(anotherRobot.isSlow(), is(false));
+        assertThat(anotherRobot.isSlow(), is(30));
         anotherRobot.setDirection(Direction.Left);
 
         anotherRobot.reset();
@@ -38,6 +40,8 @@ public class GreyRobotTest {
         assertThat(anotherRobot.isInMotion(), is(true));
         assertThat(anotherRobot.getXPosition(), is(48.0));
         assertThat(anotherRobot.getDirection(), is(Direction.Right));
+        assertThat(anotherRobot.getVelocity(), is(15.0));
+        assertThat(anotherRobot.isSlow(), is(true));
     }
 
     @Test

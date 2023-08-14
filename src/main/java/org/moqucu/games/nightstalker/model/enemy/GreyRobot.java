@@ -24,23 +24,27 @@ public class GreyRobot extends MovableObject implements Resettable {
         setLowerAnimationIndex(0);
         setUpperAnimationIndex(1);
         setFrameRate(10);
-        setVelocity(15);
         setMazeGraphFileName("/json/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.Random);
         reset();
         addPropertyChangeListener(evt -> {
 
-            if (evt.getPropertyName().equals("direction"))
-                setVelocity(30.);
+            if (slow && evt.getPropertyName().equals("XPosition") && (Double)evt.getNewValue() >= 96.0) {
+
+                setVelocity(30);
+                slow = false;
+            }
         });
     }
 
     @Override
     public void reset() {
 
+        slow = true;
+        setDirection(Direction.Right);
+        setVelocity(15);
         setXPosition(48);
         setYPosition(320);
-        setDirection(Direction.Right);
         setAnimated(true);
         setInMotion(true);
     }

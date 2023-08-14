@@ -27,7 +27,6 @@ public abstract class DisplayableObject extends GameObject implements Collidable
         }
     }
 
-
     @Getter
     private final double width = 32.0;
 
