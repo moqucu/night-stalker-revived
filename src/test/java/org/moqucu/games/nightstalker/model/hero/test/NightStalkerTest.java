@@ -2,7 +2,7 @@ package org.moqucu.games.nightstalker.model.hero.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.NightStalker;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

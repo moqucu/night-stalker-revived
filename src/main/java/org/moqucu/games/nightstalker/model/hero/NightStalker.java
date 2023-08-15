@@ -1,6 +1,9 @@
-package org.moqucu.games.nightstalker.model;
+package org.moqucu.games.nightstalker.model.hero;
 
 import lombok.Getter;
+import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.model.MazeAlgorithm;
+import org.moqucu.games.nightstalker.model.MovableObject;
 
 public class NightStalker extends MovableObject {
 
