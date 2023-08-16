@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.model.hero.test;
 
 import org.junit.jupiter.api.Test;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 
@@ -172,5 +173,19 @@ public class NightStalkerTest {
         final NightStalker anotherNightStalker = new NightStalker();
 
         assertThat(anotherNightStalker.getXPosition(), is(288.));
+    }
+
+    @Test
+    public void whenRunningUpItWillSetDirectionToUpAndRunningToTrue() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+        anotherNightStalker.run(Direction.Up);
+
+        assertThat(anotherNightStalker.getDirection(), is(Direction.Up));
+        assertThat(anotherNightStalker.isRunning(), is(true));
+
+        anotherNightStalker.stop();
+        assertThat(anotherNightStalker.getDirection(), is(Direction.Up));
+        assertThat(anotherNightStalker.isRunning(), is(false));
     }
 }

@@ -23,6 +23,40 @@ public class NightStalker extends MovableObject {
         setLowerAnimationIndex(0);
         setUpperAnimationIndex(0);
         setDirection(Direction.Up);
+        this.addPropertyChangeListener(
+                evt -> {
+
+                    if (evt.getPropertyName().equals("running")) {
+                        if (evt.getNewValue().equals(true)) {
+                            switch (getDirection()) {
+                                case Up, Down -> {
+                                    setLowerAnimationIndex(1);
+                                    setUpperAnimationIndex(2);
+                                }
+                                case Left -> {
+                                    setLowerAnimationIndex(3);
+                                    setUpperAnimationIndex(10);
+                                }
+                                case Right -> {
+                                    setLowerAnimationIndex(11);
+                                    setUpperAnimationIndex(18);
+                                }
+                                case OnTop, Undefined -> {
+                                    setLowerAnimationIndex(0);
+                                    setUpperAnimationIndex(0);
+                                }
+                            }
+                            setAnimated(true);
+                            setInMotion(true);
+                        } else {
+                            setLowerAnimationIndex(0);
+                            setUpperAnimationIndex(0);
+                            setAnimated(false);
+                            setInMotion(false);
+                        }
+                    }
+                }
+        );
     }
 
     public void setRunning(boolean running) {
@@ -39,9 +73,11 @@ public class NightStalker extends MovableObject {
     public void stop() {
 
         setRunning(false);
-        setAnimated(false);
-        setInMotion(false);
-        setLowerAnimationIndex(0);
-        setUpperAnimationIndex(0);
+    }
+
+    public void run(Direction direction) {
+
+        setDirection(direction);
+        setRunning(true);
     }
 }
