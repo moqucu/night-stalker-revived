@@ -8,8 +8,10 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
 import org.moqucu.games.nightstalker.utility.FxmlView;
 import org.moqucu.games.nightstalker.utility.GameLoop;
@@ -162,5 +164,27 @@ public class GameController {
     public void resetGameWorld() {
 
         gameWorld.reset();
+    }
+
+    public void runNightStalkerWith(Direction direction) {
+
+        final NightStalker nightStalker = (NightStalker) gameWorld.getObjects()
+                .values()
+                .stream()
+                .filter(gameObject -> gameObject instanceof NightStalker)
+                .findFirst()
+                .orElseThrow();
+        nightStalker.run(direction);
+    }
+
+    public void stopNightStalker() {
+
+        final NightStalker nightStalker = (NightStalker) gameWorld.getObjects()
+                .values()
+                .stream()
+                .filter(gameObject -> gameObject instanceof NightStalker)
+                .findFirst()
+                .orElseThrow();
+        nightStalker.stop();
     }
 }

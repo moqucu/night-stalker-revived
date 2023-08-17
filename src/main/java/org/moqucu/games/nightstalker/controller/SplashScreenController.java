@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import lombok.extern.log4j.Log4j2;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.utility.FxmlView;
 
 @Log4j2
@@ -45,7 +46,18 @@ public class SplashScreenController {
                         case P -> gameController.startGameLoop();
                         case R -> gameController.resetGameWorld();
                         case Q -> gameController.endGame();
+                        case UP -> gameController.runNightStalkerWith(Direction.Up);
+                        case DOWN -> gameController.runNightStalkerWith(Direction.Down);
                     }
+                }
+        );
+        gameScreen.setOnKeyReleased(
+                keyReleasedEvent -> {
+
+                    switch (keyReleasedEvent.getCode()) {
+                        case UP, DOWN, LEFT, RIGHT -> gameController.stopNightStalker();
+                    }
+
                 }
         );
         gameController.startGameLoop();

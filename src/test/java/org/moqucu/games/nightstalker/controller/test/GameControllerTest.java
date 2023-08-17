@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.moqucu.games.nightstalker.controller.GameController;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.utility.FxmlView;
 import org.moqucu.games.nightstalker.utility.GameLoop;
 import org.moqucu.games.nightstalker.utility.SystemWrapper;
@@ -16,9 +18,9 @@ import org.testfx.framework.junit5.Start;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(ApplicationExtension.class)
 public class GameControllerTest {
@@ -152,5 +154,41 @@ public class GameControllerTest {
         this.testFlags = 0;
         gameController.resetGameWorld();
         assertThat(this.testFlags, is(256));
+    }
+
+    @Test
+    public void runTheNightStalker() {
+
+        final NightStalker anotherNightStalker = mock(NightStalker.class);
+        doThrow(new RuntimeException("NightStalker running up!")).when(anotherNightStalker).run(Direction.Up);
+        doThrow(new RuntimeException("NightStalker running down!")).when(anotherNightStalker).run(Direction.Down);
+        doThrow(new RuntimeException("NightStalker running left!")).when(anotherNightStalker).run(Direction.Left);
+        doThrow(new RuntimeException("NightStalker running right!")).when(anotherNightStalker).run(Direction.Right);
+
+        gameWorld.add(anotherNightStalker);
+
+        final Throwable upThrowable = assertThrows(RuntimeException.class, () -> gameController.runNightStalkerWith(Direction.Up));
+        assertThat(upThrowable.getMessage(), is("NightStalker running up!"));
+
+        final Throwable downThrowable = assertThrows(RuntimeException.class, () -> gameController.runNightStalkerWith(Direction.Down));
+        assertThat(downThrowable.getMessage(), is("NightStalker running down!"));
+
+        final Throwable leftThrowable = assertThrows(RuntimeException.class, () -> gameController.runNightStalkerWith(Direction.Left));
+        assertThat(leftThrowable.getMessage(), is("NightStalker running left!"));
+
+        final Throwable rightThrowable = assertThrows(RuntimeException.class, () -> gameController.runNightStalkerWith(Direction.Right));
+        assertThat(rightThrowable.getMessage(), is("NightStalker running right!"));
+    }
+
+    @Test
+    public void stopTheNightStalker() {
+
+        final NightStalker anotherNightStalker = mock(NightStalker.class);
+        doThrow(new RuntimeException("NightStalker is stopping!")).when(anotherNightStalker).stop();
+
+        gameWorld.add(anotherNightStalker);
+
+        final Throwable upThrowable = assertThrows(RuntimeException.class, () -> gameController.stopNightStalker());
+        assertThat(upThrowable.getMessage(), is("NightStalker is stopping!"));
     }
 }
