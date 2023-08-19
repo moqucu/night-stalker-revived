@@ -2,7 +2,9 @@ package org.moqucu.games.nightstalker.model.hero.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MovableObject;
+import org.moqucu.games.nightstalker.model.Resettable;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -187,5 +189,36 @@ public class NightStalkerTest {
         anotherNightStalker.stop();
         assertThat(anotherNightStalker.getDirection(), is(Direction.Up));
         assertThat(anotherNightStalker.isRunning(), is(false));
+    }
+
+    @Test
+    public void isOfTypeResettable() {
+
+        assertThat(nightStalker, isA(Resettable.class));
+    }
+
+    @Test
+    public void afterResetNightStalkerIsInTheRightPositionAndState() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+        final GameWorld gameWorld = new GameWorld();
+        gameWorld.add(anotherNightStalker);
+
+        anotherNightStalker.setRunning(true);
+        gameWorld.pulse(1000);
+
+        assertThat(anotherNightStalker.isRunning(), is(true));
+        assertThat(anotherNightStalker.getDirection(), is(Direction.Up));
+        assertThat(anotherNightStalker.getYPosition(), is(lessThan(144.0)));
+        assertThat(anotherNightStalker.isAnimated(), is(true));
+        assertThat(anotherNightStalker.isInMotion(), is(true));
+
+        anotherNightStalker.reset();
+
+        assertThat(anotherNightStalker.isRunning(), is(false));
+        assertThat(anotherNightStalker.getDirection(), is(Direction.Up));
+        assertThat(anotherNightStalker.getYPosition(), is(144.0));
+        assertThat(anotherNightStalker.isAnimated(), is(false));
+        assertThat(anotherNightStalker.isInMotion(), is(false));
     }
 }

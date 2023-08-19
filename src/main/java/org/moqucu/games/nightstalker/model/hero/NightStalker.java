@@ -4,25 +4,15 @@ import lombok.Getter;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
+import org.moqucu.games.nightstalker.model.Resettable;
 
-public class NightStalker extends MovableObject {
+public class NightStalker extends MovableObject implements Resettable {
 
     @Getter
     private boolean running;
 
     public NightStalker() {
 
-        setXPosition(288);
-        setYPosition(144);
-        setMazeAlgorithm(MazeAlgorithm.FollowDirection);
-        setMazeGraphFileName("/json/maze-graph-night-stalker.json");
-        setImageMapFileName("/images/night-stalker.png");
-        setFrameRate(10);
-        setVelocity(30);
-        setInitialImageIndex(0);
-        setLowerAnimationIndex(0);
-        setUpperAnimationIndex(0);
-        setDirection(Direction.Up);
         this.addPropertyChangeListener(
                 evt -> {
 
@@ -48,15 +38,26 @@ public class NightStalker extends MovableObject {
                             }
                             setAnimated(true);
                             setInMotion(true);
-                        } else {
-                            setLowerAnimationIndex(0);
-                            setUpperAnimationIndex(0);
-                            setAnimated(false);
-                            setInMotion(false);
-                        }
+                        } else
+                            resetAnimationIndicesAndOtherProperties();
                     }
                 }
         );
+        setMazeAlgorithm(MazeAlgorithm.FollowDirection);
+        setMazeGraphFileName("/json/maze-graph-night-stalker.json");
+        setImageMapFileName("/images/night-stalker.png");
+        setInitialImageIndex(0);
+        setFrameRate(10);
+        setVelocity(30);
+        reset();
+    }
+
+    private void resetAnimationIndicesAndOtherProperties() {
+
+        setLowerAnimationIndex(0);
+        setUpperAnimationIndex(0);
+        setAnimated(false);
+        setInMotion(false);
     }
 
     public void setRunning(boolean running) {
@@ -80,4 +81,15 @@ public class NightStalker extends MovableObject {
         setDirection(direction);
         setRunning(true);
     }
+
+    @Override
+    public void reset() {
+
+        setXPosition(288);
+        setYPosition(144);
+        setDirection(Direction.Up);
+        if (!running)
+            resetAnimationIndicesAndOtherProperties();
+        stop();
+     }
 }

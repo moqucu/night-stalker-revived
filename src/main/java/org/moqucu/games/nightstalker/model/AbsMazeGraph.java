@@ -48,39 +48,25 @@ public class AbsMazeGraph {
 
         final Map<Double, RelativePosition> distanceToRelPos = new HashMap<>();
 
-        Set<RelativePosition> relevantSetOfRelativePositionsGivenTheDirection;
-        switch (direction) {
-            case Right:
-                relevantSetOfRelativePositionsGivenTheDirection =
-                        allRelativePosMappedToAbsPos.keySet().stream().filter(
-                                relPos -> relPos.getY() * HEIGHT == absolutePosition.getY()
-                                        && relPos.getX() * WIDTH >= absolutePosition.getX()
-                        ).collect(Collectors.toSet());
-                break;
-            case Left:
-                relevantSetOfRelativePositionsGivenTheDirection =
-                        allRelativePosMappedToAbsPos.keySet().stream().filter(
-                                relPos -> relPos.getY() * HEIGHT == absolutePosition.getY()
-                                        && relPos.getX() * WIDTH <= absolutePosition.getX()
-                        ).collect(Collectors.toSet());
-                break;
-            case Down:
-                relevantSetOfRelativePositionsGivenTheDirection =
-                        allRelativePosMappedToAbsPos.keySet().stream().filter(
-                                relPos -> relPos.getX() * HEIGHT == absolutePosition.getX()
-                                        && relPos.getY() * WIDTH >= absolutePosition.getY()
-                        ).collect(Collectors.toSet());
-                break;
-            case Up:
-                relevantSetOfRelativePositionsGivenTheDirection =
-                        allRelativePosMappedToAbsPos.keySet().stream().filter(
-                                relPos -> relPos.getX() * HEIGHT == absolutePosition.getX()
-                                        && relPos.getY() * WIDTH <= absolutePosition.getY()
-                        ).collect(Collectors.toSet());
-                break;
-            default:
-                relevantSetOfRelativePositionsGivenTheDirection = allRelativePosMappedToAbsPos.keySet();
-        }
+        Set<RelativePosition> relevantSetOfRelativePositionsGivenTheDirection = switch (direction) {
+            case Right -> allRelativePosMappedToAbsPos.keySet().stream().filter(
+                    relPos -> relPos.getY() * HEIGHT == absolutePosition.getY()
+                            && relPos.getX() * WIDTH >= absolutePosition.getX()
+            ).collect(Collectors.toSet());
+            case Left -> allRelativePosMappedToAbsPos.keySet().stream().filter(
+                    relPos -> relPos.getY() * HEIGHT == absolutePosition.getY()
+                            && relPos.getX() * WIDTH <= absolutePosition.getX()
+            ).collect(Collectors.toSet());
+            case Down -> allRelativePosMappedToAbsPos.keySet().stream().filter(
+                    relPos -> relPos.getX() * HEIGHT == absolutePosition.getX()
+                            && relPos.getY() * WIDTH >= absolutePosition.getY()
+            ).collect(Collectors.toSet());
+            case Up -> allRelativePosMappedToAbsPos.keySet().stream().filter(
+                    relPos -> relPos.getX() * HEIGHT == absolutePosition.getX()
+                            && relPos.getY() * WIDTH <= absolutePosition.getY()
+            ).collect(Collectors.toSet());
+            default -> allRelativePosMappedToAbsPos.keySet();
+        };
 
         relevantSetOfRelativePositionsGivenTheDirection.forEach(key -> distanceToRelPos.put(
                 Math.abs(allRelativePosMappedToAbsPos.get(key).getX() - absolutePosition.getX())
@@ -153,22 +139,21 @@ public class AbsMazeGraph {
         }
 
         switch (direction) {
-            case Right:
-            case Left:
+            case Right, Left -> {
                 if (closestAbsolutePosition.getY() == position.getY())
                     return closestAbsolutePosition;
                 else
                     return position;
-            case Up:
-            case Down:
+            }
+            case Up, Down -> {
                 if (closestAbsolutePosition.getX() == position.getX())
                     return closestAbsolutePosition;
                 else
                     return position;
-            default:
-                throw new MazeGraph.UnrecognizedDirectionException(
-                        String.format("Direction %s unrecognized!", direction)
-                );
+            }
+            default -> throw new MazeGraph.UnrecognizedDirectionException(
+                    String.format("Direction %s unrecognized!", direction)
+            );
         }
     }
 
