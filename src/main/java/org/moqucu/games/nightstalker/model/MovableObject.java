@@ -165,7 +165,7 @@ public abstract class MovableObject extends AnimatedObject {
                             range = 0;
                         } else {
                             updateAbsolutePosAndDirection(nextAbsPos);
-                            range -= absDiff;
+                            range = absDiff != 0 ? (range - absDiff) : 0;
                         }
                     }
                     case Down -> {
@@ -176,7 +176,7 @@ public abstract class MovableObject extends AnimatedObject {
                             range = 0;
                         } else {
                             updateAbsolutePosAndDirection(nextAbsPos);
-                            range -= absDiff;
+                            range = absDiff != 0 ? (range - absDiff) : 0;
                         }
                     }
                     case Left -> {
@@ -187,7 +187,7 @@ public abstract class MovableObject extends AnimatedObject {
                             range = 0;
                         } else {
                             updateAbsolutePosAndDirection(nextAbsPos);
-                            range -= absDiff;
+                            range = absDiff != 0 ? (range - absDiff) : 0;
                         }
                     }
                     case Right -> {
@@ -198,7 +198,7 @@ public abstract class MovableObject extends AnimatedObject {
                             range = 0;
                         } else {
                             updateAbsolutePosAndDirection(nextAbsPos);
-                            range -= absDiff;
+                            range = absDiff != 0 ? (range - absDiff) : 0;
                         }
                     }
                 }

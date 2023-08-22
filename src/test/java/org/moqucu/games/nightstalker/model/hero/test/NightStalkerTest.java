@@ -221,4 +221,15 @@ public class NightStalkerTest {
         assertThat(anotherNightStalker.isAnimated(), is(false));
         assertThat(anotherNightStalker.isInMotion(), is(false));
     }
+
+    @Test
+    public void whatHappensWhenNightStalkerKeepsWalkingUpWhenAtBoundary() {
+
+        final NightStalker anotherNightStalker = new NightStalker();
+        // anotherNightStalker.setYPosition(96);
+        anotherNightStalker.setYPosition(144);
+
+        anotherNightStalker.setRunning(true);
+        anotherNightStalker.elapseTime(1);
+    }
 }

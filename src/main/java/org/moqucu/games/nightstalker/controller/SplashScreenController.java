@@ -48,6 +48,8 @@ public class SplashScreenController {
                         case Q -> gameController.endGame();
                         case UP -> gameController.runNightStalkerWith(Direction.Up);
                         case DOWN -> gameController.runNightStalkerWith(Direction.Down);
+                        case LEFT -> gameController.runNightStalkerWith(Direction.Left);
+                        case RIGHT -> gameController.runNightStalkerWith(Direction.Right);
                     }
                 }
         );

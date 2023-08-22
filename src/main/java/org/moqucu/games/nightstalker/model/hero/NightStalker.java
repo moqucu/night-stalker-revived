@@ -46,7 +46,6 @@ public class NightStalker extends MovableObject implements Resettable {
         setMazeAlgorithm(MazeAlgorithm.FollowDirection);
         setMazeGraphFileName("/json/maze-graph-night-stalker.json");
         setImageMapFileName("/images/night-stalker.png");
-        setInitialImageIndex(0);
         setFrameRate(10);
         setVelocity(30);
         reset();
@@ -54,6 +53,7 @@ public class NightStalker extends MovableObject implements Resettable {
 
     private void resetAnimationIndicesAndOtherProperties() {
 
+        setInitialImageIndex(0);
         setLowerAnimationIndex(0);
         setUpperAnimationIndex(0);
         setAnimated(false);
