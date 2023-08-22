@@ -8,11 +8,13 @@ import org.moqucu.games.nightstalker.model.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.moqucu.games.nightstalker.model.MovableObject.MAZE_JSON_FILE_NAME_CANNOT_BE_NULL;
 import static org.moqucu.games.nightstalker.model.MovableObject.JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT;
 
@@ -158,8 +160,7 @@ public class MovableObjectTest {
     @DisplayName("PropertyChangeListener can be added and are supported")
     public void propChangeListenerCanBeAddedAndAreSupported() {
 
-        @SuppressWarnings("Convert2Lambda")
-        final PropertyChangeListener listener = new PropertyChangeListener() {
+        @SuppressWarnings("Convert2Lambda") final PropertyChangeListener listener = new PropertyChangeListener() {
             @Override
             @SneakyThrows
             public void propertyChange(PropertyChangeEvent evt) {
@@ -204,4 +205,31 @@ public class MovableObjectTest {
         assertThat(exception.getMessage(), is("inMotion"));
     }
 
+    private void executeCodeThatCanPotentiallyHang() {
+
+        final MovableObject gameObject = new MovableObject() {
+        };
+        gameObject.setMazeGraphFileName("MazeGraphTest.json");
+        gameObject.setMazeAlgorithm(MazeAlgorithm.FollowDirection);
+        gameObject.setXPosition(32.0);
+        gameObject.setYPosition(0.0);
+        gameObject.setDirection(Direction.Up);
+        gameObject.setVelocity(20);
+        gameObject.setInMotion(true);
+
+        gameObject.elapseTime(200);
+    }
+
+    @Test
+    @SneakyThrows
+    public void preventEndlessLoopWhenFollowingDirectionOnNodeWhereThereIsNoSucceedingNode() {
+
+        final Thread thread = new Thread(this::executeCodeThatCanPotentiallyHang);
+        thread.start();
+        TimeUnit.SECONDS.sleep(1L);
+        if (thread.isAlive()) {
+            thread.interrupt();
+            fail("Thread did not complete in time, probably hangs!");
+        }
+    }
 }

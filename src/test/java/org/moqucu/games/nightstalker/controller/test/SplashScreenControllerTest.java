@@ -10,6 +10,7 @@ import org.moqucu.games.nightstalker.utility.FxmlView;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,9 +25,8 @@ public class SplashScreenControllerTest {
 
         Mockito
                 .lenient()
-                .doAnswer(invocation -> testFlags |= 0B00000001)
-                .when(gameController)
-                .switchScene(FxmlView.GAME_SCREEN);
+                .when(gameController.switchScene(FxmlView.GAME_SCREEN))
+                .thenThrow(new RuntimeException("Switched to GAME_SCREEN!"));
 
         Mockito
                 .lenient()
@@ -60,8 +60,8 @@ public class SplashScreenControllerTest {
     @Test
     public void testPlayButtonPressed() {
 
-        this.testFlags = 0;
-        splashScreenController.playButtonPressed(null);
-        assertThat(this.testFlags, is(0B00001001));
+        final Throwable throwable
+                = assertThrows(RuntimeException.class, () -> splashScreenController.playButtonPressed(null));
+        assertThat(throwable.getMessage(), is("Switched to GAME_SCREEN!"));
     }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
+import org.moqucu.games.nightstalker.model.Resettable;
 import org.moqucu.games.nightstalker.model.enemy.Spider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,6 +13,27 @@ import static org.hamcrest.Matchers.*;
 public class SpiderTest {
 
     private final Spider spider = new Spider();
+
+    @Test
+    public void spiderOfTypeResettable() {
+
+        assertThat(spider, isA(Resettable.class));
+    }
+
+    @Test
+    public void resettingTheSpiderSetsEverythingBack() {
+
+        final Spider localSpider = new Spider();
+        localSpider.setDirection(Direction.Left);
+        localSpider.setYPosition(160);
+        assertThat(localSpider.isSlow(), is(false));
+        assertThat(localSpider.getVelocity(), is(50.0));
+        localSpider.reset();
+
+        assertThat(localSpider.getDirection(), is(Direction.Down));
+        assertThat(localSpider.isSlow(), is(true));
+        assertThat(localSpider.getVelocity(), is(25.0));
+    }
 
     @Test
     public void initialDirectionIsDown() {
@@ -145,5 +167,17 @@ public class SpiderTest {
     public void initiallyAnimated() {
 
         assertThat(spider.isAnimated(), is(true));
+    }
+
+    @Test
+    public void hasSlowProperty() {
+
+        assertThat(spider, hasProperty("slow"));
+    }
+
+    @Test
+    public void slowPropertyOfTypeBoolean() {
+
+        assertThat(spider.isSlow(), isA(Boolean.class));
     }
 }

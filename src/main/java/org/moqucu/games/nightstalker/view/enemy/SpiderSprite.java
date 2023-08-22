@@ -70,11 +70,6 @@ public class SpiderSprite extends MovableSprite {
         bindProperties(getModel());
     }
 
-    public void setInMotion(boolean inMotion) {
-
-        inMotionProperty.set(inMotion);
-    }
-
     public boolean isInMotion() {
 
         return inMotionProperty.get();
@@ -83,11 +78,6 @@ public class SpiderSprite extends MovableSprite {
     public BooleanProperty inMotion() {
 
         return inMotionProperty;
-    }
-
-    public void setAnimated(boolean animated) {
-
-        animatedProperty.set(animated);
     }
 
     public boolean isAnimated() {

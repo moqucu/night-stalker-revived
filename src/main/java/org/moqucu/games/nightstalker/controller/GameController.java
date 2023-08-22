@@ -8,8 +8,10 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.utility.BackGroundMusicLoop;
 import org.moqucu.games.nightstalker.utility.FxmlView;
 import org.moqucu.games.nightstalker.utility.GameLoop;
@@ -29,7 +31,7 @@ public class GameController {
     private final Stage stage;
 
     @Getter
-    private final GameWorld gameWorld = new GameWorld();
+    private final GameWorld gameWorld;
 
     @Getter
     private final Map<Parent, Scene> scenes = new HashMap<>();
@@ -88,26 +90,30 @@ public class GameController {
         return scenes.get(rootNode);
     }
 
-    private void show(Parent rootNode, String title) {
+    private Scene show(Parent rootNode, String title) {
 
         stage.setTitle(title);
-        stage.setScene(prepareScene(rootNode));
+        final Scene scene = prepareScene(rootNode);
+        stage.setScene(scene);
         stage.sizeToScene();
         stage.centerOnScreen();
         stage.show();
+
+        return scene;
     }
 
-    public void switchScene(final FxmlView view) {
+    public Scene switchScene(final FxmlView view) {
 
         Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
-        show(viewRootNodeHierarchy, view.getTitle());
+        return show(viewRootNodeHierarchy, view.getTitle());
     }
 
     public GameController(
             Stage stage,
             SystemWrapper systemWrapper,
             BackGroundMusicLoop loop,
-            GameLoop gameLoop
+            GameLoop gameLoop,
+            GameWorld gameWorld
     ) {
 
         backGroundMusicLoop = loop;
@@ -119,7 +125,19 @@ public class GameController {
         }
         this.systemWrapper = systemWrapper;
         this.gameLoop = gameLoop;
+        this.gameWorld = gameWorld;
         gameLoop.setGameWorld(gameWorld);
+    }
+
+
+    public GameController(
+            Stage stage,
+            SystemWrapper systemWrapper,
+            BackGroundMusicLoop loop,
+            GameLoop gameLoop
+    ) {
+
+        this(stage,systemWrapper, loop, gameLoop, new GameWorld());
     }
 
     public void addSprite(Sprite sprite) {
@@ -141,5 +159,32 @@ public class GameController {
     public void endGame() {
 
         systemWrapper.exit(0);
+    }
+
+    public void resetGameWorld() {
+
+        gameWorld.reset();
+    }
+
+    public void runNightStalkerWith(Direction direction) {
+
+        final NightStalker nightStalker = (NightStalker) gameWorld.getObjects()
+                .values()
+                .stream()
+                .filter(gameObject -> gameObject instanceof NightStalker)
+                .findFirst()
+                .orElseThrow();
+        nightStalker.run(direction);
+    }
+
+    public void stopNightStalker() {
+
+        final NightStalker nightStalker = (NightStalker) gameWorld.getObjects()
+                .values()
+                .stream()
+                .filter(gameObject -> gameObject instanceof NightStalker)
+                .findFirst()
+                .orElseThrow();
+        nightStalker.stop();
     }
 }

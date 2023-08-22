@@ -1,10 +1,7 @@
 package org.moqucu.games.nightstalker.model.enemy.test;
 
 import org.junit.jupiter.api.Test;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.GameWorld;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
+import org.moqucu.games.nightstalker.model.*;
 import org.moqucu.games.nightstalker.model.enemy.GreyRobot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,6 +15,33 @@ public class GreyRobotTest {
     public void isOfTypeMovableObject() {
 
         assertThat(greyRobot, isA(MovableObject.class));
+    }
+
+    @Test
+    public void isOfTypeResettable() {
+
+        assertThat(greyRobot, isA(Resettable.class));
+    }
+
+    @Test
+    public void resetSetsThingsBack() {
+
+        final GreyRobot anotherRobot = new GreyRobot();
+        anotherRobot.setAnimated(false);
+        anotherRobot.setInMotion(false);
+        anotherRobot.setXPosition(96);
+        assertThat(anotherRobot.isSlow(), is(false));
+        assertThat(anotherRobot.getVelocity(), is(30.0));
+        anotherRobot.setDirection(Direction.Left);
+
+        anotherRobot.reset();
+
+        assertThat(anotherRobot.isAnimated(), is(true));
+        assertThat(anotherRobot.isInMotion(), is(true));
+        assertThat(anotherRobot.getXPosition(), is(48.0));
+        assertThat(anotherRobot.getDirection(), is(Direction.Right));
+        assertThat(anotherRobot.getVelocity(), is(15.0));
+        assertThat(anotherRobot.isSlow(), is(true));
     }
 
     @Test
@@ -55,13 +79,14 @@ public class GreyRobotTest {
     }
 
     @Test
-    public void whenChangingDirectionForTheFirstTimeVelocityDoubles() {
+    public void whenXPositionGetsToNinetySixThenVelocityDoubles() {
 
         final GameWorld gameWorld = new GameWorld();
         final GreyRobot anotherGreyRobotModel = new GreyRobot();
         gameWorld.add(anotherGreyRobotModel);
 
-        anotherGreyRobotModel.setDirection(Direction.Left);
+        anotherGreyRobotModel.setXPosition(96);
+        assertThat(anotherGreyRobotModel.isSlow(), is(false));
         assertThat(anotherGreyRobotModel.getVelocity(), is(30.));
     }
 
