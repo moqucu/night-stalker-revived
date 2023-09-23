@@ -60,14 +60,14 @@ public class OuterRingTest extends MazeAlgorithmImplTest {
     }
 
     @Test
-    public void from_32_64_Down_To_32_32_Up() {
+    public void from_32_64_Down_To_00_64_Left() {
 
         assertThat(
                 outerRing.getNextAbsPos(
                         absMazeGraph,
                         new AbsPosAndDirection(new AbsolutePosition(32.0, 64.0), Direction.Down)
                 ),
-                is(new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Up))
+                is(new AbsPosAndDirection(new AbsolutePosition(0.0, 64.0), Direction.Left))
         );
     }
 
@@ -96,14 +96,14 @@ public class OuterRingTest extends MazeAlgorithmImplTest {
     }
 
     @Test
-    public void from_96_32_Right_To_64_32_Left() {
+    public void from_96_32_Right_To_96_00_Up() {
 
         assertThat(
                 outerRing.getNextAbsPos(
                         absMazeGraph,
                         new AbsPosAndDirection(new AbsolutePosition(96.0, 32.0), Direction.Right)
                 ),
-                is(new AbsPosAndDirection(new AbsolutePosition(64.0, 32.0), Direction.Left))
+                is(new AbsPosAndDirection(new AbsolutePosition(96.0, 00.0), Direction.Up))
         );
     }
 

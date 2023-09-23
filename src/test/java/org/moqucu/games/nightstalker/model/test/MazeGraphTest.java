@@ -47,7 +47,7 @@ public class MazeGraphTest {
                 adjacencyList,
                 hasEntry(
                         is(new RelativePosition(1, 2)),
-                        containsInAnyOrder(new RelativePosition(1, 1))
+                        containsInAnyOrder(new RelativePosition(1, 1), new RelativePosition(0, 2))
                 )
         );
         assertThat(
@@ -76,7 +76,7 @@ public class MazeGraphTest {
                 adjacencyList,
                 hasEntry(
                         is(new RelativePosition(3, 1)),
-                        containsInAnyOrder(new RelativePosition(2, 1))
+                        containsInAnyOrder(new RelativePosition(2, 1), new RelativePosition(3, 0))
                 )
         );
     }
@@ -176,7 +176,7 @@ public class MazeGraphTest {
         final RelativePosition threeOne = new RelativePosition(3, 1);
         mazeGraph.loadFromJson(getClass().getResourceAsStream("MazeGraphTest.json"));
         assertThat(
-                mazeGraph.getClosestReachableNode(threeOne, Direction.Up),
+                mazeGraph.getClosestReachableNode(threeOne, Direction.Right),
                 is(threeOne)
         );
     }
