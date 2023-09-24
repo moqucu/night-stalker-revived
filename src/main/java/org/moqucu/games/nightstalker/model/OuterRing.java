@@ -15,25 +15,15 @@ public class OuterRing implements MazeAlgorithmImpl {
     @Override
     public AbsPosAndDirection getNextAbsPos(AbsMazeGraph absMazeGraph, AbsPosAndDirection absPosAndDirection) {
 
-        List<Direction> directionSequence;
-        switch (absPosAndDirection.getDirection()) {
-            case Up:
-                directionSequence = Arrays.asList(Direction.Right, Direction.Left, Direction.Up, Direction.Down);
-                break;
-            case Down:
-                directionSequence = Arrays.asList(Direction.Left, Direction.Right, Direction.Down, Direction.Up);
-                break;
-            case Left:
-                directionSequence = Arrays.asList(Direction.Up, Direction.Down, Direction.Left, Direction.Right);
-                break;
-            case Right:
-                directionSequence = Arrays.asList(Direction.Down, Direction.Up, Direction.Right, Direction.Left);
-                break;
-            default:
-                throw new UnacceptableDirectionException(
-                        String.format("%s is an unacceptable direction!", absPosAndDirection.getDirection())
-                );
-        }
+        List<Direction> directionSequence = switch (absPosAndDirection.getDirection()) {
+            case Up -> Arrays.asList(Direction.Right, Direction.Left, Direction.Up, Direction.Down);
+            case Down -> Arrays.asList(Direction.Left, Direction.Right, Direction.Down, Direction.Up);
+            case Left -> Arrays.asList(Direction.Up, Direction.Down, Direction.Left, Direction.Right);
+            case Right -> Arrays.asList(Direction.Down, Direction.Up, Direction.Right, Direction.Left);
+            default -> throw new UnacceptableDirectionException(
+                    String.format("%s is an unacceptable direction!", absPosAndDirection.getDirection())
+            );
+        };
         int i = 0;
         while (
                 absMazeGraph.getClosestReachablePosition(
