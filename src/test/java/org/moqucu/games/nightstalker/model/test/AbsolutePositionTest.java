@@ -68,4 +68,20 @@ public class AbsolutePositionTest {
         absolutePosition.addToY(20.0);
         assertThat(absolutePosition.getY(), is(MAX_Y));
     }
+
+    @Test
+    public void distanceBetween20_40And30_80IsAround41() {
+
+        final AbsolutePosition x1 = new AbsolutePosition(20.0, 40.0);
+        final AbsolutePosition x2 = new AbsolutePosition(30.0, 80.0);
+        assertThat(x1.distanceTo(x2), closeTo(41.231056256177, 0.1));
+    }
+
+    @Test
+    public void distanceBetween30_30And30_30IsZero() {
+
+        final AbsolutePosition x1 = new AbsolutePosition(30.0, 30.0);
+        final AbsolutePosition x2 = new AbsolutePosition(30.0, 30.0);
+        assertThat(x1.distanceTo(x2), is(0.0));
+    }
 }

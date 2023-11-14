@@ -30,12 +30,12 @@ public class FollowDirectionTest extends MazeAlgorithmImplTest {
     }
 
     @Test
-    public void from_64_32_Right_To_96_32_Right() {
+    public void from_70_32_Right_To_96_32_Right() {
 
         assertThat(
                 followDirection.getNextAbsPos(
                         absMazeGraph,
-                        new AbsPosAndDirection(new AbsolutePosition(64.0, 32.0), Direction.Right)
+                        new AbsPosAndDirection(new AbsolutePosition(70.0, 32.0), Direction.Right)
                 ),
                 is(new AbsPosAndDirection(new AbsolutePosition(96.0, 32.0), Direction.Right))
         );
@@ -62,6 +62,30 @@ public class FollowDirectionTest extends MazeAlgorithmImplTest {
                         new AbsPosAndDirection(new AbsolutePosition(32.0, 00.0), Direction.Up)
                 ),
                 is(new AbsPosAndDirection(new AbsolutePosition(32.0, 00.0), Direction.Up))
+        );
+    }
+
+    @Test
+    public void from_68_32_Up_To_96_32_Up() {
+
+        assertThat(
+                followDirection.getNextAbsPos(
+                        absMazeGraph,
+                        new AbsPosAndDirection(new AbsolutePosition(68.0, 32.0), Direction.Up)
+                ),
+                is(new AbsPosAndDirection(new AbsolutePosition(96.0, 32.0), Direction.Up))
+        );
+    }
+
+    @Test
+    public void from_40_32_Down_To_32_32_Down() {
+
+        assertThat(
+                followDirection.getNextAbsPos(
+                        absMazeGraph,
+                        new AbsPosAndDirection(new AbsolutePosition(40.0, 32.0), Direction.Down)
+                ),
+                is(new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Down))
         );
     }
 }

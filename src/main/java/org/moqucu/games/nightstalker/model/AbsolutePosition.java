@@ -35,4 +35,11 @@ public class AbsolutePosition {
         else if (y > MAX_Y)
             y = MAX_Y;
     }
+
+    public double distanceTo(AbsolutePosition otherAbsolutePosition) {
+
+        return Math.sqrt(
+                Math.pow(otherAbsolutePosition.getX() - getX(), 2) + Math.pow(otherAbsolutePosition.getY() - getY(), 2)
+        );
+    }
 }
