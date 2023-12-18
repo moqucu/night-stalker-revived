@@ -6,9 +6,9 @@ import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.Resettable;
 
+@Getter
 public class NightStalker extends MovableObject implements Resettable {
 
-    @Getter
     private boolean running;
 
     public NightStalker() {

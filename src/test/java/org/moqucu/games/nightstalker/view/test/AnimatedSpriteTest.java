@@ -61,22 +61,22 @@ public class AnimatedSpriteTest {
         final GameWorld gameWorld = new GameWorld();
         gameWorld.add(animatedObject);
         animatedSprite.setModel(animatedObject);
-        assertThatViewportFollowsFrameIndex(1);
+        assertThatViewportFollowsFrameIndex(0);
 
         gameWorld.pulse(100);
-        assertThatViewportFollowsFrameIndex(2);
+        assertThatViewportFollowsFrameIndex(1);
 
         gameWorld.pulse(200);
-        assertThatViewportFollowsFrameIndex(4);
+        assertThatViewportFollowsFrameIndex(3);
 
         gameWorld.pulse(400);
+        assertThatViewportFollowsFrameIndex(7);
+
+        gameWorld.pulse(100);
         assertThatViewportFollowsFrameIndex(8);
 
         gameWorld.pulse(100);
         assertThatViewportFollowsFrameIndex(9);
-
-        gameWorld.pulse(100);
-        assertThatViewportFollowsFrameIndex(0);
     }
 
     @Test
@@ -94,31 +94,35 @@ public class AnimatedSpriteTest {
         final GameWorld gameWorld = new GameWorld();
         gameWorld.add(animatedObject);
         animatedSprite.setModel(animatedObject);
+        assertThatViewportFollowsFrameIndex(0);
+
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
         assertThatViewportFollowsFrameIndex(1);
 
         gameWorld.pulse(50);
         gameWorld.pulse(50);
-        assertThatViewportFollowsFrameIndex(2);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        assertThatViewportFollowsFrameIndex(3);
 
         gameWorld.pulse(50);
         gameWorld.pulse(50);
         gameWorld.pulse(50);
         gameWorld.pulse(50);
-        assertThatViewportFollowsFrameIndex(4);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        gameWorld.pulse(50);
+        assertThatViewportFollowsFrameIndex(7);
 
-        gameWorld.pulse(50);
-        gameWorld.pulse(50);
-        gameWorld.pulse(50);
-        gameWorld.pulse(50);
-        gameWorld.pulse(50);
-        gameWorld.pulse(50);
-        gameWorld.pulse(50);
-        gameWorld.pulse(50);
+        gameWorld.pulse(25);
+        gameWorld.pulse(25);
+        gameWorld.pulse(25);
+        gameWorld.pulse(25);
         assertThatViewportFollowsFrameIndex(8);
 
-        gameWorld.pulse(25);
-        gameWorld.pulse(25);
-        gameWorld.pulse(25);
+        gameWorld.pulse(75);
         gameWorld.pulse(25);
         assertThatViewportFollowsFrameIndex(9);
 

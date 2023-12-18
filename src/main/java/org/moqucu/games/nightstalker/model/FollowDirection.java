@@ -50,7 +50,7 @@ public class FollowDirection implements MazeAlgorithmImpl {
                                             absPosAndDirection.getAbsolutePosition(),
                                             alternativeDirection
                                     ),
-                                    absPosAndDirection.getDirection()
+                                    alternativeDirection
                             )
                     ).toList();
 
@@ -65,7 +65,9 @@ public class FollowDirection implements MazeAlgorithmImpl {
                                         ),
                                         absPosAndDirection.getDirection()
                                 );
-                                return !alternativeJumpPoint.equals(potentiallyNextPointPoint);
+                                return !alternativeJumpPoint
+                                        .getAbsolutePosition()
+                                        .equals(potentiallyNextPointPoint.getAbsolutePosition());
                             }
                     ).toList();
 

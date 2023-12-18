@@ -66,26 +66,53 @@ public class FollowDirectionTest extends MazeAlgorithmImplTest {
     }
 
     @Test
-    public void from_68_32_Up_To_96_32_Up() {
+    public void from_32_32_Top_To_32_00_Top() {
+
+        assertThat(
+                followDirection.getNextAbsPos(
+                        absMazeGraph,
+                        new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Up)
+                ),
+                is(new AbsPosAndDirection(new AbsolutePosition(32.0, 00.0), Direction.Up))
+        );
+    }
+
+    @Test
+    public void from_68_32_Up_To_96_32_Right() {
 
         assertThat(
                 followDirection.getNextAbsPos(
                         absMazeGraph,
                         new AbsPosAndDirection(new AbsolutePosition(68.0, 32.0), Direction.Up)
                 ),
-                is(new AbsPosAndDirection(new AbsolutePosition(96.0, 32.0), Direction.Up))
+                is(new AbsPosAndDirection(new AbsolutePosition(96.0, 32.0), Direction.Right))
         );
     }
 
     @Test
-    public void from_40_32_Down_To_32_32_Down() {
+    public void from_40_32_Down_To_32_32_Left() {
 
         assertThat(
                 followDirection.getNextAbsPos(
                         absMazeGraph,
                         new AbsPosAndDirection(new AbsolutePosition(40.0, 32.0), Direction.Down)
                 ),
-                is(new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Down))
+                is(new AbsPosAndDirection(new AbsolutePosition(32.0, 32.0), Direction.Left))
+        );
+    }
+
+
+    @Test
+    public void from_65_32_Up_To_96_32_Right() {
+
+        final AbsPosAndDirection nextTarget = followDirection.getNextAbsPos(
+                absMazeGraph,
+                new AbsPosAndDirection(new AbsolutePosition(65.0, 32.0), Direction.Up)
+        );
+
+        assertThat(
+                nextTarget,
+                is(new AbsPosAndDirection(new AbsolutePosition(96.0, 32.0), Direction.Right))
         );
     }
 }

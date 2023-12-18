@@ -44,8 +44,7 @@ public abstract class AnimatedObject extends DisplayableObject implements TimeLi
                     lowerAnimationIndex
             );
 
-            if (getInitialImageIndex() == -1)
-                setImageIndex(lowerAnimationIndex);
+            setImageIndex(lowerAnimationIndex);
         }
     }
 
