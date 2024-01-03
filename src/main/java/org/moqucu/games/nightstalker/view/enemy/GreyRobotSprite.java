@@ -5,9 +5,9 @@ import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.view.MovableSprite;
 
+@Getter
 public class GreyRobotSprite extends MovableSprite {
 
-    @Getter
     private GreyRobot model;
 
     public GreyRobotSprite() {

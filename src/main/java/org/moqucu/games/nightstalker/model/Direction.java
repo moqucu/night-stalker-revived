@@ -57,19 +57,14 @@ public enum Direction {
 
     public static Direction opposite(Direction direction) {
 
-        switch (direction) {
-            case Right:
-                return Direction.Left;
-            case Left:
-                return Direction.Right;
-            case Down:
-                return Direction.Up;
-            case Up:
-                return Direction.Down;
-            default:
-                throw new NoOppositeDirectionAvailable(
-                        String.format("No opposite direction available to %s!", direction)
-                );
-        }
+        return switch (direction) {
+            case Right -> Direction.Left;
+            case Left -> Direction.Right;
+            case Down -> Direction.Up;
+            case Up -> Direction.Down;
+            default -> throw new NoOppositeDirectionAvailable(
+                    String.format("No opposite direction available to %s!", direction)
+            );
+        };
     }
 }

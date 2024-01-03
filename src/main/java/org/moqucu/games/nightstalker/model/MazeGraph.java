@@ -55,7 +55,7 @@ public class MazeGraph {
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<AdjacencyListElement> adjacencyLists
-                = objectMapper.readValue(adjacencyListJsonArray, new TypeReference<List<AdjacencyListElement>>() {
+                = objectMapper.readValue(adjacencyListJsonArray, new TypeReference<>() {
         });
 
         adjacencyLists.forEach(adjacencyListItem -> adjacencyListItem.getAdjacentNodes().forEach(node ->
@@ -145,21 +145,15 @@ public class MazeGraph {
 
     public RelativePosition getClosestReachableNode(RelativePosition node, Direction direction) {
 
-        switch (direction) {
-
-            case Left:
-                return getClosestReachableNodeToTheLeft(node);
-            case Right:
-                return getClosestReachableNodeToTheRight(node);
-            case Up:
-                return getClosestReachableNodeAbove(node);
-            case Down:
-                return getClosestReachableNodeBelow(node);
-            default:
-                throw new UnrecognizedDirectionException(
-                        MessageFormat.format("Direction {0} is not a valid input for this method!", direction)
-                );
-        }
+        return switch (direction) {
+            case Left -> getClosestReachableNodeToTheLeft(node);
+            case Right -> getClosestReachableNodeToTheRight(node);
+            case Up -> getClosestReachableNodeAbove(node);
+            case Down -> getClosestReachableNodeBelow(node);
+            default -> throw new UnrecognizedDirectionException(
+                    MessageFormat.format("Direction {0} is not a valid input for this method!", direction)
+            );
+        };
     }
 
     private boolean isNodeOnNode(RelativePosition node) {
@@ -204,7 +198,7 @@ public class MazeGraph {
             List<RelativePosition> nodes
     ) {
 
-        RelativePosition furthestNode = nodes.size() > 0 ? nodes.get(0) : node;
+        RelativePosition furthestNode = !nodes.isEmpty() ? nodes.get(0) : node;
 
         for (int i = 0; i + 1 < nodes.size(); i++)
 
@@ -224,7 +218,7 @@ public class MazeGraph {
             List<RelativePosition> nodes
     ) {
 
-        RelativePosition furthestNode = nodes.size() > 0 ? nodes.get(nodes.size() - 1) : node;
+        RelativePosition furthestNode = !nodes.isEmpty() ? nodes.get(nodes.size() - 1) : node;
 
         for (int i = nodes.size() - 1; i > 0; i--)
 
@@ -253,13 +247,12 @@ public class MazeGraph {
 
         logAllNodesIndividuallyWhenInTraceMode(direction, sortedListOfNodesThatMatchCondition);
 
-        switch (direction) {
-            case Down:
-            case Right:
-                return findAndReturnFurthestNodesInAscOrder(direction, node, sortedListOfNodesThatMatchCondition);
-            default: // Up & Left
-                return findAndReturnFurthestNodesInDescOrder(direction, node, sortedListOfNodesThatMatchCondition);
-        }
+        return switch (direction) {
+            case Down, Right ->
+                    findAndReturnFurthestNodesInAscOrder(direction, node, sortedListOfNodesThatMatchCondition);
+            default -> // Up & Left
+                    findAndReturnFurthestNodesInDescOrder(direction, node, sortedListOfNodesThatMatchCondition);
+        };
     }
 
     public RelativePosition getFurthestReachableNode(RelativePosition node, Direction direction) {

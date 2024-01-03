@@ -3,10 +3,10 @@ package org.moqucu.games.nightstalker.model;
 import lombok.Getter;
 import lombok.Setter;
 
+@Setter
+@Getter
 public abstract class CollidableImpl implements Collidable {
 
-    @Getter
-    @Setter
     private BoundingBox boundingBox;
 
     public CollidableImpl() {

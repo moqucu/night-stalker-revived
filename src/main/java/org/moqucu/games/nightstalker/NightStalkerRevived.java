@@ -11,9 +11,9 @@ import org.moqucu.games.nightstalker.utility.SystemWrapper;
 
 import java.util.Objects;
 
+@Getter
 public class NightStalkerRevived extends Application {
 
-    @Getter
     private GameController gameController;
 
     @Override

@@ -5,9 +5,9 @@ import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.view.MovableSprite;
 
+@Getter
 public class NightStalkerSprite extends MovableSprite {
 
-    @Getter
     private NightStalker model;
 
     public NightStalkerSprite() {

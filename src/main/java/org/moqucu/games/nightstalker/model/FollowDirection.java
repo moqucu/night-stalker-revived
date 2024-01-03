@@ -20,10 +20,10 @@ public class FollowDirection implements MazeAlgorithmImpl {
         // Attempt naive approach: try to get somewhere directly
         final AbsPosAndDirection closestReachablePosition = new AbsPosAndDirection(
                 absMazeGraph.getClosestReachablePosition(
-                        absPosAndDirection.getAbsolutePosition(),
-                        absPosAndDirection.getDirection()
+                        absPosAndDirection.absolutePosition(),
+                        absPosAndDirection.direction()
                 ),
-                absPosAndDirection.getDirection()
+                absPosAndDirection.direction()
         );
 
         // If calculated position is not starting position, then let's go there
@@ -34,11 +34,11 @@ public class FollowDirection implements MazeAlgorithmImpl {
         else {
 
             // Determine alternative directions
-            List<Direction> alternativeDirections = switch (absPosAndDirection.getDirection()) {
+            List<Direction> alternativeDirections = switch (absPosAndDirection.direction()) {
                 case Up, Down -> Arrays.asList(Direction.Right, Direction.Left);
                 case Left, Right -> Arrays.asList(Direction.Up, Direction.Down);
                 default -> throw new OuterRing.UnacceptableDirectionException(
-                        String.format("%s is an unacceptable direction!", absPosAndDirection.getDirection())
+                        String.format("%s is an unacceptable direction!", absPosAndDirection.direction())
                 );
             };
 
@@ -47,7 +47,7 @@ public class FollowDirection implements MazeAlgorithmImpl {
                     .stream()
                     .map(alternativeDirection -> new AbsPosAndDirection(
                                     absMazeGraph.getClosestReachablePosition(
-                                            absPosAndDirection.getAbsolutePosition(),
+                                            absPosAndDirection.absolutePosition(),
                                             alternativeDirection
                                     ),
                                     alternativeDirection
@@ -60,14 +60,14 @@ public class FollowDirection implements MazeAlgorithmImpl {
                     .filter(alternativeJumpPoint -> {
                                 final AbsPosAndDirection potentiallyNextPointPoint = new AbsPosAndDirection(
                                         absMazeGraph.getClosestReachablePosition(
-                                                alternativeJumpPoint.getAbsolutePosition(),
-                                                absPosAndDirection.getDirection()
+                                                alternativeJumpPoint.absolutePosition(),
+                                                absPosAndDirection.direction()
                                         ),
-                                        absPosAndDirection.getDirection()
+                                        absPosAndDirection.direction()
                                 );
                                 return !alternativeJumpPoint
-                                        .getAbsolutePosition()
-                                        .equals(potentiallyNextPointPoint.getAbsolutePosition());
+                                        .absolutePosition()
+                                        .equals(potentiallyNextPointPoint.absolutePosition());
                             }
                     ).toList();
 
@@ -75,7 +75,7 @@ public class FollowDirection implements MazeAlgorithmImpl {
             final Map<Double, AbsPosAndDirection> distanceMap = new HashMap<>();
             for (AbsPosAndDirection element : supportiveAlternativeDirections) {
 
-                final double distance = absPosAndDirection.getAbsolutePosition().distanceTo(element.getAbsolutePosition());
+                final double distance = absPosAndDirection.absolutePosition().distanceTo(element.absolutePosition());
                 distanceMap.put(distance, element);
             }
 

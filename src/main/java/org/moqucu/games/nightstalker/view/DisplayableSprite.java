@@ -52,7 +52,7 @@ public class DisplayableSprite extends ImageView implements Sprite {
 
     private void initializeImageFromImageMapFileName(String imageMapFileName) {
 
-        if (imageMapFileName == null || imageMapFileName.equals(""))
+        if (imageMapFileName == null || imageMapFileName.isEmpty())
             setImage(null);
 
         Objects.requireNonNull(imageMapFileName);

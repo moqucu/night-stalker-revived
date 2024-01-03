@@ -120,7 +120,7 @@ public abstract class MovableObject extends AnimatedObject {
                     oldMazeGraphFileName,
                     mazeGraphFileName
             );
-         } catch (NullPointerException exception) {
+        } catch (NullPointerException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_CANNOT_BE_NULL);
         } catch (JsonParseException | JsonMappingException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT);
@@ -129,11 +129,14 @@ public abstract class MovableObject extends AnimatedObject {
         }
     }
 
-    private void updateAbsolutePosAndDirection(AbsPosAndDirection nextAbsPosAndDirection) {
+    private void moveForRangeIntoDirection(double range, Direction direction) {
 
-        setXPosition(nextAbsPosAndDirection.getAbsolutePosition().getX());
-        setYPosition(nextAbsPosAndDirection.getAbsolutePosition().getY());
-        setDirection(nextAbsPosAndDirection.getDirection());
+        switch (direction) {
+            case Up -> addToYPosition(-1.0 * range);
+            case Down -> addToYPosition(range);
+            case Left -> addToXPosition(-1.0 * range);
+            case Right -> addToXPosition(range);
+        }
     }
 
     @Override
@@ -142,66 +145,30 @@ public abstract class MovableObject extends AnimatedObject {
         super.elapseTime(milliseconds);
 
         double range = milliseconds / 1000 * getVelocity();
-        double absDiff;
 
-        if (isInMotion()) {
+        while (isInMotion() && range > 0) {
 
-            while (range > 0) {
+            final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
+                    absMazeGraph,
+                    new AbsPosAndDirection(
+                            new AbsolutePosition(getXPosition(), getYPosition()),
+                            getDirection()
+                    )
+            );
 
-                final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(
-                                new AbsolutePosition(getXPosition(), getYPosition()),
-                                direction
-                        )
-                );
+            final Direction originalDirection = getDirection();
+            setDirection(nextAbsPos.direction());
 
-                switch (nextAbsPos.getDirection()) {
-                    case Up -> {
-                        absDiff = getYPosition() - nextAbsPos.getAbsolutePosition().getY();
-                        if (range < absDiff) {
-                            addToYPosition(-1.0 * range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                    case Down -> {
-                        absDiff = nextAbsPos.getAbsolutePosition().getY() - getYPosition();
-                        if (range < absDiff) {
-                            addToYPosition(range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                    case Left -> {
-                        absDiff = getXPosition() - nextAbsPos.getAbsolutePosition().getX();
-                        if (range < absDiff) {
-                            addToXPosition(-1.0 * range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                    case Right -> {
-                        absDiff = nextAbsPos.getAbsolutePosition().getX() - getXPosition();
-                        if (range < absDiff) {
-                            addToXPosition(range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                }
+            final double distance = getAbsolutePosition().distanceTo(nextAbsPos.absolutePosition());
+
+            double moveDistance = Math.min(range, distance);
+            moveForRangeIntoDirection(moveDistance, getDirection());
+
+            if (range < distance)
+                range = 0;
+            else {
+                range = distance == 0 || originalDirection.equals(getDirection()) ? 0 : range - distance;
+                setDirection(originalDirection);
             }
         }
     }

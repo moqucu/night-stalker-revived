@@ -174,4 +174,9 @@ public abstract class DisplayableObject extends GameObject implements Collidable
             throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
         }
     }
+
+    public AbsolutePosition getAbsolutePosition() {
+
+        return new AbsolutePosition(getXPosition(), getYPosition());
+    }
 }

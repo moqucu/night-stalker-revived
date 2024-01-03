@@ -6,16 +6,14 @@ import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.Resettable;
 
+@Getter
 public class GreyRobot extends MovableObject implements Resettable {
 
-    @Getter
-    private boolean active = false;
+    private final boolean active = false;
 
-    @Getter
     private boolean slow = true;
 
-    @Getter
-    private boolean fallingApart = true;
+    private final boolean fallingApart = true;
 
     public GreyRobot() {
 
