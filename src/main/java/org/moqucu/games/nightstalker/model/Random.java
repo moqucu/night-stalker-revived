@@ -10,21 +10,21 @@ public class Random implements MazeAlgorithmImpl {
     @Override
     public AbsPosAndDirection getNextAbsPos(AbsMazeGraph absMazeGraph, AbsPosAndDirection absPosAndDirection) {
 
-        if (!absMazeGraph.isOnNode(absPosAndDirection.getAbsolutePosition()))
+        if (!absMazeGraph.isOnNode(absPosAndDirection.absolutePosition()))
 
             return new AbsPosAndDirection(
                     absMazeGraph.getClosestReachablePosition(
-                            absPosAndDirection.getAbsolutePosition(),
-                            absPosAndDirection.getDirection()
+                            absPosAndDirection.absolutePosition(),
+                            absPosAndDirection.direction()
                     ),
-                    absPosAndDirection.getDirection()
+                    absPosAndDirection.direction()
             );
 
         final Set<AbsPosAndDirection> reachablePositions = new HashSet<>();
         reachablePositions.add(
                 new AbsPosAndDirection(
                         absMazeGraph.getClosestReachablePosition(
-                                absPosAndDirection.getAbsolutePosition(),
+                                absPosAndDirection.absolutePosition(),
                                 Direction.Left
                         ),
                         Direction.Left
@@ -33,7 +33,7 @@ public class Random implements MazeAlgorithmImpl {
         reachablePositions.add(
                 new AbsPosAndDirection(
                         absMazeGraph.getClosestReachablePosition(
-                                absPosAndDirection.getAbsolutePosition(),
+                                absPosAndDirection.absolutePosition(),
                                 Direction.Up
                         ),
                         Direction.Up
@@ -42,7 +42,7 @@ public class Random implements MazeAlgorithmImpl {
         reachablePositions.add(
                 new AbsPosAndDirection(
                         absMazeGraph.getClosestReachablePosition(
-                                absPosAndDirection.getAbsolutePosition(),
+                                absPosAndDirection.absolutePosition(),
                                 Direction.Right
                         ),
                         Direction.Right
@@ -51,7 +51,7 @@ public class Random implements MazeAlgorithmImpl {
         reachablePositions.add(
                 new AbsPosAndDirection(
                         absMazeGraph.getClosestReachablePosition(
-                                absPosAndDirection.getAbsolutePosition(),
+                                absPosAndDirection.absolutePosition(),
                                 Direction.Down
                         ),
                         Direction.Down
@@ -59,15 +59,15 @@ public class Random implements MazeAlgorithmImpl {
         );
         reachablePositions.removeIf(
                 absPosAndDirectionAlternative -> absPosAndDirectionAlternative
-                        .getAbsolutePosition()
-                        .equals(absPosAndDirection.getAbsolutePosition())
+                        .absolutePosition()
+                        .equals(absPosAndDirection.absolutePosition())
         );
 
         if (reachablePositions.size() > 1)
             reachablePositions.removeIf(
                     absPosAndDirectionAlternative -> absPosAndDirectionAlternative
-                            .getDirection()
-                            .equals(Direction.opposite(absPosAndDirection.getDirection()))
+                            .direction()
+                            .equals(Direction.opposite(absPosAndDirection.direction()))
             );
 
         final int index = random.ints(0, reachablePositions.size()).findFirst().orElseThrow();

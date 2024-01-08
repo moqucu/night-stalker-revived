@@ -174,10 +174,15 @@ public class GameController {
                 .filter(gameObject -> gameObject instanceof NightStalker)
                 .findFirst()
                 .orElseThrow();
-        nightStalker.run(direction);
+        switch (direction) {
+            case Up -> nightStalker.setUpPressed(true);
+            case Down -> nightStalker.setDownPressed(true);
+            case Left -> nightStalker.setLeftPressed(true);
+            case Right -> nightStalker.setRightPressed(true);
+        }
     }
 
-    public void stopNightStalker() {
+    public void stopNightStalker(Direction direction) {
 
         final NightStalker nightStalker = (NightStalker) gameWorld.getObjects()
                 .values()
@@ -185,6 +190,11 @@ public class GameController {
                 .filter(gameObject -> gameObject instanceof NightStalker)
                 .findFirst()
                 .orElseThrow();
-        nightStalker.stop();
+        switch (direction) {
+            case Up -> nightStalker.setUpPressed(false);
+            case Down -> nightStalker.setDownPressed(false);
+            case Left -> nightStalker.setLeftPressed(false);
+            case Right -> nightStalker.setRightPressed(false);
+        }
     }
 }

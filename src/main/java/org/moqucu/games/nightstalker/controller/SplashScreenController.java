@@ -57,7 +57,11 @@ public class SplashScreenController {
                 keyReleasedEvent -> {
 
                     switch (keyReleasedEvent.getCode()) {
-                        case UP, DOWN, LEFT, RIGHT -> gameController.stopNightStalker();
+                        case UP -> gameController.stopNightStalker(Direction.Up);
+                        case DOWN -> gameController.stopNightStalker(Direction.Down);
+                        case LEFT -> gameController.stopNightStalker(Direction.Left);
+                        case RIGHT -> gameController.stopNightStalker(Direction.Right);
+//                        case UP, DOWN, LEFT, RIGHT -> gameController.stopNightStalker();
                     }
 
                 }

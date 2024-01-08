@@ -4,18 +4,15 @@ import lombok.Getter;
 
 import java.util.*;
 
+@Getter
 public class GameWorld implements Resettable {
 
-    @Getter
     private double time = 0;
 
-    @Getter
     private final Map<String, GameObject> objects = new HashMap<>();
 
-    @Getter
     private final Set<TimeListener> timeListeners = new HashSet<>();
 
-    @Getter
     private final MazeGraph mazeGraph = new MazeGraph();
 
     private void advanceTime(double milliseconds) {

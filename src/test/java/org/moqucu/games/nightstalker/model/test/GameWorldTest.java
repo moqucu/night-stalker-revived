@@ -124,20 +124,26 @@ public class GameWorldTest {
 
         gameObject.setInMotion(true);
         gameWorld.pulse(4000);
-        assertThat(gameObject.getXPosition(), is(72.0));
-        assertThat(gameObject.getYPosition(), is(32.0));
+        assertThat(gameObject.getXPosition(), is(32.0));
+        assertThat(gameObject.getYPosition(), is(56.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(4000);
-        assertThat(gameObject.getXPosition(), is(40.0));
+        assertThat(gameObject.getXPosition(), is(88.0));
         assertThat(gameObject.getYPosition(), is(32.0));
         gameObject.setInMotion(false);
 
         gameObject.setInMotion(true);
         gameWorld.pulse(2000);
-        assertThat(gameObject.getXPosition(), is(32.0));
+        assertThat(gameObject.getXPosition(), is(96.0));
         assertThat(gameObject.getYPosition(), is(0.0));
+        gameObject.setInMotion(false);
+
+        gameObject.setInMotion(true);
+        gameWorld.pulse(5000);
+        assertThat(gameObject.getXPosition(), is(32.0));
+        assertThat(gameObject.getYPosition(), is(28.0));
         gameObject.setInMotion(false);
     }
 

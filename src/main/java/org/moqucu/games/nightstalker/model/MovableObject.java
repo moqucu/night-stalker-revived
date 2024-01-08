@@ -3,10 +3,12 @@ package org.moqucu.games.nightstalker.model;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@Log4j2
 public abstract class MovableObject extends AnimatedObject {
 
     public static final String MAZE_JSON_FILE_NAME_CANNOT_BE_NULL = "Maze json file name cannot be null!";
@@ -120,7 +122,7 @@ public abstract class MovableObject extends AnimatedObject {
                     oldMazeGraphFileName,
                     mazeGraphFileName
             );
-         } catch (NullPointerException exception) {
+        } catch (NullPointerException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(MAZE_JSON_FILE_NAME_CANNOT_BE_NULL);
         } catch (JsonParseException | JsonMappingException exception) {
             throw new PreconditionNotMetForSettingObjectInMotionException(JSON_FILE_WITH_MAZE_GRAPH_IS_CORRUPT);
@@ -129,80 +131,59 @@ public abstract class MovableObject extends AnimatedObject {
         }
     }
 
-    private void updateAbsolutePosAndDirection(AbsPosAndDirection nextAbsPosAndDirection) {
+    private void moveForRangeIntoDirection(double range, Direction direction) {
 
-        setXPosition(nextAbsPosAndDirection.getAbsolutePosition().getX());
-        setYPosition(nextAbsPosAndDirection.getAbsolutePosition().getY());
-        setDirection(nextAbsPosAndDirection.getDirection());
+        switch (direction) {
+            case Up -> addToYPosition(-1.0 * range);
+            case Down -> addToYPosition(range);
+            case Left -> addToXPosition(-1.0 * range);
+            case Right -> addToXPosition(range);
+        }
     }
 
     @Override
     public void elapseTime(double milliseconds) {
 
+        // Figure out the required animation changes...
         super.elapseTime(milliseconds);
 
+        // Compute the range that the object shall have moved since the last update
         double range = milliseconds / 1000 * getVelocity();
-        double absDiff;
 
-        if (isInMotion()) {
+        // Repeat while object is in motion and there is still way to go...
+        while (isInMotion() && range > 0) {
 
-            while (range > 0) {
+            // Find the next targeted position given current position and maze algorithm
+            final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
+                    absMazeGraph,
+                    new AbsPosAndDirection(
+                            new AbsolutePosition(getXPosition(), getYPosition()),
+                            getDirection()
+                    )
+            );
 
-                final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
-                        absMazeGraph,
-                        new AbsPosAndDirection(
-                                new AbsolutePosition(getXPosition(), getYPosition()),
-                                direction
-                        )
-                );
+            // If we are already standing on the targeted position, get out of the loop
+            if (nextAbsPos.getAbsolutePosition().equals(getAbsolutePosition()))
+                break;
 
-                switch (nextAbsPos.getDirection()) {
-                    case Up -> {
-                        absDiff = getYPosition() - nextAbsPos.getAbsolutePosition().getY();
-                        if (range < absDiff) {
-                            addToYPosition(-1.0 * range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                    case Down -> {
-                        absDiff = nextAbsPos.getAbsolutePosition().getY() - getYPosition();
-                        if (range < absDiff) {
-                            addToYPosition(range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                    case Left -> {
-                        absDiff = getXPosition() - nextAbsPos.getAbsolutePosition().getX();
-                        if (range < absDiff) {
-                            addToXPosition(-1.0 * range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                    case Right -> {
-                        absDiff = nextAbsPos.getAbsolutePosition().getX() - getXPosition();
-                        if (range < absDiff) {
-                            addToXPosition(range);
-                            setDirection(nextAbsPos.getDirection());
-                            range = 0;
-                        } else {
-                            updateAbsolutePosAndDirection(nextAbsPos);
-                            range = absDiff != 0 ? (range - absDiff) : 0;
-                        }
-                    }
-                }
-            }
+            // Memorize originally intended direction and change direction to computed one
+            final Direction originalDirection = getDirection();
+            setDirection(nextAbsPos.direction());
+
+            // Compute distance to targeted position
+            final double distance = getAbsolutePosition().distanceTo(nextAbsPos.absolutePosition());
+
+            // Determine whether range or distance to targeted position is smaller and move that much
+            double moveDistance = Math.min(range, distance);
+            moveForRangeIntoDirection(moveDistance, getDirection());
+
+            // Reduce range by moved distance
+            range -= moveDistance;
+
+            // If range is left without having reached target point, set direction back to original one
+            // This way we can go 'around corners' without getting stuck somewhere
+            if (range > 0 && getMazeAlgorithm().equals(MazeAlgorithm.FollowDirection))
+                setDirection(originalDirection);
         }
     }
 }

@@ -3,9 +3,9 @@ package org.moqucu.games.nightstalker.model.object;
 import lombok.Getter;
 import org.moqucu.games.nightstalker.model.GameObject;
 
+@Getter
 public class Scores extends GameObject {
 
-    @Getter
     private int scores = 0;
 
     public void setScores(int scores) {

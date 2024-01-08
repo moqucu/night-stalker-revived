@@ -1,16 +1,12 @@
 package org.moqucu.games.nightstalker.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public record AbsPosAndDirection(AbsolutePosition absolutePosition, Direction direction) {
 
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class AbsPosAndDirection {
+    public AbsolutePosition getAbsolutePosition() {
+        return absolutePosition();
+    }
 
-    @Getter
-    private final AbsolutePosition absolutePosition;
-
-    @Getter
-    private final Direction direction;
+    public Direction getDirection() {
+        return direction();
+    }
 }
