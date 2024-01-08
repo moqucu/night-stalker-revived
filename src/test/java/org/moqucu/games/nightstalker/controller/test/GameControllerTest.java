@@ -160,10 +160,10 @@ public class GameControllerTest {
     public void runTheNightStalker() {
 
         final NightStalker anotherNightStalker = mock(NightStalker.class);
-        doThrow(new RuntimeException("NightStalker running up!")).when(anotherNightStalker).run(Direction.Up);
-        doThrow(new RuntimeException("NightStalker running down!")).when(anotherNightStalker).run(Direction.Down);
-        doThrow(new RuntimeException("NightStalker running left!")).when(anotherNightStalker).run(Direction.Left);
-        doThrow(new RuntimeException("NightStalker running right!")).when(anotherNightStalker).run(Direction.Right);
+        doThrow(new RuntimeException("NightStalker running up!")).when(anotherNightStalker).setUpPressed(true);
+        doThrow(new RuntimeException("NightStalker running down!")).when(anotherNightStalker).setDownPressed(true);
+        doThrow(new RuntimeException("NightStalker running left!")).when(anotherNightStalker).setLeftPressed(true);
+        doThrow(new RuntimeException("NightStalker running right!")).when(anotherNightStalker).setRightPressed(true);
 
         gameWorld.add(anotherNightStalker);
 
@@ -184,11 +184,17 @@ public class GameControllerTest {
     public void stopTheNightStalker() {
 
         final NightStalker anotherNightStalker = mock(NightStalker.class);
+        doCallRealMethod().when(anotherNightStalker).elapseTime(10);
         doThrow(new RuntimeException("NightStalker is stopping!")).when(anotherNightStalker).stop();
 
         gameWorld.add(anotherNightStalker);
 
-        final Throwable upThrowable = assertThrows(RuntimeException.class, () -> gameController.stopNightStalker());
+        final Throwable upThrowable = assertThrows(
+                RuntimeException.class, () -> {
+                    gameController.stopNightStalker(Direction.Down);
+                    anotherNightStalker.elapseTime(10);
+                }
+        );
         assertThat(upThrowable.getMessage(), is("NightStalker is stopping!"));
     }
 }

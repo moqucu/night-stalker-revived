@@ -1,15 +1,30 @@
 package org.moqucu.games.nightstalker.model.hero;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.Resettable;
 
 @Getter
+@Log4j2
 public class NightStalker extends MovableObject implements Resettable {
 
     private boolean running;
+
+    @Setter
+    private boolean leftPressed;
+
+    @Setter
+    private boolean rightPressed;
+
+    @Setter
+    private boolean upPressed;
+
+    @Setter
+    private boolean downPressed;
 
     public NightStalker() {
 
@@ -92,4 +107,20 @@ public class NightStalker extends MovableObject implements Resettable {
             resetAnimationIndicesAndOtherProperties();
         stop();
      }
+
+    @Override
+    public void elapseTime(double milliseconds) {
+
+        if (isLeftPressed())
+            run(Direction.Left);
+        else if (isRightPressed())
+            run(Direction.Right);
+        else if (isUpPressed())
+            run(Direction.Up);
+        else if (isDownPressed())
+            run(Direction.Down);
+        else
+            stop();
+        super.elapseTime(milliseconds);
+    }
 }

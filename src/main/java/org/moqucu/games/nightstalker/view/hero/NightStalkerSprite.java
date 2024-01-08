@@ -14,6 +14,26 @@ public class NightStalkerSprite extends MovableSprite {
 
         super(new NightStalker());
         model = (NightStalker) super.getModel();
+        setOnKeyPressed(
+                keyEvent -> {
+                    switch (keyEvent.getCode()) {
+                        case LEFT -> model.setLeftPressed(true);
+                        case RIGHT -> model.setRightPressed(true);
+                        case UP -> model.setUpPressed(true);
+                        case DOWN -> model.setDownPressed(true);
+                    }
+                }
+        );
+        setOnKeyReleased(
+                keyEvent -> {
+                    switch (keyEvent.getCode()) {
+                        case LEFT -> model.setLeftPressed(false);
+                        case RIGHT -> model.setRightPressed(false);
+                        case UP -> model.setUpPressed(false);
+                        case DOWN -> model.setDownPressed(false);
+                    }
+                }
+        );
     }
 
     private void setNightStalkerModel(NightStalker model) {
@@ -27,6 +47,6 @@ public class NightStalkerSprite extends MovableSprite {
         if (!(gameObject instanceof NightStalker))
             throw new RuntimeException("Game object needs to be of class NightStalker!");
 
-        setNightStalkerModel((NightStalker)gameObject);
+        setNightStalkerModel((NightStalker) gameObject);
     }
 }

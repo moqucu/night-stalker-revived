@@ -25,7 +25,7 @@ public class AbsPosAndDirectionTest {
     @Test
     public void absPosPropertyOfTypeAbsolutePosition() {
 
-        assertThat(absPosAndDirection.absolutePosition(), isA(AbsolutePosition.class));
+        assertThat(absPosAndDirection.getAbsolutePosition(), isA(AbsolutePosition.class));
     }
 
     @Test
@@ -37,6 +37,6 @@ public class AbsPosAndDirectionTest {
     @Test
     public void directionPropertyOfTypeDirection() {
 
-        assertThat(absPosAndDirection.direction(), isA(Direction.class));
+        assertThat(absPosAndDirection.getDirection(), isA(Direction.class));
     }
 }

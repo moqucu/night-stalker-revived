@@ -204,7 +204,7 @@ public class NightStalkerTest {
         final GameWorld gameWorld = new GameWorld();
         gameWorld.add(anotherNightStalker);
 
-        anotherNightStalker.setRunning(true);
+        anotherNightStalker.setUpPressed(true);
         gameWorld.pulse(1000);
 
         assertThat(anotherNightStalker.isRunning(), is(true));

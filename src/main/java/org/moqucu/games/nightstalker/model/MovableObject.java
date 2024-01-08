@@ -3,10 +3,12 @@ package org.moqucu.games.nightstalker.model;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@Log4j2
 public abstract class MovableObject extends AnimatedObject {
 
     public static final String MAZE_JSON_FILE_NAME_CANNOT_BE_NULL = "Maze json file name cannot be null!";
@@ -142,12 +144,16 @@ public abstract class MovableObject extends AnimatedObject {
     @Override
     public void elapseTime(double milliseconds) {
 
+        // Figure out the required animation changes...
         super.elapseTime(milliseconds);
 
+        // Compute the range that the object shall have moved since the last update
         double range = milliseconds / 1000 * getVelocity();
 
+        // Repeat while object is in motion and there is still way to go...
         while (isInMotion() && range > 0) {
 
+            // Find the next targeted position given current position and maze algorithm
             final AbsPosAndDirection nextAbsPos = mazeAlgorithmImpl.getNextAbsPos(
                     absMazeGraph,
                     new AbsPosAndDirection(
@@ -156,20 +162,28 @@ public abstract class MovableObject extends AnimatedObject {
                     )
             );
 
+            // If we are already standing on the targeted position, get out of the loop
+            if (nextAbsPos.getAbsolutePosition().equals(getAbsolutePosition()))
+                break;
+
+            // Memorize originally intended direction and change direction to computed one
             final Direction originalDirection = getDirection();
             setDirection(nextAbsPos.direction());
 
+            // Compute distance to targeted position
             final double distance = getAbsolutePosition().distanceTo(nextAbsPos.absolutePosition());
 
+            // Determine whether range or distance to targeted position is smaller and move that much
             double moveDistance = Math.min(range, distance);
             moveForRangeIntoDirection(moveDistance, getDirection());
 
-            if (range < distance)
-                range = 0;
-            else {
-                range = distance == 0 || originalDirection.equals(getDirection()) ? 0 : range - distance;
+            // Reduce range by moved distance
+            range -= moveDistance;
+
+            // If range is left without having reached target point, set direction back to original one
+            // This way we can go 'around corners' without getting stuck somewhere
+            if (range > 0 && getMazeAlgorithm().equals(MazeAlgorithm.FollowDirection))
                 setDirection(originalDirection);
-            }
         }
     }
 }
