@@ -7,6 +7,7 @@ import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.object.Weapon;
 
 @Getter
 @Log4j2
@@ -25,6 +26,8 @@ public class NightStalker extends MovableObject implements Resettable {
 
     @Setter
     private boolean downPressed;
+
+    private Weapon weapon;
 
     public NightStalker() {
 
@@ -122,5 +125,32 @@ public class NightStalker extends MovableObject implements Resettable {
         else
             stop();
         super.elapseTime(milliseconds);
+    }
+
+    private void setWeapon(Weapon weapon) {
+
+        final Weapon oldWeapon = this.weapon;
+        this.weapon = weapon;
+        propertyChangeSupport.firePropertyChange(
+                "weapon",
+                oldWeapon,
+                weapon
+        );
+    }
+
+    public void pickUpWeapon(Weapon weapon) {
+
+        this.setWeapon(weapon);
+    }
+
+    public void throwAwayWeapon() {
+
+        this.setWeapon(null);
+    }
+
+    public void fireWeapon() {
+
+        if (weapon == null)
+            throw new RuntimeException("Night stalker is not in possession of any weapons!");
     }
 }

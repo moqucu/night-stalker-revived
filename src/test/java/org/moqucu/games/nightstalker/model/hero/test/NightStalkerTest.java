@@ -6,9 +6,11 @@ import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.Resettable;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
+import org.moqucu.games.nightstalker.model.object.Weapon;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NightStalkerTest {
 
@@ -226,10 +228,62 @@ public class NightStalkerTest {
     public void whatHappensWhenNightStalkerKeepsWalkingUpWhenAtBoundary() {
 
         final NightStalker anotherNightStalker = new NightStalker();
-        // anotherNightStalker.setYPosition(96);
         anotherNightStalker.setYPosition(144);
 
         anotherNightStalker.setRunning(true);
         anotherNightStalker.elapseTime(1);
+    }
+
+    @Test
+    public void hasWeaponProperty() {
+
+        assertThat(nightStalker, hasProperty("weapon"));
+    }
+
+    @Test
+    public void pickingUpAWeaponWorks() {
+
+        final NightStalker tomJones = new NightStalker();
+        final Weapon aWeapon = new Weapon();
+        tomJones.addPropertyChangeListener(
+                evt -> {
+                    if (evt.getPropertyName().equals("weapon") && evt.getNewValue() != null
+                            && evt.getNewValue() instanceof Weapon)
+                        throw new RuntimeException("Weapon picked up!");
+                }
+        );
+
+        final Throwable throwable = assertThrows(RuntimeException.class, () -> tomJones.pickUpWeapon(aWeapon));
+        assertThat(throwable, isA(RuntimeException.class));
+        assertThat(throwable.getMessage(), is("Weapon picked up!"));
+        assertThat(tomJones.getWeapon(), is(aWeapon));
+    }
+
+    @Test
+    public void throwingAwayTheWeaponWorks() {
+
+        final NightStalker tomJones = new NightStalker();
+        final Weapon aWeapon = new Weapon();
+        tomJones.pickUpWeapon(aWeapon);
+        tomJones.addPropertyChangeListener(
+                evt -> {
+                    if (evt.getPropertyName().equals("weapon") && evt.getNewValue() == null)
+                        throw new RuntimeException("Old Weapon thrown away!");
+                }
+        );
+
+        final Throwable throwable = assertThrows(RuntimeException.class, tomJones::throwAwayWeapon);
+        assertThat(throwable, isA(RuntimeException.class));
+        assertThat(throwable.getMessage(), is("Old Weapon thrown away!"));
+        assertThat(tomJones.getWeapon(), is(nullValue()));
+    }
+
+    @Test
+    public void firingAWeaponOnlyPossibleIfItIsInPossession() {
+
+        final NightStalker tomJones = new NightStalker();
+        final Throwable throwable = assertThrows(RuntimeException.class, tomJones::fireWeapon);
+        assertThat(throwable, isA(RuntimeException.class));
+        assertThat(throwable.getMessage(), is("Night stalker is not in possession of any weapons!"));
     }
 }
