@@ -8,6 +8,5 @@ public class WeaponSprite extends AnimatedSprite {
     public WeaponSprite() {
 
         super(new Weapon());
-        getModel().setAnimated(true);
     }
 }
