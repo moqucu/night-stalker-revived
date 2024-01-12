@@ -286,4 +286,28 @@ public class NightStalkerTest {
         assertThat(throwable, isA(RuntimeException.class));
         assertThat(throwable.getMessage(), is("Night stalker is not in possession of any weapons!"));
     }
+
+    @Test
+    public void nightStalkerCanChangePosition() {
+
+        final NightStalker tomJones = new NightStalker();
+        assertThat(tomJones.canChangePosition(), is(true));
+    }
+
+    @Test
+    public void nightStalkerCollisionWithWeaponShallMadeItPickUpAndDisappear() {
+
+        final GameWorld theGameWorld = new GameWorld();
+        final Weapon aWeapon = new Weapon();
+        theGameWorld.add(aWeapon);
+        final NightStalker aNightStalker = new NightStalker();
+        aNightStalker.setXPosition(aWeapon.getXPosition());
+        aNightStalker.setYPosition(aWeapon.getYPosition());
+        theGameWorld.add(aNightStalker);
+        theGameWorld.pulse(1);
+
+        assertThat(aNightStalker.getWeapon(), is(aWeapon));
+        assertThat(aWeapon.isAnimated(), is(false));
+        assertThat(aWeapon.isObjectVisible(), is(false));
+    }
 }

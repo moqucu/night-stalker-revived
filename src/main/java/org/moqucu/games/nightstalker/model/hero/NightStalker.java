@@ -3,10 +3,7 @@ package org.moqucu.games.nightstalker.model.hero;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.*;
 import org.moqucu.games.nightstalker.model.object.Weapon;
 
 @Getter
@@ -141,6 +138,7 @@ public class NightStalker extends MovableObject implements Resettable {
     public void pickUpWeapon(Weapon weapon) {
 
         this.setWeapon(weapon);
+        getWeapon().pickUp();
     }
 
     public void throwAwayWeapon() {
@@ -152,5 +150,17 @@ public class NightStalker extends MovableObject implements Resettable {
 
         if (weapon == null)
             throw new RuntimeException("Night stalker is not in possession of any weapons!");
+    }
+
+    @Override
+    public void collisionOccurredWith(Collidable anotherCollidable) {
+
+        if (anotherCollidable instanceof Weapon && (getWeapon() == null || !getWeapon().equals(anotherCollidable)))
+            pickUpWeapon((Weapon)anotherCollidable);
+    }
+
+    @Override
+    public boolean canChangePosition() {
+        return true;
     }
 }

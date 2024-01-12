@@ -166,4 +166,12 @@ public class WeaponTest {
         assertThat(aWeapon.isAnimated(), is(true));
         assertThat(aWeapon.getPossibleWeaponLocations(), hasItem(aWeapon.getAbsolutePosition()));
     }
+
+    @Test
+    public void canChangePosition() {
+
+        final Weapon aWeapon = new Weapon();
+        assertThat(aWeapon.canChangePosition(), is(true));
+    }
+
 }

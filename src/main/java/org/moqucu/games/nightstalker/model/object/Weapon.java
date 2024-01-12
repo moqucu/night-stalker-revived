@@ -83,4 +83,9 @@ public class Weapon extends AnimatedObject {
         setObjectVisible(true);
         setAnimated(true);
     }
+
+    @Override
+    public boolean canChangePosition() {
+        return true;
+    }
 }
