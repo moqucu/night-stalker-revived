@@ -310,4 +310,37 @@ public class NightStalkerTest {
         assertThat(aWeapon.isAnimated(), is(false));
         assertThat(aWeapon.isObjectVisible(), is(false));
     }
+
+    @Test
+    public void firingWeaponWithWeaponInPossessionReducesItsRounds() {
+
+        final GameWorld theGameWorld = new GameWorld();
+        final Weapon aWeapon = new Weapon();
+        theGameWorld.add(aWeapon);
+        final NightStalker aNightStalker = new NightStalker();
+        aNightStalker.setXPosition(aWeapon.getXPosition());
+        aNightStalker.setYPosition(aWeapon.getYPosition());
+        theGameWorld.add(aNightStalker);
+        aNightStalker.pickUpWeapon(aWeapon);
+        assertThat(aWeapon.getRounds(), is(6));
+
+        aNightStalker.fireWeapon();
+        assertThat(aWeapon.getRounds(), is(5));
+    }
+
+    @Test
+    public void firingSixRoundsLeadsToThrowingAwayWeapon() {
+
+        final GameWorld theGameWorld = new GameWorld();
+        final Weapon aWeapon = new Weapon();
+        theGameWorld.add(aWeapon);
+        final NightStalker aNightStalker = new NightStalker();
+        aNightStalker.setXPosition(aWeapon.getXPosition());
+        aNightStalker.setYPosition(aWeapon.getYPosition());
+        theGameWorld.add(aNightStalker);
+        aNightStalker.pickUpWeapon(aWeapon);
+        for(int i = 0; i < 6; i++)
+            aNightStalker.fireWeapon();
+        assertThat(aNightStalker.getWeapon(), is(nullValue()));
+    }
 }

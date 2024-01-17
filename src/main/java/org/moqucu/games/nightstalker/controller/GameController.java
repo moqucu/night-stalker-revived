@@ -166,35 +166,38 @@ public class GameController {
         gameWorld.reset();
     }
 
-    public void runNightStalkerWith(Direction direction) {
+    private NightStalker getNightStalker() {
 
-        final NightStalker nightStalker = (NightStalker) gameWorld.getObjects()
+        return (NightStalker) gameWorld.getObjects()
                 .values()
                 .stream()
                 .filter(gameObject -> gameObject instanceof NightStalker)
                 .findFirst()
                 .orElseThrow();
+    }
+
+    public void runNightStalkerWith(Direction direction) {
+
         switch (direction) {
-            case Up -> nightStalker.setUpPressed(true);
-            case Down -> nightStalker.setDownPressed(true);
-            case Left -> nightStalker.setLeftPressed(true);
-            case Right -> nightStalker.setRightPressed(true);
+            case Up -> getNightStalker().setUpPressed(true);
+            case Down -> getNightStalker().setDownPressed(true);
+            case Left -> getNightStalker().setLeftPressed(true);
+            case Right -> getNightStalker().setRightPressed(true);
         }
     }
 
     public void stopNightStalker(Direction direction) {
 
-        final NightStalker nightStalker = (NightStalker) gameWorld.getObjects()
-                .values()
-                .stream()
-                .filter(gameObject -> gameObject instanceof NightStalker)
-                .findFirst()
-                .orElseThrow();
         switch (direction) {
-            case Up -> nightStalker.setUpPressed(false);
-            case Down -> nightStalker.setDownPressed(false);
-            case Left -> nightStalker.setLeftPressed(false);
-            case Right -> nightStalker.setRightPressed(false);
+            case Up -> getNightStalker().setUpPressed(false);
+            case Down -> getNightStalker().setDownPressed(false);
+            case Left -> getNightStalker().setLeftPressed(false);
+            case Right -> getNightStalker().setRightPressed(false);
         }
+    }
+
+    public void fireWeaponOnNightStalker() {
+
+        getNightStalker().fireWeapon();
     }
 }

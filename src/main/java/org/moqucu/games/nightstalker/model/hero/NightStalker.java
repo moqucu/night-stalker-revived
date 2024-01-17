@@ -143,6 +143,7 @@ public class NightStalker extends MovableObject implements Resettable {
 
     public void throwAwayWeapon() {
 
+        weapon.drop();
         this.setWeapon(null);
     }
 
@@ -150,6 +151,11 @@ public class NightStalker extends MovableObject implements Resettable {
 
         if (weapon == null)
             throw new RuntimeException("Night stalker is not in possession of any weapons!");
+        try {
+            getWeapon().fireRound();
+        } catch (Weapon.WeaponFiredEmptyException weaponFiredEmptyException) {
+            throwAwayWeapon();
+        }
     }
 
     @Override
