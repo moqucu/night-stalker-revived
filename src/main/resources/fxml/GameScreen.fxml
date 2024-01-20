@@ -33,10 +33,7 @@
             prefWidth="640"
     >
         <Pane>
-            <WeaponSprite
-                    x="288.0"
-                    y="192.0"
-            />
+            <WeaponSprite/>
             <!--            <BulletSprite/>-->
             <!--            <RobotBullet/>-->
             <LivesLabel
