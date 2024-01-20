@@ -10,6 +10,14 @@ import org.moqucu.games.nightstalker.model.object.Weapon;
 @Log4j2
 public class NightStalker extends MovableObject implements Resettable {
 
+    public static class NoWeaponsException extends RuntimeException {
+
+        public NoWeaponsException() {
+
+            super("Night stalker is not in possession of any weapons!");
+        }
+    }
+
     private boolean running;
 
     @Setter
@@ -150,7 +158,7 @@ public class NightStalker extends MovableObject implements Resettable {
     public void fireWeapon() {
 
         if (weapon == null)
-            throw new RuntimeException("Night stalker is not in possession of any weapons!");
+            throw new NoWeaponsException();
         try {
             getWeapon().fireRound();
         } catch (Weapon.WeaponFiredEmptyException weaponFiredEmptyException) {

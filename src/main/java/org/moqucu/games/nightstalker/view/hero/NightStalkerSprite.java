@@ -1,19 +1,38 @@
 package org.moqucu.games.nightstalker.view.hero;
 
+import javafx.scene.media.AudioClip;
 import lombok.Getter;
 import org.moqucu.games.nightstalker.model.GameObject;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.view.MovableSprite;
+
+import java.util.Objects;
 
 @Getter
 public class NightStalkerSprite extends MovableSprite {
 
     private NightStalker model;
 
+    private final AudioClip pickUpGunAudio = new AudioClip(
+            Objects.requireNonNull(getClass().getResource("/sounds/pickupgun.wav")).toString()
+    );
+
     public NightStalkerSprite() {
 
         super(new NightStalker());
+
+        pickUpGunAudio.setVolume(0.5f);
+        pickUpGunAudio.setCycleCount(1);
+
         model = (NightStalker) super.getModel();
+        model.addPropertyChangeListener(
+                evt -> {
+
+                    if (evt.getPropertyName().equals("weapon"))
+                        pickUpGunAudio.play();
+                }
+        );
+
         setOnKeyPressed(
                 keyEvent -> {
                     switch (keyEvent.getCode()) {

@@ -4,6 +4,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,6 +39,10 @@ public class GameController {
     private final Map<Parent, Scene> scenes = new HashMap<>();
 
     private final BackGroundMusicLoop backGroundMusicLoop;
+
+    private final AudioClip errorAudio = new AudioClip(
+            Objects.requireNonNull(getClass().getResource("/sounds/error.wav")).toString()
+    );
 
     @Getter
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
@@ -126,6 +132,10 @@ public class GameController {
         this.systemWrapper = systemWrapper;
         this.gameLoop = gameLoop;
         this.gameWorld = gameWorld;
+
+        errorAudio.setVolume(0.5f);
+        errorAudio.setCycleCount(1);
+
         gameLoop.setGameWorld(gameWorld);
     }
 
@@ -198,6 +208,10 @@ public class GameController {
 
     public void fireWeaponOnNightStalker() {
 
-        getNightStalker().fireWeapon();
+        try {
+            getNightStalker().fireWeapon();
+        } catch(NightStalker.NoWeaponsException exception) {
+            errorAudio.play();
+        }
     }
 }
