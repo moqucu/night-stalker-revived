@@ -14,28 +14,26 @@ public class BulletTest {
     @Test
     public void bulletInheritsFromDisplayableObject() {
 
-        final Bullet aBullet = new Bullet();
-        assertThat(aBullet, isA(DisplayableObject.class));
+        assertThat(new Bullet(), isA(DisplayableObject.class));
     }
 
     @Test
     public void bulletHasFiredProperty() {
 
-        final Bullet aBullet = new Bullet();
-        assertThat(aBullet, hasProperty("fired"));
+        assertThat(new Bullet(), hasProperty("fired"));
     }
 
     @Test
     public void bulletHasDirectionProperty() {
 
-        final Bullet aBullet = new Bullet();
-        assertThat(aBullet, hasProperty("direction"));
+        assertThat(new Bullet(), hasProperty("direction"));
     }
 
     @Test
     public void propertyDirectionOfTypeDirection() {
 
         final Bullet aBullet = new Bullet();
+
         assertThat(aBullet.getDirection(), isA(Direction.class));
     }
 
@@ -51,8 +49,8 @@ public class BulletTest {
     public void immediatelyAfterFiringDirectionIsNotUndefined() {
 
         final Bullet aBullet = new Bullet();
-        final NightStalker aNightStalker = new NightStalker();
-        aBullet.fire(aNightStalker, Direction.Down, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition(), new AbsolutePosition());
+
         assertThat(aBullet.getDirection(), is(not(Direction.Undefined)));
     }
 
@@ -60,6 +58,7 @@ public class BulletTest {
     public void initiallyBulletIsNotVisible() {
 
         final Bullet aBullet = new Bullet();
+
         assertThat(aBullet.isObjectVisible(), is(false));
     }
 
@@ -68,6 +67,7 @@ public class BulletTest {
 
         final Bullet aBullet = new Bullet();
         aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+
         assertThat(aBullet.isObjectVisible(), is(true));
     }
 
@@ -75,6 +75,7 @@ public class BulletTest {
     public void firedPropertyIsOfTypeBoolean() {
 
         final Bullet aBullet = new Bullet();
+
         assertThat(aBullet.isFired(), isA(Boolean.class));
     }
 
@@ -82,6 +83,7 @@ public class BulletTest {
     public void firingIntoUnknownDirectionNotSupported() {
 
         final Bullet aBullet = new Bullet();
+
         assertThrows(
                 Bullet.FiringDirectionNotSupportedException.class,
                 () -> aBullet.fire(
@@ -97,6 +99,7 @@ public class BulletTest {
     public void firingOnTopNotSupported() {
 
         final Bullet aBullet = new Bullet();
+
         assertThrows(
                 Bullet.FiringDirectionNotSupportedException.class,
                 () -> aBullet.fire(
@@ -107,7 +110,6 @@ public class BulletTest {
                 )
         );
     }
-
 
     @Test
     public void firingABulletTriggersAnEvent() {
@@ -133,14 +135,14 @@ public class BulletTest {
     @Test
     public void bulletHasSourceProperty() {
 
-        final Bullet aBullet = new Bullet();
-        assertThat(aBullet, hasProperty("source"));
+        assertThat(new Bullet(), hasProperty("source"));
     }
 
     @Test
     public void propertySourceOfTypeGameObject() {
 
         final Bullet aBullet = new Bullet();
+
         assertThat(aBullet.getSource(), isA(GameObject.class));
     }
 
@@ -159,7 +161,6 @@ public class BulletTest {
 
         final Bullet aBullet = new Bullet();
         final GreyRobot aGreyRobot = new GreyRobot();
-
         aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
         aBullet.collisionOccurredWith(aGreyRobot);
 
@@ -175,8 +176,8 @@ public class BulletTest {
         final Bullet aBullet = new Bullet();
         final NightStalker aNightStalker = new NightStalker();
         aBullet.fire(aNightStalker, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
-
         aBullet.collisionOccurredWith(aBullet);
+
         assertThat(aBullet.isFired(), is(true));
         assertThat(aBullet.isObjectVisible(), is(true));
         assertThat(aBullet.getSource(), is(aNightStalker));
@@ -189,8 +190,8 @@ public class BulletTest {
         final Bullet aBullet = new Bullet();
         final NightStalker aNightStalker = new NightStalker();
         aBullet.fire(aNightStalker, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
-
         aBullet.collisionOccurredWith(aNightStalker);
+
         assertThat(aBullet.isFired(), is(true));
         assertThat(aBullet.isObjectVisible(), is(true));
         assertThat(aBullet.getSource(), is(aNightStalker));
@@ -200,14 +201,14 @@ public class BulletTest {
     @Test
     public void bulletHasAnAbsoluteTargetPositionProperty() {
 
-        final Bullet aBullet = new Bullet();
-        assertThat(aBullet, hasProperty("absoluteTargetPosition"));
+        assertThat(new Bullet(), hasProperty("absoluteTargetPosition"));
     }
 
     @Test
     public void absoluteTargetPositionPropertyOfTypeAbsolutePosition() {
 
         final Bullet aBullet = new Bullet();
+
         assertThat(aBullet.getAbsoluteTargetPosition(), isA(AbsolutePosition.class));
     }
 
@@ -215,6 +216,7 @@ public class BulletTest {
     public void initialTargetPositionEqualsItsAbsolutePosition() {
 
         final Bullet aBullet = new Bullet();
+
         assertThat(aBullet.getAbsoluteTargetPosition(), is(aBullet.getAbsolutePosition()));
     }
 
@@ -228,9 +230,69 @@ public class BulletTest {
     public void firingABulletToTheLeftBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
 
         final Bullet aBullet = new Bullet();
-        final NightStalker aNightStalker = new NightStalker();
+        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
 
-        aBullet.fire(aNightStalker, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
+        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0.));
+        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0 + DisplayableObject.HEIGHT / 2));
+    }
+
+    @Test
+    public void firingABulletToTheRightBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition(), new AbsolutePosition());
+
+        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
+        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0 + DisplayableObject.WIDTH));
+        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0 + DisplayableObject.HEIGHT / 2));
+    }
+
+    @Test
+    public void firingABulletToTheTopBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Up, new AbsolutePosition(), new AbsolutePosition());
+
+        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
+        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0 + DisplayableObject.WIDTH / 2));
+        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0.));
+    }
+
+    @Test
+    public void firingABulletToTheBottomBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition(), new AbsolutePosition());
+
+        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
+        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0 + DisplayableObject.WIDTH / 2));
+        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0 + DisplayableObject.HEIGHT));
+    }
+
+    @Test
+    public void afterFiringBulletMovesBetweenSourceAndTargetPositionWithExpectedVelocity() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(
+                new NightStalker(),
+                Direction.Right,
+                new AbsolutePosition(0, 64),
+                new AbsolutePosition(32, 64)
+        );
+        aBullet.elapseTime(1000);
+
+        assertThat(aBullet.getXPosition(), is(32.));
+        assertThat(aBullet.getYPosition(), is(64 + DisplayableObject.HEIGHT / 2));
+    }
+
+    @Test
+    public void whenReachingTargetBoundaryBulletStopsBeingFired() {
+
         // todo
     }
 }
