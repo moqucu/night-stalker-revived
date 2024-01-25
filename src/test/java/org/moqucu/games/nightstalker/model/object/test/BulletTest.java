@@ -288,11 +288,25 @@ public class BulletTest {
 
         assertThat(aBullet.getXPosition(), is(32.));
         assertThat(aBullet.getYPosition(), is(64 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.isFired(), is(true));
+        assertThat(aBullet.isObjectVisible(), is(true));
     }
 
     @Test
     public void whenReachingTargetBoundaryBulletStopsBeingFired() {
 
-        // todo
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(
+                new NightStalker(),
+                Direction.Right,
+                new AbsolutePosition(0, 64),
+                new AbsolutePosition(32, 64)
+        );
+        aBullet.elapseTime(3001);
+
+        assertThat(aBullet.getXPosition(), is(64.));
+        assertThat(aBullet.getYPosition(), is(64 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.isFired(), is(false));
+        assertThat(aBullet.isObjectVisible(), is(false));
     }
 }

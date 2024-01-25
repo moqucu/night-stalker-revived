@@ -121,10 +121,42 @@ public class Bullet extends DisplayableObject implements TimeListener {
 
         if (fired) {
             switch (direction) {
-                case Left -> setXPosition(getXPosition() - range);
-                case Right -> setXPosition(getXPosition() + range);
-                case Up -> setYPosition(getXPosition() - range);
-                case Down -> setYPosition(getXPosition() + range);
+                case Left -> {
+                    final double newXPosition = getXPosition() - range;
+                    if (newXPosition < getAbsoluteTargetPosition().getX()) {
+                        setXPosition(getAbsoluteTargetPosition().getX());
+                        setFired(false);
+                    }
+                    else
+                        setXPosition(newXPosition);
+                }
+                case Right -> {
+                    final double newXPosition = getXPosition() + range;
+                    if (newXPosition > getAbsoluteTargetPosition().getX()) {
+                        setXPosition(getAbsoluteTargetPosition().getX());
+                        setFired(false);
+                    }
+                    else
+                        setXPosition(newXPosition);
+                }
+                case Up -> {
+                    final double newYPosition = getYPosition() - range;
+                    if (newYPosition < getAbsoluteTargetPosition().getY()) {
+                        setYPosition(getAbsoluteTargetPosition().getY());
+                        setFired(false);
+                    }
+                    else
+                        setYPosition(newYPosition);
+                }
+                case Down -> {
+                    final double newYPosition = getYPosition() + range;
+                    if (newYPosition > getAbsoluteTargetPosition().getY()) {
+                        setYPosition(getAbsoluteTargetPosition().getY());
+                        setFired(false);
+                    }
+                    else
+                        setYPosition(newYPosition);
+                }
             }
         }
     }
