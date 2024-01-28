@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.*;
 import org.moqucu.games.nightstalker.model.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

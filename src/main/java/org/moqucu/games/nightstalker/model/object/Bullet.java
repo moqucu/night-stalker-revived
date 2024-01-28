@@ -1,6 +1,7 @@
-package org.moqucu.games.nightstalker.model;
+package org.moqucu.games.nightstalker.model.object;
 
 import lombok.Getter;
+import org.moqucu.games.nightstalker.model.*;
 
 @Getter
 public class Bullet extends DisplayableObject implements TimeListener {
