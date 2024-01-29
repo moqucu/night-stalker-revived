@@ -50,6 +50,7 @@ public class SplashScreenController {
                         case DOWN -> gameController.runNightStalkerWith(Direction.Down);
                         case LEFT -> gameController.runNightStalkerWith(Direction.Left);
                         case RIGHT -> gameController.runNightStalkerWith(Direction.Right);
+                        case SPACE -> gameController.fireWeaponOnNightStalker();
                     }
                 }
         );
@@ -61,9 +62,7 @@ public class SplashScreenController {
                         case DOWN -> gameController.stopNightStalker(Direction.Down);
                         case LEFT -> gameController.stopNightStalker(Direction.Left);
                         case RIGHT -> gameController.stopNightStalker(Direction.Right);
-//                        case UP, DOWN, LEFT, RIGHT -> gameController.stopNightStalker();
                     }
-
                 }
         );
         gameController.startGameLoop();

@@ -3,14 +3,20 @@ package org.moqucu.games.nightstalker.model.hero;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.object.Weapon;
 
 @Getter
 @Log4j2
 public class NightStalker extends MovableObject implements Resettable {
+
+    public static class NoWeaponsException extends RuntimeException {
+
+        public NoWeaponsException() {
+
+            super("Night stalker is not in possession of any weapons!");
+        }
+    }
 
     private boolean running;
 
@@ -25,6 +31,8 @@ public class NightStalker extends MovableObject implements Resettable {
 
     @Setter
     private boolean downPressed;
+
+    private Weapon weapon;
 
     public NightStalker() {
 
@@ -122,5 +130,51 @@ public class NightStalker extends MovableObject implements Resettable {
         else
             stop();
         super.elapseTime(milliseconds);
+    }
+
+    private void setWeapon(Weapon weapon) {
+
+        final Weapon oldWeapon = this.weapon;
+        this.weapon = weapon;
+        propertyChangeSupport.firePropertyChange(
+                "weapon",
+                oldWeapon,
+                weapon
+        );
+    }
+
+    public void pickUpWeapon(Weapon weapon) {
+
+        this.setWeapon(weapon);
+        getWeapon().pickUp();
+    }
+
+    public void throwAwayWeapon() {
+
+        weapon.drop();
+        this.setWeapon(null);
+    }
+
+    public void fireWeapon() {
+
+        if (weapon == null)
+            throw new NoWeaponsException();
+        try {
+            getWeapon().fireRound();
+        } catch (Weapon.WeaponFiredEmptyException weaponFiredEmptyException) {
+            throwAwayWeapon();
+        }
+    }
+
+    @Override
+    public void collisionOccurredWith(Collidable anotherCollidable) {
+
+        if (anotherCollidable instanceof Weapon && (getWeapon() == null || !getWeapon().equals(anotherCollidable)))
+            pickUpWeapon((Weapon)anotherCollidable);
+    }
+
+    @Override
+    public boolean canChangePosition() {
+        return true;
     }
 }
