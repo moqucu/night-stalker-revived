@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.moqucu.games.nightstalker.model.*;
 
 @Getter
-public class Bullet extends DisplayableObject implements TimeListener {
+public class Bullet extends DisplayableObject implements TimeListener, Resettable {
 
     public static class FiringDirectionNotSupportedException extends RuntimeException {
 
@@ -27,6 +27,8 @@ public class Bullet extends DisplayableObject implements TimeListener {
     public Bullet() {
 
         super();
+        setImageMapFileName("/images/bullet.png");
+        setInitialImageIndex(0);
         propertyChangeSupport.addPropertyChangeListener(
                 evt -> {
                     if (evt.getPropertyName().equals("fired") && evt.getNewValue().equals(true))
@@ -160,5 +162,14 @@ public class Bullet extends DisplayableObject implements TimeListener {
                 }
             }
         }
+    }
+
+    @Override
+    public void reset() {
+
+        setFired(false);
+        setSource(this);
+        setDirection(Direction.Undefined);
+        setAbsoluteTargetPosition(null);
     }
 }

@@ -1,14 +1,14 @@
 package org.moqucu.games.nightstalker.view.object.test;
 
-import javafx.scene.shape.Rectangle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.moqucu.games.nightstalker.model.AbsolutePosition;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.object.Bullet;
 import org.moqucu.games.nightstalker.model.object.Weapon;
+import org.moqucu.games.nightstalker.view.DisplayableSprite;
 import org.moqucu.games.nightstalker.view.Sprite;
-import org.moqucu.games.nightstalker.view.object.BulletRectangle;
+import org.moqucu.games.nightstalker.view.object.BulletSprite;
 import org.testfx.framework.junit5.ApplicationExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,9 +17,9 @@ import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(ApplicationExtension.class)
-public class BulletRectangleTest {
+public class BulletSpriteTest {
 
-    private final BulletRectangle bulletRectangle = new BulletRectangle();
+    private final BulletSprite bulletRectangle = new BulletSprite();
 
     @Test
     public void bulletRectangleIsASprite() {
@@ -28,9 +28,9 @@ public class BulletRectangleTest {
     }
 
     @Test
-    public void bulletRectangleIsARectangle() {
+    public void bulletRectangleIsADisplayableSprite() {
 
-        assertThat(bulletRectangle, isA(Rectangle.class));
+        assertThat(bulletRectangle, isA(DisplayableSprite.class));
     }
     @Test
     public void modelRepresentsBullet() {
@@ -67,15 +67,5 @@ public class BulletRectangleTest {
         bullet.fire(bullet, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
         bulletRectangle.setModel(bullet);
         assertThat(bulletRectangle.getX(), is(16.));
-    }
-
-    @Test
-    public void testRectangleSize() {
-
-    }
-
-    @Test
-    public void testColorSize() {
-
     }
 }

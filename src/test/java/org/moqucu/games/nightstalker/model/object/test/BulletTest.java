@@ -310,4 +310,46 @@ public class BulletTest {
         assertThat(aBullet.isFired(), is(false));
         assertThat(aBullet.isObjectVisible(), is(false));
     }
+
+    @Test
+    public void bulletOfTypeResettable() {
+
+        final Bullet aBullet = new Bullet();
+
+        assertThat(aBullet, isA(Resettable.class));
+    }
+
+    @Test
+    public void resettingTheBatSetsEverythingBack() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(
+                new GreyRobot(),
+                Direction.Right,
+                new AbsolutePosition(),
+                new AbsolutePosition()
+        );
+        aBullet.reset();
+
+        assertThat(aBullet.isFired(), is(false));
+        assertThat(aBullet.isObjectVisible(), is(false));
+        assertThat(aBullet.getDirection(), is(Direction.Undefined));
+        assertThat(aBullet.getSource(), is (aBullet));
+        assertThat(aBullet.getAbsoluteTargetPosition(), is (nullValue()));
+    }
+
+    @Test
+    public void pointsToCorrectImageMap() {
+
+        final Bullet aBullet = new Bullet();
+        assertThat(aBullet.getImageMapFileName(), is("/images/bullet.png"));
+    }
+
+    @Test
+    public void initialImageIndexIsZero() {
+
+        final Bullet aBullet = new Bullet();
+        assertThat(aBullet.getInitialImageIndex(), is(0));
+    }
+
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.moqucu.games.nightstalker.model.AbsolutePosition;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 import org.moqucu.games.nightstalker.model.object.Weapon;
 
 import java.beans.PropertyChangeListener;
@@ -104,6 +105,7 @@ public class WeaponTest {
     public void initialNumberOfRoundsIsSix() {
 
         final Weapon aWeapon = new Weapon();
+
         assertThat(aWeapon.getRounds(), is(6));
     }
 
@@ -171,7 +173,24 @@ public class WeaponTest {
     public void canChangePosition() {
 
         final Weapon aWeapon = new Weapon();
+
         assertThat(aWeapon.canChangePosition(), is(true));
     }
 
+    @Test
+    public void hasBulletProperty() {
+
+        final Weapon aWeapon = new Weapon();
+
+        assertThat(aWeapon, hasProperty("bullet"));
+    }
+
+    @Test
+    public void bulletOfTypeBullet() {
+
+        final Weapon aWeapon = new Weapon();
+        aWeapon.setBullet(new Bullet());
+
+        assertThat(aWeapon.getBullet(), instanceOf(Bullet.class));
+    }
 }

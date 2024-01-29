@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.model.object;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.moqucu.games.nightstalker.model.AbsolutePosition;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
 
@@ -29,6 +30,9 @@ public class Weapon extends AnimatedObject {
             new AbsolutePosition(9.0 * 32, 3.0 * 32),
             new AbsolutePosition(3.0 * 32, 9.0 * 32)
     );
+
+    @Setter
+    private Bullet bullet;
 
     private void setRounds(int rounds) {
 
