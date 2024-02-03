@@ -233,10 +233,10 @@ public class BulletTest {
         final Bullet aBullet = new Bullet();
         aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
 
-        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
-        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
-        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getXPosition(), is(0.));
+        assertThat(aBullet.getYPosition(), is(0.));
+        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(-32.));
+        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0.));
     }
 
     @Test
@@ -245,10 +245,10 @@ public class BulletTest {
         final Bullet aBullet = new Bullet();
         aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition(), new AbsolutePosition());
 
-        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
-        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getXPosition(), is(0.));
+        assertThat(aBullet.getYPosition(), is(0.));
         assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0 + DisplayableObject.WIDTH));
-        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0.));
     }
 
     @Test
@@ -257,10 +257,10 @@ public class BulletTest {
         final Bullet aBullet = new Bullet();
         aBullet.fire(new NightStalker(), Direction.Up, new AbsolutePosition(), new AbsolutePosition());
 
-        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
-        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
-        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0 + DisplayableObject.WIDTH / 2));
-        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0.));
+        assertThat(aBullet.getXPosition(), is(0.));
+        assertThat(aBullet.getYPosition(), is(0.));
+        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0.));
+        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(-32.));
     }
 
     @Test
@@ -269,9 +269,9 @@ public class BulletTest {
         final Bullet aBullet = new Bullet();
         aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition(), new AbsolutePosition());
 
-        assertThat(aBullet.getXPosition(), is(0 + DisplayableObject.WIDTH / 2));
-        assertThat(aBullet.getYPosition(), is(0 + DisplayableObject.HEIGHT / 2));
-        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0 + DisplayableObject.WIDTH / 2));
+        assertThat(aBullet.getXPosition(), is(0.));
+        assertThat(aBullet.getYPosition(), is(0.));
+        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0.));
         assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0 + DisplayableObject.HEIGHT));
     }
 
@@ -287,8 +287,8 @@ public class BulletTest {
         );
         aBullet.elapseTime(1000);
 
-        assertThat(aBullet.getXPosition(), is(32.));
-        assertThat(aBullet.getYPosition(), is(64 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getXPosition(), is(64.));
+        assertThat(aBullet.getYPosition(), is(64.));
         assertThat(aBullet.isFired(), is(true));
         assertThat(aBullet.isObjectVisible(), is(true));
     }
@@ -306,7 +306,7 @@ public class BulletTest {
         aBullet.elapseTime(3001);
 
         assertThat(aBullet.getXPosition(), is(64.));
-        assertThat(aBullet.getYPosition(), is(64 + DisplayableObject.HEIGHT / 2));
+        assertThat(aBullet.getYPosition(), is(64.));
         assertThat(aBullet.isFired(), is(false));
         assertThat(aBullet.isObjectVisible(), is(false));
     }

@@ -1,9 +1,11 @@
 package org.moqucu.games.nightstalker.model.object;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.*;
 
 @Getter
+@Log4j2
 public class Bullet extends DisplayableObject implements TimeListener, Resettable {
 
     public static class FiringDirectionNotSupportedException extends RuntimeException {
@@ -14,7 +16,7 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
         }
     }
 
-    public static final double VELOCITY_PER_SECOND = 16;
+    public static final double VELOCITY_PER_SECOND = 64;
 
     private AbsolutePosition absoluteTargetPosition = getAbsolutePosition();
 
@@ -31,10 +33,13 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
         setInitialImageIndex(0);
         propertyChangeSupport.addPropertyChangeListener(
                 evt -> {
-                    if (evt.getPropertyName().equals("fired") && evt.getNewValue().equals(true))
+                    if (evt.getPropertyName().equals("fired") && evt.getNewValue().equals(true)) {
                         setObjectVisible(true);
+                        setInitialImageIndex(1);
+                    }
                     else if (evt.getPropertyName().equals("fired") && evt.getNewValue().equals(false)) {
                         setObjectVisible(false);
+                        setInitialImageIndex(0);
                         setSource(this);
                         setDirection(Direction.Undefined);
                     }
@@ -80,31 +85,31 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
             case OnTop, Undefined -> throw new FiringDirectionNotSupportedException(direction);
             case Left -> setAbsoluteTargetPosition(
                     new AbsolutePosition(
-                            target.getX(),
-                            target.getY() + DisplayableObject.HEIGHT / 2
+                            target.getX() - DisplayableObject.WIDTH,
+                            target.getY()
                     )
             );
             case Right -> setAbsoluteTargetPosition(
                     new AbsolutePosition(
                             target.getX() + DisplayableObject.WIDTH,
-                            target.getY() + DisplayableObject.HEIGHT / 2
+                            target.getY()
                     )
             );
             case Up -> setAbsoluteTargetPosition(
                     new AbsolutePosition(
-                            target.getX() + DisplayableObject.WIDTH / 2,
-                            target.getY()
+                            target.getX(),
+                            target.getY() - DisplayableObject.HEIGHT
                     )
             );
             case Down -> setAbsoluteTargetPosition(
                     new AbsolutePosition(
-                            target.getX() + DisplayableObject.WIDTH / 2,
+                            target.getX(),
                             target.getY() + DisplayableObject.HEIGHT
                     )
             );
         }
-        setXPosition(start.getX() + DisplayableObject.WIDTH / 2);
-        setYPosition(start.getY() + DisplayableObject.HEIGHT / 2);
+        setXPosition(start.getX());
+        setYPosition(start.getY());
         setSource(source);
         setDirection(direction);
         setFired(true);
@@ -113,7 +118,7 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
     @Override
     public void collisionOccurredWith(Collidable anotherCollidable) {
 
-        if (anotherCollidable != this && anotherCollidable != source)
+        if (!(anotherCollidable instanceof Weapon) && isFired() && anotherCollidable != this && anotherCollidable != source)
             setFired(false);
     }
 

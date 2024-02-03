@@ -2,14 +2,12 @@ package org.moqucu.games.nightstalker.model.object;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.moqucu.games.nightstalker.model.AbsolutePosition;
-import org.moqucu.games.nightstalker.model.AnimatedObject;
+import org.moqucu.games.nightstalker.model.*;
 
 import java.util.List;
 import java.util.Random;
 
-@Getter
-public class Weapon extends AnimatedObject {
+public class Weapon extends AnimatedObject implements Resettable {
 
     public static class WeaponFiredEmptyException extends RuntimeException {
 
@@ -19,10 +17,12 @@ public class Weapon extends AnimatedObject {
         }
     }
 
+    @Getter
     private int rounds;
 
     private final Random random = new Random();
 
+    @Getter
     private final List<AbsolutePosition> possibleWeaponLocations = List.of(
             new AbsolutePosition(9.0 * 32, 6.0 * 32),
             new AbsolutePosition(17.0 * 32, 3.0 * 32),
@@ -64,14 +64,12 @@ public class Weapon extends AnimatedObject {
         setLowerAnimationIndex(0);
         setUpperAnimationIndex(1);
         setFrameRate(2);
-        setRounds(6);
-        randomizeAbsolutePosition();
-        setObjectVisible(true);
-        setAnimated(true);
+        drop();
     }
 
-    public void fireRound() {
+    public void fireRound(GameObject source, Direction direction, AbsolutePosition start, AbsolutePosition target) {
 
+        getBullet().fire(source, direction, start, target);
         setRounds(getRounds() - 1);
     }
 
@@ -83,6 +81,7 @@ public class Weapon extends AnimatedObject {
 
     public void drop() {
 
+        setRounds(6);
         randomizeAbsolutePosition();
         setObjectVisible(true);
         setAnimated(true);
@@ -90,6 +89,21 @@ public class Weapon extends AnimatedObject {
 
     @Override
     public boolean canChangePosition() {
+
         return true;
+    }
+
+    @Override
+    public void reset() {
+
+        drop();
+    }
+
+    public Bullet getBullet() {
+
+        if (this.bullet == null)
+            this.bullet = new Bullet();
+
+        return this.bullet;
     }
 }

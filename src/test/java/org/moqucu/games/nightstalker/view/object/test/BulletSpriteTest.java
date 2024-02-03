@@ -46,6 +46,7 @@ public class BulletSpriteTest {
                 RuntimeException.class,
                 () -> bulletRectangle.setModel(weapon)
         );
+
         assertThat(throwable.getMessage(), is("Model needs to be of type " +
                 "class org.moqucu.games.nightstalker.model.object.Bullet but was of type " +
                 "class org.moqucu.games.nightstalker.model.object.Weapon!"));
@@ -57,6 +58,7 @@ public class BulletSpriteTest {
         final Bullet bullet = new Bullet();
         bullet.setXPosition(23.5);
         bulletRectangle.setModel(bullet);
+
         assertThat(bulletRectangle.getX(), is(23.5));
     }
 
@@ -66,6 +68,7 @@ public class BulletSpriteTest {
         final Bullet bullet = new Bullet();
         bullet.fire(bullet, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
         bulletRectangle.setModel(bullet);
-        assertThat(bulletRectangle.getX(), is(16.));
+
+        assertThat(bulletRectangle.getX(), is(0.));
     }
 }

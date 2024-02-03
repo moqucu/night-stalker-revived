@@ -34,8 +34,10 @@
             prefWidth="640"
     >
         <Pane>
-            <WeaponSprite/>
-            <WeaponBulletSprite visible="false"/>
+            <!--suppress JavaFxUnresolvedFxIdReference -->
+            <WeaponBulletSprite visible="false" fx:id="weaponBulletSprite1"/>
+
+            <WeaponSprite weaponBulletSprite="$weaponBulletSprite1"/>
             <!--            <RobotBullet/>-->
             <LivesLabel
                     x="98.0"
