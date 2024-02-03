@@ -27,11 +27,19 @@ public abstract class DisplayableObject extends GameObject implements Collidable
         }
     }
 
-    @Getter
-    private final double width = 32.0;
+    public static final double WIDTH = 32.0;
 
-    @Getter
-    private final double height = 32.0;
+    public double getWidth() {
+
+        return WIDTH;
+    }
+
+    public static final double HEIGHT = 32.0;
+
+    public double getHeight() {
+
+        return HEIGHT;
+    }
 
     private final AbsolutePosition absolutePosition = new AbsolutePosition();
 

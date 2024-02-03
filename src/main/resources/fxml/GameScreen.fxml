@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import org.moqucu.games.nightstalker.view.enemy.GreyRobotSprite?>
 <?import org.moqucu.games.nightstalker.view.hero.NightStalkerSprite?>
+<?import org.moqucu.games.nightstalker.view.object.WeaponBulletSprite?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
         xmlns:fx="http://javafx.com/fxml/1"
@@ -33,8 +34,10 @@
             prefWidth="640"
     >
         <Pane>
-            <WeaponSprite/>
-            <!--            <BulletSprite/>-->
+            <!--suppress JavaFxUnresolvedFxIdReference -->
+            <WeaponBulletSprite visible="false" fx:id="weaponBulletSprite1"/>
+
+            <WeaponSprite weaponBulletSprite="$weaponBulletSprite1"/>
             <!--            <RobotBullet/>-->
             <LivesLabel
                     x="98.0"

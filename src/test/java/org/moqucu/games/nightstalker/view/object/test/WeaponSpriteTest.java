@@ -3,36 +3,15 @@ package org.moqucu.games.nightstalker.view.object.test;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.object.Weapon;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
+import org.moqucu.games.nightstalker.view.object.WeaponBulletSprite;
 import org.moqucu.games.nightstalker.view.object.WeaponSprite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.is;
 
 public class WeaponSpriteTest {
-
-    /*
-
-        enum States {TossedAway, ReappearedOnTheGround, PickedUp}
-
-    enum Events {reappear, pickUp, tossAway}
-
-    private Map<States, Indices> frameBoundaries = Map.of(
-            States.TossedAway, Indices.builder().lower(0).upper(0).build(),
-            States.ReappearedOnTheGround, Indices.builder().lower(0).upper(1).build(),
-            States.PickedUp, Indices.builder().lower(0).upper(0).build()
-    );
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private final IntegerProperty numberOfRounds = new SimpleIntegerProperty(6);
-
-    private AudioClip pickUpGunSound = new AudioClip(
-            Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/pickupgun.wav").toString()
-    );
-
-    private AudioClip shootSound
-            = new AudioClip(Maze.class.getResource("/org/moqucu/games/nightstalker/sounds/shoot.wav").toString());
-
-     */
 
     private final WeaponSprite weaponSprite = new WeaponSprite();
 
@@ -46,5 +25,29 @@ public class WeaponSpriteTest {
     public void modelIsAWeapon() {
 
         assertThat(weaponSprite.getModel(), isA(Weapon.class));
+    }
+
+    @Test
+    public void hasAWeaponBulletSprite() {
+
+        assertThat(weaponSprite, hasProperty("weaponBulletSprite"));
+    }
+
+    @Test
+    public void weaponBulletSpriteOfTheSameType() {
+
+        final WeaponBulletSprite aWeaponBulletSprite = new WeaponBulletSprite();
+        weaponSprite.setWeaponBulletSprite(aWeaponBulletSprite);
+
+        assertThat(weaponSprite.getWeaponBulletSprite(), isA(WeaponBulletSprite.class));
+    }
+
+    @Test
+    public void settingWeaponBulletSpriteAlsoSetsBulletModelInWeaponModel() {
+
+        final WeaponBulletSprite aWeaponBulletSprite = new WeaponBulletSprite();
+        weaponSprite.setWeaponBulletSprite(aWeaponBulletSprite);
+
+        assertThat(((Weapon)weaponSprite.getModel()).getBullet(), is(aWeaponBulletSprite.getModel()));
     }
 }
