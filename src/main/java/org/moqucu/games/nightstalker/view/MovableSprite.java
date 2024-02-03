@@ -16,9 +16,9 @@ public class MovableSprite extends AnimatedSprite {
     private JavaBeanObjectProperty<Direction> directionProperty;
 
     @SneakyThrows
+    @SuppressWarnings("unchecked") // Reason: Bad API
     private void bindProperties(MovableObject model) {
 
-        //noinspection unchecked
         directionProperty = JavaBeanObjectPropertyBuilder
                 .create()
                 .name("direction")
