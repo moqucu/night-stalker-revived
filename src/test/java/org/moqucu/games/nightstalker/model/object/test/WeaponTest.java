@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.moqucu.games.nightstalker.model.AbsolutePosition;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
+import org.moqucu.games.nightstalker.model.Direction;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 import org.moqucu.games.nightstalker.model.object.Weapon;
 
 import java.beans.PropertyChangeListener;
@@ -104,6 +107,7 @@ public class WeaponTest {
     public void initialNumberOfRoundsIsSix() {
 
         final Weapon aWeapon = new Weapon();
+
         assertThat(aWeapon.getRounds(), is(6));
     }
 
@@ -116,7 +120,10 @@ public class WeaponTest {
         doThrow(new RuntimeException("First of six rounds fired!")).when(propertyChangeListener).propertyChange(ArgumentMatchers.any());
         aWeapon.addPropertyChangeListener(propertyChangeListener);
 
-        final Throwable throwable = assertThrows(RuntimeException.class, aWeapon::fireRound);
+        final Throwable throwable = assertThrows(
+                RuntimeException.class,
+                () -> aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition())
+        );
         assertThat(throwable.getMessage(), is("First of six rounds fired!"));
         assertThat(aWeapon.getRounds(), is(rounds - 1));
     }
@@ -125,19 +132,26 @@ public class WeaponTest {
     void firingSixRoundsInSuccessionLeadsToAThrownWeaponEmptyException() {
 
         final Weapon aWeapon = new Weapon();
-        for(int i = 1; i < 6; i++)
-            aWeapon.fireRound();
+        for (int i = 1; i < 6; i++)
+            aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition());
 
-        assertThrows(Weapon.WeaponFiredEmptyException.class, aWeapon::fireRound);
+        assertThrows(
+                Weapon.WeaponFiredEmptyException.class,
+                () -> aWeapon.fireRound(
+                        new NightStalker(),
+                        Direction.Left,
+                        new AbsolutePosition()
+                )
+        );
     }
 
     @Test
     void firingSixRoundsInSuccessionLeadsToAReloadedWeapon() {
 
         final Weapon aWeapon = new Weapon();
-        for(int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             try {
-                aWeapon.fireRound();
+                aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition());
             } catch (Weapon.WeaponFiredEmptyException ignored) {
             }
         }
@@ -171,7 +185,24 @@ public class WeaponTest {
     public void canChangePosition() {
 
         final Weapon aWeapon = new Weapon();
+
         assertThat(aWeapon.canChangePosition(), is(true));
     }
 
+    @Test
+    public void hasBulletProperty() {
+
+        final Weapon aWeapon = new Weapon();
+
+        assertThat(aWeapon, hasProperty("bullet"));
+    }
+
+    @Test
+    public void bulletOfTypeBullet() {
+
+        final Weapon aWeapon = new Weapon();
+        aWeapon.setBullet(new Bullet());
+
+        assertThat(aWeapon.getBullet(), instanceOf(Bullet.class));
+    }
 }

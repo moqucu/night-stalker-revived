@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.Group?>
-<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.Pane?>
 <?import org.moqucu.games.nightstalker.view.background.BunkerSprite?>
 <?import org.moqucu.games.nightstalker.view.background.HallwaySprite?>
@@ -17,6 +16,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import org.moqucu.games.nightstalker.view.enemy.GreyRobotSprite?>
 <?import org.moqucu.games.nightstalker.view.hero.NightStalkerSprite?>
+<?import org.moqucu.games.nightstalker.view.object.WeaponBulletSprite?>
+<?import org.moqucu.games.nightstalker.view.MazeBackgroundTilePane?>
 <Group
         xmlns="http://javafx.com/javafx/8.0.172-ea"
         xmlns:fx="http://javafx.com/fxml/1"
@@ -33,8 +34,10 @@
             prefWidth="640"
     >
         <Pane>
-            <WeaponSprite/>
-            <!--            <BulletSprite/>-->
+            <!--suppress JavaFxUnresolvedFxIdReference -->
+            <WeaponBulletSprite visible="false" fx:id="weaponBulletSprite1"/>
+
+            <WeaponSprite weaponBulletSprite="$weaponBulletSprite1"/>
             <!--            <RobotBullet/>-->
             <LivesLabel
                     x="98.0"
@@ -48,16 +51,6 @@
             />
         </Pane>
         <Pane>
-            <!--            <Spider-->
-            <!--                    spawnCoordinateX="32.0"-->
-            <!--                    spawnCoordinateY="32.0"-->
-            <!--                    sleepTimeInMillis="500"-->
-            <!--                    spawnTimeInMillis="3000"-->
-            <!--                    autoReversible="false"-->
-            <!--                    frameDurationInMillis="200"-->
-            <!--                    velocity="50"-->
-            <!--            />-->
-
             <SpiderSprite/>
             <Group
                     id="GreyRobotAnimationGroup">
@@ -93,37 +86,11 @@
                     x="512.0"
                     y="224"
             />
-            <!--            <Bat-->
-            <!--                    spawnCoordinateX="528.0"-->
-            <!--                    spawnCoordinateY="96"-->
-            <!--                    sleepTimeInMillis="5000"-->
-            <!--                    spawnTimeInMillis="3000"-->
-            <!--                    autoReversible="false"-->
-            <!--                    frameDurationInMillis="100"-->
-            <!--                    velocity="50"-->
-            <!--            />-->
-            <!--            <Bat-->
-            <!--                    spawnCoordinateX="512.0"-->
-            <!--                    spawnCoordinateY="224"-->
-            <!--                    spawnTimeInMillis="3000"-->
-            <!--                    sleepTimeInMillis="2500"-->
-            <!--                    autoReversible="false"-->
-            <!--                    frameDurationInMillis="100"-->
-            <!--                    velocity="50"-->
-            <!--            />-->
         </Pane>
         <Pane>
             <NightStalkerSprite/>
-            <!--            <NightStalker-->
-            <!--                    spawnCoordinateX="288.0"-->
-            <!--                    spawnCoordinateY="144.0"-->
-            <!--                    spawnTimeInMillis="3000"-->
-            <!--                    autoReversible="false"-->
-            <!--                    frameDurationInMillis="200"-->
-            <!--                    velocity="75"-->
-            <!--            />-->
         </Pane>
-        <TilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
+        <MazeBackgroundTilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
             <WallSprite initialImageIndex="0"/>
             <WallSprite initialImageIndex="1"/>
             <WallSprite initialImageIndex="2"/>
@@ -384,6 +351,6 @@
             <WallSprite initialImageIndex="33"/>
             <WallSprite initialImageIndex="34"/>
             <WallSprite initialImageIndex="35"/>
-        </TilePane>
+        </MazeBackgroundTilePane>
     </StackPane>
 </Group>
