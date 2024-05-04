@@ -66,7 +66,7 @@ public class BulletSpriteTest {
     public void testPropertyChangePropagation() {
 
         final Bullet bullet = new Bullet();
-        bullet.fire(bullet, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+        bullet.fire(bullet, Direction.Left, new AbsolutePosition());
         bulletRectangle.setModel(bullet);
 
         assertThat(bulletRectangle.getX(), is(0.));

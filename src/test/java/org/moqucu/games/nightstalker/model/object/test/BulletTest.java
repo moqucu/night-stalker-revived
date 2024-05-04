@@ -50,7 +50,7 @@ public class BulletTest {
     public void immediatelyAfterFiringDirectionIsNotUndefined() {
 
         final Bullet aBullet = new Bullet();
-        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition());
 
         assertThat(aBullet.getDirection(), is(not(Direction.Undefined)));
     }
@@ -67,7 +67,7 @@ public class BulletTest {
     public void afterBulletIsFiredItBecomesVisible() {
 
         final Bullet aBullet = new Bullet();
-        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition());
 
         assertThat(aBullet.isObjectVisible(), is(true));
     }
@@ -90,7 +90,6 @@ public class BulletTest {
                 () -> aBullet.fire(
                         new NightStalker(),
                         Direction.Undefined,
-                        new AbsolutePosition(),
                         new AbsolutePosition()
                 )
         );
@@ -106,7 +105,6 @@ public class BulletTest {
                 () -> aBullet.fire(
                         new NightStalker(),
                         Direction.OnTop,
-                        new AbsolutePosition(),
                         new AbsolutePosition()
                 )
         );
@@ -126,7 +124,6 @@ public class BulletTest {
                 () -> aBullet.fire(
                         new NightStalker(),
                         Direction.Right,
-                        new AbsolutePosition(),
                         new AbsolutePosition()
                 )
         );
@@ -152,7 +149,7 @@ public class BulletTest {
 
         final Bullet aBullet = new Bullet();
         final NightStalker aNightStalker = new NightStalker();
-        aBullet.fire(aNightStalker, Direction.Up, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(aNightStalker, Direction.Up, new AbsolutePosition());
 
         assertThat(aBullet.getSource(), is(aNightStalker));
     }
@@ -162,7 +159,7 @@ public class BulletTest {
 
         final Bullet aBullet = new Bullet();
         final GreyRobot aGreyRobot = new GreyRobot();
-        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition());
         aBullet.collisionOccurredWith(aGreyRobot);
 
         assertThat(aBullet.isFired(), is(false));
@@ -176,7 +173,7 @@ public class BulletTest {
 
         final Bullet aBullet = new Bullet();
         final NightStalker aNightStalker = new NightStalker();
-        aBullet.fire(aNightStalker, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(aNightStalker, Direction.Left, new AbsolutePosition());
         aBullet.collisionOccurredWith(aBullet);
 
         assertThat(aBullet.isFired(), is(true));
@@ -190,35 +187,13 @@ public class BulletTest {
 
         final Bullet aBullet = new Bullet();
         final NightStalker aNightStalker = new NightStalker();
-        aBullet.fire(aNightStalker, Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(aNightStalker, Direction.Left, new AbsolutePosition());
         aBullet.collisionOccurredWith(aNightStalker);
 
         assertThat(aBullet.isFired(), is(true));
         assertThat(aBullet.isObjectVisible(), is(true));
         assertThat(aBullet.getSource(), is(aNightStalker));
         assertThat(aBullet.getDirection(), is(Direction.Left));
-    }
-
-    @Test
-    public void bulletHasAnAbsoluteTargetPositionProperty() {
-
-        assertThat(new Bullet(), hasProperty("absoluteTargetPosition"));
-    }
-
-    @Test
-    public void absoluteTargetPositionPropertyOfTypeAbsolutePosition() {
-
-        final Bullet aBullet = new Bullet();
-
-        assertThat(aBullet.getAbsoluteTargetPosition(), isA(AbsolutePosition.class));
-    }
-
-    @Test
-    public void initialTargetPositionEqualsItsAbsolutePosition() {
-
-        final Bullet aBullet = new Bullet();
-
-        assertThat(aBullet.getAbsoluteTargetPosition(), is(aBullet.getAbsolutePosition()));
     }
 
     @Test
@@ -231,48 +206,40 @@ public class BulletTest {
     public void firingABulletToTheLeftBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
 
         final Bullet aBullet = new Bullet();
-        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition());
 
         assertThat(aBullet.getXPosition(), is(0.));
         assertThat(aBullet.getYPosition(), is(0.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(-32.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0.));
     }
 
     @Test
     public void firingABulletToTheRightBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
 
         final Bullet aBullet = new Bullet();
-        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition());
 
         assertThat(aBullet.getXPosition(), is(0.));
         assertThat(aBullet.getYPosition(), is(0.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0 + DisplayableObject.WIDTH));
-        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0.));
     }
 
     @Test
     public void firingABulletToTheTopBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
 
         final Bullet aBullet = new Bullet();
-        aBullet.fire(new NightStalker(), Direction.Up, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Up, new AbsolutePosition());
 
         assertThat(aBullet.getXPosition(), is(0.));
         assertThat(aBullet.getYPosition(), is(0.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(-32.));
     }
 
     @Test
     public void firingABulletToTheBottomBetweenZeroPositionsDeterminesRightSourceAndTargetCoordinates() {
 
         final Bullet aBullet = new Bullet();
-        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition(), new AbsolutePosition());
+        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition());
 
         assertThat(aBullet.getXPosition(), is(0.));
         assertThat(aBullet.getYPosition(), is(0.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getX(), is(0.));
-        assertThat(aBullet.getAbsoluteTargetPosition().getY(), is(0 + DisplayableObject.HEIGHT));
     }
 
     @Test
@@ -282,8 +249,7 @@ public class BulletTest {
         aBullet.fire(
                 new NightStalker(),
                 Direction.Right,
-                new AbsolutePosition(0, 64),
-                new AbsolutePosition(32, 64)
+                new AbsolutePosition(0, 64)
         );
         aBullet.elapseTime(1000);
 
@@ -300,15 +266,14 @@ public class BulletTest {
         aBullet.fire(
                 new NightStalker(),
                 Direction.Right,
-                new AbsolutePosition(0, 64),
-                new AbsolutePosition(32, 64)
+                new AbsolutePosition(0, 64)
         );
         aBullet.elapseTime(3001);
 
-        assertThat(aBullet.getXPosition(), is(64.));
+        assertThat(aBullet.getXPosition(), is(192.064));
         assertThat(aBullet.getYPosition(), is(64.));
-        assertThat(aBullet.isFired(), is(false));
-        assertThat(aBullet.isObjectVisible(), is(false));
+        assertThat(aBullet.isFired(), is(true));
+        assertThat(aBullet.isObjectVisible(), is(true));
     }
 
     @Test
@@ -326,7 +291,6 @@ public class BulletTest {
         aBullet.fire(
                 new GreyRobot(),
                 Direction.Right,
-                new AbsolutePosition(),
                 new AbsolutePosition()
         );
         aBullet.reset();
@@ -335,7 +299,6 @@ public class BulletTest {
         assertThat(aBullet.isObjectVisible(), is(false));
         assertThat(aBullet.getDirection(), is(Direction.Undefined));
         assertThat(aBullet.getSource(), is (aBullet));
-        assertThat(aBullet.getAbsoluteTargetPosition(), is (nullValue()));
     }
 
     @Test

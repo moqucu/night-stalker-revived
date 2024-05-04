@@ -160,11 +160,7 @@ public class NightStalker extends MovableObject implements Resettable {
         if (weapon == null)
             throw new NoWeaponsException();
         try {
-            final AbsolutePosition targetPosition = getAbsMazeGraph().getFurthestReachablePosition(
-                    getAbsolutePosition(),
-                    getDirection()
-            );
-            getWeapon().fireRound(this, getDirection(), getAbsolutePosition(), targetPosition);
+            getWeapon().fireRound(this, getDirection(), getAbsolutePosition());
         } catch (Weapon.WeaponFiredEmptyException weaponFiredEmptyException) {
             throwAwayWeapon();
         }

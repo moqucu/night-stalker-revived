@@ -67,9 +67,9 @@ public class Weapon extends AnimatedObject implements Resettable {
         drop();
     }
 
-    public void fireRound(GameObject source, Direction direction, AbsolutePosition start, AbsolutePosition target) {
+    public void fireRound(GameObject source, Direction direction, AbsolutePosition start) {
 
-        getBullet().fire(source, direction, start, target);
+        getBullet().fire(source, direction, start);
         setRounds(getRounds() - 1);
     }
 

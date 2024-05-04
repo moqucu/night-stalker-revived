@@ -122,7 +122,7 @@ public class WeaponTest {
 
         final Throwable throwable = assertThrows(
                 RuntimeException.class,
-                () -> aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition())
+                () -> aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition())
         );
         assertThat(throwable.getMessage(), is("First of six rounds fired!"));
         assertThat(aWeapon.getRounds(), is(rounds - 1));
@@ -133,14 +133,13 @@ public class WeaponTest {
 
         final Weapon aWeapon = new Weapon();
         for (int i = 1; i < 6; i++)
-            aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+            aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition());
 
         assertThrows(
                 Weapon.WeaponFiredEmptyException.class,
                 () -> aWeapon.fireRound(
                         new NightStalker(),
                         Direction.Left,
-                        new AbsolutePosition(),
                         new AbsolutePosition()
                 )
         );
@@ -152,7 +151,7 @@ public class WeaponTest {
         final Weapon aWeapon = new Weapon();
         for (int i = 0; i < 6; i++) {
             try {
-                aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition(), new AbsolutePosition());
+                aWeapon.fireRound(new NightStalker(), Direction.Left, new AbsolutePosition());
             } catch (Weapon.WeaponFiredEmptyException ignored) {
             }
         }
