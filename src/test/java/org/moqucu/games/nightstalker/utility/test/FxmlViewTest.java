@@ -8,8 +8,21 @@ import static org.hamcrest.Matchers.is;
 
 public class FxmlViewTest {
 
+    private final FxmlView loadingScreen = FxmlView.LOADING_SCREEN;
     private final FxmlView splashScreen = FxmlView.SPLASH_SCREEN;
     private final FxmlView gameScreen = FxmlView.GAME_SCREEN;
+
+    @Test
+    public void testLoadingScreenTitle() {
+
+        assertThat(loadingScreen.getTitle(), is("Night Stalker Revived"));
+    }
+
+    @Test
+    public void testLoadingScreenFxmlLocation() {
+
+        assertThat(loadingScreen.getFxmlFile(), is("/fxml/LoadingScreen.fxml"));
+    }
 
     @Test
     public void testSplashScreenTitle() {

@@ -105,3 +105,10 @@ gradle-app.setting
 LOG_FILE_IS_UNDEFINED
 *.log
 *.log.*
+
+# macOS
+*.DS_Store
+
+# Claude Code
+CLAUDE.md
+
