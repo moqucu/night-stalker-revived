@@ -52,7 +52,9 @@ public class GameController {
 
     private final Callback<Class<?>, Object> controllerFactory = param -> {
 
-        if (param.equals(SplashScreenController.class))
+        if (param.equals(LoadingScreenController.class))
+            return new LoadingScreenController(this);
+        else if (param.equals(SplashScreenController.class))
             return new SplashScreenController(this);
         else
             return new GameScreenController(this);
@@ -127,7 +129,8 @@ public class GameController {
         if (stage != null) {
 
             startBackgroundMusicLoop();
-            switchScene(FxmlView.SPLASH_SCREEN);
+            switchScene(FxmlView.LOADING_SCREEN);
+            stage.setY(0);
         }
         this.systemWrapper = systemWrapper;
         this.gameLoop = gameLoop;

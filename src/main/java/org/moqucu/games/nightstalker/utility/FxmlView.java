@@ -2,6 +2,20 @@ package org.moqucu.games.nightstalker.utility;
 
 public enum FxmlView {
 
+    LOADING_SCREEN {
+
+        @Override
+        public String getTitle() {
+
+            return "Night Stalker Revived";
+        }
+
+        @Override
+        public String getFxmlFile() {
+
+            return "/fxml/LoadingScreen.fxml";
+        }
+    },
     SPLASH_SCREEN {
 
         @Override

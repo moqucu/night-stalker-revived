@@ -1,0 +1,13 @@
+.loading-progress-bar .bar {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.loading-progress-bar .track {
+    -fx-background-color: #2a2800;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: white;
+    -fx-border-width: 1;
+}

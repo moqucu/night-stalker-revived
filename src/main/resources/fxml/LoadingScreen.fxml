@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<Group
+        xmlns="http://javafx.com/javafx/8.0.172-ea"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="org.moqucu.games.nightstalker.controller.LoadingScreenController"
+        stylesheets="@/fxml/LoadingScreen.css"
+>
+    <StackPane prefWidth="782.0" prefHeight="950.0">
+        <ImageView fitWidth="782.0" fitHeight="950.0" preserveRatio="false" pickOnBounds="true">
+            <Image url="@/images/splash.jpeg"/>
+        </ImageView>
+        <VBox StackPane.alignment="BOTTOM_CENTER"
+              style="-fx-background-color: rgba(0,0,0,0.65);"
+              prefWidth="782.0">
+            <padding><Insets top="12.0" bottom="12.0" left="16.0" right="16.0"/></padding>
+            <ProgressBar fx:id="loadingBar" prefWidth="750.0" prefHeight="20.0"
+                         progress="0.0" styleClass="loading-progress-bar"/>
+        </VBox>
+    </StackPane>
+</Group>
