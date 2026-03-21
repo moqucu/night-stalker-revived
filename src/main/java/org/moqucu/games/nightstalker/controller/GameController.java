@@ -48,6 +48,8 @@ public class GameController {
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Map<Sprite, GameObject> gameElements = new HashMap<>();
 
+    private NightStalker nightStalker;
+
     private final GameLoop gameLoop;
 
     private final Callback<Class<?>, Object> controllerFactory = param -> {
@@ -157,6 +159,8 @@ public class GameController {
 
         gameElements.put(sprite, sprite.getModel());
         gameWorld.add(sprite.getModel());
+        if (sprite.getModel() instanceof NightStalker)
+            nightStalker = (NightStalker) sprite.getModel();
     }
 
     public void startGameLoop() {
@@ -181,12 +185,14 @@ public class GameController {
 
     private NightStalker getNightStalker() {
 
-        return (NightStalker) gameWorld.getObjects()
-                .values()
-                .stream()
-                .filter(gameObject -> gameObject instanceof NightStalker)
-                .findFirst()
-                .orElseThrow();
+        if (nightStalker == null)
+            nightStalker = (NightStalker) gameWorld.getObjects()
+                    .values()
+                    .stream()
+                    .filter(gameObject -> gameObject instanceof NightStalker)
+                    .findFirst()
+                    .orElseThrow();
+        return nightStalker;
     }
 
     public void runNightStalkerWith(Direction direction) {
