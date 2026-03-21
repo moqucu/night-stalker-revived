@@ -56,27 +56,27 @@ public abstract class MovableObject extends AnimatedObject {
 
     public void setInMotion(boolean inMotion) {
 
-        if (direction == Direction.Undefined)
-            throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
-        else if (absMazeGraph == null)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");
-        else if (!absMazeGraph.isWithinBounds(new AbsolutePosition(getXPosition(), getYPosition())))
-            throw new PreconditionNotMetForSettingObjectInMotionException("Absolute position is out of bounds!");
-        else if (velocity <= 0.)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No velocity!");
-        else if (mazeAlgorithm == MazeAlgorithm.None)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No maze algorithm!");
-        else {
-
-            final boolean oldInMotion = this.inMotion;
-            this.inMotion = inMotion;
-
-            propertyChangeSupport.firePropertyChange(
-                    "inMotion",
-                    oldInMotion,
-                    inMotion
-            );
+        if (inMotion) {
+            if (direction == Direction.Undefined)
+                throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
+            else if (absMazeGraph == null)
+                throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");
+            else if (!absMazeGraph.isWithinBounds(new AbsolutePosition(getXPosition(), getYPosition())))
+                throw new PreconditionNotMetForSettingObjectInMotionException("Absolute position is out of bounds!");
+            else if (velocity <= 0.)
+                throw new PreconditionNotMetForSettingObjectInMotionException("No velocity!");
+            else if (mazeAlgorithm == MazeAlgorithm.None)
+                throw new PreconditionNotMetForSettingObjectInMotionException("No maze algorithm!");
         }
+
+        final boolean oldInMotion = this.inMotion;
+        this.inMotion = inMotion;
+
+        propertyChangeSupport.firePropertyChange(
+                "inMotion",
+                oldInMotion,
+                inMotion
+        );
     }
 
     public void setDirection(Direction direction) {

@@ -75,4 +75,44 @@ public class BatSprite extends MovableSprite {
 
         return sleepTimeInMillisProperty;
     }
+
+    public void setSpawnX(double x) {
+
+        model.setSpawnXPosition(x);
+    }
+
+    public double getSpawnX() {
+
+        return model.getXPosition();
+    }
+
+    public void setSpawnY(double y) {
+
+        model.setSpawnYPosition(y);
+    }
+
+    public double getSpawnY() {
+
+        return model.getYPosition();
+    }
+
+    public void setSpawnDirection(org.moqucu.games.nightstalker.model.Direction direction) {
+
+        model.setSpawnDirection(direction);
+    }
+
+    public org.moqucu.games.nightstalker.model.Direction getSpawnDirection() {
+
+        return model.getDirection();
+    }
+
+    public void setSpawnImageIndex(int imageIndex) {
+
+        model.setSpawnImageIndex(imageIndex);
+    }
+
+    public int getSpawnImageIndex() {
+
+        return model.getInitialImageIndex();
+    }
 }
