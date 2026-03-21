@@ -1,10 +1,7 @@
 package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.*;
 
 @Getter
 public class GreyRobot extends MovableObject implements Resettable {
@@ -27,7 +24,7 @@ public class GreyRobot extends MovableObject implements Resettable {
         reset();
         addPropertyChangeListener(evt -> {
 
-            if (slow && evt.getPropertyName().equals("XPosition") && (Double)evt.getNewValue() >= 96.0) {
+            if (slow && evt.getPropertyName().equals(PropertyNames.X_POSITION) && (Double)evt.getNewValue() >= 96.0) {
 
                 setVelocity(30);
                 slow = false;

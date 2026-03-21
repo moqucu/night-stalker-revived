@@ -48,7 +48,7 @@ public abstract class MovableObject extends AnimatedObject {
         final double oldVelocity = this.velocity;
         this.velocity = velocity;
         propertyChangeSupport.firePropertyChange(
-                "velocity",
+                PropertyNames.VELOCITY,
                 oldVelocity,
                 velocity
         );
@@ -73,7 +73,7 @@ public abstract class MovableObject extends AnimatedObject {
         this.inMotion = inMotion;
 
         propertyChangeSupport.firePropertyChange(
-                "inMotion",
+                PropertyNames.IN_MOTION,
                 oldInMotion,
                 inMotion
         );
@@ -85,7 +85,7 @@ public abstract class MovableObject extends AnimatedObject {
         this.direction = direction;
 
         propertyChangeSupport.firePropertyChange(
-                "direction",
+                PropertyNames.DIRECTION,
                 oldDirection,
                 direction
         );
@@ -100,7 +100,7 @@ public abstract class MovableObject extends AnimatedObject {
 
             mazeAlgorithmImpl = MazeAlgorithmFactory.getInstance().createMazeAlgorithm(mazeAlgorithm);
             propertyChangeSupport.firePropertyChange(
-                    "mazeAlgorithm",
+                    PropertyNames.MAZE_ALGORITHM,
                     oldMazeAlgorithm,
                     mazeAlgorithm
             );
@@ -118,7 +118,7 @@ public abstract class MovableObject extends AnimatedObject {
             this.mazeGraphFileName = mazeGraphFileName;
 
             propertyChangeSupport.firePropertyChange(
-                    "mazeGraphFileName",
+                    PropertyNames.MAZE_GRAPH_FILE_NAME,
                     oldMazeGraphFileName,
                     mazeGraphFileName
             );

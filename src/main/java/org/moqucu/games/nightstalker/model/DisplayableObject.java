@@ -104,7 +104,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
         if (oldXPosition != xPosition) {
 
             absolutePosition.addToX(xPosition - oldXPosition);
-            propertyChangeSupport.firePropertyChange("XPosition", oldXPosition, absolutePosition.getX());
+            propertyChangeSupport.firePropertyChange(PropertyNames.X_POSITION, oldXPosition, absolutePosition.getX());
         }
     }
 
@@ -125,7 +125,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
         if (oldYPosition != yPosition) {
 
             absolutePosition.addToY(yPosition - oldYPosition);
-            propertyChangeSupport.firePropertyChange("YPosition", oldYPosition, absolutePosition.getY());
+            propertyChangeSupport.firePropertyChange(PropertyNames.Y_POSITION, oldYPosition, absolutePosition.getY());
         }
     }
 
@@ -143,7 +143,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
         this.imageMapFileName = imageMapFileName;
         if (!Objects.equals(oldImageMapFileName, imageMapFileName))
             propertyChangeSupport.firePropertyChange(
-                    "imageMapFileName",
+                    PropertyNames.IMAGE_MAP_FILE_NAME,
                     oldImageMapFileName,
                     imageMapFileName
             );
@@ -159,7 +159,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
 
         if (oldInitialImageIndex != initialImageIndex)
             propertyChangeSupport.firePropertyChange(
-                    "initialImageIndex",
+                    PropertyNames.INITIAL_IMAGE_INDEX,
                     oldInitialImageIndex,
                     initialImageIndex
             );
@@ -188,7 +188,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
 
         if (oldObjectVisible != objectVisible)
             propertyChangeSupport.firePropertyChange(
-                    "objectVisible",
+                    PropertyNames.OBJECT_VISIBLE,
                     oldObjectVisible,
                     objectVisible
             );

@@ -1,10 +1,7 @@
 package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.*;
 
 public class Bat extends MovableObject implements Resettable {
 
@@ -54,7 +51,7 @@ public class Bat extends MovableObject implements Resettable {
 
         final double oldSleepTime = this.sleepTime;
         this.sleepTime = sleepTime;
-        this.propertyChangeSupport.firePropertyChange("sleepTime", oldSleepTime, sleepTime);
+        this.propertyChangeSupport.firePropertyChange(PropertyNames.SLEEP_TIME, oldSleepTime, sleepTime);
     }
 
     @Override

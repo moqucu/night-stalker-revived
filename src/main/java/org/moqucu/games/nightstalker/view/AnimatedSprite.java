@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
 import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.PropertyNames;
 
 import java.beans.PropertyChangeListener;
 
@@ -15,7 +16,7 @@ public class AnimatedSprite extends DisplayableSprite {
 
     private final PropertyChangeListener propertyChangeListener = evt -> {
 
-        if (evt.getPropertyName().equals("imageIndex"))
+        if (evt.getPropertyName().equals(PropertyNames.IMAGE_INDEX))
             initializeViewPortFromImageIndex((Integer) evt.getNewValue());
     };
 

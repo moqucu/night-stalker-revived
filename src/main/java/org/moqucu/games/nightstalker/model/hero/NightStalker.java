@@ -57,7 +57,7 @@ public class NightStalker extends MovableObject implements Resettable {
 
         final boolean oldRunning = this.running;
         this.running = running;
-        propertyChangeSupport.firePropertyChange("running", oldRunning, running);
+        propertyChangeSupport.firePropertyChange(PropertyNames.RUNNING, oldRunning, running);
 
         if (running) {
             switch (getDirection()) {
@@ -128,7 +128,7 @@ public class NightStalker extends MovableObject implements Resettable {
         final Weapon oldWeapon = this.weapon;
         this.weapon = weapon;
         propertyChangeSupport.firePropertyChange(
-                "weapon",
+                PropertyNames.WEAPON,
                 oldWeapon,
                 weapon
         );

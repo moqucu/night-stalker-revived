@@ -39,7 +39,7 @@ public abstract class AnimatedObject extends DisplayableObject implements TimeLi
         if (oldLowerAnimationIndex != lowerAnimationIndex) {
 
             propertyChangeSupport.firePropertyChange(
-                    "lowerAnimationIndex",
+                    PropertyNames.LOWER_ANIMATION_INDEX,
                     oldLowerAnimationIndex,
                     lowerAnimationIndex
             );
@@ -53,7 +53,7 @@ public abstract class AnimatedObject extends DisplayableObject implements TimeLi
         final int oldUpperAnimationIndex = this.upperAnimationIndex;
         this.upperAnimationIndex = upperAnimationIndex;
         propertyChangeSupport.firePropertyChange(
-                "upperAnimationIndex",
+                PropertyNames.UPPER_ANIMATION_INDEX,
                 oldUpperAnimationIndex,
                 upperAnimationIndex
         );
@@ -71,7 +71,7 @@ public abstract class AnimatedObject extends DisplayableObject implements TimeLi
             final boolean oldAnimated = this.animated;
             this.animated = animated;
             propertyChangeSupport.firePropertyChange(
-                    "animated",
+                    PropertyNames.ANIMATED,
                     oldAnimated,
                     animated
             );
@@ -84,7 +84,7 @@ public abstract class AnimatedObject extends DisplayableObject implements TimeLi
         this.frameRate = frameRate;
         frameInterval = 1000.0 / frameRate;
         propertyChangeSupport.firePropertyChange(
-                "frameRate",
+                PropertyNames.FRAME_RATE,
                 oldFrameRate,
                 frameRate
         );
@@ -95,7 +95,7 @@ public abstract class AnimatedObject extends DisplayableObject implements TimeLi
         final int oldImageIndex = this.imageIndex;
         this.imageIndex = imageIndex;
         propertyChangeSupport.firePropertyChange(
-                "imageIndex",
+                PropertyNames.IMAGE_INDEX,
                 oldImageIndex,
                 imageIndex
         );

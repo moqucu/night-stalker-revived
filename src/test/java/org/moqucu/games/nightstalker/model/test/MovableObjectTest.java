@@ -178,31 +178,31 @@ public class MovableObjectTest {
                 Exception.class,
                 () -> movableObject.setVelocity(20)
         );
-        assertThat(exception.getMessage(), is("velocity"));
+        assertThat(exception.getMessage(), is(PropertyNames.VELOCITY));
 
         exception = assertThrows(
                 Exception.class,
                 () -> movableObject.setDirection(Direction.Left)
         );
-        assertThat(exception.getMessage(), is("direction"));
+        assertThat(exception.getMessage(), is(PropertyNames.DIRECTION));
 
         exception = assertThrows(
                 Exception.class,
                 () -> movableObject.setMazeGraphFileName("MazeGraphTest.json")
         );
-        assertThat(exception.getMessage(), is("mazeGraphFileName"));
+        assertThat(exception.getMessage(), is(PropertyNames.MAZE_GRAPH_FILE_NAME));
 
         exception = assertThrows(
                 Exception.class,
                 () -> movableObject.setMazeAlgorithm(MazeAlgorithm.OuterRing)
         );
-        assertThat(exception.getMessage(), is("mazeAlgorithm"));
+        assertThat(exception.getMessage(), is(PropertyNames.MAZE_ALGORITHM));
 
         exception = assertThrows(
                 Exception.class,
                 () -> movableObject.setInMotion(true)
         );
-        assertThat(exception.getMessage(), is("inMotion"));
+        assertThat(exception.getMessage(), is(PropertyNames.IN_MOTION));
     }
 
     private void executeCodeThatCanPotentiallyHang() {
