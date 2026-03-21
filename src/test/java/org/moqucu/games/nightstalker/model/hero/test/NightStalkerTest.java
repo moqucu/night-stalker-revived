@@ -194,6 +194,46 @@ public class NightStalkerTest {
     }
 
     @Test
+    public void runningUpSetsAnimationIndicesToVerticalRange() {
+
+        final NightStalker ns = new NightStalker();
+        ns.run(Direction.Up);
+        assertThat(ns.getLowerAnimationIndex(), is(1));
+        assertThat(ns.getUpperAnimationIndex(), is(2));
+        ns.stop();
+    }
+
+    @Test
+    public void runningDownSetsAnimationIndicesToVerticalRange() {
+
+        final NightStalker ns = new NightStalker();
+        ns.run(Direction.Down);
+        assertThat(ns.getLowerAnimationIndex(), is(1));
+        assertThat(ns.getUpperAnimationIndex(), is(2));
+        ns.stop();
+    }
+
+    @Test
+    public void runningLeftSetsAnimationIndicesToLeftRange() {
+
+        final NightStalker ns = new NightStalker();
+        ns.run(Direction.Left);
+        assertThat(ns.getLowerAnimationIndex(), is(3));
+        assertThat(ns.getUpperAnimationIndex(), is(10));
+        ns.stop();
+    }
+
+    @Test
+    public void runningRightSetsAnimationIndicesToRightRange() {
+
+        final NightStalker ns = new NightStalker();
+        ns.run(Direction.Right);
+        assertThat(ns.getLowerAnimationIndex(), is(11));
+        assertThat(ns.getUpperAnimationIndex(), is(18));
+        ns.stop();
+    }
+
+    @Test
     public void isOfTypeResettable() {
 
         assertThat(nightStalker, isA(Resettable.class));
