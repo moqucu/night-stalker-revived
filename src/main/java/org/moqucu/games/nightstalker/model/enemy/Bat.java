@@ -1,10 +1,7 @@
 package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.*;
 
 public class Bat extends MovableObject implements Resettable {
 
@@ -54,7 +51,7 @@ public class Bat extends MovableObject implements Resettable {
 
         final double oldSleepTime = this.sleepTime;
         this.sleepTime = sleepTime;
-        this.propertyChangeSupport.firePropertyChange("sleepTime", oldSleepTime, sleepTime);
+        this.propertyChangeSupport.firePropertyChange(PropertyNames.SLEEP_TIME, oldSleepTime, sleepTime);
     }
 
     @Override
@@ -63,52 +60,44 @@ public class Bat extends MovableObject implements Resettable {
         return true;
     }
 
+    public void setSpawnXPosition(double x) {
+
+        this.initialXPosition = x;
+        super.setXPosition(x);
+    }
+
+    public void setSpawnYPosition(double y) {
+
+        this.initialYPosition = y;
+        super.setYPosition(y);
+    }
+
+    public void setSpawnImageIndex(int imageIndex) {
+
+        this.initialImageIndex = imageIndex;
+        super.setInitialImageIndex(imageIndex);
+    }
+
+    public void setSpawnDirection(Direction direction) {
+
+        this.initialDirection = direction;
+        super.setDirection(direction);
+    }
+
     @Override
     public void reset() {
 
         setAnimated(false);
         setInMotion(false);
         if (initialXPosition != null)
-            setXPosition(initialXPosition);
+            super.setXPosition(initialXPosition);
         if (initialYPosition != null)
-            setYPosition(initialYPosition);
+            super.setYPosition(initialYPosition);
         if (initialImageIndex != null)
-            setInitialImageIndex(initialImageIndex);
+            super.setInitialImageIndex(initialImageIndex);
         if (initialDirection != null)
-                setDirection(initialDirection);
+            super.setDirection(initialDirection);
         awake = false;
         elapsedTimeSinceSpawning = 0;
-    }
-
-    @Override
-    public void setXPosition(double xPosition) {
-
-        if (initialXPosition == null)
-            initialXPosition = xPosition;
-        super.setXPosition(xPosition);
-    }
-
-    @Override
-    public void setYPosition(double yPosition) {
-
-        if (initialYPosition == null)
-            initialYPosition = yPosition;
-        super.setYPosition(yPosition);
-    }
-
-    @Override
-    public void setInitialImageIndex(int initialImageIndex) {
-
-        if (this.initialImageIndex == null)
-            this.initialImageIndex = initialImageIndex;
-        super.setInitialImageIndex(initialImageIndex);
-    }
-
-    @Override
-    public void setDirection(Direction direction) {
-
-        if (initialDirection == null)
-            initialDirection = direction;
-        super.setDirection(direction);
     }
 }

@@ -29,11 +29,11 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
         setInitialImageIndex(0);
         propertyChangeSupport.addPropertyChangeListener(
                 evt -> {
-                    if (evt.getPropertyName().equals("fired") && evt.getNewValue().equals(true)) {
+                    if (evt.getPropertyName().equals(PropertyNames.FIRED) && evt.getNewValue().equals(true)) {
                         setObjectVisible(true);
                         setInitialImageIndex(1);
                     }
-                    else if (evt.getPropertyName().equals("fired") && evt.getNewValue().equals(false)) {
+                    else if (evt.getPropertyName().equals(PropertyNames.FIRED) && evt.getNewValue().equals(false)) {
                         setObjectVisible(false);
                         setInitialImageIndex(0);
                         setSource(this);
@@ -47,21 +47,21 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
 
         final boolean oldFired = this.fired;
         this.fired = fired;
-        propertyChangeSupport.firePropertyChange("fired", oldFired, fired);
+        propertyChangeSupport.firePropertyChange(PropertyNames.FIRED, oldFired, fired);
     }
 
     private void setDirection(Direction direction) {
 
         final Direction oldDirection = this.direction;
         this.direction = direction;
-        propertyChangeSupport.firePropertyChange("direction", oldDirection, direction);
+        propertyChangeSupport.firePropertyChange(PropertyNames.DIRECTION, oldDirection, direction);
     }
 
     private void setSource(GameObject source) {
 
         final GameObject oldSource = this.source;
         this.source = source;
-        propertyChangeSupport.firePropertyChange("source", oldSource, source);
+        propertyChangeSupport.firePropertyChange(PropertyNames.SOURCE, oldSource, source);
     }
 
     public void fire(GameObject source, Direction direction, AbsolutePosition start) {

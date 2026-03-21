@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.moqucu.games.nightstalker.model.DisplayableObject;
 import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.PropertyNames;
 
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -39,9 +40,9 @@ public class DisplayableSprite extends ImageView implements Sprite {
 
     private final PropertyChangeListener propertyChangeListener = evt -> {
 
-        if (evt.getPropertyName().equals("initialImageIndex"))
+        if (evt.getPropertyName().equals(PropertyNames.INITIAL_IMAGE_INDEX))
             initializeViewPortFromInitialImageIndex((Integer) evt.getNewValue());
-        else if (evt.getPropertyName().equals("imageMapFileName"))
+        else if (evt.getPropertyName().equals(PropertyNames.IMAGE_MAP_FILE_NAME))
             initializeImageFromImageMapFileName((String) evt.getNewValue());
     };
 
@@ -68,7 +69,7 @@ public class DisplayableSprite extends ImageView implements Sprite {
 
         objectIdProperty = ReadOnlyJavaBeanStringPropertyBuilder
                 .create()
-                .name("objectId")
+                .name(PropertyNames.OBJECT_ID)
                 .bean(model)
                 .build();
         idProperty().bind(objectIdProperty);

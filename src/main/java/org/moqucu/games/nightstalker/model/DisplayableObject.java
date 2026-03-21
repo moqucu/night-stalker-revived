@@ -5,6 +5,7 @@ import lombok.experimental.Delegate;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public abstract class DisplayableObject extends GameObject implements Collidable {
 
@@ -45,6 +46,10 @@ public abstract class DisplayableObject extends GameObject implements Collidable
 
     @Getter
     private String imageMapFileName = "";
+
+    private boolean imageMapFileChecked = false;
+
+    private boolean imageMapFileValid = false;
 
     @Getter
     private int initialImageIndex = -1;
@@ -99,7 +104,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
         if (oldXPosition != xPosition) {
 
             absolutePosition.addToX(xPosition - oldXPosition);
-            propertyChangeSupport.firePropertyChange("XPosition", oldXPosition, absolutePosition.getX());
+            propertyChangeSupport.firePropertyChange(PropertyNames.X_POSITION, oldXPosition, absolutePosition.getX());
         }
     }
 
@@ -120,7 +125,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
         if (oldYPosition != yPosition) {
 
             absolutePosition.addToY(yPosition - oldYPosition);
-            propertyChangeSupport.firePropertyChange("YPosition", oldYPosition, absolutePosition.getY());
+            propertyChangeSupport.firePropertyChange(PropertyNames.Y_POSITION, oldYPosition, absolutePosition.getY());
         }
     }
 
@@ -131,11 +136,14 @@ public abstract class DisplayableObject extends GameObject implements Collidable
 
     public void setImageMapFileName(String imageMapFileName) {
 
+        imageMapFileChecked = false;
+        imageMapFileValid = false;
+
         final String oldImageMapFileName = this.imageMapFileName;
         this.imageMapFileName = imageMapFileName;
-        if (!oldImageMapFileName.equals(imageMapFileName))
+        if (!Objects.equals(oldImageMapFileName, imageMapFileName))
             propertyChangeSupport.firePropertyChange(
-                    "imageMapFileName",
+                    PropertyNames.IMAGE_MAP_FILE_NAME,
                     oldImageMapFileName,
                     imageMapFileName
             );
@@ -151,7 +159,7 @@ public abstract class DisplayableObject extends GameObject implements Collidable
 
         if (oldInitialImageIndex != initialImageIndex)
             propertyChangeSupport.firePropertyChange(
-                    "initialImageIndex",
+                    PropertyNames.INITIAL_IMAGE_INDEX,
                     oldInitialImageIndex,
                     initialImageIndex
             );
@@ -159,28 +167,31 @@ public abstract class DisplayableObject extends GameObject implements Collidable
 
     public void setObjectVisible(boolean objectVisible) {
 
-        if (imageMapFileName == null)
-            throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
-
-        try (InputStream inputStream = getClass().getResourceAsStream(imageMapFileName)) {
-
-            if (inputStream == null || inputStream.readAllBytes().length == 0)
-                throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
-            else {
-                final boolean oldObjectVisible = this.objectVisible;
-                this.objectVisible = objectVisible;
-
-                if (oldObjectVisible != objectVisible)
-                    propertyChangeSupport.firePropertyChange(
-                            "objectVisible",
-                            oldObjectVisible,
-                            objectVisible
-                    );
+        if (!imageMapFileChecked) {
+            imageMapFileChecked = true;
+            if (imageMapFileName == null) {
+                imageMapFileValid = false;
+            } else {
+                try (InputStream inputStream = getClass().getResourceAsStream(imageMapFileName)) {
+                    imageMapFileValid = inputStream != null && inputStream.readAllBytes().length > 0;
+                } catch (IOException ioException) {
+                    imageMapFileValid = false;
+                }
             }
-
-        } catch (IOException ioException) {
-            throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
         }
+
+        if (!imageMapFileValid)
+            throw new PreconditionNotMetForMakingObjectVisibleException("Image map file name not correctly set!");
+
+        final boolean oldObjectVisible = this.objectVisible;
+        this.objectVisible = objectVisible;
+
+        if (oldObjectVisible != objectVisible)
+            propertyChangeSupport.firePropertyChange(
+                    PropertyNames.OBJECT_VISIBLE,
+                    oldObjectVisible,
+                    objectVisible
+            );
     }
 
     public AbsolutePosition getAbsolutePosition() {

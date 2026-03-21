@@ -48,7 +48,7 @@ public abstract class MovableObject extends AnimatedObject {
         final double oldVelocity = this.velocity;
         this.velocity = velocity;
         propertyChangeSupport.firePropertyChange(
-                "velocity",
+                PropertyNames.VELOCITY,
                 oldVelocity,
                 velocity
         );
@@ -56,27 +56,27 @@ public abstract class MovableObject extends AnimatedObject {
 
     public void setInMotion(boolean inMotion) {
 
-        if (direction == Direction.Undefined)
-            throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
-        else if (absMazeGraph == null)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");
-        else if (!absMazeGraph.isWithinBounds(new AbsolutePosition(getXPosition(), getYPosition())))
-            throw new PreconditionNotMetForSettingObjectInMotionException("Absolute position is out of bounds!");
-        else if (velocity <= 0.)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No velocity!");
-        else if (mazeAlgorithm == MazeAlgorithm.None)
-            throw new PreconditionNotMetForSettingObjectInMotionException("No maze algorithm!");
-        else {
-
-            final boolean oldInMotion = this.inMotion;
-            this.inMotion = inMotion;
-
-            propertyChangeSupport.firePropertyChange(
-                    "inMotion",
-                    oldInMotion,
-                    inMotion
-            );
+        if (inMotion) {
+            if (direction == Direction.Undefined)
+                throw new PreconditionNotMetForSettingObjectInMotionException("Direction is undefined!");
+            else if (absMazeGraph == null)
+                throw new PreconditionNotMetForSettingObjectInMotionException("No maze graph!");
+            else if (!absMazeGraph.isWithinBounds(new AbsolutePosition(getXPosition(), getYPosition())))
+                throw new PreconditionNotMetForSettingObjectInMotionException("Absolute position is out of bounds!");
+            else if (velocity <= 0.)
+                throw new PreconditionNotMetForSettingObjectInMotionException("No velocity!");
+            else if (mazeAlgorithm == MazeAlgorithm.None)
+                throw new PreconditionNotMetForSettingObjectInMotionException("No maze algorithm!");
         }
+
+        final boolean oldInMotion = this.inMotion;
+        this.inMotion = inMotion;
+
+        propertyChangeSupport.firePropertyChange(
+                PropertyNames.IN_MOTION,
+                oldInMotion,
+                inMotion
+        );
     }
 
     public void setDirection(Direction direction) {
@@ -85,7 +85,7 @@ public abstract class MovableObject extends AnimatedObject {
         this.direction = direction;
 
         propertyChangeSupport.firePropertyChange(
-                "direction",
+                PropertyNames.DIRECTION,
                 oldDirection,
                 direction
         );
@@ -100,7 +100,7 @@ public abstract class MovableObject extends AnimatedObject {
 
             mazeAlgorithmImpl = MazeAlgorithmFactory.getInstance().createMazeAlgorithm(mazeAlgorithm);
             propertyChangeSupport.firePropertyChange(
-                    "mazeAlgorithm",
+                    PropertyNames.MAZE_ALGORITHM,
                     oldMazeAlgorithm,
                     mazeAlgorithm
             );
@@ -118,7 +118,7 @@ public abstract class MovableObject extends AnimatedObject {
             this.mazeGraphFileName = mazeGraphFileName;
 
             propertyChangeSupport.firePropertyChange(
-                    "mazeGraphFileName",
+                    PropertyNames.MAZE_GRAPH_FILE_NAME,
                     oldMazeGraphFileName,
                     mazeGraphFileName
             );

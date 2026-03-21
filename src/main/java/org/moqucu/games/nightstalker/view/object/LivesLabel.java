@@ -6,6 +6,7 @@ import javafx.util.Duration;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.PropertyNames;
 import org.moqucu.games.nightstalker.model.object.Lives;
 import org.moqucu.games.nightstalker.view.Sprite;
 
@@ -20,7 +21,7 @@ public class LivesLabel extends Text implements Sprite {
 
     private final PropertyChangeListener propertyChangeListener = evt -> {
 
-        if (evt.getPropertyName().equals("lives")) {
+        if (evt.getPropertyName().equals(PropertyNames.LIVES)) {
 
             setText(evt.getNewValue().toString());
             fadeTransition.play();

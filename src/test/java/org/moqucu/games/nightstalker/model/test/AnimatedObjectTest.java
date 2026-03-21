@@ -7,6 +7,7 @@ import org.moqucu.games.nightstalker.model.TimeListener;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
 import org.moqucu.games.nightstalker.model.DisplayableObject;
 import org.moqucu.games.nightstalker.model.GameWorld;
+import org.moqucu.games.nightstalker.model.PropertyNames;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -235,30 +236,30 @@ public class AnimatedObjectTest {
                 Exception.class,
                 () -> animatedObject.setFrameRate(50)
         );
-        assertThat(exception.getMessage(), is("frameRate"));
+        assertThat(exception.getMessage(), is(PropertyNames.FRAME_RATE));
 
         exception = assertThrows(
                 Exception.class,
                 () -> animatedObject.setLowerAnimationIndex(0)
         );
-        assertThat(exception.getMessage(), is("lowerAnimationIndex"));
+        assertThat(exception.getMessage(), is(PropertyNames.LOWER_ANIMATION_INDEX));
 
         exception = assertThrows(
                 Exception.class,
                 () -> animatedObject.setUpperAnimationIndex(6)
         );
-        assertThat(exception.getMessage(), is("upperAnimationIndex"));
+        assertThat(exception.getMessage(), is(PropertyNames.UPPER_ANIMATION_INDEX));
 
         exception = assertThrows(
                 Exception.class,
                 () -> animatedObject.setAnimated(true)
         );
-        assertThat(exception.getMessage(), is("animated"));
+        assertThat(exception.getMessage(), is(PropertyNames.ANIMATED));
 
         exception = assertThrows(
                 Exception.class,
                 () -> animatedObject.setImageIndex(2)
         );
-        assertThat(exception.getMessage(), is("imageIndex"));
+        assertThat(exception.getMessage(), is(PropertyNames.IMAGE_INDEX));
     }
 }

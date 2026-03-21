@@ -39,7 +39,7 @@ public class Weapon extends AnimatedObject implements Resettable {
         final int oldRounds = this.rounds;
         this.rounds = rounds;
         propertyChangeSupport.firePropertyChange(
-                "rounds",
+                PropertyNames.ROUNDS,
                 oldRounds,
                 rounds
         );

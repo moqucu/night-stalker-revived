@@ -65,10 +65,10 @@ public class BatTest {
 
         final Bat localBat = new Bat();
         localBat.setSleepTime(100);
-        localBat.setDirection(Direction.Left);
-        localBat.setXPosition(528.0);
-        localBat.setYPosition(96);
-        localBat.setInitialImageIndex(0);
+        localBat.setSpawnDirection(Direction.Left);
+        localBat.setSpawnXPosition(528.0);
+        localBat.setSpawnYPosition(96);
+        localBat.setSpawnImageIndex(0);
         assertThat(localBat.isAwake(), is(false));
         assertThat(localBat.isInMotion(), is(false));
         assertThat(localBat.isAnimated(), is(false));
@@ -83,10 +83,27 @@ public class BatTest {
         assertThat(localBat.isAwake(), is(false));
         assertThat(localBat.isInMotion(), is(false));
         assertThat(localBat.isAnimated(), is(false));
-        assertThat(localBat.getDirection(), is (Direction.Left));
-        assertThat(localBat.getXPosition(), is (528.0));
-        assertThat(localBat.getYPosition(), is (96.0));
-        assertThat(localBat.getImageIndex(), is (0));
+        assertThat(localBat.getDirection(), is(Direction.Left));
+        assertThat(localBat.getXPosition(), is(528.0));
+        assertThat(localBat.getYPosition(), is(96.0));
+        assertThat(localBat.getImageIndex(), is(0));
+    }
+
+    @Test
+    public void movingBatAfterSpawnDoesNotChangeSpawnPoint() {
+
+        final Bat localBat = new Bat();
+        localBat.setSpawnXPosition(528.0);
+        localBat.setSpawnYPosition(96.0);
+        localBat.setSpawnDirection(Direction.Left);
+
+        localBat.setXPosition(100.0);
+        localBat.setYPosition(200.0);
+
+        localBat.reset();
+
+        assertThat(localBat.getXPosition(), is(528.0));
+        assertThat(localBat.getYPosition(), is(96.0));
     }
 
     @Test
@@ -175,9 +192,9 @@ public class BatTest {
         final GameWorld gameWorld = new GameWorld();
         final Bat anotherBatModel = new Bat();
         anotherBatModel.setSleepTime(sleepTime);
-        anotherBatModel.setXPosition(528.0);
-        anotherBatModel.setYPosition(96.0);
-        anotherBatModel.setDirection(Direction.Up);
+        anotherBatModel.setSpawnXPosition(528.0);
+        anotherBatModel.setSpawnYPosition(96.0);
+        anotherBatModel.setSpawnDirection(Direction.Up);
         gameWorld.add(anotherBatModel);
         gameWorld.pulse(sleepTime);
 

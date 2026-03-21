@@ -3,6 +3,7 @@ package org.moqucu.games.nightstalker.view.hero;
 import javafx.scene.media.AudioClip;
 import lombok.Getter;
 import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.PropertyNames;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.view.MovableSprite;
 
@@ -28,7 +29,7 @@ public class NightStalkerSprite extends MovableSprite {
         model.addPropertyChangeListener(
                 evt -> {
 
-                    if (evt.getPropertyName().equals("weapon"))
+                    if (evt.getPropertyName().equals(PropertyNames.WEAPON))
                         pickUpGunAudio.play();
                 }
         );

@@ -73,18 +73,18 @@
             <!--                    velocity="250"-->
             <!--            />-->
             <BatSprite
-                    initialImageIndex="0"
                     sleepTimeInMillis="5000"
-                    direction="Left"
-                    x="528.0"
-                    y="96"
+                    spawnImageIndex="0"
+                    spawnDirection="Left"
+                    spawnX="528.0"
+                    spawnY="96"
             />
             <BatSprite
-                    initialImageIndex="0"
                     sleepTimeInMillis="3000"
-                    direction="Right"
-                    x="512.0"
-                    y="224"
+                    spawnImageIndex="0"
+                    spawnDirection="Right"
+                    spawnX="512.0"
+                    spawnY="224"
             />
         </Pane>
         <Pane>

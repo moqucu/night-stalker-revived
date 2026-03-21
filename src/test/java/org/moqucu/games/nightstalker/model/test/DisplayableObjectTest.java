@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.Collidable;
 import org.moqucu.games.nightstalker.model.DisplayableObject;
 import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.PropertyNames;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -154,19 +155,19 @@ public class DisplayableObjectTest {
                 Exception.class,
                 () -> displayableObject.setImageMapFileName("part_1_a.gif")
         );
-        assertThat(exception.getMessage(), is("imageMapFileName"));
+        assertThat(exception.getMessage(), is(PropertyNames.IMAGE_MAP_FILE_NAME));
 
         exception = assertThrows(
                 Exception.class,
                 () -> displayableObject.setInitialImageIndex(0)
         );
-        assertThat(exception.getMessage(), is("initialImageIndex"));
+        assertThat(exception.getMessage(), is(PropertyNames.INITIAL_IMAGE_INDEX));
 
         exception = assertThrows(
                 Exception.class,
                 () -> displayableObject.setObjectVisible(true)
         );
-        assertThat(exception.getMessage(), is("objectVisible"));
+        assertThat(exception.getMessage(), is(PropertyNames.OBJECT_VISIBLE));
     }
 
     @Test
@@ -178,7 +179,7 @@ public class DisplayableObjectTest {
                 Exception.class,
                 () -> displayableObject.setImageMapFileName("part_1_a.gif")
         );
-        assertThat(exception.getMessage(), is("imageMapFileName"));
+        assertThat(exception.getMessage(), is(PropertyNames.IMAGE_MAP_FILE_NAME));
         displayableObject.removePropertyChangeListener(listener);
         displayableObject.setImageMapFileName("part_1_a.gif");
     }

@@ -143,7 +143,7 @@ public class GameControllerTest {
                 is(true)
         );
         assertThat(
-                gameController.getGameElements().containsKey(spiderSprite),
+                gameController.getGameElements().contains(spiderSprite),
                 is(true)
         );
     }

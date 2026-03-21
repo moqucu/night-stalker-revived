@@ -1,7 +1,7 @@
 package org.moqucu.games.nightstalker.model.object;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.model.GameObject;
+import org.moqucu.games.nightstalker.model.*;
 
 @Getter
 public class Scores extends GameObject {
@@ -13,6 +13,6 @@ public class Scores extends GameObject {
         final int oldScores = this.scores;
         this.scores = scores;
 
-        propertyChangeSupport.firePropertyChange("scores", oldScores, scores);
+        propertyChangeSupport.firePropertyChange(PropertyNames.SCORES, oldScores, scores);
     }
 }

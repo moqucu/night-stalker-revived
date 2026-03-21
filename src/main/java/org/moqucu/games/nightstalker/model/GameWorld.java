@@ -13,6 +13,8 @@ public class GameWorld implements Resettable {
 
     private final Set<TimeListener> timeListeners = new HashSet<>();
 
+    private final Set<DisplayableObject> displayableObjects = new HashSet<>();
+
     private final MazeGraph mazeGraph = new MazeGraph();
 
     private void advanceTime(double milliseconds) {
@@ -20,23 +22,10 @@ public class GameWorld implements Resettable {
         timeListeners.forEach(timeListener -> timeListener.elapseTime(milliseconds));
     }
 
-    private Set<DisplayableObject> getDisplayObjects() {
-
-        final Set<DisplayableObject> displayableObjects = new HashSet<>();
-
-        objects
-                .values()
-                .stream()
-                .filter(gameObject -> gameObject instanceof DisplayableObject)
-                .forEach(gameObject -> displayableObjects.add((DisplayableObject) gameObject));
-
-        return displayableObjects;
-    }
-
     private void detectCollisions() {
 
-        getDisplayObjects().stream().filter(DisplayableObject::canChangePosition).forEach(
-                displayableObject -> getDisplayObjects()
+        displayableObjects.stream().filter(DisplayableObject::canChangePosition).forEach(
+                displayableObject -> displayableObjects
                         .stream()
                         .filter(otherGameObject -> !otherGameObject.equals(displayableObject))
                         .forEach(
@@ -63,6 +52,17 @@ public class GameWorld implements Resettable {
         objects.put(gameObject.getObjectId(), gameObject);
         if (gameObject instanceof TimeListener)
             timeListeners.add((TimeListener) gameObject);
+        if (gameObject instanceof DisplayableObject)
+            displayableObjects.add((DisplayableObject) gameObject);
+    }
+
+    public void remove(GameObject gameObject) {
+
+        objects.remove(gameObject.getObjectId());
+        if (gameObject instanceof TimeListener)
+            timeListeners.remove(gameObject);
+        if (gameObject instanceof DisplayableObject)
+            displayableObjects.remove(gameObject);
     }
 
     @Override

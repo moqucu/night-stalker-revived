@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.view.object;
 
 import javafx.scene.media.AudioClip;
 import lombok.Getter;
+import org.moqucu.games.nightstalker.model.PropertyNames;
 import org.moqucu.games.nightstalker.model.object.Weapon;
 import org.moqucu.games.nightstalker.view.AnimatedSprite;
 
@@ -24,7 +25,7 @@ public class WeaponSprite extends AnimatedSprite {
 
         getModel().addPropertyChangeListener(
                 evt -> {
-                    if (evt.getSource().equals(getModel()) && evt.getPropertyName().equals("rounds"))
+                    if (evt.getSource().equals(getModel()) && evt.getPropertyName().equals(PropertyNames.ROUNDS))
                         roundFiredAudio.play();
                 }
         );

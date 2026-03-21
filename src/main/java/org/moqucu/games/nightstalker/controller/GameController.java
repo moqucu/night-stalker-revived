@@ -21,8 +21,10 @@ import org.moqucu.games.nightstalker.utility.SystemWrapper;
 import org.moqucu.games.nightstalker.view.Sprite;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,8 +47,9 @@ public class GameController {
     );
 
     @Getter
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private final Map<Sprite, GameObject> gameElements = new HashMap<>();
+    private final Set<Sprite> gameElements = new HashSet<>();
+
+    private NightStalker nightStalker;
 
     private final GameLoop gameLoop;
 
@@ -155,8 +158,10 @@ public class GameController {
 
     public void addSprite(Sprite sprite) {
 
-        gameElements.put(sprite, sprite.getModel());
+        gameElements.add(sprite);
         gameWorld.add(sprite.getModel());
+        if (sprite.getModel() instanceof NightStalker)
+            nightStalker = (NightStalker) sprite.getModel();
     }
 
     public void startGameLoop() {
@@ -181,12 +186,14 @@ public class GameController {
 
     private NightStalker getNightStalker() {
 
-        return (NightStalker) gameWorld.getObjects()
-                .values()
-                .stream()
-                .filter(gameObject -> gameObject instanceof NightStalker)
-                .findFirst()
-                .orElseThrow();
+        if (nightStalker == null)
+            nightStalker = (NightStalker) gameWorld.getObjects()
+                    .values()
+                    .stream()
+                    .filter(gameObject -> gameObject instanceof NightStalker)
+                    .findFirst()
+                    .orElseThrow();
+        return nightStalker;
     }
 
     public void runNightStalkerWith(Direction direction) {
