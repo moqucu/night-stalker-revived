@@ -79,7 +79,6 @@ public class DisplayableSprite extends ImageView implements Sprite {
                 .name("objectVisible")
                 .bean(model)
                 .build();
-        setVisible(model.isObjectVisible());
         objectVisibleProperty.bindBidirectional(visibleProperty());
         xPositionProperty = JavaBeanDoublePropertyBuilder
                 .create()
