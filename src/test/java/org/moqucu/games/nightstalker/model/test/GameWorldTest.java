@@ -148,6 +148,26 @@ public class GameWorldTest {
     }
 
     @Test
+    public void afterRemovingAGameObjectItIsNoLongerInObjects() {
+
+        final DisplayableObject gameObject = new DisplayableObject() {
+        };
+        gameWorld.add(gameObject);
+        gameWorld.remove(gameObject);
+        assertThat(gameWorld.getObjects().containsKey(gameObject.getObjectId()), is(false));
+    }
+
+    @Test
+    public void afterRemovingATimeListenerItIsNoLongerInTimeListeners() {
+
+        final AnimatedObject timeListener = new AnimatedObject() {
+        };
+        gameWorld.add(timeListener);
+        gameWorld.remove(timeListener);
+        assertThat(gameWorld.getTimeListeners().contains(timeListener), is(false));
+    }
+
+    @Test
     public void aGameWorldIsResettable() {
 
         assertThat(gameWorld, isA(Resettable.class));

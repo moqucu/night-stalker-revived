@@ -65,6 +65,13 @@ public class GameWorld implements Resettable {
             timeListeners.add((TimeListener) gameObject);
     }
 
+    public void remove(GameObject gameObject) {
+
+        objects.remove(gameObject.getObjectId());
+        if (gameObject instanceof TimeListener)
+            timeListeners.remove(gameObject);
+    }
+
     @Override
     public void reset() {
 
