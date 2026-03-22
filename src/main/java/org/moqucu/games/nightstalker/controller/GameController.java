@@ -70,6 +70,7 @@ public class GameController {
             Task<Void> backGroundMusicLoop = this.backGroundMusicLoop;
             ExecutorService service = Executors.newFixedThreadPool(1);
             service.execute(backGroundMusicLoop);
+            service.shutdown();
         }
     }
 
