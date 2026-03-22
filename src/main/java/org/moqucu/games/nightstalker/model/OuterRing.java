@@ -26,12 +26,18 @@ public class OuterRing implements MazeAlgorithmImpl {
         };
         int i = 0;
         while (
+                i < directionSequence.size() &&
                 absMazeGraph.getClosestReachablePosition(
                         absPosAndDirection.absolutePosition(),
                         directionSequence.get(i)
                 ).equals(absPosAndDirection.absolutePosition())
         )
             i++;
+
+        if (i >= directionSequence.size())
+            throw new UnacceptableDirectionException(
+                    "No reachable position found from current position!"
+            );
 
         return new AbsPosAndDirection(
                 absMazeGraph.getClosestReachablePosition(

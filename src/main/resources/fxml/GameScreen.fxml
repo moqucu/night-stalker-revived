@@ -90,7 +90,7 @@
         <Pane>
             <NightStalkerSprite/>
         </Pane>
-        <MazeBackgroundTilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20">
+        <MazeBackgroundTilePane id="org.moqucu.games.nightstalker.maze" prefRows="12" prefColumns="20" prefTileWidth="32" prefTileHeight="32">
             <WallSprite initialImageIndex="0"/>
             <WallSprite initialImageIndex="1"/>
             <WallSprite initialImageIndex="2"/>

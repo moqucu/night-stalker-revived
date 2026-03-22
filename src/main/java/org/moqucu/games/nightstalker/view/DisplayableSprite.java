@@ -53,10 +53,10 @@ public class DisplayableSprite extends ImageView implements Sprite {
 
     private void initializeImageFromImageMapFileName(String imageMapFileName) {
 
-        if (imageMapFileName == null || imageMapFileName.isEmpty())
+        if (imageMapFileName == null || imageMapFileName.isEmpty()) {
             setImage(null);
-
-        Objects.requireNonNull(imageMapFileName);
+            return;
+        }
         try (InputStream inputStream = getClass().getResourceAsStream(imageMapFileName)) {
             setImage(new Image(Objects.requireNonNull(inputStream)));
         } catch (IOException | NullPointerException ioException) {
@@ -156,12 +156,18 @@ public class DisplayableSprite extends ImageView implements Sprite {
     public DisplayableSprite() {
 
         super();
+        setSmooth(false);
+        setFitWidth(DisplayableObject.WIDTH);
+        setFitHeight(DisplayableObject.HEIGHT);
         bindProperties(model);
     }
 
     protected DisplayableSprite(DisplayableObject model) {
 
         super();
+        setSmooth(false);
+        setFitWidth(DisplayableObject.WIDTH);
+        setFitHeight(DisplayableObject.HEIGHT);
         this.model = model;
         bindProperties(model);
     }
