@@ -15,7 +15,6 @@ public class WallSprite extends DisplayableSprite {
 
         super(new Wall());
         model = (Wall) super.getModel();
-        setSmooth(false);
     }
 
     private void setWallModel(Wall model) {
