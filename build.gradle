@@ -33,6 +33,7 @@ dependencies {
 
 application {
     mainClass.set('org.moqucu.games.nightstalker.NightStalkerRevived')
+    applicationDefaultJvmArgs = ['-Dprism.allowhidpi=false']
 }
 
 test {

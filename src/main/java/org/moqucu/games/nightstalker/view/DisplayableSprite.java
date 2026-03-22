@@ -156,12 +156,18 @@ public class DisplayableSprite extends ImageView implements Sprite {
     public DisplayableSprite() {
 
         super();
+        setSmooth(false);
+        setFitWidth(DisplayableObject.WIDTH);
+        setFitHeight(DisplayableObject.HEIGHT);
         bindProperties(model);
     }
 
     protected DisplayableSprite(DisplayableObject model) {
 
         super();
+        setSmooth(false);
+        setFitWidth(DisplayableObject.WIDTH);
+        setFitHeight(DisplayableObject.HEIGHT);
         this.model = model;
         bindProperties(model);
     }
