@@ -5,7 +5,10 @@ import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.AbsolutePosition;
 import org.moqucu.games.nightstalker.model.enemy.Bat;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 import java.util.Random;
 
@@ -207,5 +210,43 @@ public class BatTest {
     public void canChangePosition() {
 
         assertThat(bat.canChangePosition(), is(true));
+    }
+
+    @Test
+    public void batIsDestroyedWhenHitByBullet() {
+
+        final Bat localBat = new Bat();
+        localBat.setSpawnXPosition(528.0);
+        localBat.setSpawnYPosition(96.0);
+        localBat.setSpawnDirection(Direction.Left);
+        localBat.setSpawnImageIndex(0);
+        localBat.setSleepTime(100);
+        localBat.elapseTime(101);
+        localBat.setObjectVisible(true);
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition());
+
+        localBat.collisionOccurredWith(aBullet);
+
+        assertThat(localBat.isObjectVisible(), is(false));
+        assertThat(localBat.isInMotion(), is(false));
+        assertThat(localBat.isAnimated(), is(false));
+    }
+
+    @Test
+    public void batIsNotAffectedByNonBulletCollision() {
+
+        final Bat localBat = new Bat();
+        localBat.setSleepTime(100);
+        localBat.setSpawnXPosition(528.0);
+        localBat.setSpawnYPosition(96.0);
+        localBat.setSpawnDirection(Direction.Left);
+        localBat.elapseTime(101);
+
+        localBat.collisionOccurredWith(new NightStalker());
+
+        assertThat(localBat.isInMotion(), is(true));
+        assertThat(localBat.isAnimated(), is(true));
     }
 }

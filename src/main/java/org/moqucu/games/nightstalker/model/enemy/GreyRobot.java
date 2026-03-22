@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
 import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 @Getter
 public class GreyRobot extends MovableObject implements Resettable {
@@ -30,6 +31,22 @@ public class GreyRobot extends MovableObject implements Resettable {
                 slow = false;
             }
         });
+    }
+
+    @Override
+    public boolean canChangePosition() {
+
+        return true;
+    }
+
+    @Override
+    public void collisionOccurredWith(Collidable anotherCollidable) {
+
+        if (anotherCollidable instanceof Bullet && isObjectVisible()) {
+            setInMotion(false);
+            setAnimated(false);
+            setObjectVisible(false);
+        }
     }
 
     @Override

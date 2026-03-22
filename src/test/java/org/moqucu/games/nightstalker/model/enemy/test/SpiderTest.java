@@ -5,7 +5,10 @@ import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
 import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.AbsolutePosition;
 import org.moqucu.games.nightstalker.model.enemy.Spider;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -179,5 +182,29 @@ public class SpiderTest {
     public void slowPropertyOfTypeBoolean() {
 
         assertThat(spider.isSlow(), isA(Boolean.class));
+    }
+
+    @Test
+    public void spiderIsDestroyedWhenHitByBullet() {
+
+        spider.setObjectVisible(true);
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition());
+
+        spider.collisionOccurredWith(aBullet);
+
+        assertThat(spider.isObjectVisible(), is(false));
+        assertThat(spider.isInMotion(), is(false));
+        assertThat(spider.isAnimated(), is(false));
+    }
+
+    @Test
+    public void spiderIsNotAffectedByNonBulletCollision() {
+
+        spider.collisionOccurredWith(new NightStalker());
+
+        assertThat(spider.isInMotion(), is(true));
+        assertThat(spider.isAnimated(), is(true));
     }
 }

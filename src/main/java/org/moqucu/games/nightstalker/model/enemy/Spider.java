@@ -1,10 +1,8 @@
 package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 import java.beans.PropertyChangeListener;
 
@@ -56,6 +54,16 @@ public class Spider extends MovableObject implements Resettable {
     public boolean canChangePosition() {
 
         return true;
+    }
+
+    @Override
+    public void collisionOccurredWith(Collidable anotherCollidable) {
+
+        if (anotherCollidable instanceof Bullet && isObjectVisible()) {
+            setInMotion(false);
+            setAnimated(false);
+            setObjectVisible(false);
+        }
     }
 
     @Override
