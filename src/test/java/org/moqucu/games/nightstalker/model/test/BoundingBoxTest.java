@@ -77,4 +77,13 @@ public class BoundingBoxTest {
 
         assertThat(boundingBox1.isOverlapping(boundingBox2), is(false));
     }
+
+    @Test
+    public void touchingEdgesAreNotOverlapping() {
+
+        final BoundingBox boundingBox1 = new BoundingBox(0.0, 32.0, 0.0, 32.0);
+        final BoundingBox boundingBox2 = new BoundingBox(32.0, 64.0, 0.0, 32.0);
+
+        assertThat(boundingBox1.isOverlapping(boundingBox2), is(false));
+    }
 }

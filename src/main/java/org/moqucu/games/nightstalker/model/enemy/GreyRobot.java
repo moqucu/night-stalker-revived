@@ -7,11 +7,17 @@ import org.moqucu.games.nightstalker.model.object.Bullet;
 @Getter
 public class GreyRobot extends MovableObject implements Resettable {
 
+    private static final double RESPAWN_TIME_MS = 5000;
+
     private final boolean active = false;
 
     private boolean slow = true;
 
     private final boolean fallingApart = true;
+
+    private boolean dead = false;
+
+    private double timeSinceDeath = 0;
 
     public GreyRobot() {
 
@@ -40,12 +46,26 @@ public class GreyRobot extends MovableObject implements Resettable {
     }
 
     @Override
+    public void elapseTime(double milliseconds) {
+
+        if (dead) {
+            timeSinceDeath += milliseconds;
+            if (timeSinceDeath >= RESPAWN_TIME_MS)
+                reset();
+        } else {
+            super.elapseTime(milliseconds);
+        }
+    }
+
+    @Override
     public void collisionOccurredWith(Collidable anotherCollidable) {
 
         if (anotherCollidable instanceof Bullet && isObjectVisible()) {
             setInMotion(false);
             setAnimated(false);
             setObjectVisible(false);
+            dead = true;
+            timeSinceDeath = 0;
         }
     }
 
@@ -53,10 +73,13 @@ public class GreyRobot extends MovableObject implements Resettable {
     public void reset() {
 
         slow = true;
+        dead = false;
+        timeSinceDeath = 0;
         setDirection(Direction.Right);
         setVelocity(15);
         setXPosition(48);
         setYPosition(320);
+        setObjectVisible(true);
         setAnimated(true);
         setInMotion(true);
     }

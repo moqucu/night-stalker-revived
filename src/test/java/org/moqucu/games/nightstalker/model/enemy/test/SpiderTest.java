@@ -207,4 +207,22 @@ public class SpiderTest {
         assertThat(spider.isInMotion(), is(true));
         assertThat(spider.isAnimated(), is(true));
     }
+
+    @Test
+    public void spiderRespawnsAfterBeingKilledByBullet() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Down, new AbsolutePosition());
+
+        spider.setObjectVisible(true);
+        spider.collisionOccurredWith(aBullet);
+
+        assertThat(spider.isObjectVisible(), is(false));
+
+        spider.elapseTime(5001);
+
+        assertThat(spider.isObjectVisible(), is(true));
+        assertThat(spider.isInMotion(), is(true));
+        assertThat(spider.isAnimated(), is(true));
+    }
 }

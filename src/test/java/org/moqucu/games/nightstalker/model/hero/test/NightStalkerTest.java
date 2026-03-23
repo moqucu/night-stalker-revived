@@ -5,6 +5,7 @@ import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.background.Wall;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.model.object.Weapon;
 
@@ -379,8 +380,24 @@ public class NightStalkerTest {
         aNightStalker.setYPosition(aWeapon.getYPosition());
         theGameWorld.add(aNightStalker);
         aNightStalker.pickUpWeapon(aWeapon);
-        for(int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) {
             aNightStalker.fireWeapon();
+            aWeapon.getBullet().collisionOccurredWith(new Wall());
+        }
         assertThat(aNightStalker.getWeapon(), is(nullValue()));
+    }
+
+    @Test
+    public void nightStalkerCannotFireWhileBulletIsAlreadyInFlight() {
+
+        final Weapon aWeapon = new Weapon();
+        final NightStalker aNightStalker = new NightStalker();
+        aNightStalker.pickUpWeapon(aWeapon);
+
+        aNightStalker.fireWeapon();
+        assertThat(aWeapon.getRounds(), is(5));
+
+        aNightStalker.fireWeapon();
+        assertThat(aWeapon.getRounds(), is(5));
     }
 }

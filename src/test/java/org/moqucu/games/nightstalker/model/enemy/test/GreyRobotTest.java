@@ -198,4 +198,22 @@ public class GreyRobotTest {
         assertThat(greyRobot.isInMotion(), is(true));
         assertThat(greyRobot.isAnimated(), is(true));
     }
+
+    @Test
+    public void greyRobotRespawnsAfterBeingKilledByBullet() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition());
+
+        greyRobot.setObjectVisible(true);
+        greyRobot.collisionOccurredWith(aBullet);
+
+        assertThat(greyRobot.isObjectVisible(), is(false));
+
+        greyRobot.elapseTime(5001);
+
+        assertThat(greyRobot.isObjectVisible(), is(true));
+        assertThat(greyRobot.isInMotion(), is(true));
+        assertThat(greyRobot.isAnimated(), is(true));
+    }
 }

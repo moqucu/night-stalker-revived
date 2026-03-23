@@ -2,6 +2,9 @@ package org.moqucu.games.nightstalker.model.object;
 
 import lombok.Getter;
 import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.background.Bunker;
+import org.moqucu.games.nightstalker.model.background.Wall;
+import org.moqucu.games.nightstalker.model.background.Web;
 
 @Getter
 public class Bullet extends DisplayableObject implements TimeListener, Resettable {
@@ -79,9 +82,15 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
     }
 
     @Override
+    public boolean canChangePosition() {
+
+        return isFired();
+    }
+
+    @Override
     public void collisionOccurredWith(Collidable anotherCollidable) {
 
-        if (!(anotherCollidable instanceof Weapon) && isFired() && anotherCollidable != this && anotherCollidable != source)
+        if ((anotherCollidable instanceof Wall || anotherCollidable instanceof Bunker || anotherCollidable instanceof Web) && isFired())
             setFired(false);
     }
 

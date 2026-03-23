@@ -42,6 +42,7 @@ public class Bat extends MovableObject implements Resettable {
 
         if (elapsedTimeSinceSpawning >= sleepTime && !awake) {
 
+            setObjectVisible(true);
             setAnimated(true);
             setInMotion(true);
             awake = true;
@@ -65,8 +66,7 @@ public class Bat extends MovableObject implements Resettable {
     public void collisionOccurredWith(Collidable anotherCollidable) {
 
         if (anotherCollidable instanceof Bullet && isObjectVisible()) {
-            setInMotion(false);
-            setAnimated(false);
+            reset();
             setObjectVisible(false);
         }
     }

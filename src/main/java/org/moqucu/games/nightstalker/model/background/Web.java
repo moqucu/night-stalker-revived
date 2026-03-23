@@ -2,11 +2,11 @@ package org.moqucu.games.nightstalker.model.background;
 
 import org.moqucu.games.nightstalker.model.DisplayableObject;
 
-public class Bunker extends DisplayableObject {
+public class Web extends DisplayableObject {
 
-    public Bunker() {
+    public Web() {
 
         super();
-        setImageMapFileName("/images/bunker.png");
+        setImageMapFileName("/images/web.png");
     }
 }

@@ -150,6 +150,8 @@ public class NightStalker extends MovableObject implements Resettable {
 
         if (weapon == null)
             throw new NoWeaponsException();
+        if (getWeapon().getBullet().isFired())
+            return;
         try {
             getWeapon().fireRound(this, getDirection(), getAbsolutePosition());
         } catch (Weapon.WeaponFiredEmptyException weaponFiredEmptyException) {

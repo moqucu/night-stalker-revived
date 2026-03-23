@@ -249,4 +249,30 @@ public class BatTest {
         assertThat(localBat.isInMotion(), is(true));
         assertThat(localBat.isAnimated(), is(true));
     }
+
+    @Test
+    public void batRespawnsAfterBeingKilledByBullet() {
+
+        final Bat localBat = new Bat();
+        localBat.setSleepTime(1000);
+        localBat.setSpawnXPosition(528.0);
+        localBat.setSpawnYPosition(96.0);
+        localBat.setSpawnDirection(Direction.Left);
+        localBat.setSpawnImageIndex(0);
+        localBat.elapseTime(1001);
+        localBat.setObjectVisible(true);
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition());
+        localBat.collisionOccurredWith(aBullet);
+
+        assertThat(localBat.isObjectVisible(), is(false));
+
+        localBat.elapseTime(1001);
+
+        assertThat(localBat.isObjectVisible(), is(true));
+        assertThat(localBat.isAwake(), is(true));
+        assertThat(localBat.isInMotion(), is(true));
+        assertThat(localBat.isAnimated(), is(true));
+    }
 }
