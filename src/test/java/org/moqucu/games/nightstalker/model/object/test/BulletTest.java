@@ -2,6 +2,9 @@ package org.moqucu.games.nightstalker.model.object.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.background.Bunker;
+import org.moqucu.games.nightstalker.model.background.Wall;
+import org.moqucu.games.nightstalker.model.background.Web;
 import org.moqucu.games.nightstalker.model.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.model.object.Bullet;
@@ -155,17 +158,68 @@ public class BulletTest {
     }
 
     @Test
-    public void collisionWithNonSourceStopsBullet() {
+    public void firedBulletCanChangePosition() {
 
         final Bullet aBullet = new Bullet();
-        final GreyRobot aGreyRobot = new GreyRobot();
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition());
+
+        assertThat(aBullet.canChangePosition(), is(true));
+    }
+
+    @Test
+    public void unfiredBulletCannotChangePosition() {
+
+        assertThat(new Bullet().canChangePosition(), is(false));
+    }
+
+    @Test
+    public void collisionWithWallStopsBullet() {
+
+        final Bullet aBullet = new Bullet();
         aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition());
-        aBullet.collisionOccurredWith(aGreyRobot);
+        aBullet.collisionOccurredWith(new Wall());
 
         assertThat(aBullet.isFired(), is(false));
         assertThat(aBullet.isObjectVisible(), is(false));
         assertThat(aBullet.getSource(), is(aBullet));
         assertThat(aBullet.getDirection(), is(Direction.Undefined));
+    }
+
+    @Test
+    public void collisionWithBunkerStopsBullet() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition());
+        aBullet.collisionOccurredWith(new Bunker());
+
+        assertThat(aBullet.isFired(), is(false));
+        assertThat(aBullet.isObjectVisible(), is(false));
+        assertThat(aBullet.getSource(), is(aBullet));
+        assertThat(aBullet.getDirection(), is(Direction.Undefined));
+    }
+
+    @Test
+    public void collisionWithWebStopsBullet() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition());
+        aBullet.collisionOccurredWith(new Web());
+
+        assertThat(aBullet.isFired(), is(false));
+        assertThat(aBullet.isObjectVisible(), is(false));
+        assertThat(aBullet.getSource(), is(aBullet));
+        assertThat(aBullet.getDirection(), is(Direction.Undefined));
+    }
+
+    @Test
+    public void collisionWithEnemyDoesNotStopBullet() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Left, new AbsolutePosition());
+        aBullet.collisionOccurredWith(new GreyRobot());
+
+        assertThat(aBullet.isFired(), is(true));
+        assertThat(aBullet.isObjectVisible(), is(true));
     }
 
     @Test

@@ -1,17 +1,21 @@
 package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
-import org.moqucu.games.nightstalker.model.Direction;
-import org.moqucu.games.nightstalker.model.MazeAlgorithm;
-import org.moqucu.games.nightstalker.model.MovableObject;
-import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 import java.beans.PropertyChangeListener;
 
 public class Spider extends MovableObject implements Resettable {
 
+    private static final double RESPAWN_TIME_MS = 5000;
+
     @Getter
     private boolean slow = true;
+
+    private boolean dead = false;
+
+    private double timeSinceDeath = 0;
 
     private final PropertyChangeListener propertyChangeListener = evt -> {
 
@@ -59,9 +63,35 @@ public class Spider extends MovableObject implements Resettable {
     }
 
     @Override
+    public void elapseTime(double milliseconds) {
+
+        if (dead) {
+            timeSinceDeath += milliseconds;
+            if (timeSinceDeath >= RESPAWN_TIME_MS)
+                reset();
+        } else {
+            super.elapseTime(milliseconds);
+        }
+    }
+
+    @Override
+    public void collisionOccurredWith(Collidable anotherCollidable) {
+
+        if (anotherCollidable instanceof Bullet && isObjectVisible()) {
+            setInMotion(false);
+            setAnimated(false);
+            setObjectVisible(false);
+            dead = true;
+            timeSinceDeath = 0;
+        }
+    }
+
+    @Override
     public void reset() {
 
         slow = true;
+        dead = false;
+        timeSinceDeath = 0;
         setMazeAlgorithm(MazeAlgorithm.FollowDirection);
         removePropertyChangeListener(propertyChangeListener);
         setFrameRate(5);
@@ -71,6 +101,9 @@ public class Spider extends MovableObject implements Resettable {
         setInitialImageIndex(0);
         setXPosition(96);
         setYPosition(32);
+        setObjectVisible(true);
+        setAnimated(true);
+        setInMotion(true);
         addPropertyChangeListener(propertyChangeListener);
     }
 }

@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.model.enemy;
 
 import lombok.Getter;
 import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 public class Bat extends MovableObject implements Resettable {
 
@@ -41,6 +42,7 @@ public class Bat extends MovableObject implements Resettable {
 
         if (elapsedTimeSinceSpawning >= sleepTime && !awake) {
 
+            setObjectVisible(true);
             setAnimated(true);
             setInMotion(true);
             awake = true;
@@ -58,6 +60,15 @@ public class Bat extends MovableObject implements Resettable {
     public boolean canChangePosition() {
 
         return true;
+    }
+
+    @Override
+    public void collisionOccurredWith(Collidable anotherCollidable) {
+
+        if (anotherCollidable instanceof Bullet && isObjectVisible()) {
+            reset();
+            setObjectVisible(false);
+        }
     }
 
     public void setSpawnXPosition(double x) {

@@ -16,9 +16,9 @@ public class BoundingBox {
 
     public boolean isOverlapping(BoundingBox withAnotherBoundingBox) {
 
-        return maxX >= withAnotherBoundingBox.minX
-                & withAnotherBoundingBox.maxX >= minX
-                & maxY >= withAnotherBoundingBox.minY
-                & withAnotherBoundingBox.maxY >= minY;
+        return maxX > withAnotherBoundingBox.minX
+                & withAnotherBoundingBox.maxX > minX
+                & maxY > withAnotherBoundingBox.minY
+                & withAnotherBoundingBox.maxY > minY;
      }
 }

@@ -1,24 +1,28 @@
 package org.moqucu.games.nightstalker.utility;
 
 import javafx.concurrent.Task;
-import javafx.scene.media.AudioClip;
 
-import static javafx.scene.media.AudioClip.INDEFINITE;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 public class BackGroundMusicLoop extends Task<Void> {
 
-    private final AudioClip audioClip;
+    private final Clip clip;
 
-    public BackGroundMusicLoop(AudioClip audioClip) {
+    public BackGroundMusicLoop(Clip clip) {
 
-        this.audioClip = audioClip;
+        this.clip = clip;
     }
+
     @Override
     protected Void call() {
 
-        audioClip.setVolume(0.5f);
-        audioClip.setCycleCount(INDEFINITE);
-        audioClip.play();
+        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-6.0f);
+        }
+        clip.setFramePosition(0);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         return null;
     }
@@ -31,14 +35,14 @@ public class BackGroundMusicLoop extends Task<Void> {
     @Override
     protected void cancelled() {
 
-        audioClip.stop();
+        clip.stop();
     }
 
     @Override
     public boolean cancel(boolean b) {
 
         if (b) {
-            audioClip.stop();
+            clip.stop();
             return true;
         }
         else

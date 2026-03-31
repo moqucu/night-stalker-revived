@@ -3,6 +3,8 @@ package org.moqucu.games.nightstalker.model.enemy.test;
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.*;
 import org.moqucu.games.nightstalker.model.enemy.GreyRobot;
+import org.moqucu.games.nightstalker.model.hero.NightStalker;
+import org.moqucu.games.nightstalker.model.object.Bullet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -166,5 +168,52 @@ public class GreyRobotTest {
     public void fallingApartPropertyOfTypeBoolean() {
 
         assertThat(greyRobot.isFallingApart(), isA(Boolean.class));
+    }
+
+    @Test
+    public void canChangePosition() {
+
+        assertThat(greyRobot.canChangePosition(), is(true));
+    }
+
+    @Test
+    public void greyRobotIsDestroyedWhenHitByBullet() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition());
+
+        greyRobot.setObjectVisible(true);
+        greyRobot.collisionOccurredWith(aBullet);
+
+        assertThat(greyRobot.isObjectVisible(), is(false));
+        assertThat(greyRobot.isInMotion(), is(false));
+        assertThat(greyRobot.isAnimated(), is(false));
+    }
+
+    @Test
+    public void greyRobotIsNotAffectedByNonBulletCollision() {
+
+        greyRobot.collisionOccurredWith(new NightStalker());
+
+        assertThat(greyRobot.isInMotion(), is(true));
+        assertThat(greyRobot.isAnimated(), is(true));
+    }
+
+    @Test
+    public void greyRobotRespawnsAfterBeingKilledByBullet() {
+
+        final Bullet aBullet = new Bullet();
+        aBullet.fire(new NightStalker(), Direction.Right, new AbsolutePosition());
+
+        greyRobot.setObjectVisible(true);
+        greyRobot.collisionOccurredWith(aBullet);
+
+        assertThat(greyRobot.isObjectVisible(), is(false));
+
+        greyRobot.elapseTime(5001);
+
+        assertThat(greyRobot.isObjectVisible(), is(true));
+        assertThat(greyRobot.isInMotion(), is(true));
+        assertThat(greyRobot.isAnimated(), is(true));
     }
 }
