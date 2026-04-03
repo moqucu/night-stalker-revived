@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.moqucu.games.nightstalker.model.AbsolutePosition;
 import org.moqucu.games.nightstalker.model.AnimatedObject;
+import org.moqucu.games.nightstalker.model.BoundingBox;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.model.object.Bullet;
@@ -187,6 +188,20 @@ public class WeaponTest {
         final Weapon aWeapon = new Weapon();
 
         assertThat(aWeapon.canChangePosition(), is(true));
+    }
+
+    @Test
+    public void weaponHasTightBoundingBox() {
+
+        final Weapon aWeapon = new Weapon();
+        aWeapon.setXPosition(64);
+        aWeapon.setYPosition(128);
+
+        final BoundingBox bounds = aWeapon.getAbsoluteBounds();
+        assertThat(bounds.getMinX(), is(64.0));
+        assertThat(bounds.getMaxX(), is(96.0));
+        assertThat(bounds.getMinY(), is(136.0));
+        assertThat(bounds.getMaxY(), is(152.0));
     }
 
     @Test

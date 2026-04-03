@@ -5,6 +5,7 @@ import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MovableObject;
 import org.moqucu.games.nightstalker.model.Resettable;
+import org.moqucu.games.nightstalker.model.BoundingBox;
 import org.moqucu.games.nightstalker.model.background.Wall;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.model.object.Weapon;
@@ -399,5 +400,17 @@ public class NightStalkerTest {
 
         aNightStalker.fireWeapon();
         assertThat(aWeapon.getRounds(), is(5));
+    }
+
+    @Test
+    public void nightStalkerHasTightBoundingBox() {
+
+        final NightStalker nightStalker = new NightStalker();
+
+        final BoundingBox bounds = nightStalker.getAbsoluteBounds();
+        assertThat(bounds.getMinX(), is(nightStalker.getXPosition() + 6));
+        assertThat(bounds.getMaxX(), is(nightStalker.getXPosition() + 26));
+        assertThat(bounds.getMinY(), is(nightStalker.getYPosition() + 1));
+        assertThat(bounds.getMaxY(), is(nightStalker.getYPosition() + 31));
     }
 }

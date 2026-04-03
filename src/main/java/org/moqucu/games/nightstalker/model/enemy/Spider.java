@@ -51,6 +51,7 @@ public class Spider extends MovableObject implements Resettable {
 
         setMazeGraphFileName("/json/maze-graph-enemy.json");
         setImageMapFileName("/images/spider.png");
+        setBoundingBoxDimensions(0, 4, 32, 22);
         reset();
         setAnimated(true);
         setInMotion(true);

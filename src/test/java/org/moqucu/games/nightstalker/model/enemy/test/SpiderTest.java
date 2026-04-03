@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.model.enemy.test;
 
 import org.junit.jupiter.api.Test;
+import org.moqucu.games.nightstalker.model.BoundingBox;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
@@ -224,5 +225,15 @@ public class SpiderTest {
         assertThat(spider.isObjectVisible(), is(true));
         assertThat(spider.isInMotion(), is(true));
         assertThat(spider.isAnimated(), is(true));
+    }
+
+    @Test
+    public void spiderHasTightBoundingBox() {
+
+        final BoundingBox bounds = spider.getAbsoluteBounds();
+        assertThat(bounds.getMinX(), is(spider.getXPosition() + 0));
+        assertThat(bounds.getMaxX(), is(spider.getXPosition() + 32));
+        assertThat(bounds.getMinY(), is(spider.getYPosition() + 4));
+        assertThat(bounds.getMaxY(), is(spider.getYPosition() + 26));
     }
 }

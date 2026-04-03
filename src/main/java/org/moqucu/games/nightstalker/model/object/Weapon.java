@@ -64,6 +64,7 @@ public class Weapon extends AnimatedObject implements Resettable {
         setLowerAnimationIndex(0);
         setUpperAnimationIndex(1);
         setFrameRate(2);
+        setBoundingBoxDimensions(0, 8, 32, 16);
         drop();
     }
 
