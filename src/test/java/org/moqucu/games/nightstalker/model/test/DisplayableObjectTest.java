@@ -3,6 +3,7 @@ package org.moqucu.games.nightstalker.model.test;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.moqucu.games.nightstalker.model.BoundingBox;
 import org.moqucu.games.nightstalker.model.Collidable;
 import org.moqucu.games.nightstalker.model.DisplayableObject;
 import org.moqucu.games.nightstalker.model.GameObject;
@@ -188,5 +189,19 @@ public class DisplayableObjectTest {
     public void implementsCollidableInterface() {
 
         assertThat(displayableObject, isA(Collidable.class));
+    }
+
+    @Test
+    public void setBoundingBoxDimensionsAffectsAbsoluteBounds() {
+
+        displayableObject.setXPosition(100);
+        displayableObject.setYPosition(200);
+        displayableObject.setBoundingBoxDimensions(4, 8, 20, 16);
+
+        final BoundingBox bounds = displayableObject.getAbsoluteBounds();
+        assertThat(bounds.getMinX(), is(104.0));
+        assertThat(bounds.getMaxX(), is(124.0));
+        assertThat(bounds.getMinY(), is(208.0));
+        assertThat(bounds.getMaxY(), is(224.0));
     }
 }

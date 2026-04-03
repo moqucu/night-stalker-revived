@@ -32,6 +32,7 @@ public class Bat extends MovableObject implements Resettable {
         setVelocity(50);
         setMazeGraphFileName("/json/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.Random);
+        setBoundingBoxDimensions(4, 4, 24, 14);
     }
 
     @Override

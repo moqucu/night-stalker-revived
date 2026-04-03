@@ -369,4 +369,18 @@ public class BulletTest {
         assertThat(aBullet.getInitialImageIndex(), is(0));
     }
 
+    @Test
+    public void bulletHasTightBoundingBox() {
+
+        final Bullet bullet = new Bullet();
+        bullet.setXPosition(64);
+        bullet.setYPosition(128);
+
+        final BoundingBox bounds = bullet.getAbsoluteBounds();
+        assertThat(bounds.getMinX(), is(76.0));
+        assertThat(bounds.getMaxX(), is(84.0));
+        assertThat(bounds.getMinY(), is(142.0));
+        assertThat(bounds.getMaxY(), is(146.0));
+    }
+
 }

@@ -30,6 +30,7 @@ public class Bullet extends DisplayableObject implements TimeListener, Resettabl
         super();
         setImageMapFileName("/images/bullet.png");
         setInitialImageIndex(0);
+        setBoundingBoxDimensions(12, 14, 8, 4);
         propertyChangeSupport.addPropertyChangeListener(
                 evt -> {
                     if (evt.getPropertyName().equals(PropertyNames.FIRED) && evt.getNewValue().equals(true)) {

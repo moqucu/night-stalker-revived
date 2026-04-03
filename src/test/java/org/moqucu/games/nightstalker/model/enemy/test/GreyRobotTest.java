@@ -2,6 +2,7 @@ package org.moqucu.games.nightstalker.model.enemy.test;
 
 import org.junit.jupiter.api.Test;
 import org.moqucu.games.nightstalker.model.*;
+import org.moqucu.games.nightstalker.model.BoundingBox;
 import org.moqucu.games.nightstalker.model.enemy.GreyRobot;
 import org.moqucu.games.nightstalker.model.hero.NightStalker;
 import org.moqucu.games.nightstalker.model.object.Bullet;
@@ -215,5 +216,15 @@ public class GreyRobotTest {
         assertThat(greyRobot.isObjectVisible(), is(true));
         assertThat(greyRobot.isInMotion(), is(true));
         assertThat(greyRobot.isAnimated(), is(true));
+    }
+
+    @Test
+    public void greyRobotHasTightBoundingBox() {
+
+        final BoundingBox bounds = greyRobot.getAbsoluteBounds();
+        assertThat(bounds.getMinX(), is(greyRobot.getXPosition() + 2));
+        assertThat(bounds.getMaxX(), is(greyRobot.getXPosition() + 30));
+        assertThat(bounds.getMinY(), is(greyRobot.getYPosition() + 2));
+        assertThat(bounds.getMaxY(), is(greyRobot.getYPosition() + 30));
     }
 }

@@ -194,6 +194,11 @@ public abstract class DisplayableObject extends GameObject implements Collidable
             );
     }
 
+    public void setBoundingBoxDimensions(double offsetX, double offsetY, double width, double height) {
+
+        collidable.setBoundingBox(new BoundingBox(offsetX, offsetX + width, offsetY, offsetY + height));
+    }
+
     public AbsolutePosition getAbsolutePosition() {
 
         return new AbsolutePosition(getXPosition(), getYPosition());

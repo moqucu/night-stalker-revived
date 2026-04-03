@@ -41,6 +41,7 @@ public class NightStalker extends MovableObject implements Resettable {
         setImageMapFileName("/images/night-stalker.png");
         setFrameRate(10);
         setVelocity(30);
+        setBoundingBoxDimensions(6, 1, 20, 30);
         reset();
     }
 

@@ -28,6 +28,7 @@ public class GreyRobot extends MovableObject implements Resettable {
         setFrameRate(10);
         setMazeGraphFileName("/json/maze-graph-enemy.json");
         setMazeAlgorithm(MazeAlgorithm.Random);
+        setBoundingBoxDimensions(2, 2, 28, 28);
         reset();
         addPropertyChangeListener(evt -> {
 

@@ -1,6 +1,7 @@
 package org.moqucu.games.nightstalker.model.enemy.test;
 
 import org.junit.jupiter.api.Test;
+import org.moqucu.games.nightstalker.model.BoundingBox;
 import org.moqucu.games.nightstalker.model.Direction;
 import org.moqucu.games.nightstalker.model.GameWorld;
 import org.moqucu.games.nightstalker.model.MazeAlgorithm;
@@ -274,5 +275,19 @@ public class BatTest {
         assertThat(localBat.isAwake(), is(true));
         assertThat(localBat.isInMotion(), is(true));
         assertThat(localBat.isAnimated(), is(true));
+    }
+
+    @Test
+    public void batHasTightBoundingBox() {
+
+        final Bat localBat = new Bat();
+        localBat.setSpawnXPosition(528.0);
+        localBat.setSpawnYPosition(96.0);
+
+        final BoundingBox bounds = localBat.getAbsoluteBounds();
+        assertThat(bounds.getMinX(), is(532.0));
+        assertThat(bounds.getMaxX(), is(556.0));
+        assertThat(bounds.getMinY(), is(100.0));
+        assertThat(bounds.getMaxY(), is(114.0));
     }
 }
